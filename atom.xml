@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-13T09:14:06.299Z</updated>
+  <updated>2017-12-13T13:46:36.555Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>pictest</title>
+    <link href="http://yoursite.com/2017/12/13/pictest/"/>
+    <id>http://yoursite.com/2017/12/13/pictest/</id>
+    <published>2017-12-13T13:40:06.000Z</published>
+    <updated>2017-12-13T13:46:36.555Z</updated>
+    
+    <content type="html"><![CDATA[<p>啊！五环，你比四环多一环！</p><p>啊！五环，你比六环少一环！</p><p><img src="/images/1.gif" alt="akb48" title="天气妹儿"><br>终于有一天，你会修到七环</p><p><img src="/images/parading.jpg" alt="paradin" title="SQ"></p>]]></content>
+    
+    <summary type="html">
+    
+      陈男神~
+    
+    </summary>
+    
+      <category term="这是一个用来测试图片上传的文章" scheme="http://yoursite.com/categories/%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E7%94%A8%E6%9D%A5%E6%B5%8B%E8%AF%95%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E7%AB%A0/"/>
+    
+    
+      <category term="美女" scheme="http://yoursite.com/tags/%E7%BE%8E%E5%A5%B3/"/>
+    
+      <category term="图片" scheme="http://yoursite.com/tags/%E5%9B%BE%E7%89%87/"/>
+    
+  </entry>
   
   <entry>
     <title>这里记录的不只有代码，还有生活和思想！</title>
