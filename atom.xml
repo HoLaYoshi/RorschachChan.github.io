@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-12-21T08:13:40.889Z</updated>
+  <updated>2017-12-21T08:25:07.855Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="http://yoursite.com/2017/12/21/screen%E7%9A%84%E7%94%A8%E6%B3%95/"/>
     <id>http://yoursite.com/2017/12/21/screen的用法/</id>
     <published>2017-12-21T07:59:44.000Z</published>
-    <updated>2017-12-21T08:13:40.889Z</updated>
+    <updated>2017-12-21T08:25:07.855Z</updated>
     
     <content type="html"><![CDATA[<p>很多时候在Linux要后台执行程序，都是使用“&amp;”，或者是nohup，不过这两个更多应用于临时的脚本。一个比较高科技的方法就是使用“screen”</p><p>安装screen的方法很简单：yum install -y screen</p><p>如果新建一个screen，就输入screen -S name，这样会新开一个窗口，然后执行命令。比如我要启动django，那么就输入python manage.py runserver 0.0.0.0:9000即可。</p><p>这个重开一个窗口，列出所有screen进程，就这样：<br>[root@docker ~]# screen -ls<br>There are screens on:<br>    3029.xiedi    (Attached)</p><p>如果想链接上之前那个django，执行命令screen -r 3029即可。</p><p><img src="/images/kobe.png" alt="goodbye,Kobe" title="kobe vs durant"></p>]]></content>
     
@@ -31,7 +31,7 @@
     
     </summary>
     
-      <category term="如果你想在后台执行程序..." scheme="http://yoursite.com/categories/%E5%A6%82%E6%9E%9C%E4%BD%A0%E6%83%B3%E5%9C%A8%E5%90%8E%E5%8F%B0%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F/"/>
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
       <category term="其他软件" scheme="http://yoursite.com/tags/%E5%85%B6%E4%BB%96%E8%BD%AF%E4%BB%B6/"/>
@@ -45,17 +45,17 @@
     <link href="http://yoursite.com/2017/12/13/pictest/"/>
     <id>http://yoursite.com/2017/12/13/pictest/</id>
     <published>2017-12-13T13:40:06.000Z</published>
-    <updated>2017-12-21T08:13:42.755Z</updated>
+    <updated>2017-12-21T08:26:28.574Z</updated>
     
     <content type="html"><![CDATA[<p>啊！五环，你比四环多一环！</p><p>啊！五环，你比六环少一环！</p><p><img src="/images/1.gif" alt="akb48" title="天气妹儿"><br>终于有一天，你会修到七环</p><p><img src="/images/paradin.jpg" alt="paradin" title="SQ"></p>]]></content>
     
     <summary type="html">
     
-      这是一个用来测试图片上传的文章
+      这是一个我用来测试图片上传的文章
     
     </summary>
     
-      <category term="这是一个用来测试图片上传的文章" scheme="http://yoursite.com/categories/%E8%BF%99%E6%98%AF%E4%B8%80%E4%B8%AA%E7%94%A8%E6%9D%A5%E6%B5%8B%E8%AF%95%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0%E7%9A%84%E6%96%87%E7%AB%A0/"/>
+      <category term="用来保护视力的图片" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E4%BF%9D%E6%8A%A4%E8%A7%86%E5%8A%9B%E7%9A%84%E5%9B%BE%E7%89%87/"/>
     
     
       <category term="美女" scheme="http://yoursite.com/tags/%E7%BE%8E%E5%A5%B3/"/>
@@ -65,21 +65,21 @@
   </entry>
   
   <entry>
-    <title>这里记录的不只有代码，还有生活和思想！</title>
+    <title>一个人去旅行</title>
     <link href="http://yoursite.com/2017/12/13/%E8%BF%99%E9%87%8C%E8%AE%B0%E5%BD%95%E7%9A%84%E4%B8%8D%E5%8F%AA%E6%9C%89%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%BF%98%E6%9C%89%E7%94%9F%E6%B4%BB%E5%92%8C%E6%80%9D%E6%83%B3%EF%BC%81/"/>
     <id>http://yoursite.com/2017/12/13/这里记录的不只有代码，还有生活和思想！/</id>
     <published>2017-12-13T06:17:22.000Z</published>
-    <updated>2017-12-13T09:14:06.299Z</updated>
+    <updated>2017-12-21T08:25:50.840Z</updated>
     
     <content type="html"><![CDATA[<p>你说要一个人去旅行　但是归期却没有约定　亚得里亚海边风中的吉他声<br>你说你带着苍白的回忆　却谢谢能与我相逢　我怕你在异乡夜里孤独醒来<br>要拒绝两人单调的生活　想寻找自由　迷信了爱情　就迷失了我自己<br>你就这样　离开吧　抛弃吧　他乡的旅人<br>你就那样　离开吧　抛弃吧　一个人生活</p><p>你说要一个人去旅行　眼里藏着一朵乌云　知道你藏不住秘密　天空就会飘着雨<br>你说你带着一本日记　却不想再拥有回忆　我怕你在异乡孤独的醒来<br>要拒绝两人单调的生活　不想再随波逐流　迷信了孤独　就软弱的抛弃了我的等待</p><p>你就这样　离开吧　抛弃吧　他乡的旅人<br>你就那样　离开吧　抛弃吧　让我孤独生活</p><p>你就这样　离开吧　抛弃我　孤独的旅人<br>你就这样　离开我　抛弃我　让我孤独生活</p><p>我想要一个人去旅行　但愿归期会有约定　每个人都在问我　是否可以找到自由的你<br>亚得里亚海边他乡的人和风中的吉他声　我怕你一个人在异乡孤独醒来<br>我会带着你回来</p>]]></content>
     
     <summary type="html">
     
-      先用陈升先生的一首《一个人去旅行》做开场白
+      先用陈升先生的一首《一个人去旅行》做我这个博客的开场白
     
     </summary>
     
-      <category term="默认分类" scheme="http://yoursite.com/categories/%E9%BB%98%E8%AE%A4%E5%88%86%E7%B1%BB/"/>
+      <category term="音乐" scheme="http://yoursite.com/categories/%E9%9F%B3%E4%B9%90/"/>
     
     
       <category term="音乐" scheme="http://yoursite.com/tags/%E9%9F%B3%E4%B9%90/"/>
