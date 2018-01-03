@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-03T13:04:53.271Z</updated>
+  <updated>2018-01-03T14:28:04.492Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Nginx动态编译新的模块</title>
+    <link href="http://yoursite.com/2018/01/03/Nginx%E5%8A%A8%E6%80%81%E7%BC%96%E8%AF%91%E6%96%B0%E7%9A%84%E6%A8%A1%E5%9D%97/"/>
+    <id>http://yoursite.com/2018/01/03/Nginx动态编译新的模块/</id>
+    <published>2018-01-03T13:44:44.000Z</published>
+    <updated>2018-01-03T14:28:04.492Z</updated>
+    
+    <content type="html"><![CDATA[<p>打算给电脑上的nginx添加一个当时没有编译安装的echo-nginx-module模块，这是一个第三方模块，要知道nginx要添加模块是需要重新编译的，这一点跟apache不同，apache是在配置文件里引用.so文件的。</p><p>首先先#nginx -V，查看一下nginx已经编译的模块都有啥，如图：<br><img src="/images/nginxV.png" alt="akb48" title="nginx模块一览"></p><p>于是我就#git clone <a href="https://github.com/openresty/echo-nginx-module，但是发现竟然告诉我“git" target="_blank" rel="noopener">https://github.com/openresty/echo-nginx-module，但是发现竟然告诉我“git</a>: command not found”。oh shit，原来这台nginx实验机器压根就没有装过git啊！而yum源里的软件基本上已经过时的太久了，就拿git来说吧，使用#yum info git 看到的版本是1.8.3.1。但是在<a href="https://github.com/git/git/releases" target="_blank" rel="noopener">https://github.com/git/git/releases</a> 里可以看到，git的版本现在已经丧心病狂的到达了2.16的版本了。<br><img src="/images/yuminfogit.png" alt="akb48" title="git版本太落后"></p><p>那么我们先安装git!<br>通过#yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel和#yum install  gcc perl-ExtUtils-MakeMaker 来安装依赖库。#wget <a href="https://github.com/git/git/archive/v2.16.0-rc0.tar.gz" target="_blank" rel="noopener">https://github.com/git/git/archive/v2.16.0-rc0.tar.gz</a> 来下载2.16的git保存到centos里。#tar -xzvf v2.9.2.tar.gz -C /目标目录/，然后在目标目录里面执行#make prefix=/usr/local/git all和#make prefix=/usr/local/git install，编译过程可能会比较长，请耐心等待。</p><p>编译结束之后，#echo “export PATH=$PATH:/usr/local/git/bin” &gt;&gt; /etc/bashrc，把git添加到环境变量，再#source /etc/bashrc让它实时生效，最后再一次看看#git –version，大功告成！<br><img src="/images/gitversion.png" alt="akb48" title="展现git版本"></p><p>git搞定了之后，重新#git clone <a href="https://github.com/openresty/echo-nginx-module，然后在nginx的configure文件夹里面，把echo-nginx-module模块添加上。命令如下：" target="_blank" rel="noopener">https://github.com/openresty/echo-nginx-module，然后在nginx的configure文件夹里面，把echo-nginx-module模块添加上。命令如下：</a></p><p>./configure –prefix=/usr/local/nginx –with-http_stub_status_module –with-http_ssl_module –with-pcre=/root/pcre-8.41 –with-http_v2_module –add-module=/root/echo-nginx-module-0.61<br>我这里还附赠了一个“http_v2_module”。</p><p>configure完毕之后，去#make一下就可以了，不要轻易#make install，不然就是重新安装了。原来的nginx.conf等配置都没了。</p><p>养成替换nginx二进制文件的好习惯，如下：<br>cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak<br>cp nginx编译目录/objs/nginx /usr/local/nginx/sbin/</p><p>然后再打开看一下#nginx -V<br><img src="/images/nginxV2.png" alt="akb48" title="安装模块成功"></p>]]></content>
+    
+    <summary type="html">
+    
+      你的nginx总不能一辈子都不变的吧
+    
+    </summary>
+    
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>从vmstat命令里看服务器瓶颈</title>
