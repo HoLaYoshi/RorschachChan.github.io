@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-03T08:27:39.358Z</updated>
+  <updated>2018-01-03T13:04:53.271Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从vmstat命令里看服务器瓶颈</title>
+    <link href="http://yoursite.com/2018/01/03/%E4%BB%8Evmstat%E5%91%BD%E4%BB%A4%E9%87%8C%E7%9C%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%93%B6%E9%A2%88/"/>
+    <id>http://yoursite.com/2018/01/03/从vmstat命令里看服务器瓶颈/</id>
+    <published>2018-01-03T12:56:56.000Z</published>
+    <updated>2018-01-03T13:04:53.271Z</updated>
+    
+    <content type="html"><![CDATA[<p>重新翻看基础知识的第一天…<br><a id="more"></a></p><p>这几天重新翻看基础知识，看到了vmstat，我认为它是一个非常优秀的命令,因为它包括了top和free，甚至还包含了一些io的信息，可以说是运维人员常备命令之一。常用方法：#vmstat (-a) 多少秒刷一次 刷多少次</p><p><img src="/images/vmstat.png" alt="vmstat" title="vmstat的效果"></p><p>对上面这个图来一个简单的解释：</p><p>r: 运行队列中进程数量，这个值长期大于1就要判断是否需要增加CPU。<br>b: 等待IO的进程数量</p><p>swpd: 使用虚拟内存大小(如果swpd的值不为0，但是SI，SO的值长期为0，这种情况不会影响系统性能）<br>free: 空闲物理内存大小<br>buff: 用作缓冲的内存大小<br>cache: 用作缓存的内存大小(如果cache的值大的时候，说明cache处的文件数多，如果频繁访问到的文件都能被cache处，那么磁盘的读IO bi会非常小)<br>inact: 非活跃内存大小（当使用-a选项时显示）<br>active: 活跃的内存大小（当使用-a选项时显示）</p><p>si: 每秒从交换区写到内存的大小，由磁盘调入内存<br>so: 每秒写入交换区的内存大小，由内存调入磁盘<br>注意：内存够用的时候，这2个值都是0，如果这2个值长期大于0时，系统性能会受到影响，磁盘IO和CPU资源都会被消耗。有些朋友看到空闲内存（free）很少的或接近于0时，就认为内存不够用了，不能光看这一点，还要结合si和so，如果free很少，但是si和so也很少（大多时候是0），那么不用担心，系统性能这时不会受到影响的。</p><p>bi: 每秒读取的块数<br>bo: 每秒写入的块数<br>注意：随机磁盘读写的时候，这2个值越大（如超出1024k)，能看到CPU在IO等待的值也会越大。</p><p>in: 每秒中断数，包括时钟中断。<br>cs: 每秒上下文切换数。<br>注意：上面2个值越大，会看到由内核消耗的CPU时间会越大。</p><p>us: 用户进程执行时间百分比(user time)<br>注意： us的值比较高时，说明用户进程消耗的CPU时间多，但是如果长期超50%的使用，那么我们就该考虑优化程序算法或者进行加速。</p><p>sy: 内核系统进程执行时间百分比(system time)<br>注意：sy的值高时，说明系统内核消耗的CPU资源多，这并不是良性表现，我们应该检查原因。</p><p>wa: IO等待时间百分比<br>注意：wa的值高时，说明IO等待比较严重，这可能由于磁盘大量作随机访问造成，也有可能磁盘出现瓶颈（块操作）。</p><p>id: 空闲时间百分比</p><p>最后总结：如果r经常大于4 ，且id经常少于40，表示cpu的负荷很重。如果bi，bo长期不等于0，表示内存不足。</p><p>r（运行队列）展示了正在执行和等待CPU资源的任务个数。当这个值超过了CPU数目，就会出现CPU瓶颈了。 CPU 100%并不能说明什么，Linux总是试图要CPU尽可能的繁忙，使得任务的吞吐量最大化。唯一能够确定CPU瓶颈的还是r（运行队列）的值。</p>]]></content>
+    
+    <summary type="html">
+    
+      使用vmstat查看服务器情况
+    
+    </summary>
+    
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+  </entry>
   
   <entry>
     <title>关于我</title>

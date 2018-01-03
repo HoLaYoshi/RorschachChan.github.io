@@ -6,18 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Category: 音乐 | 石锤淡啤酒</title>
+  <title>从vmstat命令里看服务器瓶颈 | 石锤淡啤酒</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="那些在阳光下挥洒青春的日子啊!">
-<meta property="og:type" content="website">
-<meta property="og:title" content="石锤淡啤酒">
-<meta property="og:url" content="http://yoursite.com/categories/音乐/index.html">
+  <meta name="description" content="使用vmstat查看服务器情况">
+<meta name="keywords" content="Linux,运维">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从vmstat命令里看服务器瓶颈">
+<meta property="og:url" content="http://yoursite.com/2018/01/03/从vmstat命令里看服务器瓶颈/index.html">
 <meta property="og:site_name" content="石锤淡啤酒">
-<meta property="og:description" content="那些在阳光下挥洒青春的日子啊!">
+<meta property="og:description" content="使用vmstat查看服务器情况">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/vmstat.png">
+<meta property="og:updated_time" content="2018-01-03T13:04:53.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="石锤淡啤酒">
-<meta name="twitter:description" content="那些在阳光下挥洒青春的日子啊!">
+<meta name="twitter:title" content="从vmstat命令里看服务器瓶颈">
+<meta name="twitter:description" content="使用vmstat查看服务器情况">
+<meta name="twitter:image" content="http://yoursite.com/images/vmstat.png">
   
     <link rel="alternative" href="/atom.xml" title="石锤淡啤酒" type="application/atom+xml">
   
@@ -179,75 +183,222 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-从vmstat命令里看服务器瓶颈" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/12/13/这里记录的不只有代码，还有生活和思想！/" class="archive-article-date">
-  	<time datetime="2017-12-13T06:17:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-13</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/13/这里记录的不只有代码，还有生活和思想！/">一个人去旅行</a>
+    <h1 class="article-title" itemprop="name">
+      从vmstat命令里看服务器瓶颈
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/01/03/从vmstat命令里看服务器瓶颈/" class="archive-article-date">
+  	<time datetime="2018-01-03T12:56:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-01-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>重新翻看基础知识的第一天…<br><a id="more"></a></p>
+<p>这几天重新翻看基础知识，看到了vmstat，我认为它是一个非常优秀的命令,因为它包括了top和free，甚至还包含了一些io的信息，可以说是运维人员常备命令之一。常用方法：#vmstat (-a) 多少秒刷一次 刷多少次</p>
+<p><img src="/images/vmstat.png" alt="vmstat" title="vmstat的效果"></p>
+<p>对上面这个图来一个简单的解释：</p>
+<p>r: 运行队列中进程数量，这个值长期大于1就要判断是否需要增加CPU。<br>b: 等待IO的进程数量</p>
+<p>swpd: 使用虚拟内存大小(如果swpd的值不为0，但是SI，SO的值长期为0，这种情况不会影响系统性能）<br>free: 空闲物理内存大小<br>buff: 用作缓冲的内存大小<br>cache: 用作缓存的内存大小(如果cache的值大的时候，说明cache处的文件数多，如果频繁访问到的文件都能被cache处，那么磁盘的读IO bi会非常小)<br>inact: 非活跃内存大小（当使用-a选项时显示）<br>active: 活跃的内存大小（当使用-a选项时显示）</p>
+<p>si: 每秒从交换区写到内存的大小，由磁盘调入内存<br>so: 每秒写入交换区的内存大小，由内存调入磁盘<br>注意：内存够用的时候，这2个值都是0，如果这2个值长期大于0时，系统性能会受到影响，磁盘IO和CPU资源都会被消耗。有些朋友看到空闲内存（free）很少的或接近于0时，就认为内存不够用了，不能光看这一点，还要结合si和so，如果free很少，但是si和so也很少（大多时候是0），那么不用担心，系统性能这时不会受到影响的。</p>
+<p>bi: 每秒读取的块数<br>bo: 每秒写入的块数<br>注意：随机磁盘读写的时候，这2个值越大（如超出1024k)，能看到CPU在IO等待的值也会越大。</p>
+<p>in: 每秒中断数，包括时钟中断。<br>cs: 每秒上下文切换数。<br>注意：上面2个值越大，会看到由内核消耗的CPU时间会越大。</p>
+<p>us: 用户进程执行时间百分比(user time)<br>注意： us的值比较高时，说明用户进程消耗的CPU时间多，但是如果长期超50%的使用，那么我们就该考虑优化程序算法或者进行加速。</p>
+<p>sy: 内核系统进程执行时间百分比(system time)<br>注意：sy的值高时，说明系统内核消耗的CPU资源多，这并不是良性表现，我们应该检查原因。</p>
+<p>wa: IO等待时间百分比<br>注意：wa的值高时，说明IO等待比较严重，这可能由于磁盘大量作随机访问造成，也有可能磁盘出现瓶颈（块操作）。</p>
+<p>id: 空闲时间百分比</p>
+<p>最后总结：如果r经常大于4 ，且id经常少于40，表示cpu的负荷很重。如果bi，bo长期不等于0，表示内存不足。</p>
+<p>r（运行队列）展示了正在执行和等待CPU资源的任务个数。当这个值超过了CPU数目，就会出现CPU瓶颈了。 CPU 100%并不能说明什么，Linux总是试图要CPU尽可能的繁忙，使得任务的吞吐量最大化。唯一能够确定CPU瓶颈的还是r（运行队列）的值。</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果!<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/image/wechatpay.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">音乐</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">感悟</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">运维</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/音乐//" class="article-tag-list-link color3">音乐</a>
+        			<a href="/categories/用来讨饭吃的技术//" class="article-tag-list-link color4">用来讨饭吃的技术</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/01/03/从vmstat命令里看服务器瓶颈/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/01/03/关于我/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">关于我</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
+  <div id="gitment-ctn"></div> 
+<link rel="stylesheet" href="//imsun.github.io/gitment/style/default.css">
+<script src="//imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  id: "http://yoursite.com/2018/01/03/从vmstat命令里看服务器瓶颈/",
+  owner: 'RorschachChan',
+  repo: 'https://rorschachchan.github.io',
+  oauth: {
+    client_id: '30f4e4055cf522ce0256',
+    client_secret: 'b9bb9eac569c28773c4ee4be9f8dce602ae9d850',
+  },
+})
+gitment.render('gitment-ctn')
+</script>
+  
 
 
           </div>
@@ -280,10 +431,10 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
-		isCategory: true,
+		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
