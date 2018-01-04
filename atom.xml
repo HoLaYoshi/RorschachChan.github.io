@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>石锤淡啤酒</title>
+  <title>Chris Chan&#39;s BLOG</title>
   
   <subtitle>生活就是等待戈多</subtitle>
   <link href="/atom.xml" rel="self"/>
@@ -10,7 +10,7 @@
   <id>http://yoursite.com/</id>
   
   <author>
-    <name>雪中悍刀行</name>
+    <name>石锤淡啤酒</name>
     
   </author>
   
@@ -65,30 +65,6 @@
   </entry>
   
   <entry>
-    <title>关于我</title>
-    <link href="http://yoursite.com/2018/01/03/%E5%85%B3%E4%BA%8E%E6%88%91/"/>
-    <id>http://yoursite.com/2018/01/03/关于我/</id>
-    <published>2018-01-03T08:19:15.000Z</published>
-    <updated>2018-01-03T08:27:39.358Z</updated>
-    
-    <content type="html"><![CDATA[<p>《哪呢》被网易云音乐下架了，就换一首《荡空山》吧！</p><iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&id=77164&auto=1&height=66"></iframe>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;《哪呢》被网易云音乐下架了，就换一首《荡空山》吧！&lt;/p&gt;
-&lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; width=&quot;330&quot; height=&quot;86&quot; src=&quot;//music.1
-      
-    
-    </summary>
-    
-      <category term="aboutme" scheme="http://yoursite.com/categories/aboutme/"/>
-    
-    
-  </entry>
-  
-  <entry>
     <title>关于阿里云CDN的两个故障解决</title>
     <link href="http://yoursite.com/2017/12/28/CDN%E7%BD%91%E7%AB%99%E4%B8%80%E6%AC%A1%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/"/>
     <id>http://yoursite.com/2017/12/28/CDN网站一次打不开的问题/</id>
@@ -130,9 +106,9 @@
       <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
       <category term="其他软件" scheme="http://yoursite.com/tags/%E5%85%B6%E4%BB%96%E8%BD%AF%E4%BB%B6/"/>
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
