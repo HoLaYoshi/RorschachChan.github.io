@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/yuminfogit.png">
 <meta property="og:image" content="http://yoursite.com/images/gitversion.png">
 <meta property="og:image" content="http://yoursite.com/images/nginxV2.png">
-<meta property="og:updated_time" content="2018-01-04T03:12:18.823Z">
+<meta property="og:updated_time" content="2018-01-04T03:14:01.464Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx动态编译新的模块">
 <meta name="twitter:description" content="你的nginx总不能一辈子都不变的吧">
@@ -427,12 +427,12 @@
       
 
       
-        <p>###开始动手<br>打算给电脑上的nginx添加一个当时没有编译安装的echo-nginx-module模块，这是一个第三方模块，要知道nginx要添加模块是需要重新编译的，这一点跟apache不同，apache是在配置文件里引用.so文件的。</p>
+        <h2><span id="开始动手">开始动手</span></h2><p>打算给电脑上的nginx添加一个当时没有编译安装的echo-nginx-module模块，这是一个第三方模块，要知道nginx要添加模块是需要重新编译的，这一点跟apache不同，apache是在配置文件里引用.so文件的。</p>
 <p>首先先<code>nginx -V</code>，查看一下nginx已经编译的模块都有啥，如图：<br><img src="/images/nginxV.png" alt="akb48" title="nginx模块一览"></p>
 <p>于是我就<code>git clone https://github.com/openresty/echo-nginx-module</code>，但是发现竟然告诉我“git: command not found”。oh shit，原来这台nginx实验机器压根就没有装过git啊！而yum源里的软件基本上已经过时的太久了，就拿git来说吧，使用<code>yum info git</code>看到的版本是1.8.3.1。但是在<a href="https://github.com/git/git/releases" target="_blank" rel="noopener">https://github.com/git/git/releases</a> 里可以看到，git的版本现在已经丧心病狂的到达了2.16的版本了。<br><img src="/images/yuminfogit.png" alt="akb48" title="git版本太落后"></p>
-<p>###那么我们先安装git!<br>通过<code>yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel</code>和<code>yum install  gcc perl-ExtUtils-MakeMaker</code>来安装依赖库。<code>wget https://github.com/git/git/archive/v2.16.0-rc0.tar.gz</code>来下载2.16的git保存到centos里。<code>tar -xzvf v2.9.2.tar.gz -C /目标目录/</code>，然后在目标目录里面执行<code>make prefix=/usr/local/git all</code>和<code>make prefix=/usr/local/git install</code>，编译过程可能会比较长，请耐心等待。</p>
+<h2><span id="那么我们先安装git">那么我们先安装git!</span></h2><p>通过<code>yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel</code>和<code>yum install  gcc perl-ExtUtils-MakeMaker</code>来安装依赖库。<code>wget https://github.com/git/git/archive/v2.16.0-rc0.tar.gz</code>来下载2.16的git保存到centos里。<code>tar -xzvf v2.9.2.tar.gz -C /目标目录/</code>，然后在目标目录里面执行<code>make prefix=/usr/local/git all</code>和<code>make prefix=/usr/local/git install</code>，编译过程可能会比较长，请耐心等待。</p>
 <p>编译结束之后，<code>echo &quot;export PATH=$PATH:/usr/local/git/bin&quot; &gt;&gt; /etc/bashrc</code>，把git添加到环境变量，再<code>source /etc/bashrc</code>让它实时生效，最后再一次看看<code>git --version</code>，大功告成！<br><img src="/images/gitversion.png" alt="akb48" title="展现git版本"></p>
-<p>###开始编译新模块<br>git搞定了之后，重新<code>git clone https://github.com/openresty/echo-nginx-module</code>，然后在nginx的configure文件夹里面，把echo-nginx-module模块添加上。命令如下：</p>
+<h2><span id="开始编译新模块">开始编译新模块</span></h2><p>git搞定了之后，重新<code>git clone https://github.com/openresty/echo-nginx-module</code>，然后在nginx的configure文件夹里面，把echo-nginx-module模块添加上。命令如下：</p>
 <p><code>./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-pcre=/root/pcre-8.41 --with-http_v2_module --add-module=/root/echo-nginx-module-0.61</code>,我这里还附赠了一个“http_v2_module”。</p>
 <p>configure完毕之后，去<code>make</code>一下就可以了，不要轻易<code>make install</code>，不然就是重新安装了。原来的nginx.conf等配置都没了。</p>
 <p>养成替换nginx二进制文件的好习惯，如下：<br>    cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak<br>    cp nginx编译目录/objs/nginx /usr/local/nginx/sbin/</p>
@@ -599,8 +599,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -707,6 +716,22 @@ var jiathis_config={
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x59CB;&#x52A8;&#x624B;">&#x5F00;&#x59CB;&#x52A8;&#x624B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5148;&#x5B89;&#x88C5;git">&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5148;&#x5B89;&#x88C5;git!</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5F00;&#x59CB;&#x7F16;&#x8BD1;&#x65B0;&#x6A21;&#x5757;">&#x5F00;&#x59CB;&#x7F16;&#x8BD1;&#x65B0;&#x6A21;&#x5757;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
