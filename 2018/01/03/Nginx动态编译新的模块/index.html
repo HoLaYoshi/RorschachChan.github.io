@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/yuminfogit.png">
 <meta property="og:image" content="http://yoursite.com/images/gitversion.png">
 <meta property="og:image" content="http://yoursite.com/images/nginxV2.png">
-<meta property="og:updated_time" content="2018-01-04T03:21:08.509Z">
+<meta property="og:updated_time" content="2018-01-04T04:50:19.075Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx动态编译新的模块">
 <meta name="twitter:description" content="你的nginx总不能一辈子都不变的吧">
@@ -386,7 +386,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  542
+                  539
                 </span>
               
 
@@ -436,7 +436,7 @@
 <p><code>./configure --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-pcre=/root/pcre-8.41 --with-http_v2_module --add-module=/root/echo-nginx-module-0.61</code>,我这里还附赠了一个“http_v2_module”。</p>
 <p>configure完毕之后，去<code>make</code>一下就可以了，不要轻易<code>make install</code>，不然就是重新安装了。原来的nginx.conf等配置都没了。</p>
 <p>养成替换nginx二进制文件的好习惯，如下：</p>
-<h2><span id="代码块">代码块：</span></h2><pre><code>cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
+<pre><code>cp /usr/local/nginx/sbin/nginx /usr/local/nginx/sbin/nginx.bak
 cp nginx编译目录/objs/nginx /usr/local/nginx/sbin/
 </code></pre><p>然后再打开看一下<code>nginx -V</code><br><img src="/images/nginxV2.png" alt="akb48" title="安装模块成功"></p>
 
@@ -728,7 +728,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x59CB;&#x52A8;&#x624B;">&#x5F00;&#x59CB;&#x52A8;&#x624B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5148;&#x5B89;&#x88C5;git">&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5148;&#x5B89;&#x88C5;git!</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x7F16;&#x8BD1;&#x65B0;&#x6A21;&#x5757;">&#x7F16;&#x8BD1;&#x65B0;&#x6A21;&#x5757;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x4EE3;&#x7801;&#x5757;">&#x4EE3;&#x7801;&#x5757;&#xFF1A;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x59CB;&#x52A8;&#x624B;">&#x5F00;&#x59CB;&#x52A8;&#x624B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5148;&#x5B89;&#x88C5;git">&#x90A3;&#x4E48;&#x6211;&#x4EEC;&#x5148;&#x5B89;&#x88C5;git!</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x7F16;&#x8BD1;&#x65B0;&#x6A21;&#x5757;">&#x7F16;&#x8BD1;&#x65B0;&#x6A21;&#x5757;</span></span></a></li></ol></div>
             
 
           </div>
