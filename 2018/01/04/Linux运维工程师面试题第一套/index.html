@@ -90,14 +90,14 @@
 
 <meta name="description" content="把基础知识重新看起来">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux运维工程师面试题第一套">
+<meta property="og:title" content="Linux运维工程师面试题第一套（未写完）">
 <meta property="og:url" content="http://yoursite.com/2018/01/04/Linux运维工程师面试题第一套/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="把基础知识重新看起来">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-04T13:32:28.507Z">
+<meta property="og:updated_time" content="2018-01-04T13:37:36.912Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux运维工程师面试题第一套">
+<meta name="twitter:title" content="Linux运维工程师面试题第一套（未写完）">
 <meta name="twitter:description" content="把基础知识重新看起来">
 
 
@@ -134,7 +134,7 @@
 
 
 
-  <title>Linux运维工程师面试题第一套 | Chris Chan's BLOG</title>
+  <title>Linux运维工程师面试题第一套（未写完） | Chris Chan's BLOG</title>
   
 
 
@@ -278,7 +278,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="石锤淡啤酒">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/faceinpunch.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -290,7 +290,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Linux运维工程师面试题第一套</h1>
+          <h1 class="post-title" itemprop="name headline">Linux运维工程师面试题第一套（未写完）</h1>
         
 
         <div class="post-meta">
@@ -332,7 +332,7 @@
 
           
           
-             <span id="/2018/01/04/Linux运维工程师面试题第一套/" class="leancloud_visitors" data-flag-title="Linux运维工程师面试题第一套">
+             <span id="/2018/01/04/Linux运维工程师面试题第一套/" class="leancloud_visitors" data-flag-title="Linux运维工程师面试题第一套（未写完）">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -358,7 +358,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  763
+                  782
                 </span>
               
 
@@ -402,14 +402,11 @@
         <p>这套题的出处是<a href="http://blog.51cto.com/nolinux/1670406，看到了闲着没事就做一做，答案都是我自己在工作里得到的，拿出来跟各位分享一番。" target="_blank" rel="noopener">http://blog.51cto.com/nolinux/1670406，看到了闲着没事就做一做，答案都是我自己在工作里得到的，拿出来跟各位分享一番。</a></p>
 <p><strong>1、请写出五种系统性能分析工具，并简述其作用和特点</strong><br>[解答] </p>
 <p><strong>2、请写出web服务器的调优要点</strong><br>[解答]以nginx为例，个人总结有如下几个要点：<br>1）尽可能的少用http，因为http是有开销的；<br>2）尽可能的使用CDN；<br>3）添加Expire/Cache-Control头，这个头是缓存用的，可以缓存图片和flash那样不轻易更改的文件，减少访问时间；<br>4）启动gzip压缩，这个没啥好说的了；<br>5）尽可能少的重定向，能rewrite就不要return，我也知道return比rewrite好写，但是重定向是需要时间的，增加一次重定向就会多一次web需求；<br>6）如果可以，把ajax也做缓存；<br>7）减少dns查询，很多网页会有外站的广告，这些广告也是会启动dns查询的，所以如果不缺钱，减少这种广告；</p>
-<p><strong>3、请写出你知道或使用过的nginx扩展模块（注意标注知道和使用）</strong></p>
-<p><strong>4、请简述你了解的自动化配置管理工具特点和运行原理</strong></p>
-<p><strong>5、目前，有一个文件，内容如下：<br>     172.16.100.1<br>     172.16.100.2<br>     172.16.100.3<br>     172.16.100.4<br>   请使用while和ssh命令，登录文件内的ip并执行hostname命令</strong></p>
-<p><strong>6、请使用awk命令将如下两份文件中名字相同的两行合并起来<br>   A文件：<br>      大广州 21岁<br>      广州大 23岁<br>      州广大 22岁<br>      广州大 24岁<br>   B文件：<br>      广州大 男<br>      大广州 男<br>      州广大 男<br>      广州大 男<br>输出效果：<br>    大广州 21岁 男</strong></p>
+<p><strong>3、请写出你知道或使用过的nginx扩展模块（注意标注知道和使用）</strong><br>[解答]<br><strong>4、请简述你了解的自动化配置管理工具特点和运行原理</strong><br>[解答]<br><strong>5、目前，有一个文件，内容如下：<br>         172.16.100.1<br>         172.16.100.2<br>         172.16.100.3<br>         172.16.100.4<br>   请使用while和ssh命令，登录文件内的ip并执行hostname命令</strong></p>
+<p><strong>6、请使用awk命令将如下两份文件中名字相同的两行合并起来<br>   A文件：<br>          大广州 21岁<br>          广州大 23岁<br>          州广大 22岁<br>          广州大 24岁<br>   B文件：<br>          广州大 男<br>         大广州 男<br>          州广大 男<br>          广州大 男<br>输出效果：<br>    <code>大广州 21岁 男</code></strong></p>
 <p><strong>7、请使用绘图的方式简述TCP/IP三次握手和四次断开的交互过程</strong><br>[解答]这种图满大街都是了，我这里就不画了，不过这里我额外推荐各位去看一篇文章：<a href="https://mp.weixin.qq.com/s?__biz=MjM5NzA1MTcyMA==&amp;mid=2651160450&amp;idx=2&amp;sn=1128438fa5287b6cee503880698642b2&amp;scene=21" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MjM5NzA1MTcyMA==&amp;mid=2651160450&amp;idx=2&amp;sn=1128438fa5287b6cee503880698642b2&amp;scene=21</a> 讲的浅显易懂。<br>多说一句，网易招聘java的时候也问这个问题，不过他们问的是“为什么要三次握手？”</p>
-<p><strong>8、请根据你的理解，简述高可用服务体系的相关组件，并列举该组件的具体实现服务名字</strong></p>
-<p><strong>9、请根据你的理解，简述负载均衡的实现方式</strong><br>轮询：访问请求依序分发给后端服务器；<br>加权轮询：访问请求依序分发后端服务器，服务器权重越高被分发的几率也越大；<br>最小连接数： 将访问请求分发给当前连接数最小的一台后端服务器，服务器权重越高被分发的几率也越大；<br><strong>10、请根据你的理解，简述数据迁移工具和数据存储服务有哪些以及相关特点</strong></p>
-<p><a href="http://blog.csdn.net/fireofjava/article/details/5122314" target="_blank" rel="noopener">http://blog.csdn.net/fireofjava/article/details/5122314</a></p>
+<p><strong>8、请根据你的理解，简述高可用服务体系的相关组件，并列举该组件的具体实现服务名字</strong><br>[解答]<br><strong>9、请根据你的理解，简述负载均衡的实现方式</strong><br>[解答]<br>轮询：访问请求依序分发给后端服务器；<br>加权轮询：访问请求依序分发后端服务器，服务器权重越高被分发的几率也越大；<br>最小连接数： 将访问请求分发给当前连接数最小的一台后端服务器，服务器权重越高被分发的几率也越大；<br><strong>10、请根据你的理解，简述数据迁移工具和数据存储服务有哪些以及相关特点</strong><br>[解答]</p>
+<p><a href="http://blog.csdn.net/fireofjava/article/details/5122314" target="_blank" rel="noopener">http://blog.csdn.net/fireofjava/article/details/5122314</a><br><a href="http://mungo.space/2015/10/17/markdown-base-use/" target="_blank" rel="noopener">http://mungo.space/2015/10/17/markdown-base-use/</a></p>
 
       
     </div>
@@ -569,6 +566,10 @@ var jiathis_config={
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/images/faceinpunch.png"
+                alt="石锤淡啤酒" />
+            
               <p class="site-author-name" itemprop="name">石锤淡啤酒</p>
               <p class="site-description motion-element" itemprop="description">那些在阳光下挥洒青春的日子啊!</p>
           </div>
@@ -666,6 +667,20 @@ var jiathis_config={
 
           
           
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://liubin.nanshapo.com" title="Title" target="_blank">Title</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
 
           
 
@@ -718,7 +733,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共3.3k字</span>
+  <span class="post-count">博客全站共3.4k字</span>
 </div>
         
 
