@@ -95,10 +95,12 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="把基础知识重新看起来">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-08T03:46:31.688Z">
+<meta property="og:image" content="http://yoursite.com/images/awkpinjie.png">
+<meta property="og:updated_time" content="2018-01-08T13:04:19.330Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师面试题第一套（未写完）">
 <meta name="twitter:description" content="把基础知识重新看起来">
+<meta name="twitter:image" content="http://yoursite.com/images/awkpinjie.png">
 
 
 
@@ -422,7 +424,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,083
+                  1,380
                 </span>
               
 
@@ -438,7 +440,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  5
                 </span>
               
             </div>
@@ -466,10 +468,13 @@
         <p>这套题的出处是<a href="http://blog.51cto.com/nolinux/1670406，看到了闲着没事就做一做，答案都是我自己在工作里得到的，拿出来跟各位分享一番。" target="_blank" rel="noopener">http://blog.51cto.com/nolinux/1670406，看到了闲着没事就做一做，答案都是我自己在工作里得到的，拿出来跟各位分享一番。</a></p>
 <p><strong>1、请写出五种系统性能分析工具，并简述其作用和特点</strong><br>[解答] top、free、vmstat、iostat、perf等等等等，如果你想装逼，可以回答fio,blktrace，oprofile。<br>具体的作用和特点这里不多说了，但是我着重要推荐vmstat，很实用很棒的一个命令。</p>
 <p><strong>2、请写出web服务器的调优要点</strong><br>[解答]以nginx为例，个人总结有如下几个要点：<br>1）尽可能的少用http，因为http是有开销的；<br>2）尽可能的使用CDN；<br>3）添加Expire/Cache-Control头，这个头是缓存用的，可以缓存图片和flash那样不轻易更改的文件，减少访问时间；<br>4）启动gzip压缩，这个没啥好说的了；<br>5）尽可能少的重定向，能rewrite就不要return，我也知道return比rewrite好写，但是重定向是需要时间的，增加一次重定向就会多一次web需求；<br>6）如果可以，把ajax也做缓存；<br>7）减少dns查询，很多网页会有外站的广告，这些广告也是会启动dns查询的，所以如果不缺钱，减少这种广告；</p>
-<p><strong>3、请写出你知道或使用过的nginx扩展模块（注意标注知道和使用）</strong><br>[解答] 随便说几个，这玩意到时候背背吧：<br>Nginx负载均衡模块：nginx-upstream-fair<br>非阻塞访问redis模块：redis2-nginx-module<br>分布式图片实时动态压缩：ngx-fastdfs<br><strong>4、请简述你了解的自动化配置管理工具特点和运行原理</strong><br>[解答]<br><strong>5、目前，有一个文件，内容如下：<br>         172.16.100.1<br>         172.16.100.2<br>         172.16.100.3<br>         172.16.100.4<br>   请使用while和ssh命令，登录文件内的ip并执行hostname命令</strong></p>
-<p><strong>6、请使用awk命令将如下两份文件中名字相同的两行合并起来<br>   A文件：<br>          大广州 21岁<br>          广州大 23岁<br>          州广大 22岁<br>          广州大 24岁<br>   B文件：<br>          广州大 男<br>         大广州 男<br>          州广大 男<br>          广州大 男<br>输出效果：<br>    <code>大广州 21岁 男</code></strong></p>
-<p><strong>7、请使用绘图的方式简述TCP/IP三次握手和四次断开的交互过程</strong><br>[解答]这种图满大街都是了，我这里就不画了，不过这里我额外推荐各位去看一篇文章：<a href="https://mp.weixin.qq.com/s?__biz=MjM5NzA1MTcyMA==&amp;mid=2651160450&amp;idx=2&amp;sn=1128438fa5287b6cee503880698642b2&amp;scene=21" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MjM5NzA1MTcyMA==&amp;mid=2651160450&amp;idx=2&amp;sn=1128438fa5287b6cee503880698642b2&amp;scene=21</a> 讲的浅显易懂。<br>多说一句，网易招聘java的时候也问这个问题，不过他们问的是“为什么要三次握手？”</p>
-<p><strong>8、请根据你的理解，简述高可用服务体系的相关组件，并列举该组件的具体实现服务名字</strong><br>[解答]<br><strong>9、请根据你的理解，简述负载均衡的实现方式</strong><br>[解答]负载均衡主要分为两种，硬件（F5）和软件（NGINX、Haproxy、LVS），硬件效果比较牛逼，它是把4-7层的负载均衡功能做到一个硬件里面，但是价格昂贵最近用的越来越少了。<br>软件的负载均衡又分两种，四层和七层：四层是在IP/TCP协议栈上把网络包的IP地址和端口进行修改，达到转发的目的；七层就是在应用层里把HTTP请求、URL等具体的应用数据发送到具体的服务器上。四层的效率比七层的高，四层一般安排在架构的前端，七层一般就是在具体服务器的前端。<br>软件负载均衡比较常见的几个分配方式如下：<br>轮询：访问请求依序分发给后端服务器；<br>加权轮询：访问请求依序分发后端服务器，服务器权重越高被分发的几率也越大；<br>最小连接数： 将访问请求分发给当前连接数最小的一台后端服务器，服务器权重越高被分发的几率也越大；<br><strong>10、请根据你的理解，简述数据迁移工具和数据存储服务有哪些以及相关特点</strong><br>[解答]</p>
+<p><strong>3、请写出你知道或使用过的nginx扩展模块（注意标注知道和使用）</strong><br>[解答] 随便说几个，这玩意到时候结合工作过的情况说说吧：<br>Nginx负载均衡模块：nginx-upstream-fair<br>非阻塞访问redis模块：redis2-nginx-module<br>分布式图片实时动态压缩：ngx-fastdfs<br><strong>4、请简述你了解的自动化配置管理工具特点和运行原理</strong><br>[解答]<br><strong>5、目前，有一个文件，内容如下：<br>         172.16.100.1<br>         172.16.100.2<br>         172.16.100.3<br>         172.16.100.4<br>   请使用while和ssh命令，登录文件内的ip并执行hostname命令</strong></p>
+<p><strong>6、请使用awk命令将如下两份文件中名字相同的两行合并起来<br>   A文件：<br>          大广州 21岁<br>          广州大 23岁<br>          州广大 22岁<br>          广州大 24岁<br>   B文件：<br>          广州大 男<br>         大广州 男<br>          州广大 男<br>          广州大 男<br>输出效果：<br>    <code>大广州 21岁 男</code></strong><br>[解答]awk ‘NR==FNR{a[$1]=$2}NR&gt;FNR{print $0,a[$1]}’  第2个文件名 第1个文件名<br><img src="/images/awkpinjie.png" alt="awk拼接" title="awk拼接的效果"><br>PS，昨晚这道题，我已经不认识“广”“州”这两个字了…</p>
+<p><strong>7、请使用绘图的方式简述TCP/IP三次握手和四次断开的交互过程</strong><br>[解答]这种图满大街都是了，我这里就不画了，不过这里推荐各位去看一篇文章：<a href="https://mp.weixin.qq.com/s?__biz=MjM5NzA1MTcyMA==&amp;mid=2651160450&amp;idx=2&amp;sn=1128438fa5287b6cee503880698642b2&amp;scene=21" target="_blank" rel="noopener">https://mp.weixin.qq.com/s?__biz=MjM5NzA1MTcyMA==&amp;mid=2651160450&amp;idx=2&amp;sn=1128438fa5287b6cee503880698642b2&amp;scene=21</a> 对原理讲的浅显易懂。<br>多说一句，网易招聘java的时候也问这个问题，不过他们问的是“为什么要三次握手？”</p>
+<p><strong>8、请根据你的理解，简述高可用服务体系的相关组件，并列举该组件的具体实现服务名字</strong><br>[解答] 我觉得这个题是要问一些架构上的东西，以我工作环境为例：<br>统一配置:zookeeper、Consul、Etcd+Confd(这俩比较常见于动态管理nginx)<br>前端展示:nginx<br>消息队列:activemq、kafka<br>读写分离中间件:atlas<br>日志分析:elk</p>
+<p><strong>9、请根据你的理解，简述负载均衡的实现方式</strong><br>[解答]负载均衡主要分为两种，硬件（F5）和软件（NGINX、Haproxy、LVS），硬件效果比较牛逼，它是把<strong>4-7层的负载均衡功能做到一个硬件里面</strong>，但是价格昂贵最近用的越来越少了。<br>软件的负载均衡又分两种，四层和七层：四层是<strong>在IP/TCP协议栈上把网络包的IP地址和端口进行修改</strong>，达到转发的目的；七层就是<strong>在应用层里把HTTP请求、URL等具体的应用数据发送到具体的服务器上</strong>。四层的效率比七层的高，四层一般安排在架构的前端，七层一般就是在具体服务器的前端。<br>软件负载均衡比较常见的几个分配方式如下：<br>轮询：访问请求依序分发给后端服务器；<br>加权轮询：访问请求依序分发后端服务器，服务器权重越高被分发的几率也越大；<br>最小连接数： 将访问请求分发给当前连接数最小的一台后端服务器，服务器权重越高被分发的几率也越大；</p>
+<p><strong>10、请根据你的理解，简述数据迁移工具和数据存储服务有哪些以及相关特点</strong><br>[解答]我数据库用过的就这么几个:mysql、redis和elasticsearch。对于Storm和Hadoop我还是初学者。<br>mysql:关系型数据库<br>elasticsearch:全文检索框架，这玩意逐渐向一个数据库靠拢了<br>redis:键值储存数据库</p>
+<p>mysql的数据迁移最常见的就是mysqldump，但是要注意使用不当会锁表，<br>redis的数据迁移最稳妥的方法就是主从同步：在slave端启动redis，然后执行<code>slaveof master机器IP地址 6379</code>，然后使用<code>info</code>的时候查看<code>master_link_status</code>如果是<code>up</code>那就是OK了，再执行<code>slaveof no one</code>,提示OK就是OK了；<br>Elasticsearch的数据迁移工具就是Elasticsearch-Exporter，不过我就对它了解，其他的用的并不多； </p>
 <p><a href="http://blog.csdn.net/fireofjava/article/details/5122314" target="_blank" rel="noopener">http://blog.csdn.net/fireofjava/article/details/5122314</a><br><a href="http://mungo.space/2015/10/17/markdown-base-use/" target="_blank" rel="noopener">http://mungo.space/2015/10/17/markdown-base-use/</a></p>
 
       
@@ -853,7 +858,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共3.6k字</span>
+  <span class="post-count">博客全站共3.9k字</span>
 </div>
         
 
