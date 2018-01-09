@@ -97,7 +97,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/awkpinjie.png">
 <meta property="og:image" content="http://yoursite.com/images/welcomekuniao.jpg">
-<meta property="og:updated_time" content="2018-01-09T01:43:23.742Z">
+<meta property="og:updated_time" content="2018-01-09T08:38:19.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师面试题第一套">
 <meta name="twitter:description" content="把基础知识重新看起来">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,607
+                  1,691
                 </span>
               
 
@@ -478,6 +478,7 @@
 <p><strong>9、请根据你的理解，简述负载均衡的实现方式</strong><br>[我的答案]负载均衡主要分为两种，硬件（F5）和软件（NGINX、Haproxy、LVS），硬件效果比较牛逼，它是把<strong>4-7层的负载均衡功能做到一个硬件里面</strong>，但是价格昂贵最近用的越来越少了。<br>软件的负载均衡又分两种，四层和七层：四层是<strong>在IP/TCP协议栈上把网络包的IP地址和端口进行修改</strong>，达到转发的目的；七层就是<strong>在应用层里把HTTP请求、URL等具体的应用数据发送到具体的服务器上</strong>。四层的效率比七层的高，四层一般安排在架构的前端，七层一般就是在具体服务器的前端。<br>软件负载均衡比较常见的几个分配方式如下：<br>轮询：访问请求依序分发给后端服务器；<br>加权轮询：访问请求依序分发后端服务器，服务器权重越高被分发的几率也越大；<br>最小连接数： 将访问请求分发给当前连接数最小的一台后端服务器，服务器权重越高被分发的几率也越大；</p>
 <p><strong>10、请根据你的理解，简述数据迁移工具和数据存储服务有哪些以及相关特点</strong><br>[我的答案]由于我公司主要都放在了阿里云，数据库用过的就这么几个:mysql、redis和elasticsearch。对于Storm和Hadoop这俩我还是初学者。<br>mysql:关系型数据库<br>elasticsearch:全文检索框架，这玩意逐渐向一个数据库靠拢了<br>redis:键值储存数据库</p>
 <p>mysql的数据迁移最常见的就是mysqldump，但是要注意使用不当会锁表，<br>redis的数据迁移最稳妥的方法就是主从同步：在slave端启动redis，然后执行<code>slaveof master机器IP地址 6379</code>，然后使用<code>info</code>的时候查看<code>master_link_status</code>如果是<code>up</code>那就是OK了，再执行<code>slaveof no one</code>,提示OK就是OK了；<br>Elasticsearch的数据迁移工具就是Elasticsearch-Exporter，不过我对它仅仅只是了解，用的并不多； </p>
+<p><strong>总结</strong><br>这套题不算难，方向是偏应用的，但是对云端服务的运维来说不算很友好，因为云厂商基本都把数据备份和数据迁移都做成自己的工具（比如阿里云的DTS），所以很多云服务的运维对这种东西了解不多。</p>
 <p><img src="/images/welcomekuniao.jpg" alt="欢迎新人" title="欢迎来到巴塞罗那！库迪尼奥"></p>
 
       
@@ -577,6 +578,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/09/记一次配置rewrite和return的经历/" rel="prev" title="记一次配置rewrite和return的经历">
+                记一次配置rewrite和return的经历 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -679,7 +684,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -701,7 +706,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -856,7 +861,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共4.1k字</span>
+  <span class="post-count">博客全站共4.9k字</span>
 </div>
         
 
