@@ -97,7 +97,7 @@
 <meta property="og:description" content="比较一下return跟rewrite的不同。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/hugguangmei.gif">
-<meta property="og:updated_time" content="2018-01-09T09:24:26.734Z">
+<meta property="og:updated_time" content="2018-01-09T12:09:37.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次配置rewrite和return的经历">
 <meta name="twitter:description" content="比较一下return跟rewrite的不同。">
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  771
+                  780
                 </span>
               
 
@@ -443,7 +443,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -469,14 +469,14 @@
 
       
         <h2><span id="前言与需求">前言与需求</span></h2><p>自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的疲命应付，并且在应付后记录下来，就怕以后再遇到类似的问题。</p>
-<p>这次的需求是一个跳转，满足某个条件之后把<code>“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;redirect_uri=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;response_type=code&amp;scope=read&amp;state=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;user=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;expire=1514191636&amp;nonce=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 ”</code><br>改成<br><code>“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;redirect_uri=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;=code&amp;scope=read&amp;state=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;user=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;expire=1514191636&amp;nonce=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27”</code></p>
+<p>这次的需求是一个跳转，满足某个条件之后把<code>“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;redirect_uri=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;response_type=code&amp;scope=read&amp;state=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;user=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;expire=1514191636&amp;source_type=lc_app&amp;nonce=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 ”</code><br>改成<br><code>“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;redirect_uri=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;=code&amp;scope=read&amp;state=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;user=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;expire=1514191636&amp;source_type=lc_app&amp;nonce=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27”</code></p>
 <p>具体条件是: </p>
 <ol>
 <li>先判断是否有source_type=lc_app；</li>
 <li>再判断是否有response_type；</li>
-<li>去过两个都满足，将“response_type”改成“+auto+”；</li>
+<li>如果以上两个都满足，将“response_type”改成“+auto+”；</li>
 </ol>
-<p>各位看官，我理解你们此时不想继续看下去的心情，其实我当初看着那么一大坨心里也直犯闹，但是没办法，“食君之禄，分君之忧”，我只能耐着性子一个一个的拆开，还别说，拆开的话就清晰许多了，如下：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
+<p>各位看官，我理解你们此时不想继续看下去的心情，其实我当初看着那么一大坨uri心里也直犯闹，但是没办法，“食君之禄，分君之忧”，我只能耐着性子一个一个的拆开，还别说，拆开的话就清晰许多了，如下：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>source_type</em>=lc_app&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
 <h2><span id="开始操作">开始操作</span></h2><p>针对这次需求我的计划是这样的：把原地址看成”$1+ response_type +$2”这样的一个样式，确定$1和$2，然后rewrite成”$1+ +auto+ +$2”不就搞定了么？ 于是乎我就凭着我那二把刀的nginx技术开始动手。折腾了大约半个小时，拿出来这样一个配置：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.php.*</span><br><span class="line">   &#123;</span><br><span class="line">       include php_fcgi.conf;</span><br><span class="line">       include pathinfo.conf;</span><br><span class="line">       set $flag <span class="string">"0"</span>;</span><br><span class="line">       <span class="keyword">if</span> ( $request_uri ~ <span class="string">"source_type=lc_app"</span> ) &#123;</span><br><span class="line">          set $flag  <span class="string">"1"</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">if</span> ( $request_uri ~ <span class="string">"(.*)response_type(.*)"</span> )&#123;</span><br><span class="line">          set $Flag  <span class="string">"$flag$flag"</span>;</span><br><span class="line">          set $id $<span class="number">1</span>;</span><br><span class="line">          set $query $<span class="number">2</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       if ($Flag = "11")&#123;	#注意这个地方是11</span><br><span class="line">           set $flag <span class="string">"0"</span>;</span><br><span class="line">          rewrite ^.*$ http:<span class="comment">//dvlshop.lechange.com/index.php/wap/$id$query last;	#前面那一段是写死的</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>但是很不幸，<em>nginx -s reload</em>之后的结果是“$1+$2+$1+ response_type +$2”的格式（地址太长太恶心了，我就不写了）。</p>
 <p>然后在arstercz大神的指点下，把那句rewrite改成了<code>return 301 http://dvlshop.lechange.com/index.php/wap/?$id$query;</code>。就达到了效果。</p>
