@@ -88,18 +88,20 @@
 
 
 
-<meta name="description" content="自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的应付，并且在应付后记录下来，以备后用。 这次的需求是一个跳转，满足某个条件之后把“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;amp;redirect_uri=https%3A%2F%2Fdvlsho">
+<meta name="description" content="自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的疲命应付，并且在应付后记录下来，就怕以后再遇到类似的问题。 这次的需求是一个跳转，满足某个条件之后把“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;amp;redirect_uri=https%3A%2">
 <meta name="keywords" content="运维,Nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次配置rewrite和return的经历">
 <meta property="og:url" content="http://yoursite.com/2018/01/09/记一次配置rewrite和return的经历/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的应付，并且在应付后记录下来，以备后用。 这次的需求是一个跳转，满足某个条件之后把“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;amp;redirect_uri=https%3A%2F%2Fdvlsho">
+<meta property="og:description" content="自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的疲命应付，并且在应付后记录下来，就怕以后再遇到类似的问题。 这次的需求是一个跳转，满足某个条件之后把“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;amp;redirect_uri=https%3A%2">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-09T09:05:47.461Z">
+<meta property="og:image" content="http://yoursite.com/images/hugguangmei.gif">
+<meta property="og:updated_time" content="2018-01-09T09:13:10.060Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次配置rewrite和return的经历">
-<meta name="twitter:description" content="自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的应付，并且在应付后记录下来，以备后用。 这次的需求是一个跳转，满足某个条件之后把“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;amp;redirect_uri=https%3A%2F%2Fdvlsho">
+<meta name="twitter:description" content="自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的疲命应付，并且在应付后记录下来，就怕以后再遇到类似的问题。 这次的需求是一个跳转，满足某个条件之后把“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;amp;redirect_uri=https%3A%2">
+<meta name="twitter:image" content="http://yoursite.com/images/hugguangmei.gif">
 
 
 
@@ -445,7 +447,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  655
+                  718
                 </span>
               
 
@@ -482,7 +484,7 @@
       
 
       
-        <p>自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的应付，并且在应付后记录下来，以备后用。</p>
+        <p>自动电商平台归属了大数据研究院之后，我又恢复了那个“把nginx当成爸爸”的日子。开发不断地提出了的要求，我一样一样的疲命应付，并且在应付后记录下来，就怕以后再遇到类似的问题。</p>
 <p>这次的需求是一个跳转，满足某个条件之后把<code>“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;redirect_uri=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;response_type=code&amp;scope=read&amp;state=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;user=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;expire=1514191636&amp;nonce=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 ”</code><br>改成<br><code>“http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;redirect_uri=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;=code&amp;scope=read&amp;state=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;user=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;expire=1514191636&amp;nonce=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27”</code></p>
 <p>具体条件是: </p>
 <ol>
@@ -490,8 +492,8 @@
 <li>再判断是否有response_type；</li>
 <li>去过两个都满足，将“response_type”改成“+auto+”；</li>
 </ol>
-<p>我当初看着那么一大坨心里直犯闹，但是没办法只能耐着性子一个一个的拆开，拆开的话就好看许多了，如下：<br><a href="http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?client_id=lc_mall_m&amp;</a><br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
-<p>我的计划是这样的：把原地址看成”$1+ response_type +$2”这样的一个样式，确定$1和$2，然后rewrite成”$1+ +auto+ +$2”不就OK了么？ 于是乎我就凭着我那二把刀的nginx技术开始动手。折腾了大约半个小时，拿出来这样一个配置：<br>    <code>location ~ .*\.php.*
+<p>各位看官，我理解你们此时不想继续看下去的心情，其实我当初看着那么一大坨心里也直犯闹，但是没办法，“食君之禄，分君之忧”，我只能耐着性子一个一个的拆开，还别说，拆开的话就清晰许多了，如下：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
+<p>针对这次需求我的计划是这样的：把原地址看成”$1+ response_type +$2”这样的一个样式，确定$1和$2，然后rewrite成”$1+ +auto+ +$2”不就搞定了么？ 于是乎我就凭着我那二把刀的nginx技术开始动手。折腾了大约半个小时，拿出来这样一个配置：<br>    <code>location ~ .*\.php.*
     {
         include php_fcgi.conf;
         include pathinfo.conf;
@@ -506,10 +508,10 @@
         }
         if ($Flag = &quot;11&quot;){    #注意这个地方是11
             set $flag &quot;0&quot;;
-              rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;
+              rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;    #前面那一段是写死的
             }
         }</code></p>
-<p>但是很不幸，<em>nginx -s reload</em>之后的结果是“$1+$2+$1+response_type +$2”的格式（地址太长太恶心了，我就不写了）。</p>
+<p>但是很不幸，<em>nginx -s reload</em>之后的结果是“$1+$2+$1+ response_type +$2”的格式（地址太长太恶心了，我就不写了）。</p>
 <p>然后在arstercz大神的指点下，把那句rewrite改成了<code>return 301 http://dvlshop.lechange.com/index.php/wap/?$id$query;</code>。就达到了效果。</p>
 <p>后来追寻原因，原来是： <strong>rewrite后面接的$uri不需要$args，因为$args会被自动带过来。而return的则会丢失$args，需要手动补上$args。</strong>而我上面的$1,$2恰巧就是$args，所以用rewrite的话就会重复。举个例子，比如请求「<a href="http://localhost/?a=1」想被" target="_blank" rel="noopener">http://localhost/?a=1」想被</a> 301 到「<a href="https://localhost/?a=1?a=1」，要么" target="_blank" rel="noopener">https://localhost/?a=1?a=1」，要么</a><br>    <code>server {
         listen 80;
@@ -519,12 +521,13 @@
         listen 80;
         return 301 https://$host$request_uri;
     }</code></p>
-<p>这里补充一下uri、request_uri、document_uri之间的区别：</p>
+<p>PS，这里补充一下uri、request_uri、document_uri之间的区别：</p>
 <ul>
 <li>$request_uri: /stat.php?id=1585378&amp;web_id=1585378</li>
 <li>$uri: /stat.php</li>
 <li>$document_uri: /stat.php</li>
 </ul>
+<p><img src="/images/hugguangmei.gif" alt="抱光妹" title="《四重奏》"></p>
 
       
     </div>
