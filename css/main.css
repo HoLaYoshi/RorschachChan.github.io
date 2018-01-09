@@ -1958,7 +1958,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #be8eac;
+  background: #2485ac;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3070,7 +3070,7 @@ pre {
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
 }
 body {
-  background: url("https://source.unsplash.com/random/2100x900");
+  background: url("https://source.unsplash.com/random/2000x900");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
