@@ -91,15 +91,15 @@
 <meta name="description" content="比较一下$query_string跟$arg的不同">
 <meta name="keywords" content="Nginx,运维">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Query String跟arg的异同">
+<meta property="og:title" content="Query String跟Arg的差异">
 <meta property="og:url" content="http://yoursite.com/2018/01/09/Query-String跟arg的异同/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="比较一下$query_string跟$arg的不同">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/家有喜事.gif">
-<meta property="og:updated_time" content="2018-01-09T13:36:49.031Z">
+<meta property="og:updated_time" content="2018-01-09T13:48:22.069Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Query String跟arg的异同">
+<meta name="twitter:title" content="Query String跟Arg的差异">
 <meta name="twitter:description" content="比较一下$query_string跟$arg的不同">
 <meta name="twitter:image" content="http://yoursite.com/images/家有喜事.gif">
 
@@ -137,7 +137,7 @@
 
 
 
-  <title>Query String跟arg的异同 | Chris Chan's BLOG</title>
+  <title>Query String跟Arg的差异 | Chris Chan's BLOG</title>
   
 
 
@@ -337,7 +337,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Query String跟arg的异同</h1>
+          <h1 class="post-title" itemprop="name headline">Query String跟Arg的差异</h1>
         
 
         <div class="post-meta">
@@ -401,7 +401,7 @@
 
           
           
-             <span id="/2018/01/09/Query-String跟arg的异同/" class="leancloud_visitors" data-flag-title="Query String跟arg的异同">
+             <span id="/2018/01/09/Query-String跟arg的异同/" class="leancloud_visitors" data-flag-title="Query String跟Arg的差异">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  599
+                  769
                 </span>
               
 
@@ -468,16 +468,28 @@
       
 
       
-        <h2><span id="前言与需求">前言与需求</span></h2><p>在<a href="https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/</a> 里记录了一次rewrite和return的故事，不过我当时最后的return是把域名给写死了：<code>rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;</code>。</p>
+        <h2><span id="前言与需求">前言与需求</span></h2><p>在<a href="https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/</a> 里记录了一次rewrite和return的故事，不过我当时在最后的return里是把域名给写死了：<code>rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;</code>。</p>
 <p>现在新的需求又来了，说域名不要写死，<code>http://dvlshop.lechange.com/index.php/</code>这部分要跟整个uri的state部分保持一致。</p>
-<p>我这里再把整个uri贴出来，辣一下各位的眼睛：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>source_type</em>=lc_app&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
-<p>也就是说现在只需要变量state那部分，那么这个时候就不能再使用$query_string了，要使用$arg。</p>
-<p>$arg可以精确匹配变量，比如说我有一个参数（uri里？后面的那部分全叫参数）：&amp;p=2887&amp;q=test，用$query_string和$arg就是获取所有，而使用$arg_p就是可以获取2887。</p>
+<p>于是我这里再把整个uri贴出来，辣一下各位的眼睛：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>source_type</em>=lc_app&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
+<p>也就是说现在只需要变量state那点部分，那么这个时候就不能再使用$query_string了，要使用$arg。</p>
+<p>$arg可以精确匹配变量，比如说我有一个参数（uri里？后面的那部分全叫参数）：&amp;p=你大爷&amp;q=你大娘，用$query_string和$arg就是获取所有，而使用$arg_p就是可以获取“你大爷”。</p>
 <p>于是说动手就动手，把nginx.conf改成了：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.php.*</span><br><span class="line">&#123;</span><br><span class="line">    include php_fcgi.conf;</span><br><span class="line">    include pathinfo.conf;</span><br><span class="line">    set $flag <span class="string">"0"</span>;</span><br><span class="line">    <span class="keyword">if</span> ( $args ~ <span class="string">"source_type=lc_app"</span> ) &#123;</span><br><span class="line">       set $flag  <span class="string">"1"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( $args ~ <span class="string">"(.*)response_type(.*)"</span> )&#123;</span><br><span class="line">       set $Flag  <span class="string">"$flag$flag"</span>;</span><br><span class="line">       set $id $<span class="number">1</span>;</span><br><span class="line">       set $query $<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($Flag = <span class="string">"11"</span>)&#123;</span><br><span class="line">        set $flag <span class="string">"0"</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">301</span>  $arg_state$id+auto+$query;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>但是通过日志查看，发现$arg_state得到的是<code>/http%3A%2F%2Fdvlshop.lechange.com%2Fproduct-79.html</code>,这就很囧了，我希望获取<code>http%3A%2F%2Fdvlshop.lechange.com%2Fproduct-79.html</code>（不要前面的反斜杠）或者是<code>/product-79.html</code>（不要中间的网站）。这可怎么办？</p>
-<p>答案是，<strong>原生的nginx是做不到这一点，因为nginx不参与业务层逻辑方面的业务。</strong>如果说要达到改写的目的，就要搭配lua或者把nginx换成openresty。</p>
-<p>这时候让我想起来一道面试题，说开发有一个模块，现在这个模块会给nginx提供几个状态码，比如状态码是111，那就是代表OK，状态码不是111，那就是代表不OK，现在想写一个语句，如果nginx获得的状态码不是111，返回一个404的页面，怎么写？</p>
-<p>没错，答案是“原生nginx写不了”，原因跟上面的一样，应用模块状态码是业务层的，nginx是http层的，不在一层压根就无法交流。</p>
+<p>答案是，<strong>原生的nginx是做不到这一点，因为nginx不参与业务层逻辑方面的业务。</strong>如果说要达到改写的目的，就要搭配lua或者把nginx换成openresty。于是乎就让开发修改一下传递的state来达到目的。</p>
+<h2><span id="扩展与补充">扩展与补充</span></h2><p>看到这个结果突然让我想起来一道面试题，说开发有一个模块，同时这个模块会给nginx提供几个状态码，比如状态码是111，那就是代表OK，状态码不是111，那就是代表不OK，现在想写一个语句，如果nginx获得的状态码不是111，返回一个404的页面，怎么写？</p>
+<p>没错，答案也是“原生nginx写不了”，原因跟上面的一样，应用模块状态码是业务层的，nginx是http层的，不在一层压根就无法交流。</p>
+<p>在这里也顺道补充一下“在浏览器中输入一个URL后都发生了什么？”，以下是一个大概流程：</p>
+<ol>
+<li>浏览器向DNS服务器查找输入URL对应的IP地址；</li>
+<li>DNS服务器返回网站的IP地址；</li>
+<li>浏览器根据IP地址与目标web服务器建立TCP连接；</li>
+<li>发送HTTP请求；</li>
+<li>服务器处理请求；</li>
+<li>返回响应结果；</li>
+<li>关闭TCP连接；</li>
+<li>浏览器解析HTML；</li>
+<li>浏览器布局渲染；</li>
+</ol>
 <p><img src="/images/家有喜事.gif" alt="星爷、李丽珍、张曼玉" title="《家有喜事》"></p>
 
       
@@ -543,7 +555,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/09/Query-String跟arg的异同/" title="Query String跟arg的异同">Query String跟arg的异同</a>
+					<a href="http://yoursite.com/2018/01/09/Query-String跟arg的异同/" title="Query String跟Arg的差异">Query String跟Arg的差异</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -832,7 +844,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;&#x4E0E;&#x9700;&#x6C42;">&#x524D;&#x8A00;&#x4E0E;&#x9700;&#x6C42;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;&#x4E0E;&#x9700;&#x6C42;">&#x524D;&#x8A00;&#x4E0E;&#x9700;&#x6C42;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x6269;&#x5C55;&#x4E0E;&#x8865;&#x5145;">&#x6269;&#x5C55;&#x4E0E;&#x8865;&#x5145;</span></span></a></li></ol></div>
             
 
           </div>
@@ -889,7 +901,7 @@ var jiathis_config={
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共5.6k字</span>
+  <span class="post-count">博客全站共5.8k字</span>
 </div>
         
 
