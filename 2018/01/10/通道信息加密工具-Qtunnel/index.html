@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/images/aqidong.png">
 <meta property="og:image" content="http://yoursite.com/images/bqidong.png">
 <meta property="og:image" content="http://yoursite.com/images/shujubuluoben.png">
-<meta property="og:updated_time" content="2018-01-10T04:31:26.591Z">
+<meta property="og:updated_time" content="2018-01-10T04:33:29.115Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通道信息加密工具--Qtunnel">
 <meta name="twitter:description" content="你总不会采取“数据在公网裸奔”这样的找死行为吧。">
@@ -474,7 +474,7 @@
       
 
       
-        <p>前言<br>数据库做异地容灾是一个很常见的现象，既然信息要跨地域传递，要么就很土豪的打通机房之间的链路或者动用VPN，要不然就不可避免的走公网网络传输信息。既然选择了公网，那么数据库的语句就很容易被人监听到，所以把那些明文加密是必不可少的环节。</p>
+        <h2><span id="前言">前言</span></h2><p>数据库做异地容灾是一个很常见的现象，既然信息要跨地域传递，要么就很土豪的打通机房之间的链路或者动用VPN，要不然就不可避免的走公网网络传输信息。既然选择了公网，那么数据库的语句就很容易被人监听到，所以把那些明文加密是必不可少的环节。</p>
 <p>mysql支持tls/ssl加密方法对信息进行加密，这个方法的配置也很简单，就是两边各加上一个nginx，一个是正向代理一个是反向代理，配上ssl证书，然后就像配置网站https协议那样，在nginx.conf里开启ssl监听即可。</p>
 <p>但是这种方法有一点小问题，就是在进行SSL握手之前，mysql 会发送Server Greeting和Login Request数据包，然后才有可能使用SSL握手。这样步骤就多了一步鉴权，对访问性能有所影响。所以这个时候，我选择了另一个用于加密client和server之间链路通信的工具—-Qtunnel，因为它直接加密，速度更快。</p>
 <p>Git的地址在这里：<a href="https://github.com/arstercz/qtunnel" target="_blank" rel="noopener">https://github.com/arstercz/qtunnel</a> ，<strong>感谢arstercz大神的再加工！</strong></p>
@@ -849,7 +849,7 @@ var jiathis_config={
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x4E0B;&#x8F7D;&#x4E0E;&#x51C6;&#x5907;">&#x4E0B;&#x8F7D;&#x4E0E;&#x51C6;&#x5907;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B9E;&#x9A8C;&#x5F00;&#x59CB;">&#x5B9E;&#x9A8C;&#x5F00;&#x59CB;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x603B;&#x7ED3;&#x4E0E;&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x603B;&#x7ED3;&#x4E0E;&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;">&#x524D;&#x8A00;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x4E0B;&#x8F7D;&#x4E0E;&#x51C6;&#x5907;">&#x4E0B;&#x8F7D;&#x4E0E;&#x51C6;&#x5907;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5B9E;&#x9A8C;&#x5F00;&#x59CB;">&#x5B9E;&#x9A8C;&#x5F00;&#x59CB;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x603B;&#x7ED3;&#x4E0E;&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x603B;&#x7ED3;&#x4E0E;&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
