@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[通过nginx配置修改网页cookie属性]]></title>
+    <url>%2F2018%2F01%2F10%2F%E9%80%9A%E8%BF%87nginx%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E7%BD%91%E9%A1%B5cookie%E5%B1%9E%E6%80%A7%2F</url>
+    <content type="text"><![CDATA[需求与具体配置公司的电子商城在十九大等保安检时期被折腾出去，结果这几天又折腾回来了，据说还会是明年大数据研究院的主要开发项目。结果回来没几天被测试中心的人在cookie方面发现了几个问题，如下： cookie没有使用http-only； cookie没有携带secure属性； http头中需要配置“X-Frame-Options：SAMEORIGIN”； 以上这几点可以通过nginx的配置来轻松实现，具体方法就是在需要更改的网页server的配置里面添加下面几句话。如图： 123add_header Set-Cookie "HttpOnly";add_header Set-Cookie "Secure";add_header X-Frame-Options "SAMEORIGIN"; 然后保存配置文件，nginx -s reload平滑重启即可，通过chrome在目标网页里按下ctrl+shift+c，先选择好network，然后重新刷新一下界面，选择域名，对应域名下点击headers，就会看到cookie的配置情况，如图： 扩展内容看到配置已经生效。那么这几个配置主要是干什么的呢？其实主要都是防范XSS攻击（跨域脚本攻击）的。 Cookie的Secure属性，意味着保持Cookie通信只限于加密传输，指示浏览器仅仅在通过安全/加密连接才能使用该Cookie。如果一个Web服务器从一个非安全连接里设置了一个带有secure属性的Cookie，当Cookie被发送到客户端时，它仍然能通过中间人攻击来拦截。 Cookie的HttpOnly属性，指示浏览器不要在除HTTP（和HTTPS)请求之外暴露Cookie。一个有HttpOnly属性的Cookie，是不可以通过例如调用JavaScript(引用document.cookie)这种非HTTP方式来访问。因此，也不可能通过跨域脚本（一种非常普通的攻击技术）来偷走这种Cookie。 X-Frame-Options HTTP 响应头是用来给浏览器指示允许一个页面可否在 , 或者 中展现的标记。网站可以使用此功能，来确保自己网站的内容没有被嵌到别人的网站中去，也从而避免了点击劫持 (clickjacking) 的攻击。它有三个可选择项： 123DENY：表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许；SAMEORIGIN：表示该页面可以在相同域名页面的 frame 中展示；ALLOW-FROM uri地址：表示该页面可以在指定来源的 frame 中展示； 如果设置为 DENY，不光在别人的网站 frame 嵌入时会无法加载，在同域名页面中同样会无法加载。另一方面，如果设置为 SAMEORIGIN，那么页面就可以在同域名页面的 frame 中嵌套。 这里还要额外注意一下！配置了Cookie的HttpOnly属性和Secure属性之后，如果测试中心的人使用的协议是http而不是https的话，会有“浏览器请求后端服务时header不会带上cookie参数”的现象，那是因为“由于secure属性的存在，导致浏览器在与服务器通信时不会使用该cookie”。这个时候就需要把secure=”true”这个配置去掉才可以达到正确测试的目的。 参考资料https://imququ.com/post/my-nginx-conf-for-security.html]]></content>
+      <categories>
+        <category>用来讨饭吃的技术</category>
+      </categories>
+      <tags>
+        <tag>nginx</tag>
+        <tag>运维技术</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[django新增class的时候数据库格式出错]]></title>
     <url>%2F2018%2F01%2F10%2Fdjango%E6%96%B0%E5%A2%9Eclass%E7%9A%84%E6%97%B6%E5%80%99%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A0%BC%E5%BC%8F%E5%87%BA%E9%94%99%2F</url>
     <content type="text"><![CDATA[这几天开发频繁要求查看生产环境zookeeper的配置，于是就想在django里添加一个新的栏，以文本的形式随时更新zookeeper的情况。 于是我就登陆了django，在model.py里添加一个新的class，如下： 12345678#建立杭州测试ZK配置class HZfunczk(models.Model): hzfunczk_remark = models.CharField(verbose_name='杭州测试ZK配置',max_length=50000,blank=true) hzfunczk_signer = models.CharField(verbose_name='登记人',max_length=30,default='system') hzfunczk_signtime = models.DateField(auto_now_add=True) def __unicode__(self): return self.domain_name 然后在django的目录下执行python manage.py makemigrations，这一步没问题，但是在执行python manage.py migrate的时候，就出现了下面的错误： 我开始认为是charfield写错了，应该写Textfield，于是更改了一下，但是保存之后，再执行python manage.py migrate还是出错。其实这个错误主要原因就是因为我那个50000设置错了，因为字段hzfunczk_remark定义的长度50000超出了mysql的varchar的最大长度21845（在utf8编码情况下）。于是我就在model.py里把这个长度改成20000，保存之后，还是执行到python manage.py migrate这一步，依旧爆上面的错误。于是我就干脆把这个class先删除掉，没想到都删除光了，还是在make的时候会爆错。 这就很奇怪了，我已经删掉了为啥还有这样的事儿？于是就干脆进入到数据库去看，由于我现在只知道列名叫hzfunczk_remark，所以我要根据这个列名去查它所在的表，maria反馈如下： 12MariaDB [abccs]&gt; select TABLE_SCHEMA, TABLE_NAME from information_schema.columns where COLUMN_NAME = 'hzfunczk_remark'; Empty set (0.02 sec) 好尴尬呀，数据库里压根就没有列名为“hzfunczk_remark”的表。然后由于python manage.py migrate报错，现在无法启动django。怎么办？ 遇到这种状况，就去django里的migrations文件夹，这个文件夹里有很多的以时间命名的py文件，它们记录着数据库的每一步操作，不过这里面的py还没有真正执行到数据库里，我找到当时添加class那个时间段的py文件，里面是这样的： 先把里面CharField改成TextField，然后把50000改成小于21845的就行了。如果你性子比较烈，那就干脆把这个文件以及之后产生的所有文件都删除掉。重新的去make。 如果还是实在不行，还有一个万不得已的办法，几乎所有的数据库错误都可以用这个方法解决：将migrations文件夹下的文件除了init.py全部删掉，然后将数据库drop掉，重新建数据库。然后make和migrate，就可以使用一个新的数据库（但愿你永远用不到这个方法）。]]></content>
@@ -32,8 +44,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>运维</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -57,8 +69,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Nginx</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -69,8 +81,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Nginx</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
