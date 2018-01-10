@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="运维,zabbix," />
 
 
 
@@ -88,17 +88,28 @@
 
 
 
-<meta name="description" content="生活就是等待戈多">
-<meta property="og:type" content="website">
-<meta property="og:title" content="about me">
-<meta property="og:url" content="http://yoursite.com/about-me/index.html">
+<meta name="description" content="Zabbix搭配微信企业号报警是一个很流行的手段，这里说一下如何配置。 准备工作建立一个企业号以及具体应用的链接在此：http://chenx1242.blog.51cto.com/10430133/1954634 ，里面写的都很明白了。 现在打开微信企业号的官方网站https://work.weixin.qq.com  ，然后扫描一下微信二维码登录到企业号的控制台。 在控制台网页里，需要查找几个">
+<meta name="keywords" content="运维,zabbix">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zabbix3.0搭配微信企业号报警">
+<meta property="og:url" content="http://yoursite.com/2018/01/10/Zabbix3-0搭配微信企业号报警/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="生活就是等待戈多">
+<meta property="og:description" content="Zabbix搭配微信企业号报警是一个很流行的手段，这里说一下如何配置。 准备工作建立一个企业号以及具体应用的链接在此：http://chenx1242.blog.51cto.com/10430133/1954634 ，里面写的都很明白了。 现在打开微信企业号的官方网站https://work.weixin.qq.com  ，然后扫描一下微信二维码登录到企业号的控制台。 在控制台网页里，需要查找几个">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T06:23:07.011Z">
+<meta property="og:image" content="http://yoursite.com/images/corpid.png">
+<meta property="og:image" content="http://yoursite.com/images/aksk1.png">
+<meta property="og:image" content="http://yoursite.com/images/checkaksk.png">
+<meta property="og:image" content="http://yoursite.com/images/content.png">
+<meta property="og:image" content="http://yoursite.com/images/checkpy.jpg">
+<meta property="og:image" content="http://yoursite.com/images/mediatype.png">
+<meta property="og:image" content="http://yoursite.com/images/addpy.png">
+<meta property="og:image" content="http://yoursite.com/images/addtrigger.png">
+<meta property="og:image" content="http://yoursite.com/images/checkpy2.jpg">
+<meta property="og:updated_time" content="2018-01-10T03:29:46.452Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="about me">
-<meta name="twitter:description" content="生活就是等待戈多">
+<meta name="twitter:title" content="Zabbix3.0搭配微信企业号报警">
+<meta name="twitter:description" content="Zabbix搭配微信企业号报警是一个很流行的手段，这里说一下如何配置。 准备工作建立一个企业号以及具体应用的链接在此：http://chenx1242.blog.51cto.com/10430133/1954634 ，里面写的都很明白了。 现在打开微信企业号的官方网站https://work.weixin.qq.com  ，然后扫描一下微信二维码登录到企业号的控制台。 在控制台网页里，需要查找几个">
+<meta name="twitter:image" content="http://yoursite.com/images/corpid.png">
 
 
 
@@ -128,13 +139,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/about-me/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/10/Zabbix3-0搭配微信企业号报警/"/>
 
 
 
 
 
-  <title>about me | Chris Chan's BLOG</title>
+  <title>Zabbix3.0搭配微信企业号报警 | Chris Chan's BLOG</title>
   
 
 
@@ -305,33 +316,335 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/10/Zabbix3-0搭配微信企业号报警/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/faceinpunch.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">about me</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
+          <h1 class="post-title" itemprop="name headline">Zabbix3.0搭配微信企业号报警</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T11:18:02+08:00">
+                2018-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-      </div>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/用来讨饭吃的技术/" itemprop="url" rel="index">
+                    <span itemprop="name">用来讨饭吃的技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/10/Zabbix3-0搭配微信企业号报警/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/10/Zabbix3-0搭配微信企业号报警/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/01/10/Zabbix3-0搭配微信企业号报警/" class="leancloud_visitors" data-flag-title="Zabbix3.0搭配微信企业号报警">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,194
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <p>Zabbix搭配微信企业号报警是一个很流行的手段，这里说一下如何配置。</p>
+<h2><span id="准备工作">准备工作</span></h2><p>建立一个企业号以及具体应用的链接在此：<a href="http://chenx1242.blog.51cto.com/10430133/1954634" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1954634</a> ，里面写的都很明白了。</p>
+<p>现在打开微信企业号的官方网站<a href="https://work.weixin.qq.com" target="_blank" rel="noopener">https://work.weixin.qq.com</a>  ，然后扫描一下微信二维码登录到企业号的控制台。</p>
+<p>在控制台网页里，需要查找几个元素，分别是CorpID、应用AgentId、应用Secret还有用户账号。</p>
+<p>首先，在控制台里选择“我的企业”，然后就可以看见CorpID，如图：<br><img src="/images/corpid.png" alt="抱光妹" title="获取CorpID"></p>
+<p>然后点击“企业应用”，如果没有应用，那么就新建立一个应用。比如我已经建立了一个应用叫“zabbix告警”，那么应用AgentId和应用Secret就在如图的位置：<br><img src="/images/aksk1.png" alt="抱光妹" title="应用AgentId和应用Secret"></p>
+<p>有了上面的CropID和Secret，就可以去验证一下accesstoken，登录<a href="http://qydev.weixin.qq.com/debug" target="_blank" rel="noopener">http://qydev.weixin.qq.com/debug</a> ，后在填入对应的CropID和Secret，看一下返回结果是否是“HTTP/1.0 200 OK”，如图：<br><img src="/images/checkaksk.png" alt="抱光妹" title="验证AgentId和Secret"></p>
+<p>在这个“zabbix告警”的应用里可见范围里添加对应需要通知的人，然后在“通讯录”里，找到对应的人，记录他们的账号，如图：<br><img src="/images/content.png" alt="抱光妹" title="通讯录联系人"></p>
+<p>材料已经俱备完毕，现在需要做的是更改zabbix-server配置。</p>
+<p>首先，在zabbix-server.conf里添加一句<code>“AlertScriptsPath=/usr/lib/zabbix/alertscripts”</code>，这是为了说明一下脚本所在的路径。当然，这个路径你可以自己更改，然后重启一下zabbix-server。</p>
+<h2><span id="编写脚本">编写脚本</span></h2><p><code>cd /usr/lib/zabbix/alertscripts</code>，在这个目录下我们要新写一个微信脚本，比如脚本名称叫<code>wechat.py</code>。</p>
+<p>这个python脚本是需要requests模块的，所以需要先安装这个模块，安装方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install requests</span><br><span class="line">pip install --upgrade requests</span><br></pre></td></tr></table></figure></p>
+<p>而python脚本内容如下，感谢<a href="https://github.com/X-Mars/Zabbix-Alert-WeChat/" target="_blank" rel="noopener">https://github.com/X-Mars/Zabbix-Alert-WeChat/</a> 的脚本：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/python2.7</span></span><br><span class="line">#_*_coding:utf-8 _*_</span><br><span class="line">#this script is used for alarm by WECHAT</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,sys,json</span><br><span class="line"><span class="keyword">import</span> urllib3</span><br><span class="line"></span><br><span class="line">urllib3.disable_warnings()</span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding(<span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">def GetToken(Corpid,Secret):</span><br><span class="line">   	Url = <span class="string">"https://qyapi.weixin.qq.com/cgi-bin/gettoken"</span></span><br><span class="line">   	Data = &#123;</span><br><span class="line">   	    <span class="string">"corpid"</span>:Corpid,</span><br><span class="line">   	    <span class="string">"corpsecret"</span>:Secret</span><br><span class="line">   	&#125;</span><br><span class="line">   	r = requests.get(url=Url,params=Data,verify=False)</span><br><span class="line">   	Token = r.json()[<span class="string">'access_token'</span>]</span><br><span class="line">   	<span class="keyword">return</span> Token</span><br><span class="line">   	 </span><br><span class="line">def SendMessage(Token,User,Agentid,Subject,Content):</span><br><span class="line">   	Url = <span class="string">"https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s"</span> % Token</span><br><span class="line">   	Data = &#123;</span><br><span class="line">   	    "touser": User,                                 # 企业号中的用户帐号，在zabbix用户Media中配置，如果配置不正常，将按部门发送。</span><br><span class="line">   	    #"totag": Tagid,                                # 企业号中的部门id，群发时使用。</span><br><span class="line">   	    "msgtype": "text",                              # 消息类型。</span><br><span class="line">   	    "agentid": Agentid,                             # 企业号中的应用id。</span><br><span class="line">   	    <span class="string">"text"</span>: &#123;</span><br><span class="line">   	        <span class="string">"content"</span>: Subject + <span class="string">'\n'</span> + Content</span><br><span class="line">   	    &#125;,</span><br><span class="line">   	    <span class="string">"safe"</span>: <span class="string">"0"</span></span><br><span class="line">   	&#125;</span><br><span class="line">   	r = requests.post(url=Url,data=json.dumps(Data),verify=False)</span><br><span class="line">   	<span class="keyword">return</span> r.text</span><br><span class="line">   	 </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">   	User = sys.argv[1]                                                              # zabbix传过来的第一个参数</span><br><span class="line">   	Subject = sys.argv[2]                                                           # zabbix传过来的第二个参数</span><br><span class="line">   	Content = sys.argv[3]                                                           # zabbix传过来的第三个参数</span><br><span class="line">   	Corpid = <span class="string">"这里填写Corpid"</span>                                                   </span><br><span class="line">   	Secret = <span class="string">"这里填写Secret"</span>                           </span><br><span class="line">   	Agentid = <span class="string">"这里填写应用的agentid"</span>                                                        </span><br><span class="line">   	Token = GetToken(Corpid, Secret)</span><br><span class="line">   	Status = SendMessage(Token,User,Agentid,Subject,Content)</span><br><span class="line">   	print Status</span><br></pre></td></tr></table></figure></p>
+<p>脚本保存后，#chown -R zabbix:zabbix wechat.py，然后小试一下，上面看到“Zabbix告警”这个微信应用里有一个用户账号叫ChenShuo，那么wechat.py执行语句是：＃python wechat.py ChenShuo 这个是标题  这里是正文！！</p>
+<p>然后看一下微信，如图：<br><img src="/images/checkpy.jpg" alt="抱光妹" title="脚本验证成功"></p>
+<p>正确出现了微信提示，可见这个脚本是OK的了。</p>
+<h2><span id="配置zabbix">配置zabbix</span></h2><p>现在我们要登录到zabbix网站，最上面的“Administration”里选择“Media types”，新建立一个Media type，如图：<br><img src="/images/mediatype.png" alt="抱光妹" title="新建立Media type"></p>
+<p>保存之后，在“Administration”里选择“Users”，在Admin用户里点击“media”,把刚刚新增的“微信告警”这个media type添加进去，如图：<br><img src="/images/addpy.png" alt="抱光妹" title="添加Media type"></p>
+<p>通知手段配置完毕，现在就是要在具体的Trigger上把微信告警这个新手段添加到active里。首先打开Configuration里的actions界面。此时假设现在有一个告警Trigger叫“模块发生了重启”，判断模块是否重启的依据就是pid值是否发生了变化。那么点击这个Trigger，在action里把“微信告警”添加到报警手段里，如图：<br><img src="/images/addtrigger.png" alt="抱光妹" title="配置trigger"></p>
+<p>保存之后，整个的微信告警配置就完成了。为了验证配置是否生效，我冒死重启了一台生产环境的服务器，当然啦，好孩子千万不要效仿。</p>
+<p>收到微信提示如图：<br><img src="/images/checkpy2.jpg" alt="抱光妹" title="脚本验证成功"><br>不过考虑到微信告警可能会有所延迟，所以在这建议大家把告警阈值配置稍微早一点，避免“孩子死了奶来了”这种尴尬的情况。</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.yfshare.vip/2017/04/13/Zabbix%E4%B9%8B%E5%BE%AE%E4%BF%A1-Wechat-%E5%91%8A%E8%AD%A6/" target="_blank" rel="noopener">http://www.yfshare.vip/2017/04/13/Zabbix%E4%B9%8B%E5%BE%AE%E4%BF%A1-Wechat-%E5%91%8A%E8%AD%A6/</a><br><a href="https://github.com/X-Mars/Zabbix-Alert-WeChat/" target="_blank" rel="noopener">https://github.com/X-Mars/Zabbix-Alert-WeChat/</a></p>
+
       
     </div>
     
     
     
+	
+	
+	  <div>
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------This article is over!<i class="fa fa-paw"></i>Thanks for reading!-------------</div>
+    
+</div>
+	  </div>
+	
+	
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢您请我喝咖啡！(o´ω`o)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Chris Chan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zhifubaopay.jpg" alt="Chris Chan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+			<ul class="post-copyright">
+				<li class="post-copyright-link">
+					<strong>本文作者：</strong>
+					<a href="/" title="欢迎访问 Chris Chan 的个人博客">Chris Chan</a>
+				</li>
+
+				<li class="post-copyright-link">
+					<strong>本文标题：</strong>
+					<a href="http://yoursite.com/2018/01/10/Zabbix3-0搭配微信企业号报警/" title="Zabbix3.0搭配微信企业号报警">Zabbix3.0搭配微信企业号报警</a>
+				</li>
+
+				<li class="post-copyright-date">
+					<strong>发布时间：</strong>2018年1月10日 - 11时01分
+				</li>  
+
+				<li class="post-copyright-license">
+					<strong>版权声明： </strong>
+					本文由 Chris Chan 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="license" target="_blank">保留署名-非商业性使用-禁止演绎 4.0-国际许可协议</a> </br>转载请保留以上声明信息！
+				</li>
+			</ul>
+			
+		</div>
+	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/运维/" rel="tag"><i class="fa fa-tag"></i> 运维</a>
+          
+            <a href="/tags/zabbix/" rel="tag"><i class="fa fa-tag"></i> zabbix</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/10/自己动手搭建一个hexo博客demo/" rel="next" title="自己动手搭建一个hexo博客demo">
+                <i class="fa fa-chevron-left"></i> 自己动手搭建一个hexo博客demo
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
   </div>
 
 
@@ -369,8 +682,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -515,6 +837,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x51C6;&#x5907;&#x5DE5;&#x4F5C;">&#x51C6;&#x5907;&#x5DE5;&#x4F5C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x7F16;&#x5199;&#x811A;&#x672C;">&#x7F16;&#x5199;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;zabbix">&#x914D;&#x7F6E;zabbix</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -701,7 +1039,7 @@
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "about-me/index.html"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/10/Zabbix3-0搭配微信企业号报警/"});
 		
 
 		(function() {
