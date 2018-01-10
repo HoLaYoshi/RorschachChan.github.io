@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[通道信息加密工具--Qtunnel]]></title>
+    <url>%2F2018%2F01%2F10%2F%E9%80%9A%E9%81%93%E4%BF%A1%E6%81%AF%E5%8A%A0%E5%AF%86%E5%B7%A5%E5%85%B7-Qtunnel%2F</url>
+    <content type="text"><![CDATA[前言数据库做异地容灾是一个很常见的现象，既然信息要跨地域传递，要么就很土豪的打通机房之间的链路或者动用VPN，要不然就不可避免的走公网网络传输信息。既然选择了公网，那么数据库的语句就很容易被人监听到，所以把那些明文加密是必不可少的环节。 mysql支持tls/ssl加密方法对信息进行加密，这个方法的配置也很简单，就是两边各加上一个nginx，一个是正向代理一个是反向代理，配上ssl证书，然后就像配置网站https协议那样，在nginx.conf里开启ssl监听即可。 但是这种方法有一点小问题，就是在进行SSL握手之前，mysql 会发送Server Greeting和Login Request数据包，然后才有可能使用SSL握手。这样步骤就多了一步鉴权，对访问性能有所影响。所以这个时候，我选择了另一个用于加密client和server之间链路通信的工具—-Qtunnel，因为它直接加密，速度更快。 Git的地址在这里：https://github.com/arstercz/qtunnel ，感谢arstercz大神的再加工！ 上面说过了Qtunnel是不需要认证的，默认加密方法是RC4，以字节流的方式加密明文的每一个字节，而且密钥长度最长支持256位，可以很好的抵御暴力搜索密钥的攻击，总而言之，Qtunnel是一个轻量且快速的加解密工具，而且还可以搭配atlas等数据库中间件使用。 下载与准备由于Qtunnel是用go语言写的，所以需要先安装golang，centos服务器的yum安装方法如下: 12rpm -Uvh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpmyum install -y golang go语言安装完毕之后，我们就git clone https://github.com/arstercz/qtunnel.git ，获得qtunnel文件夹，文件夹内容如下： make，如果没有任何报错，那么就是安装成功了，使用./bin/qtunnel -h语句验证一番： 本次实验的计划是这样的：用A机器访问B机器的mysql，并且插入数据，在B机器上的3306端口抓包，查看数据是否是明文；然后再在A机器和B机器上都安装qtunnel并且启动，然后重新插入数据，在B机器上的端口抓包，查看数据是否被加密。流程图如下： 实验开始A机器和B机器都是使用阿里云虚拟服务器，版本都是6.4，现在我们的加密实验正式开始。 首先A和B机器上都不启动qtunnel，然后我们在A机器上登陆B机器的数据库，如果之前没有授权，那么授权语句是： GRANT ALL PRIVILEGES ON . TO ‘root’@’A机器的IP地址’ IDENTIFIED BY ‘密码’ WITH GRANT OPTION; 登陆mysql之后，我们随意的插一个语句，然后通过抓包发现无论这个语句还是数据库的反馈都是以明文的形式呈现，如图： 这种让数据裸奔的行为无疑于找死，那么这个时候我们就要配置一下qtunnel，来看一下它的加密效果。 在A服务器上，我们设定qtunnel是客户端，手动建立一个conf文件，比如vim /etc/conn.conf，内容如下： 123456[client1]faddr = 10.252.215.108:3309 #这里是qtunnel客户端的IPbaddr = 10.175.193.239:3310 #这里是qtunnel服务端的IPcryptoMethod = rc4 #这里选用rc4的方式加密secret = 3301_test%Iad #rc4密钥，服务端的密码必须跟这个一致！clientmode = true #表示这端是客户端 然后使用./bin/qtunnel -conf=/etc/conn.conf -daemon -logto=syslog启动qtunnel，看一下进程和端口情况，如图： 在B服务器上，同样手动建立一个配置文件，假设也叫conn.conf，内容如下： 123456[server1]faddr = 10.175.193.239:3310 #这里是qtunnel服务端的IPbaddr = 10.175.193.239:3306 #这里是数据库的地址，由于在同一台机器上，所以地址一样cryptoMethod = rc4 secret = 3301_test%Iad #rc4密钥，跟client密钥一致clientmode = false #表示这是服务器端 也用同样的语句启动qtunnel，查看3310这个端口已经被监听了： 现在，我们在A服务器上来重新连接B数据库，但是要注意！这个时候mysql里的-h不能再是B的IP地址了，而是A的地址！因为qtunnel现在已经打通了一个通道，访问qtunnel的3310端口就等于是访问B数据库的3306端口（有点类似atlas的意思）。 连上之后，我们随意插入一些语句，看一下qtunnel的能力: 可见这个时候，抓包显示都是加密的文字了，实验成功！ 总结与参考资料总结一下：qtunnel 采用 rc4加密，在算法强度和速度方面是很好的选择，不会引起 slave 太大的延迟，对管理员或开发而言数据都是透明的（如果在上面的实验启动了qtunnel之后，不监听3310端口，而是监听3306端口，得到的依旧是明文），只是在两端传输的过程中增加了加解密处理。核心的业务(比如用户和充值)在做异地架构的时候可以考虑该方式增强数据的安全性。 《mysql使用ssl简析》：https://hsulei.com/2017/10/19/mysql%E4%BD%BF%E7%94%A8ssl%E7%AE%80%E6%9E%90/《使用ssl加密mysql 5.6的官方文档》：https://dev.mysql.com/doc/refman/5.6/en/encrypted-connections.html]]></content>
+      <categories>
+        <category>用来讨饭吃的技术</category>
+      </categories>
+      <tags>
+        <tag>加密技术</tag>
+        <tag>Qtunnel</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Zabbix3.0搭配微信企业号报警]]></title>
     <url>%2F2018%2F01%2F10%2FZabbix3-0%E6%90%AD%E9%85%8D%E5%BE%AE%E4%BF%A1%E4%BC%81%E4%B8%9A%E5%8F%B7%E6%8A%A5%E8%AD%A6%2F</url>
     <content type="text"><![CDATA[Zabbix搭配微信企业号报警是一个很流行的手段，这里说一下如何配置。 准备工作建立一个企业号以及具体应用的链接在此：http://chenx1242.blog.51cto.com/10430133/1954634，里面写的都很明白了。 现在打开微信企业号的官方网站https://work.weixin.qq.com，然后扫描一下微信二维码登录到企业号的控制台。 在控制台网页里，需要查找几个元素，分别是CorpID、应用AgentId、应用Secret还有用户账号。 首先，在控制台里选择“我的企业”，然后就可以看见CorpID，如图： 然后点击“企业应用”，如果没有应用，那么就新建立一个应用。比如我已经建立了一个应用叫“zabbix告警”，那么应用AgentId和应用Secret就在如图的位置： 有了上面的CropID和Secret，就可以去验证一下accesstoken，登录http://qydev.weixin.qq.com/debug ，后在填入对应的CropID和Secret，看一下返回结果是否是“HTTP/1.0 200 OK”，如图： 在这个“zabbix告警”的应用里可见范围里添加对应需要通知的人，然后在“通讯录”里，找到对应的人，记录他们的账号，如图： 材料已经俱备完毕，现在需要做的是更改zabbix-server配置。 首先，在zabbix-server.conf里添加一句AlertScriptsPath=/usr/lib/zabbix/alertscripts，这是为了说明一下脚本所在的路径。当然，这个路径你可以自己更改，然后重启一下zabbix-server。 编写脚本cd /usr/lib/zabbix/alertscripts，在这个目录下我们要新写一个微信脚本，比如脚本名称叫wechat.py。 这个python脚本是需要requests模块的，所以需要先安装这个模块，安装方法如下： 12pip install requestspip install --upgrade requests 而python脚本内容如下，感谢https://github.com/X-Mars/Zabbix-Alert-WeChat/的脚本： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546#!/usr/bin/python2.7#_*_coding:utf-8 _*_#this script is used for alarm by WECHATimport requests,sys,jsonimport urllib3urllib3.disable_warnings()reload(sys)sys.setdefaultencoding('utf-8')def GetToken(Corpid,Secret): Url = "https://qyapi.weixin.qq.com/cgi-bin/gettoken" Data = &#123; "corpid":Corpid, "corpsecret":Secret &#125; r = requests.get(url=Url,params=Data,verify=False) Token = r.json()['access_token'] return Token def SendMessage(Token,User,Agentid,Subject,Content): Url = "https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token=%s" % Token Data = &#123; "touser": User, # 企业号中的用户帐号，在zabbix用户Media中配置，如果配置不正常，将按部门发送。 #"totag": Tagid, # 企业号中的部门id，群发时使用。 "msgtype": "text", # 消息类型。 "agentid": Agentid, # 企业号中的应用id。 "text": &#123; "content": Subject + '\n' + Content &#125;, "safe": "0" &#125; r = requests.post(url=Url,data=json.dumps(Data),verify=False) return r.text if __name__ == '__main__': User = sys.argv[1] # zabbix传过来的第一个参数 Subject = sys.argv[2] # zabbix传过来的第二个参数 Content = sys.argv[3] # zabbix传过来的第三个参数 Corpid = "这里填写Corpid" Secret = "这里填写Secret" Agentid = "这里填写应用的agentid" Token = GetToken(Corpid, Secret) Status = SendMessage(Token,User,Agentid,Subject,Content) print Status 脚本保存后，chown -R zabbix:zabbix wechat.py，然后小试一下，上面看到“Zabbix告警”这个微信应用里有一个用户账号叫ChenShuo，那么wechat.py执行语句是：python wechat.py ChenShuo 这个是标题 这里是正文！！ 然后看一下微信，如图： 正确出现了微信提示，可见这个脚本是OK的了。 配置zabbix现在我们要登录到zabbix网站，最上面的“Administration”里选择“Media types”，新建立一个Media type，如图： 保存之后，在“Administration”里选择“Users”，在Admin用户里点击“media”,把刚刚新增的“微信告警”这个media type添加进去，如图： 通知手段配置完毕，现在就是要在具体的Trigger上把微信告警这个新手段添加到active里。首先打开Configuration里的actions界面。此时假设现在有一个告警Trigger叫“模块发生了重启”，判断模块是否重启的依据就是pid值是否发生了变化。那么点击这个Trigger，在action里把“微信告警”添加到报警手段里，如图： 保存之后，整个的微信告警配置就完成了。为了验证配置是否生效，我冒死重启了一台生产环境的服务器，当然啦，好孩子千万不要效仿。 收到微信提示如图：不过考虑到微信告警可能会有所延迟，所以在这建议大家把告警阈值配置稍微早一点，避免“孩子死了奶来了”这种尴尬的情况。 参考资料http://www.yfshare.vip/2017/04/13/Zabbix%E4%B9%8B%E5%BE%AE%E4%BF%A1-Wechat-%E5%91%8A%E8%AD%A6/https://github.com/X-Mars/Zabbix-Alert-WeChat/]]></content>
@@ -8,8 +20,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -33,8 +45,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -45,8 +57,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -98,8 +110,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>其他软件</tag>
         <tag>Linux</tag>
+        <tag>其他软件</tag>
       </tags>
   </entry>
   <entry>
@@ -119,7 +131,7 @@
     <url>%2F2017%2F12%2F13%2F%E8%BF%99%E9%87%8C%E8%AE%B0%E5%BD%95%E7%9A%84%E4%B8%8D%E5%8F%AA%E6%9C%89%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%BF%98%E6%9C%89%E7%94%9F%E6%B4%BB%E5%92%8C%E6%80%9D%E6%83%B3%EF%BC%81%2F</url>
     <content type="text"><![CDATA[你说要一个人去旅行 但是归期却没有约定 亚得里亚海边风中的吉他声你说你带着苍白的回忆 却谢谢能与我相逢 我怕你在异乡夜里孤独醒来要拒绝两人单调的生活 想寻找自由 迷信了爱情 就迷失了我自己你就这样 离开吧 抛弃吧 他乡的旅人你就那样 离开吧 抛弃吧 一个人生活 你说要一个人去旅行 眼里藏着一朵乌云 知道你藏不住秘密 天空就会飘着雨你说你带着一本日记 却不想再拥有回忆 我怕你在异乡孤独的醒来要拒绝两人单调的生活 不想再随波逐流 迷信了孤独 就软弱的抛弃了我的等待 你就这样 离开吧 抛弃吧 他乡的旅人你就那样 离开吧 抛弃吧 让我孤独生活 你就这样 离开吧 抛弃我 孤独的旅人你就这样 离开我 抛弃我 让我孤独生活 我想要一个人去旅行 但愿归期会有约定 每个人都在问我 是否可以找到自由的你亚得里亚海边他乡的人和风中的吉他声 我怕你一个人在异乡孤独醒来我会带着你回来]]></content>
       <categories>
-        <category>音乐</category>
+        <category>坠乱花天</category>
       </categories>
       <tags>
         <tag>音乐</tag>
