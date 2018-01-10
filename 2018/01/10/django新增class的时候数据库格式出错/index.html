@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/django1.png">
 <meta property="og:image" content="http://yoursite.com/images/django2.png">
-<meta property="og:updated_time" content="2018-01-10T07:47:51.724Z">
+<meta property="og:updated_time" content="2018-01-10T08:08:49.973Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="django新增class的时候数据库格式出错">
 <meta name="twitter:description" content="sql添加行的时候可不能为所欲为...">
@@ -477,7 +477,7 @@
 <p>好尴尬呀，数据库里压根就没有列名为“hzfunczk_remark”的表。然后由于<code>python manage.py migrate</code>报错，现在无法启动django。怎么办？</p>
 <p>遇到这种状况，就去django里的migrations文件夹，这个文件夹里有很多的以时间命名的py文件，它们记录着数据库的每一步操作，不过这里面的py还没有真正执行到数据库里，我找到当时添加class那个时间段的py文件，里面是这样的：<br><img src="/images/django2.png" alt="akb48" title="记录数据库操作的PY细节"></p>
 <p>先把里面CharField改成TextField，然后把50000改成小于21845的就行了。如果你性子比较烈，那就干脆把这个文件以及之后产生的所有文件都删除掉。重新的去<code>make</code>。</p>
-<p>如果还是实在不行，还有一个万不得已的办法，几乎所有的数据库错误都可以用这个方法解决：<strong>将migrations文件夹下的文件除了<strong>init</strong>.py全部删掉，然后将数据库drop掉，重新建数据库。然后make和migrate，就可以使用一个新的数据库</strong>（但愿你永远用不到这个方法）。</p>
+<p>如果还是实在不行，还有一个万不得已的办法，几乎所有的数据库错误都可以用这个方法解决：<font color="red">将migrations文件夹下的文件除了<strong>init</strong>.py全部删掉，然后将数据库drop掉，重新建数据库。然后make和migrate，就可以使用一个新的数据库</font>（但愿你永远用不到这个方法）。</p>
 
       
     </div>

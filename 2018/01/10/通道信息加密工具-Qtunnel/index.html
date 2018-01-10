@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/images/aqidong.png">
 <meta property="og:image" content="http://yoursite.com/images/bqidong.png">
 <meta property="og:image" content="http://yoursite.com/images/shujubuluoben.png">
-<meta property="og:updated_time" content="2018-01-10T04:50:11.796Z">
+<meta property="og:updated_time" content="2018-01-10T08:09:03.354Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通道信息加密工具--Qtunnel">
 <meta name="twitter:description" content="你总不会采取“数据在公网裸奔”这样的找死行为吧。">
@@ -491,7 +491,7 @@
 <p>然后使用<code>./bin/qtunnel -conf=/etc/conn.conf -daemon -logto=syslog</code>启动qtunnel，看一下进程和端口情况，如图：<br><img src="/images/aqidong.png" alt="抱光妹" title="看一下A进程和端口情况"></p>
 <p>在B服务器上，同样手动建立一个配置文件，假设也叫conn.conf，内容如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[server1]</span><br><span class="line">faddr = 10.175.193.239:3310    #这里是qtunnel服务端的IP</span><br><span class="line">baddr = 10.175.193.239:3306    #这里是数据库的地址，由于在同一台机器上，所以地址一样</span><br><span class="line">cryptoMethod = rc4    </span><br><span class="line">secret = 3301_test%Iad      #rc4密钥，跟client密钥一致</span><br><span class="line">clientmode = false             #表示这是服务器端</span><br></pre></td></tr></table></figure></p>
 <p>也用同样的语句启动qtunnel，查看3310这个端口已经被监听了：<br><img src="/images/bqidong.png" alt="抱光妹" title="看一下B进程和端口情况"></p>
-<p>现在，我们在A服务器上来重新连接B数据库，但是要注意！<strong>这个时候mysql里的-h不能再是B的IP地址了，而是A的地址！因为qtunnel现在已经打通了一个通道，访问qtunnel的3310端口就等于是访问B数据库的3306端口（有点类似atlas的意思）。</strong></p>
+<p>现在，我们在A服务器上来重新连接B数据库，但是要注意！<font color="red">这个时候mysql里的-h不能再是B的IP地址了，而是A的地址！因为qtunnel现在已经打通了一个通道，访问qtunnel的3310端口就等于是访问B数据库的3306端口（有点类似atlas的意思）。</font></p>
 <p>连上之后，我们随意插入一些语句，看一下qtunnel的能力:<br><img src="/images/shujubuluoben.png" alt="抱光妹" title="数据已经被加密了"></p>
 <p>可见这个时候，抓包显示都是加密的文字了，实验成功！</p>
 <h2><span id="总结与参考资料">总结与参考资料</span></h2><p>总结一下：qtunnel采用rc4加密，在算法强度和速度方面是很好的选择，不会引起slave太大的延迟，对管理员或开发而言数据都是透明的（如果在上面的实验启动了qtunnel之后，不监听3310端口，而是监听3306端口，得到的依旧是明文），只是在两端传输的过程中增加了加解密处理。核心的业务(比如用户和充值)在做异地架构的时候可以考虑该方式增强数据的安全性。</p>
