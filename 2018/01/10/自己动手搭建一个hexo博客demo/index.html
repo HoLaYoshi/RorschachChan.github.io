@@ -111,7 +111,7 @@
 <meta property="og:image" content="http://yoursite.com/images/hexod.png">
 <meta property="og:image" content="http://yoursite.com/images/hexod2.png">
 <meta property="og:image" content="http://yoursite.com/images/newnext.png">
-<meta property="og:updated_time" content="2018-01-10T03:12:45.719Z">
+<meta property="og:updated_time" content="2018-01-10T03:39:34.098Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="自己动手搭建一个hexo博客demo">
 <meta name="twitter:description" content="记录自己搭窝的过程，方便以后搭更多的窝...">
@@ -441,7 +441,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,699
+                  1,702
                 </span>
               
 
@@ -485,18 +485,18 @@
         <p>曾几何时，自己动手做一个博客的想法愈加强烈，想在里面放一些更多除了技术之外的东西，比如烹饪的美食，比如PVP的视频，比如拍摄的照片，比如篮球足球的评论。在这种需求下，我从众多博客框架里面选择了hexo，原因就是“很多人都推荐hexo”….（囧）于是乎我在windows里搞一个，由于我在公司的网络是可以跨越长城的，所以搞github有一点天然的优势。而且github的博客不用花钱搞域名，他直接免费提供…</p>
 <p><strong>在搞github的时候墙裂推荐各位去用命令行，有linux的基本基础就可以很熟练的使用命令行搞github， 它的客户端真的不如命令行好用。</strong></p>
 <h2><span id="准备工作">准备工作</span></h2><p>先去注册一个github，然后去<a href="https://git-scm.com" target="_blank" rel="noopener">https://git-scm.com</a> 上下载一个最新的git windows的客户端，我下载的是2.15.1版本，如图：<br><img src="/images/zhucegithub.png" alt="抱光妹" title="windows下载github"></p>
-<p>下载完毕之后，就把这个exe文件安装，然后在“开始”里找到git再打开“Git Bash”，我的github账号是RorschachChan，电子邮件也已经配置过，所以现在就在这个bash窗口里写入如下语句：<br>$ git config –global user.name “RorschachChan”<br>$ git config –global user.email “chenx1242@163.com”</p>
+<p>下载完毕之后，就把这个exe文件安装，然后在“开始”里找到git再打开“Git Bash”，我的github账号是<code>RorschachChan</code>，电子邮件也已经配置过，所以现在就在这个bash窗口里写入如下语句：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"RorschachChan"</span></span><br><span class="line">git config --global user.email <span class="string">"chenx1242@163.com"</span></span><br></pre></td></tr></table></figure></p>
 <p><img src="/images/config1.png" alt="抱光妹" title="确定用户名和邮箱"><br>上面git config –global 参数，表示你这台机器上所有的Git仓库都会使用这个配置。</p>
 <p>再去<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">https://nodejs.org/en/download/</a> 上根据自己windows的情况，下载最新的nodejs，下载完了之后就一路next，然后需要退出重进一下git bash，在bash的命令行里输入<code>node -v</code>，看到版本号就是OK，同时输入node，$会变成&gt;，然后输入.exit就可以退出返回到bash。<br><img src="/images/nodeV.png" alt="抱光妹" title="查看node版本"></p>
 <p>然后就是安装hexo，hexo的安装比较简单，就是在git bash里输入<code>npm install -g hexo-cli</code>和<code>npm install -g hexo</code>，然后需要等待一会，如果出现了“npm ERR! ”不要怕，重新输入一次应该就会好了，安装完毕之后，输入$ hexo -v查看hexo的版本，如图：<br><img src="/images/installhexo1.png" alt="抱光妹" title="安装hexo-cli"><br><img src="/images/installhexo2.png" alt="抱光妹" title="安装hexo"></p>
 <p>然后建立一个github ssh密钥，在git bash里输入<code>ssh-keygen -t rsa -C &quot;你的邮箱&quot;</code>，然后告诉密钥生成的路径（下图黄框）以及会让你输入对应的口诀（红色箭头），这个口诀很重要，要妥善保存，如图：<br><img src="/images/githubak.png" alt="抱光妹" title="配置密钥"></p>
-<p>这个密码会在你提交项目（<code>hexo d</code>）时使用，如果为空的话提交项目时则不用输入。这个设置是防止别人往你的项目里提交内容。这时候去C:\Users\33664.ssh的路径里就会看到一对钥匙，id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。<br><img src="/images/miyao.png" alt="抱光妹" title="密钥在这里"></p>
+<p>这个密码会在你提交项目（<code>hexo d</code>）时使用，如果为空的话提交项目时则不用输入。这个设置是防止别人往你的项目里提交内容。这时候去<code>C:\Users\33664\.ssh</code>的路径里就会看到一对钥匙，<strong>id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。</strong><br><img src="/images/miyao.png" alt="抱光妹" title="密钥在这里"></p>
 <p>来到github的个人配置里，选择“SSH and GPG keys”，然后输入title和id_rsa.pub的内容，点击“add ssh key”。如图：<br><img src="/images/addak.png" alt="抱光妹" title="在github添加ak"><br>准备工作的最后一步，就是建立一个文件夹，我的文件夹建立在E盘下，名字就叫hexo。</p>
-<h2><span id="开始搭建博客">开始搭建博客</span></h2><p>首先在git bash里进入/e/hexo，然后输入$hexo init，这个命令是初始化命令，再输入$hexo -g来生成静态文件，执行之后，hexo就会在public文件夹生成相关html文件，这些文件将来都是要提交到github上你的用户名.github.io的仓库上去的。然后可以输入$hexo s来启动hexo，这个时候跑到浏览器里输入localhost:4000 就会看到hexo博客最初的一个样子，如图：<br><img src="/images/hexo1.png" alt="抱光妹" title="最初是状态的hexo"></p>
+<h2><span id="开始搭建博客">开始搭建博客</span></h2><p>首先在git bash里进入/e/hexo，然后输入<code>hexo init</code>，这个命令是初始化命令，再输入<code>hexo -g</code>来生成静态文件，执行之后，hexo就会在public文件夹生成相关html文件，这些文件将来都是要提交到github上你的用户名.github.io的仓库上去的。然后可以输入<code>hexo s</code>来本地启动hexo，这个时候跑到浏览器里输入<code>localhost:4000</code>就会看到hexo博客最初的一个样子，如图：<br><img src="/images/hexo1.png" alt="抱光妹" title="最初是状态的hexo"></p>
 <p>这个默认的主题比较难看，我们去<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next</a> 下载最近一个比较火爆的主题next,并且把这个下载到hexo文件夹里的themes/next里，语句是：<code>git clone https://github.com/iissnan/hexo-theme-next.git themes/next</code><br><img src="/images/installnext.png" alt="抱光妹" title="安装next主题"></p>
-<p>然后打开hexo文件夹里的_config，把原有的theme注释，换成新的next，注意，中间是有空格的！<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#theme: landscape</span><br><span class="line">theme: next</span><br></pre></td></tr></table></figure></p>
-<p>然后$ hexo clean和$ hexo g清除 Hexo 的缓存和重新生成静态文件，再次$ hexo s启动进程，来到浏览看一下发现博客的样子就变成下面的样子了：<br><img src="/images/next1.png" alt="抱光妹" title="展示next主题"><br>这个看上去就简单大方很多了吧。</p>
-<h2><span id="把博客上传到github">把博客上传到github</span></h2><p>现在有人问了，这个博客看上去好像很美，但是有两个致命的缺陷：第一，内容都是在我的windows里，如果我这个电脑坏了/出差/换新硬盘，那么如何保证我以前文件？第二，我启动进程需要执行$ hexo -s，如果我电脑关机了，岂不是博客无法打开？</p>
+<p>然后打开hexo文件夹里的_config.xml，把原有的theme注释，换成新的next，注意，中间是有空格的！<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#theme: landscape</span><br><span class="line">theme: next</span><br></pre></td></tr></table></figure></p>
+<p>然后<code>hexo clean</code>和<code>hexo g</code>清除 Hexo 的缓存和重新生成静态文件，再次<code>hexo s</code>启动进程，来到浏览看一下发现博客的样子就变成下面的样子了：<br><img src="/images/next1.png" alt="抱光妹" title="展示next主题"><br>这个看上去就简单大方很多了吧。</p>
+<h2><span id="把博客上传到github">把博客上传到github</span></h2><p>现在有人问了，这个博客看上去好像很美，但是有两个致命的缺陷：第一，内容都是在我的windows里，如果我这个电脑坏了/出差/换新硬盘，那么如何保证我以前文件？第二，我启动进程需要执行 <code>hexo -s</code>，如果我电脑关机了，岂不是博客无法打开？</p>
 <p>需要解决就要把磁盘上的内容传递到github库里了，同时github是常开进程的，这样既可以更新我们的内容又不会关闭博客进程，除非github这个网站黄了。</p>
 <p>先去github网站去建立一个库（repository），这里我直接选择了公共读，如图：<br><img src="/images/repository.png" alt="抱光妹" title="建立一个新库"></p>
 <p>然后在hexo文件夹里面，修改一下_config.xml的几个地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 石锤淡啤酒    #这个是网站在标签页的标题</span><br><span class="line">subtitle: 生活就是等待戈多    #这个是副标题</span><br><span class="line">description: 这里记录的不只有代码，还有生活和思想！    #这里也可以写网站的关键词，也可以矫情的写点别的</span><br><span class="line">author: Chris Chan    #这个作者会在网页最下面显示</span><br><span class="line">language: zh-Hans    #这里表示简体中文</span><br><span class="line">timezone:</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line"> 		type: git</span><br><span class="line"> 		repository: git@github.com:RorschachChan/RorschachChan.github.io.git    #这里写的就是刚刚申请的库名</span><br><span class="line"> 		branch: master</span><br></pre></td></tr></table></figure></p>
