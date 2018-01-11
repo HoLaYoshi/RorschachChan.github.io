@@ -88,16 +88,30 @@
 
 
 
-<meta name="description" content="生活就是等待戈多">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chris Chan&#39;s BLOG">
-<meta property="og:url" content="http://yoursite.com/tags/redis/index.html">
+<meta name="description" content="在ZABBIX上监控MQ队列众所周知，Zabbix是可以自定义监控项的，那么就代表只要能获得到的数字都可以进入Zabbix的监控范围内。作为消息队列，Activemq里的“消息堆积数”是监控的重点项目之一。 获取消息堆积数并不是一个很难的事儿，浏览器里登陆MQ的web网页控制台，输入账号密码之后，在Queues的网页里就能看到如下的界面： 其中Pending Messages就是“等待消息”，Co">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zabbix监控ActiveMQ队列数以及结合Grafana展示">
+<meta property="og:url" content="http://yoursite.com/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="生活就是等待戈多">
+<meta property="og:description" content="在ZABBIX上监控MQ队列众所周知，Zabbix是可以自定义监控项的，那么就代表只要能获得到的数字都可以进入Zabbix的监控范围内。作为消息队列，Activemq里的“消息堆积数”是监控的重点项目之一。 获取消息堆积数并不是一个很难的事儿，浏览器里登陆MQ的web网页控制台，输入账号密码之后，在Queues的网页里就能看到如下的界面： 其中Pending Messages就是“等待消息”，Co">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/myinfo.png">
+<meta property="og:image" content="http://yoursite.com/images/curl+s.png">
+<meta property="og:image" content="http://yoursite.com/images/getMQ.png">
+<meta property="og:image" content="http://yoursite.com/images/mqtrigger.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana1.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana2.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana3.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana4.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana5.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana6.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana7.png">
+<meta property="og:image" content="http://yoursite.com/images/grafana8.png">
+<meta property="og:updated_time" content="2018-01-11T14:21:58.407Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chris Chan&#39;s BLOG">
-<meta name="twitter:description" content="生活就是等待戈多">
+<meta name="twitter:title" content="Zabbix监控ActiveMQ队列数以及结合Grafana展示">
+<meta name="twitter:description" content="在ZABBIX上监控MQ队列众所周知，Zabbix是可以自定义监控项的，那么就代表只要能获得到的数字都可以进入Zabbix的监控范围内。作为消息队列，Activemq里的“消息堆积数”是监控的重点项目之一。 获取消息堆积数并不是一个很难的事儿，浏览器里登陆MQ的web网页控制台，输入账号密码之后，在Queues的网页里就能看到如下的界面： 其中Pending Messages就是“等待消息”，Co">
+<meta name="twitter:image" content="http://yoursite.com/images/myinfo.png">
 
 
 
@@ -127,13 +141,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/redis/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/"/>
 
 
 
 
 
-  <title>标签: redis | Chris Chan's BLOG</title>
+  <title>Zabbix监控ActiveMQ队列数以及结合Grafana展示 | Chris Chan's BLOG</title>
   
 
 
@@ -152,7 +166,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
 	<a href="https://github.com/RorschachChan" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -302,54 +316,309 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>redis<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/faceinpunch.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/10/使用Zabbix去监控Redis/" itemprop="url">
-              
-                <span itemprop="name">使用Zabbix去监控Redis</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">Zabbix监控ActiveMQ队列数以及结合Grafana展示</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-10T22:49:04+08:00"
-              content="2018-01-10" >
-          01-10
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T21:43:01+08:00">
+                2018-01-11
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/" class="leancloud_visitors" data-flag-title="Zabbix监控ActiveMQ队列数以及结合Grafana展示">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,187
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2><span id="在zabbix上监控mq队列">在ZABBIX上监控MQ队列</span></h2><p>众所周知，Zabbix是可以自定义监控项的，那么就代表只要能获得到的数字都可以进入Zabbix的监控范围内。作为消息队列，Activemq里的“消息堆积数”是监控的重点项目之一。</p>
+<p>获取消息堆积数并不是一个很难的事儿，浏览器里登陆MQ的web网页控制台，输入账号密码之后，在Queues的网页里就能看到如下的界面：<br><img src="/images/myinfo.png" alt="akb48" title="MQ的界面"></p>
+<p>其中Pending Messages就是“等待消息”，Consumers是“消费者”，Enqueued是“入队”，Dequeued是“出队”。<code>入队数=出队数+等待数</code>。</p>
+<p>现在我们要获取到图中的队列叫AggregateQueue里的那个23596，很简单，shell语句是：<br>    curl -s -u网站用户名:网站密码 <a href="http://网站外网IP地址:8161/admin/queues.jsp" target="_blank" rel="noopener">http://网站外网IP地址:8161/admin/queues.jsp</a> | grep -A 5 “具体的队列名“|awk -F ‘&lt;’ ‘{print $2}’|sed ‘s/td&gt;//g’|head -2|tail -1</p>
+<p>这里curl 有一个“-s”的参数，不然会显示curl的状态。如图：<br><img src="/images/curl+s.png" alt="akb48" title="curl -s的效果"></p>
+<p>语句在此，写脚本就很easy了。不过我这里就直接监控具体数字了，没有写脚本，如果要写python脚本的话，我推荐各位移步：<a href="http://blog.51cto.com/sfzhang88/1316789" target="_blank" rel="noopener">http://blog.51cto.com/sfzhang88/1316789</a> ，看一下这篇文章。</p>
+<p>现在把这个监控项添加到具体的zabbix_agentd.conf里吧，具体添加过程可以参看 <a href="http://blog.51cto.com/chenx1242/1839829" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1839829</a> ，由于是curl网站，那么直接把这个监控项加到Zabbix-server里就好，然后使用zabbix_get检查一下。有的zabbix 3.x里没有zabbix_get，安装zabbix_get方法：<code>yum install zabbix-get.x86_64</code>。</p>
+<p>zabbix_get检查情况和具体的trigger情况如下：<br><img src="/images/getMQ.png" alt="akb48" title="zabbix_get检查情况"><br><img src="/images/mqtrigger.png" alt="akb48" title="zabbix_get检查情况"></p>
+<h2><span id="配置zabbix结合grafana">配置Zabbix结合Grafana</span></h2><p>我使用的Grafana版本是4.3.2，下载地址：<a href="https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.3.2-1.x86_64.rpm" target="_blank" rel="noopener">https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-4.3.2-1.x86_64.rpm</a>  ，下载完毕之后，直接<code>yum install /路径/grafana-4.3.2-1.x86_64.rpm</code>，由于Grafana使用的是AWS的云存储，可能在墙内的下载会比较吃力，有断开的情况就多试几次。话说Grafana的升级是比较频繁的，半年不到的时间升级了三次，现在最新版本已经是4.6.2。所以说这玩意，其实选择一个稳定的就好。</p>
+<p>启动grafana的方法就是：<code>systemctl start grafana-server.service</code>，配置开机自启动的方法：<code>chkconfig grafana-server on</code>。然后在浏览器里输入<code>grafana外网ip地址：3000</code>就能看到grafana的界面，默认密码：<code>admin/admin</code>，grafana默认的日志存储路径是<code>/var/log/grafana</code>/。</p>
+<p>Grafana与ZABBIX联系的插件下载方式：<code>grafana-cli plugins install alexanderzobnin-zabbix-app</code>，安装之后，重启一下grafana-server，在web界面就会看到插件已经成功安装，如图：<br><img src="/images/grafana1.png" alt="akb48" title="grafana插件web界面"></p>
+<p>其他更多的插件下载可以在grafana的官方网站查看到：<a href="https://grafana.com/plugins" target="_blank" rel="noopener">https://grafana.com/plugins</a> ，用<code>grafana-cli</code>都能搞定，还是那话，墙里的同学速度要慢一点。</p>
+<p>现在配置Zabbix作为Grafana的数据源，首选点击网站上面的红色漩涡标志，选择<code>zabbix</code>，点击<code>Plugin Config</code>，点击<code>Enable</code>，启动Zabbix插件。如图：<br><img src="/images/grafana2.png" alt="akb48" title="启动Zabbix插件"></p>
+<p>再次点击红色漩涡，这次选择<code>Data Sources</code>，点击<code>Add data source</code>，如果插件启动成功，那么在Type里是可以选择<code>zabbix</code>的，然后就是填各种东西，如图：<br><img src="/images/grafana3.png" alt="akb48" title="添加数据源"></p>
+<p>这里有一些要额外说明：<br>1）url这个是zabbix的API地址”<a href="http://ip/zabbix/api_jsonrpc.php&quot;，这个可以在zabbix服务端上可查找&quot;find" target="_blank" rel="noopener">http://ip/zabbix/api_jsonrpc.php&quot;，这个可以在zabbix服务端上可查找&quot;find</a> / -name api_*.php”；<br>2）username和passwd是zabbix WEB界面的登录用户名和密码，有读的权限即可；<br>3）alerting选择启动，min severity选择high；</p>
+<p>然后点击“save &amp; test”，如果都正确的话，就会出现success，如图：<br><img src="/images/grafana4.png" alt="akb48" title="保存zabbix资料"></p>
+<h2><span id="在grafana展示趋势图">在Grafana展示趋势图</span></h2><p>点击左上方红色漩涡，”Dashboards”的地方点击“+new”，然后在小齿轮的地方选择“Templating”,如图：<br><img src="/images/grafana5.png" alt="akb48" title="趋势图"></p>
+<p>在Templating里要建立4个模板，其中group的添加方法如下，如果Query正确的话，在点击<code>Include All option</code>的时候，就会有“组”显示出，而且和zabbix里完全一致：<br><img src="/images/grafana6.png" alt="akb48" title="添加模板"></p>
+<p>group添加完了，还有host、application、iteams，添加的大同小异，需要注意的是Query的不同：<br>host的Query：<code>$group.*</code><br>application的Query: <code>$group.$host.*</code><br>iterm的Query:<code>$group.$host.$application.*</code></p>
+<p>以上四个template都搞定之后，应该是这个样子：<br><img src="/images/grafana7.png" alt="akb48" title="搞定templage"></p>
+<p>模板搞定了，下面就是图形展示，选择对应的hosts、application和items就自动有图像生成了！<br><img src="/images/grafana8.png" alt="akb48" title="大功告成！"></p>
+<p>最后说一下页面自动刷新，点击右上角“Last 6 hours”, 在弹出的下拉框中，选择Time range下的Refreshing every选项，点击下拉框按钮，默认应该有“off”和“1m”两个选项。点击“1m” 然后Apply设置，即为每一分钟刷新一次数据的意思。设置成功后，在原来Last 6 hours的后面会出现Refresh every 1m的橙色文字！</p>
+<h2><span id="参考资料">参考资料</span></h2><p>《实践MQ的小demo》<a href="http://www.jianshu.com/p/3a39c8dd4f29" target="_blank" rel="noopener">http://www.jianshu.com/p/3a39c8dd4f29</a></p>
 
       
     </div>
+    
+    
+    
+	
+	
+	  <div>
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------This article is over!<i class="fa fa-paw"></i>Thanks for reading!-------------</div>
+    
+</div>
+	  </div>
+	
+	
+    
 
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢您请我喝咖啡！(o´ω`o)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Chris Chan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zhifubaopay.jpg" alt="Chris Chan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+			<ul class="post-copyright">
+				<li class="post-copyright-link">
+					<strong>本文作者：</strong>
+					<a href="/" title="欢迎访问 Chris Chan 的个人博客">Chris Chan</a>
+				</li>
+
+				<li class="post-copyright-link">
+					<strong>本文标题：</strong>
+					<a href="http://yoursite.com/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/" title="Zabbix监控ActiveMQ队列数以及结合Grafana展示">Zabbix监控ActiveMQ队列数以及结合Grafana展示</a>
+				</li>
+
+				<li class="post-copyright-date">
+					<strong>发布时间：</strong>2018年1月11日 - 21时01分
+				</li>  
+
+				<li class="post-copyright-license">
+					<strong>版权声明： </strong>
+					本文由 Chris Chan 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="license" target="_blank">保留署名-非商业性使用-禁止演绎 4.0-国际许可协议</a> </br>转载请保留以上声明信息！
+				</li>
+			</ul>
+			
+		</div>
+	
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/11/在Python使用yaml的几个例子/" rel="next" title="在Python使用yaml的几个例子">
+                <i class="fa fa-chevron-left"></i> 在Python使用yaml的几个例子
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
 
 
           </div>
@@ -357,6 +626,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="hypercomments_widget"></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -377,8 +655,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -523,6 +810,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5728;zabbix&#x4E0A;&#x76D1;&#x63A7;mq&#x961F;&#x5217;">&#x5728;ZABBIX&#x4E0A;&#x76D1;&#x63A7;MQ&#x961F;&#x5217;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;zabbix&#x7ED3;&#x5408;grafana">&#x914D;&#x7F6E;Zabbix&#x7ED3;&#x5408;Grafana</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5728;grafana&#x5C55;&#x793A;&#x8D8B;&#x52BF;&#x56FE;">&#x5728;Grafana&#x5C55;&#x793A;&#x8D8B;&#x52BF;&#x56FE;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -681,6 +984,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -704,6 +1011,8 @@
 
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
+		
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/"});
 		
 
 		(function() {
