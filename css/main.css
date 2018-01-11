@@ -1816,7 +1816,7 @@ pre .javascript .function {
 }
 .sidebar {
   position: fixed;
-  right: 0;
+  left: 0;
   top: 0;
   bottom: 0;
   width: 0;
@@ -1994,7 +1994,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #ffc3b5;
+  background: #79a3ff;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3117,4 +3117,13 @@ body {
   background: #fff;
   opacity: 0.9;
   min-height: 500px;
+}
+#days {
+  display: block;
+  color: #07b39b;
+  font-size: 13px;
+  margin-top: 15px;
+}
+img.img-topic {
+  width: 100%;
 }
