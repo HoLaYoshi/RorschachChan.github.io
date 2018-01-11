@@ -446,7 +446,7 @@
       
 
       
-        <p>这套题的出处是<a href="http://blog.51cto.com/nolinux/1670406，看到了闲着没事周末就做一做，答案都是我自己在工作里得到的，不一定百分百准确，只是无聊的时候做做，现在拿出来跟各位分享一番。" target="_blank" rel="noopener">http://blog.51cto.com/nolinux/1670406，看到了闲着没事周末就做一做，答案都是我自己在工作里得到的，不一定百分百准确，只是无聊的时候做做，现在拿出来跟各位分享一番。</a></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>这套题的出处是<a href="http://blog.51cto.com/nolinux/1670406，看到了闲着没事周末就做一做，答案都是我自己在工作里得到的，不一定百分百准确，只是无聊的时候做做，现在拿出来跟各位分享一番。" target="_blank" rel="noopener">http://blog.51cto.com/nolinux/1670406，看到了闲着没事周末就做一做，答案都是我自己在工作里得到的，不一定百分百准确，只是无聊的时候做做，现在拿出来跟各位分享一番。</a></p>
 <p><strong>1、请写出五种系统性能分析工具，并简述其作用和特点</strong><br>[我的答案] top、free、vmstat、iostat、perf等等等等，如果你想装逼，可以回答fio,blktrace，oprofile。<br>具体的作用和特点这里不多说了，但是我着重要推荐vmstat，很实用很棒的一个命令。</p>
 <p><strong>2、请写出web服务器的调优要点</strong><br>[我的答案]以nginx为例，个人总结有如下几个要点：<br>1）尽可能的少用http，因为http是有开销的；<br>2）尽可能的使用CDN；<br>3）添加Expire/Cache-Control头，这个头是缓存用的，可以缓存图片和flash那样不轻易更改的文件，减少访问时间；<br>4）启动gzip压缩，这个没啥好说的了；<br>5）尽可能少的重定向，能rewrite就不要return，我也知道return比rewrite好写，但是重定向是需要时间的，增加一次重定向就会多一次web需求；<br>6）如果可以，把ajax也做缓存；<br>7）减少dns查询，很多网页会有外站的广告，这些广告也是会启动dns查询的，所以如果不缺钱，减少这种广告；<br>8）调好服务器里的TCP协议栈，这个无论是web服务器还是应用服务器都是必须的；</p>
 <p><strong>3、请写出你知道或使用过的nginx扩展模块（注意标注知道和使用）</strong><br>[我的答案] 随便说几个，这玩意到时候结合工作过的情况说说吧：<br>Nginx负载均衡模块：nginx-upstream-fair<br>非阻塞访问redis模块：redis2-nginx-module<br>分布式图片实时动态压缩：ngx-fastdfs</p>

@@ -474,7 +474,7 @@
       
 
       
-        <h2><span id="前言">前言</span></h2><p>数据库做异地容灾是一个很常见的现象，既然信息要跨地域传递，要么就很土豪的打通机房之间的链路或者动用VPN，要不然就不可避免的走公网网络传输信息。既然选择了公网，那么数据库的语句就很容易被人监听到，所以把那些明文加密是必不可少的环节。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>数据库做异地容灾是一个很常见的现象，既然信息要跨地域传递，要么就很土豪的打通机房之间的链路或者动用VPN，要不然就不可避免的走公网网络传输信息。既然选择了公网，那么数据库的语句就很容易被人监听到，所以把那些明文加密是必不可少的环节。</p>
 <p>mysql支持<code>tls/ssl</code>加密方法对信息进行加密，这个方法的配置也很简单，就是两边各加上一个nginx，一个是正向代理一个是反向代理，配上ssl证书，然后就像配置网站https协议那样，在nginx.conf里开启ssl监听即可。</p>
 <p>但是这种方法有一点小问题，就是在进行SSL握手之前，mysql会发送Server Greeting和Login Request数据包，然后才有可能使用SSL握手。这样步骤就多了一步鉴权，对访问性能有所影响。所以这个时候，我选择了另一个用于加密client和server之间链路通信的工具—-Qtunnel，因为它直接加密，速度更快。</p>
 <p>Git的地址在这里：<a href="https://github.com/arstercz/qtunnel" target="_blank" rel="noopener">https://github.com/arstercz/qtunnel</a> ，<strong>感谢arstercz大神的再加工！</strong></p>

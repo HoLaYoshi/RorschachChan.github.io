@@ -479,7 +479,7 @@
       
 
       
-        <h2><span id="在zabbix上监控mq队列">在ZABBIX上监控MQ队列</span></h2><p>众所周知，Zabbix是可以自定义监控项的，那么就代表只要能获得到的数字都可以进入Zabbix的监控范围内。作为消息队列，Activemq里的“消息堆积数”是监控的重点项目之一。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="在zabbix上监控mq队列">在ZABBIX上监控MQ队列</span></h2><p>众所周知，Zabbix是可以自定义监控项的，那么就代表只要能获得到的数字都可以进入Zabbix的监控范围内。作为消息队列，Activemq里的“消息堆积数”是监控的重点项目之一。</p>
 <p>获取消息堆积数并不是一个很难的事儿，浏览器里登陆MQ的web网页控制台，输入账号密码之后，在Queues的网页里就能看到如下的界面：<br><img src="/images/mqinfo.png" alt="akb48" title="MQ的界面"></p>
 <p>其中Pending Messages就是“等待消息”，Consumers是“消费者”，Enqueued是“入队”，Dequeued是“出队”。<code>入队数=出队数+等待数</code>。</p>
 <p>现在我们要获取到图中的队列叫AggregateQueue里的那个23596，很简单，shell语句是：<br>    curl -s -u网站用户名:网站密码 <a href="http://网站外网IP地址:8161/admin/queues.jsp" target="_blank" rel="noopener">http://网站外网IP地址:8161/admin/queues.jsp</a> | grep -A 5 “具体的队列名“|awk -F ‘&lt;’ ‘{print $2}’|sed ‘s/td&gt;//g’|head -2|tail -1</p>

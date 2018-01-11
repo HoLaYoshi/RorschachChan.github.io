@@ -97,7 +97,7 @@
 <meta property="og:description" content="自我介绍">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/desk.jpg">
-<meta property="og:updated_time" content="2018-01-11T04:26:38.618Z">
+<meta property="og:updated_time" content="2018-01-11T17:21:56.767Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于我">
 <meta name="twitter:description" content="自我介绍">
@@ -329,7 +329,7 @@
       <div class="post-body">
         
         
-          <p><img src="/images/desk.jpg" alt="好车" title="我的工作台"></p>
+          <script src="\assets\js\APlayer.min.js"> </script><p><img src="/images/desk.jpg" alt="好车" title="我的工作台"></p>
 <hr>
 <p>欢迎你来到我的博客，我是Chris Chan，生活在浙江杭州。在地球上我有很多身份，即是《魔兽世界》里的联盟玩家也是一名巴塞罗那的球迷，是蝙蝠侠的狂热爱好者也是一个懒散专业户。</p>
 <p>目前就职于浙江大华股份研发中心大数据研究院，职位是LINUX运维工程师。</p>
@@ -346,6 +346,23 @@
 <li>明年目标：在杭州买房，跟女票结婚，去一趟日本，如果可以的话，再听一场perfume的演唱会</li>
 </ul>
 <hr>
+<div id="aplayer0" class="aplayer" style="margin-bottom: 20px;"></div>
+		<script>
+			var ap = new APlayer({
+				element: document.getElementById("aplayer0"),
+				narrow: false,
+				autoplay: false,
+				showlrc: 0,
+				music: {
+					title: "一个人去旅行",
+					author: "陈升",
+					url: "http://p1x3hd2at.bkt.clouddn.com/一个人去旅行.mp3",
+					pic: "http://p1x3hd2at.bkt.clouddn.com/五十米深蓝.jpg",
+				}
+			});
+			window.aplayers || (window.aplayers = []);
+			window.aplayers.push(ap);
+		</script>
 <blockquote>
 <p>习武之人有三个阶段：见自己，见天地，见众生。</p>
 </blockquote>

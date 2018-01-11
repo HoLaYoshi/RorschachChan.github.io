@@ -468,7 +468,7 @@
       
 
       
-        <h2><span id="前言与需求">前言与需求</span></h2><p>在<a href="https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/</a> 里记录了一次rewrite和return的故事，不过我当时在最后的return里是把域名给写死了：<code>rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;</code>。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言与需求">前言与需求</span></h2><p>在<a href="https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/</a> 里记录了一次rewrite和return的故事，不过我当时在最后的return里是把域名给写死了：<code>rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;</code>。</p>
 <p>现在新的需求又来了，说域名不要写死，<code>http://dvlshop.lechange.com/index.php/</code>这部分要跟整个uri的state部分保持一致。</p>
 <p>于是我这里再把整个uri贴出来，辣一下各位的眼睛：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>source_type</em>=lc_app&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p>
 <p>也就是说现在只需要变量state那点部分，那么这个时候就不能再使用$query_string了，要使用$arg。</p>
