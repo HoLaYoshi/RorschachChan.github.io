@@ -91,7 +91,7 @@
 <meta name="description" content="生活就是等待戈多">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Chris Chan&#39;s BLOG">
-<meta property="og:url" content="http://yoursite.com/tags/nginx/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/Nginx/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="生活就是等待戈多">
 <meta property="og:locale" content="zh-CN">
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/nginx/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/Nginx/"/>
 
 
 
 
 
-  <title>标签: nginx | Chris Chan's BLOG</title>
+  <title>标签: Nginx | Chris Chan's BLOG</title>
   
 
 
@@ -309,7 +309,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>nginx<small>标签</small>
+        <h1>Nginx<small>标签</small>
         </h1>
       </div>
 
@@ -321,9 +321,9 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/01/10/通过nginx配置修改网页cookie属性/" itemprop="url">
+            <a class="post-title-link" href="/2018/01/09/Query-String跟arg的异同/" itemprop="url">
               
-                <span itemprop="name">通过nginx配置修改网页cookie属性</span>
+                <span itemprop="name">Query String跟Arg的差异</span>
               
             </a>
         
@@ -331,9 +331,9 @@
 
       <div class="post-meta">
         <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-10T15:48:08+08:00"
-              content="2018-01-10" >
-          01-10
+              datetime="2018-01-09T20:47:40+08:00"
+              content="2018-01-09" >
+          01-09
         </time>
       </div>
 
@@ -349,9 +349,9 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/01/03/Nginx动态编译新的模块/" itemprop="url">
+            <a class="post-title-link" href="/2018/01/09/记一次配置rewrite和return的经历/" itemprop="url">
               
-                <span itemprop="name">Nginx动态编译新的模块</span>
+                <span itemprop="name">记一次配置rewrite和return的经历</span>
               
             </a>
         
@@ -359,9 +359,9 @@
 
       <div class="post-meta">
         <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-03T21:44:44+08:00"
-              content="2018-01-03" >
-          01-03
+              datetime="2018-01-09T16:39:10+08:00"
+              content="2018-01-09" >
+          01-09
         </time>
       </div>
 
@@ -543,11 +543,37 @@
                   </li>
                 
               </ul>
+			<div id="days"></div>
+</script>
+<script language="javascript">
+function show_date_time(){
+window.setTimeout("show_date_time()", 1000);
+BirthDay=new Date("12/01/2017 8:00:00");
+today=new Date();
+timeold=(today.getTime()-BirthDay.getTime());
+sectimeold=timeold/1000
+secondsold=Math.floor(sectimeold);
+msPerDay=24*60*60*1000
+e_daysold=timeold/msPerDay
+daysold=Math.floor(e_daysold);
+e_hrsold=(e_daysold-daysold)*24;
+hrsold=setzero(Math.floor(e_hrsold));
+e_minsold=(e_hrsold-hrsold)*60;
+minsold=setzero(Math.floor((e_hrsold-hrsold)*60));
+seconds=setzero(Math.floor((e_minsold-minsold)*60));
+document.getElementById('days').innerHTML="本博客已运行"+daysold+"天"+hrsold+"小时"+minsold+"分"+seconds+"秒";
+}
+function setzero(i){
+if (i<10)
+{i="0" + i};
+return i;
+}
+show_date_time();
+</script>
             </div>
           
 
           
-
         </div>
       </section>
 
@@ -1239,4 +1265,4 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
 </body>
 </html>
 <!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/src/love.js"></script>
+<script type="text/javascript" src="/js/src/love.js"></script>cript>
