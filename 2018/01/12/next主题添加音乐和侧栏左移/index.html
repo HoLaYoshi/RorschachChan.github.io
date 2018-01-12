@@ -96,10 +96,13 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="让博客看起来更加舒服更加贴心">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-12T09:51:00.356Z">
+<meta property="og:image" content="http://yoursite.com/images/aplayer.png">
+<meta property="og:image" content="http://yoursite.com/images/7cow.png">
+<meta property="og:updated_time" content="2018-01-12T09:52:09.397Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Next主题添加音乐和将侧栏移动到左边">
 <meta name="twitter:description" content="让博客看起来更加舒服更加贴心">
+<meta name="twitter:image" content="http://yoursite.com/images/aplayer.png">
 
 
 
@@ -425,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  608
+                  993
                 </span>
               
 
@@ -441,7 +444,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -468,6 +471,12 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><p>玩Github博客也有一个多月的时间了，现在这个博客也搭建的有模有样，目前整个博客添加了<br>1.支持头像图片旋转，同时点击头像可以返回主页；<br>2.背景图片随机出现，而且墙内用户也可以顺利访问；<br>3.增加文章打分系统，觉得好可以给五星好评；<br>4.开放评论系统，无需注册直接评论；<br>5.添加了可视加载栏和公益404页面；<br>6.添加桌面小宠物和访客统计；<br>7.添加博客运行时间和代码橙色高亮；</p>
 <p>目前欠缺的功能一个是“相册”，还有一个就是博客标题的加载方式希望更加高逼格，至于SEO和单独域名，我暂时还没有想去做，等将来的吧。这篇文章里主要说的就是“博客添加音乐”和“侧栏左移”这两个事儿。</p>
+<h2><span id="博客添加音乐">博客添加音乐</span></h2><p>Next主题添加网易云音乐不是一个很难的事儿，但是我发现对于非大陆的IP地址（比如我用的是公司VPN，香港IP），侧栏的网易云音乐就无法播放，而且打开博客页面就自动播放音乐这点对来访的用户来说，体验感觉是见仁见智。所以我打算把侧栏的网易云音乐撤掉，在“关于我”里单独放进音乐歌单。</p>
+<p>若单独配置音乐同时不想被IP地址打扰的话可以使用由DIYgod所制作的APlayer。</p>
+<p>要使用APlayer需要先在hexo根目录里安装插件：<br><img src="/images/aplayer.png" alt="7牛云存储" title="为啥会提示“The tag `aplayer` is not a recognized Liquid tag？”"></p>
+<p>注意：如果lrc用的是这种URL形式，<code>hexo g</code>时请保持网络通畅，如果没有歌词，可以不用添加。</p>
+<p>现在的世面上很少有在线提供歌曲MP3地址的网站了，很多都是下载mp3到本地，这里我推荐一个免费下载MP3的网站：<a href="https://www.tikitiki.cn" target="_blank" rel="noopener">https://www.tikitiki.cn</a> 。里面有QQ音乐、网易云音乐和酷狗的资源，基本上大陆没有被封杀的艺人作品都能在里面找到（抱歉了，陈升先生和黄耀明先生）。然后再搭配七牛云，把下载的MP3和封面图片上传到七牛云存储里，然后搭配提供的外网域名就可以填写MP3地址和封面地址了。如图：<br><img src="/images/7cow.png" alt="7牛云存储" title="MP3上传到七牛云存储"></p>
+<p>不过我这个七牛云的账号比较挫，没有做https，只好用http了…</p>
 <h2><span id="把侧栏移动到左边">把侧栏移动到左边</span></h2><p>博客自从安装了宠物之后，发现小宠物与侧栏重叠，看上去感觉很不友好，但是很奇怪，默认的宠物即使调整了botton依旧无法移动，所以我就想那就把整个侧栏移动到了左边，但是发现更改next主题的<code>_config.xml</code>里的“sidebar的position属性”发现并没有效果，后来经过一顿查找，找到了改成左侧栏的方法(适用于next 5.1.3版本)。</p>
 <p>首先，先更改<code>\themes\next\source\css\_common\components\sidebar\sidebar.styl</code>，把第三行的<code>right</code>改成<code>left</code>,如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.sidebar &#123;</span><br><span class="line">  position: fixed;</span><br><span class="line">  left: <span class="number">0</span>;</span><br></pre></td></tr></table></figure></p>
 <p>保存之后，打开<code>\themes\next\source\js\src\motion.js</code>，把101行和167行的<code>paddingRight</code>全改成<code>paddingLeft</code>,同时找到类似如下的代码，并替换成如下代码:<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sidebarToggleLine1st = <span class="keyword">new</span> SidebarToggleLine(&#123;</span><br><span class="line">  el: <span class="string">'.sidebar-toggle-line-first'</span>,</span><br><span class="line"> 	status: &#123;</span><br><span class="line">   	arrow: &#123;<span class="attr">width</span>: <span class="string">'50%'</span>, <span class="attr">rotateZ</span>: <span class="string">'45deg'</span>, <span class="attr">top</span>: <span class="string">'2px'</span>, <span class="attr">left</span>: <span class="string">'5px'</span>&#125;,</span><br><span class="line">   	close: &#123;<span class="attr">width</span>: <span class="string">'100%'</span>, <span class="attr">rotateZ</span>: <span class="string">'45deg'</span>, <span class="attr">top</span>: <span class="string">'5px'</span>, <span class="attr">left</span>: <span class="number">0</span>&#125;</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> sidebarToggleLine2nd = <span class="keyword">new</span> SidebarToggleLine(&#123;</span><br><span class="line"> 	  el: <span class="string">'.sidebar-toggle-line-middle'</span>,</span><br><span class="line"> 	status: &#123;</span><br><span class="line">   	arrow: &#123;<span class="attr">width</span>: <span class="string">'90%'</span>&#125;,</span><br><span class="line">   	close: &#123;<span class="attr">opacity</span>: <span class="number">0</span>&#125;</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="keyword">var</span> sidebarToggleLine3rd = <span class="keyword">new</span> SidebarToggleLine(&#123;</span><br><span class="line"> 	  el: <span class="string">'.sidebar-toggle-line-last'</span>,</span><br><span class="line"> 	status: &#123;</span><br><span class="line">   	arrow: &#123;<span class="attr">width</span>: <span class="string">'50%'</span>, <span class="attr">rotateZ</span>: <span class="string">'-45deg'</span>, <span class="attr">top</span>: <span class="string">'-2px'</span>, <span class="attr">left</span>: <span class="string">'5px'</span>&#125;,</span><br><span class="line">   	close: &#123;<span class="attr">width</span>: <span class="string">'100%'</span>, <span class="attr">rotateZ</span>: <span class="string">'-45deg'</span>, <span class="attr">top</span>: <span class="string">'-5px'</span>, <span class="attr">left</span>: <span class="number">0</span>&#125;</span><br><span class="line"> 	&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
@@ -869,7 +878,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x628A;&#x4FA7;&#x680F;&#x79FB;&#x52A8;&#x5230;&#x5DE6;&#x8FB9;">&#x628A;&#x4FA7;&#x680F;&#x79FB;&#x52A8;&#x5230;&#x5DE6;&#x8FB9;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x535A;&#x5BA2;&#x6DFB;&#x52A0;&#x97F3;&#x4E50;">&#x535A;&#x5BA2;&#x6DFB;&#x52A0;&#x97F3;&#x4E50;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x628A;&#x4FA7;&#x680F;&#x79FB;&#x52A8;&#x5230;&#x5DE6;&#x8FB9;">&#x628A;&#x4FA7;&#x680F;&#x79FB;&#x52A8;&#x5230;&#x5DE6;&#x8FB9;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -926,7 +935,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共15.6k字</span>
+  <span class="post-count">博客全站共15.9k字</span>
 </div>
         
 
