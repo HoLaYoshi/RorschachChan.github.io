@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="nginx,https," />
 
 
 
@@ -88,16 +88,20 @@
 
 
 
-<meta name="description" content="生活就是等待戈多">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chris Chan&#39;s BLOG">
-<meta property="og:url" content="http://yoursite.com/archives/2017/12/index.html">
+<meta name="description" content="什么是人，欲望满身。">
+<meta name="keywords" content="nginx,https">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记录一次处理https监听不正确的过程">
+<meta property="og:url" content="http://yoursite.com/2018/01/12/记录一次处理https监听不正确的过程/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="生活就是等待戈多">
+<meta property="og:description" content="什么是人，欲望满身。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/ksslb.png">
+<meta property="og:updated_time" content="2018-01-12T12:04:55.700Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chris Chan&#39;s BLOG">
-<meta name="twitter:description" content="生活就是等待戈多">
+<meta name="twitter:title" content="记录一次处理https监听不正确的过程">
+<meta name="twitter:description" content="什么是人，欲望满身。">
+<meta name="twitter:image" content="http://yoursite.com/images/ksslb.png">
 
 
 
@@ -127,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2017/12/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/12/记录一次处理https监听不正确的过程/"/>
 
 
 
 
 
-  <title>归档 | Chris Chan's BLOG</title>
+  <title>记录一次处理https监听不正确的过程 | Chris Chan's BLOG</title>
   
 
 
@@ -152,7 +156,7 @@
     
   
 
-  <div class="container sidebar-position-right page-archive">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
 	<a href="https://github.com/RorschachChan" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -302,185 +306,346 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/12/记录一次处理https监听不正确的过程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">记录一次处理https监听不正确的过程</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-12T19:58:54+08:00">
+                2018-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 19 篇日志。 继续努力。
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/用来讨饭吃的技术/" itemprop="url" rel="index">
+                    <span itemprop="name">用来讨饭吃的技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/12/记录一次处理https监听不正确的过程/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/12/记录一次处理https监听不正确的过程/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/01/12/记录一次处理https监听不正确的过程/" class="leancloud_visitors" data-flag-title="记录一次处理https监听不正确的过程">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  747
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  什么是人，欲望满身。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
-        
-        
-        
+      
+        <script src="\assets\js\APlayer.min.js"> </script><p>今天开发反馈在测试金山云设备的时候遇到了这样的一个现象：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8 </span></span><br><span class="line">-<span class="number">-2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">11</span>:<span class="number">49</span>:<span class="number">26</span>--  https:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8  </span></span><br><span class="line">Resolving funchlscdn.lechange.cn... <span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span> </span><br><span class="line">Connecting to funchlscdn.lechange.cn|<span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span>|:<span class="number">443.</span>.. connected. </span><br><span class="line">OpenSSL: error:<span class="number">140770</span>FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol </span><br><span class="line">Unable to establish SSL connection.</span><br></pre></td></tr></table></figure></p>
+<p>爆“error:140770FC:SSL routines:SSL23_GET_SERVER_HELLO:unknown protocol”的错误，就是在当向只提供http的服务发送https请求造成的。</p>
+<p><code>ping funchlscdn.lechange.cn</code>，获得了这个域名对应的IP之后，返回到金山云的控制台，发现这个IP是一个负载均衡，但是这个负载均衡配置的时候对80端口是http协议，而对443端口还是http协议，于是更改成https，重新测试之后，发现错误变成了这样：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@js-develop ~]# wget https://funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8 </span><br><span class="line">-<span class="number">-2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">16</span>:<span class="number">08</span>:<span class="number">15</span>--  https:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8</span></span><br><span class="line">Resolving funchlscdn.lechange.cn... <span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span></span><br><span class="line">Connecting to funchlscdn.lechange.cn|<span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span>|:<span class="number">443.</span>.. connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">502</span> Bad Gateway</span><br><span class="line"><span class="number">2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">16</span>:<span class="number">08</span>:<span class="number">15</span> ERROR <span class="number">502</span>: Bad Gateway.</span><br></pre></td></tr></table></figure></p>
+<p>在浏览器打开效果如图：</p>
+<p>502 Bad Gateway<br>The proxy server received an invalid response from an upstream server. </p>
+<hr>
+<p>KSYUN ELB 1.0.0 </p>
+<p>同时发现金山云负载均衡里对nginx的8000健康检查是“异常”。但是使用http访问却是可以的，效果如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@js-develop ~]# wget http://funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8 </span><br><span class="line">-<span class="number">-2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">31</span>:<span class="number">55</span>--  http:<span class="comment">//funchlscdn.lechange.cn/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8</span></span><br><span class="line">Resolving funchlscdn.lechange.cn... <span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span></span><br><span class="line">Connecting to funchlscdn.lechange.cn|<span class="number">120.92</span><span class="number">.158</span><span class="number">.134</span>|:<span class="number">80.</span>.. connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">302</span> Found</span><br><span class="line">Location: http:<span class="comment">//120.92.133.76:8090/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8 [following]</span></span><br><span class="line">-<span class="number">-2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">31</span>:<span class="number">55</span>--  http:<span class="comment">//120.92.133.76:8090/LCLR/2K02135PAK01979/0/0/20170726085033/dev_20170726085033_lpxh73ezzb92xxa8.m3u8</span></span><br><span class="line">Connecting to <span class="number">120.92</span><span class="number">.133</span><span class="number">.76</span>:<span class="number">8090.</span>.. connected.</span><br><span class="line">HTTP request sent, awaiting response... <span class="number">200</span> OK</span><br><span class="line">Length: <span class="number">66</span> [application/x-mpegURL]</span><br><span class="line">Saving to: “dev_20170726085033_lpxh73ezzb92xxa8.m3u8”</span><br><span class="line"><span class="number">100</span>%[========================================================================================================================================================&gt;] <span class="number">66</span>          --.-K/s   <span class="keyword">in</span> <span class="number">0</span>s      </span><br><span class="line"><span class="number">2017</span><span class="number">-07</span><span class="number">-26</span> <span class="number">15</span>:<span class="number">31</span>:<span class="number">55</span> (<span class="number">3.02</span> MB/s) - “dev_20170726085033_lpxh73ezzb92xxa8.m3u8” saved [<span class="number">66</span>/<span class="number">66</span>]</span><br></pre></td></tr></table></figure></p>
+<p>于是就叫来开发问一下http和https详细的流程，开发说在http里，设计路线如下：<br>    http(80)-&gt;开发模块(9001)</p>
+<p>而在https里，设计路线如下：<br>    https(443)-&gt;nginx(8000)-&gt;开发模块(9001)</p>
+<p>这时候就发现了问题，原来最早的时候金山云是没有配置https证书的，于是开发们就用nginx的8000端口去监听ssl这样达到https证书的效果，但是后来金山云控制台添加了https证书，就不再需要nginx去配置ssl证书了，再去https监听8000这一步也就是错误的了，于是在负载均衡那里改成了：<br>    https(443)-&gt;开发模块(9001)</p>
+<p>同时关闭了nginx，这时候再来测试一下https请求，就成功了！<br><img src="/images/ksslb.png" alt="7牛云存储" title="https返回OK"></p>
+<p>其实如果非要用nginx的ssl证书的话，那么的套路就是：开启nginx，但是在负载均衡那里使用tcp协议去监听nginx的8000端口，这样一样能达到效果。</p>
 
-        
+      
+    </div>
+    
+    
+    
+	
+	
+	  <div>
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------This article is over!<i class="fa fa-paw"></i>Thanks for reading!-------------</div>
+    
+</div>
+	  </div>
+	
+	
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢您请我喝咖啡！(o´ω`o)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Chris Chan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zhifubaopay.jpg" alt="Chris Chan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+			<ul class="post-copyright">
+				<li class="post-copyright-link">
+					<strong>本文作者：</strong>
+					<a href="/" title="欢迎访问 Chris Chan 的个人博客">Chris Chan</a>
+				</li>
+
+				<li class="post-copyright-link">
+					<strong>本文标题：</strong>
+					<a href="http://yoursite.com/2018/01/12/记录一次处理https监听不正确的过程/" title="记录一次处理https监听不正确的过程">记录一次处理https监听不正确的过程</a>
+				</li>
+
+				<li class="post-copyright-date">
+					<strong>发布时间：</strong>2018年1月12日 - 19时01分
+				</li>  
+
+				<li class="post-copyright-license">
+					<strong>版权声明： </strong>
+					本文由 Chris Chan 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="license" target="_blank">保留署名-非商业性使用-禁止演绎 4.0-国际许可协议</a> </br>转载请保留以上声明信息！
+				</li>
+			</ul>
+			
+		</div>
+	
+      
+        <div class="post-tags">
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2017">2017</h1>
+            <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+          
+            <a href="/tags/https/" rel="tag"><i class="fa fa-tag"></i> https</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+			<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;欢迎各位看官给我的这篇文章打个分！&lt;)</div>
+            <div id="wpac-rating"></div>
           </div>
         
-        
 
         
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
         
-            <a class="post-title-link" href="/2017/12/28/CDN网站一次打不开的问题/" itemprop="url">
-              
-                <span itemprop="name">关于阿里云CDN的两个故障解决</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-28T17:34:57+08:00"
-              content="2017-12-28" >
-          12-28
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
+        </div>
+      
       
 
-        
-        
-        
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/12/next主题添加音乐和侧栏左移/" rel="next" title="Next主题添加音乐和将侧栏移动到左边">
+                <i class="fa fa-chevron-left"></i> Next主题添加音乐和将侧栏移动到左边
+              </a>
+            
+          </div>
 
-        
-        
+          <span class="post-nav-divider"></span>
 
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/21/screen的用法/" itemprop="url">
-              
-                <span itemprop="name">screen的用法</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-21T15:59:44+08:00"
-              content="2017-12-21" >
-          12-21
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
 
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/13/pictest/" itemprop="url">
-              
-                <span itemprop="name">pictest</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-13T21:40:06+08:00"
-              content="2017-12-13" >
-          12-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2017/12/13/这里记录的不只有代码，还有生活和思想！/" itemprop="url">
-              
-                <span itemprop="name">这里记录的不只有代码，还有生活和思想！</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-12-13T14:17:22+08:00"
-              content="2017-12-13" >
-          12-13
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
-
-    </div>
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
 
 
           </div>
@@ -488,6 +653,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="hypercomments_widget"></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -840,6 +1014,10 @@ show_date_time();
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -863,6 +1041,8 @@ show_date_time();
 
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
+		
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/12/记录一次处理https监听不正确的过程/"});
 		
 
 		(function() {
@@ -1331,6 +1511,23 @@ show_date_time();
 
   
   
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 8956,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
 
   
 
