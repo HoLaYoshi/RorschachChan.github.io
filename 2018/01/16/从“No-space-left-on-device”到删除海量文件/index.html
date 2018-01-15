@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/df3.png">
 <meta property="og:image" content="http://yoursite.com/images/df4.png">
 <meta property="og:image" content="http://yoursite.com/images/df5.png">
-<meta property="og:updated_time" content="2018-01-15T16:53:56.024Z">
+<meta property="og:updated_time" content="2018-01-15T16:56:02.479Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从“No space left on device”到删除海量文件">
 <meta name="twitter:description" content="当吃的比拉的快...">
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  636
+                  630
                 </span>
               
 
@@ -481,8 +481,13 @@
 <p>先<code>yum install rsync</code>，当然了现在inode是饱和的状态，yum install是会报错的：<br><img src="/images/df4.png" alt="办公室"></p>
 <p>那么就需要手动删除一些文件，腾出来一部分inode供yum使用，安装完毕rsync之后，找到一个空文件夹，如果没有空文件夹，就手动建立一个。 </p>
 <p>使用命令：<code>rsync --delete-before -a -H -v --progress --stats /空文件夹的路径/ /海量小文件的路径/</code></p>
-<pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">–<span class="keyword">delete</span>-before 接收者在传输之前进行删除操作</span><br><span class="line">–progress 在传输时显示传输过程</span><br><span class="line">-a 归档模式，表示以递归方式传输文件，并保持所有文件属性</span><br><span class="line">-H 保持硬连接的文件</span><br><span class="line">-v 详细输出模式</span><br><span class="line">-stats 给出某些文件的传输状态</span><br></pre></td></tr></table></figure>
-</code></pre><p>如果你开了这个服务器的两个窗口，一个是执行上面的命令，另一个是在海量文件夹里执行<code>ls</code>，这个时候ls命令是卡死的，过了大约2分钟，就会看到ls展示的文件喷涌而出，整个电脑屏幕好比黑客帝国一样，异常壮观。</p>
+<pre><code>–delete-before 接收者在传输之前进行删除操作
+–progress 在传输时显示传输过程
+-a 归档模式，表示以递归方式传输文件，并保持所有文件属性
+-H 保持硬连接的文件
+-v 详细输出模式
+-stats 给出某些文件的传输状态
+</code></pre><p>如果你开了这个服务器的两个窗口，一个是执行上面的命令，另一个是在海量文件夹里执行<code>ls</code>，这个时候ls命令是卡死的，过了大约2分钟，就会看到<code>ls</code>展示的文件喷涌而出，整个电脑屏幕好比黑客帝国一样，异常壮观。</p>
 <p>静等大约20分钟，整个文件夹删除干净，inode也释放了97%，世界恢复了清静。<br><img src="/images/df5.png" alt="办公室"></p>
 
       
@@ -906,7 +911,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共19.2k字</span>
+  <span class="post-count">博客全站共19.1k字</span>
 </div>
         
 
