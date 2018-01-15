@@ -97,7 +97,7 @@
 <meta property="og:description" content="极其不负责任的自我介绍">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/desk.jpg">
-<meta property="og:updated_time" content="2018-01-15T11:12:17.687Z">
+<meta property="og:updated_time" content="2018-01-15T13:03:35.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于我">
 <meta name="twitter:description" content="极其不负责任的自我介绍">
@@ -347,9 +347,16 @@
 </ul>
 <hr>
 
+			<div id="aplayer1" class="aplayer" style="margin-bottom: 20px;"></div>
 			<script>
-				console.error("SyntaxError: Unexpected token ， in JSON at position 1156");
+				var options = {"narrow":false,"autoplay":false,"showlrc":3,"mutex":true,"music":[{"title":"一块红布","author":"崔健","url":"http://p1x3hd2at.bkt.clouddn.com/一块红布.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/一块红布.jpg"},{"title":"快让我在雪地上撒点野","author":"崔健","url":"http://p1x3hd2at.bkt.clouddn.com/一块红布.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/一块红布.jpg"},{"title":"漩涡","author":"黄耀明、彭羚","url":"http://p1x3hd2at.bkt.clouddn.com/漩涡.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/漩涡.jpg"},{"title":"昆仑仙境","author":"蔡志展","url":"http://p1x3hd2at.bkt.clouddn.com/昆仑仙境.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/金庸群侠传.jpg"},{"title":"荡空山","author":"窦唯","url":"http://p1x3hd2at.bkt.clouddn.com/荡空山.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/窦唯.jpg"},{"title":"哪呢","author":"窦唯","url":"http://p1x3hd2at.bkt.clouddn.com/哪呢.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/窦唯.jpg"},{"title":"努力活着","author":"赵传","url":"http://p1x3hd2at.bkt.clouddn.com/努力活着.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/赵传.jpg"},{"title":"So ban","author":"Eminem","url":"http://p1x3hd2at.bkt.clouddn.com/So bad.mp3","pic":"http://p1x3hd2at.bkt.clouddn.com/Eminem.jpg"}]};
+				options.element = document.getElementById("aplayer1");
+				var ap = new APlayer(options);
+				window.aplayers || (window.aplayers = []);
+				window.aplayers.push(ap);
 			</script>
+
+		
 <blockquote class="blockquote-center"><p>习武之人有三个阶段：见自己，见天地，见众生。</p>
 </blockquote>
         
