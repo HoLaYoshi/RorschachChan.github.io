@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-15T16:47:39.506Z</updated>
+  <updated>2018-01-15T16:53:56.024Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,22 +17,45 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>从“No space left on device”到删除海量文件</title>
+    <link href="http://yoursite.com/2018/01/16/%E4%BB%8E%E2%80%9CNo-space-left-on-device%E2%80%9D%E5%88%B0%E5%88%A0%E9%99%A4%E6%B5%B7%E9%87%8F%E6%96%87%E4%BB%B6/"/>
+    <id>http://yoursite.com/2018/01/16/从“No-space-left-on-device”到删除海量文件/</id>
+    <published>2018-01-15T16:48:39.000Z</published>
+    <updated>2018-01-15T16:53:56.024Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>开发发现某个云服务器无法启动进程，提示“No space left on device”，但是使用<code>df -h</code>查看容量的时候，明明还有很多的空间。于是使用<code>df -i</code>，发现inode节点已经全部用光了，所以现在不能建立任何新的文件。如图：<br><img src="/images/df1.png" alt="办公室"></p><p>既然如此就要查出来是哪个文件夹里会有如此多的文件来占用这些inode,使用一个小脚本：<code>for i in /*; do echo $i; find $i | wc -l; done</code>，获取到/mnt下有一个文件占用了绝大多数的inode，如图：<br><img src="/images/df2.png" alt="办公室"></p><p>于是就进入到mnt这个文件夹里，慢慢找寻到底是哪个文件夹，用上面那个语句一点一点缩小范围，最后确定文件夹原来就是data文件夹，如图：<br><img src="/images/df3.png" alt="办公室"></p><p>现在如果要<code>rm -rf data/*</code>的话，是没有效果的，有效果的话也很慢。而且很有可能报<code>-bash: /bin/rm: Argument list too long</code>的错，因为这个文件夹里面的小文件实在太多了，有足足两百五十多万个，那么怎么样处理这样的情况？</p><p>用find搭配-type f -exec rm {} \;可能会引起内存溢出，用文件夹重置命令搭配”–reference” 也没什么效果。</p><p>这时最好的方法就是使用<code>rsync</code>!</p><p>先<code>yum install rsync</code>，当然了现在inode是饱和的状态，yum install是会报错的：<br><img src="/images/df4.png" alt="办公室"></p><p>那么就需要手动删除一些文件，腾出来一部分inode供yum使用，安装完毕rsync之后，找到一个空文件夹，如果没有空文件夹，就手动建立一个。 </p><p>使用命令：<code>rsync --delete-before -a -H -v --progress --stats /空文件夹的路径/ /海量小文件的路径/</code></p><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">–<span class="keyword">delete</span>-before 接收者在传输之前进行删除操作</span><br><span class="line">–progress 在传输时显示传输过程</span><br><span class="line">-a 归档模式，表示以递归方式传输文件，并保持所有文件属性</span><br><span class="line">-H 保持硬连接的文件</span><br><span class="line">-v 详细输出模式</span><br><span class="line">-stats 给出某些文件的传输状态</span><br></pre></td></tr></table></figure></code></pre><p>如果你开了这个服务器的两个窗口，一个是执行上面的命令，另一个是在海量文件夹里执行<code>ls</code>，这个时候ls命令是卡死的，过了大约2分钟，就会看到ls展示的文件喷涌而出，整个电脑屏幕好比黑客帝国一样，异常壮观。</p><p>静等大约20分钟，整个文件夹删除干净，inode也释放了97%，世界恢复了清静。<br><img src="/images/df5.png" alt="办公室"></p>]]></content>
+    
+    <summary type="html">
+    
+      当吃的比拉的快...
+    
+    </summary>
+    
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
     <title>使用Google Authenticator给ssh进行登录验证</title>
     <link href="http://yoursite.com/2018/01/16/%E4%BD%BF%E7%94%A8Google-Authenticator%E7%BB%99ssh%E8%BF%9B%E8%A1%8C%E7%99%BB%E5%BD%95%E9%AA%8C%E8%AF%81/"/>
     <id>http://yoursite.com/2018/01/16/使用Google-Authenticator给ssh进行登录验证/</id>
     <published>2018-01-15T16:39:26.000Z</published>
-    <updated>2018-01-15T16:47:39.506Z</updated>
+    <updated>2018-01-15T16:49:15.002Z</updated>
     
     <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>普通情况下的服务器登录，是“服务器+密码”这种直白的验证方式，但是这种方式太过简单，一旦密码泄露，服务器就有危险，于是为了安全我们就要在登录上再加一把锁，那就是使用Google Authenticator（谷歌身份验证器）这个工具，在登录的时候进行一次验证，只有“验证通过了”+“密码正确”才能登陆服务器。</p><h2><span id="安装前准备">安装前准备</span></h2><p>1）关闭Selinux ：<code>setenforce 0</code><br>2）安装依赖：<code>yum -y install gcc make pam-devel libpng-devel libtool wget git</code><br>3）添加阿里云epel 源：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RHEL <span class="number">6</span>/Centos <span class="number">6</span></span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http:<span class="comment">//mirrors.aliyun.com/repo/epel-6.repo</span></span><br><span class="line">RHEL <span class="number">7</span>/Centos <span class="number">7</span></span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http:<span class="comment">//mirrors.aliyun.com/repo/epel-7.repo</span></span><br></pre></td></tr></table></figure></p><p>4）安装Qrencode，谷歌身份验证器需要调用该程序生成二维码并显示：<code>yum install -y qrencode</code></p><h2><span id="安装谷歌身份验证器">安装谷歌身份验证器</span></h2><p>这个时候很多教程会让你去执行<code>git clone https://github.com/google/google-authenticator.git</code>，然而现在这个git里面已经不再含有libpam这个文件夹了，下载下来是一个错误的包，那么这个时候你可以使用<code>yum install google-authenticator</code>，不过yum安装的身份验证器的版本很老，这个时候可以执行<code>wget https://github.com/google/google-authenticator-libpam/archive/1.04.tar.gz</code>。</p><p>下载下来1.0.4版本的然后拆包解压缩，里面是这样几个文件：<br><img src="/images/google1.png" alt="办公室"></p><p>然后就<code>./bootstrap.sh &amp;&amp; ./configure &amp;&amp; make &amp;&amp; make install</code>进行编译和安装。</p><p>安装过程完毕之后，还要复制google身份验证器pam模块到系统下，命令是：<code>cp /usr/local/lib/security/pam_google_authenticator.so /lib64/security/</code>。</p><h2><span id="调整登陆方式">调整登陆方式</span></h2><p>1）编辑<code>/etc/pam.d/sshd</code>这个文件，我这个centos的版本是7.0的，里面的内容可能跟centos 6.x的优点不同，不过没关系，就需要插入黄色框内的<code>auth required pam_google_authenticator.so</code>，如图：<br><img src="/images/google2.png" alt="办公室"></p><p>修改完毕之后，保存退出。</p><p>注意！修改了这步之后，服务器千万不能断开连接，否则再连是需要google验证码的，而我们现在还没有生成码，所以肯定是无法连接服务器，如果是云服务器，可以通过登陆控制台的方式把这个文件修改回来，如果是实体服务器，那就呵呵呵了。</p><p>2）编辑<code>/etc/ssh/sshd_config</code>，就修改一个地方：<code>ChallengeResponseAuthentication yes</code><br>3）保存退出之后，重启一下ssh服务：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RHEL6 /Centos6：Service sshd restart</span><br><span class="line">RHEL7 /Centos7：Systemctl resart sshd</span><br></pre></td></tr></table></figure></p><h2><span id="生成登陆验证码">生成登陆验证码</span></h2><p>这次以root用户为例，那么切换成root用户执行下面的过程。<br>1）执行<code>google-authenticator</code>，由于我们之前已经安装了<code>qrencode</code>，那么这个时候会生成一个超级超级巨大的二维码，给各位感受一下：<br><img src="/images/google3.png" alt="办公室"></p><p>红色内容是生成的密钥，很重要。绿色的内容是备用的紧急救助码，紧急救助码就是当你无法获取认证码时（比如手机丢了），可以当做认证码来用，每用一个少一个，但其实可以手动添加的，建议如果 root 账户使用 Google Authenticator 的话一定要把紧急救助码另外保存一份。</p><pre><code>Do you want me to update your &quot;/home/test/.google_authenticator&quot; file? (y/n) y</code></pre><p>是否更新用户的 Google Authenticator 配置文件，选择 y 才能使上面操作对当前用户生效，其实就是在对应用户的 Home 目录下生成了一个 .google_authenticator 文件，如果你想停用这个用户的 Google Authenticator 验证，只需要删除这个用户 Home 目录下的 .google_authenticator 文件就可以了。</p><pre><code>Do you want to disallow multiple uses of the same authentication token? This restricts you to one login about every 30s, but it increases your chances to notice or even prevent man-in-the-middle attacks (y/n) y</code></pre><p>每次生成的认证码是否同时只允许一个人使用？这里选择 y。</p><pre><code>By default, tokens are good for 30 seconds. In order to compensate for possible time-skew between the client and the server, we allow an extra token before and after the current time. If you experience problems with poor time synchronization, you can increase the window from its default size of +-1min (window size of 3) to about +-4min (window size of 17 acceptable tokens). Do you want to do so? (y/n) n</code></pre><p>是否增加时间误差？这里随便选择， ny都可以。</p><pre><code>If the computer that you are logging into isn&apos;t hardened against brute-force login attempts, you can enable rate-limiting for the authentication module. By default, this limits attackers to no more than 3 login attempts every 30s. Do you want to enable rate-limiting (y/n) y</code></pre><p>是否启用次数限制？这里选择 y，默认每 30 秒最多尝试登录 3 次。</p><p>如果想要写成脚本的话，那么上面交互式的设置也可用通过参数一次性设置：<code>google-authenticator -t -f -d -l test@chen.super -i MR.chen -r 3 -R 30 -W</code>。</p><p>-I和-i是可以随便写的，但是-i后期可以改，-I不能改。</p><h2><span id="搭配手机端">搭配手机端</span></h2><p>如果手机是ios，就去apple store里搜索“Google Authenticator”，如果是安卓，就去应用商店搜索“谷歌动态口令”。</p><p>安装完后，打开App，点击“开始设置”，选择“扫描条形码”扫描上面google-authenticator命令生成的二维码，或者是选择“输入密钥”，然后手机上就能看到对应的六位数认证码了。</p><p>最后一步，返回xshell，修改登陆方式，设置登陆方法为<code>Keyboard Interactive</code>，如图：<br><img src="/images/google4.png" alt="办公室"></p><p>这个时候，推荐各位保留原有的ssh不要动，在另外一个xshell窗口登陆一下看看效果，如果正常的话，这个时候会看到系统会让你先输入一个<code>Verification code</code>。这个值就是手机里的那个六位数，然后再输入密码，只有两个都是正确的，才能登陆！</p><p>至此整个配置完成，如果登陆时遇到问题，请查看日志文件<code>/var/log/secure</code>。</p><h2><span id="更改存储位置">更改存储位置</span></h2><p>在生成二维码那一步的时候，如果你错过了记住密钥也不要怕，系统会自动把密钥和紧急救助码保存在<code>~/.google_authenticator</code>这个文件里。</p><p>如果想要改变密钥存储位置，请使用–secret参数:<code>google-authenticator --secret=&quot;/文件路径/用户名&quot;</code>。</p><p>然后更改/etc/pam.d/sshd内的路径配置:<code>auth required pam_google_authenticator.so user=root secret=/PATH_FOLDER/${USER}</code>。</p><p>上面那句话里“user=root” 用于强制PAM使用root用户权限来搜索文件。</p><p>另外请注意，由于我们当时切换成了root用户，所以密钥文件的所有者是root，生成文件的用户只能读取文件(chmod: 400)：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown root.root /PATH_FILE/SECRET_KEY_FILES</span><br><span class="line">chmod <span class="number">400</span> /PATH_FILE/SECRET_KEY_FILES</span><br></pre></td></tr></table></figure></p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;p&gt;普通情况下的服务器登录，是“服务器+密码”这种直白的验证方式，但是这种方式太过简单，一旦密码泄露，服务器就有危险，于是为了安全我们就要在登录上再加一把锁，那就是使用Googl
-      
+      给Linux服务器再加一把锁
     
     </summary>
+    
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
@@ -468,30 +491,6 @@
       <category term="美女" scheme="http://yoursite.com/tags/%E7%BE%8E%E5%A5%B3/"/>
     
       <category term="图片" scheme="http://yoursite.com/tags/%E5%9B%BE%E7%89%87/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>这里记录的不只有代码，还有生活和思想！</title>
-    <link href="http://yoursite.com/2017/12/13/%E8%BF%99%E9%87%8C%E8%AE%B0%E5%BD%95%E7%9A%84%E4%B8%8D%E5%8F%AA%E6%9C%89%E4%BB%A3%E7%A0%81%EF%BC%8C%E8%BF%98%E6%9C%89%E7%94%9F%E6%B4%BB%E5%92%8C%E6%80%9D%E6%83%B3%EF%BC%81/"/>
-    <id>http://yoursite.com/2017/12/13/这里记录的不只有代码，还有生活和思想！/</id>
-    <published>2017-12-13T06:17:22.000Z</published>
-    <updated>2018-01-12T07:53:13.423Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p><img src="/images/石锤淡啤酒.png" alt="beer" title="那些在阳光下挥洒青春的日子啊！"></p><div id="aplayer0" class="aplayer" style="margin-bottom: 20px;"></div><script>var ap = new APlayer({element: document.getElementById("aplayer0"),narrow: false,autoplay: false,showlrc: 0,music: {title: "一个人去旅行",author: "陈升",url: "http://p1x3hd2at.bkt.clouddn.com/一个人去旅行.mp3",pic: "http://p1x3hd2at.bkt.clouddn.com/五十米深蓝.jpg",}});window.aplayers || (window.aplayers = []);window.aplayers.push(ap);</script><p>你说要一个人去旅行　但是归期却没有约定　亚得里亚海边风中的吉他声<br>你说你带着苍白的回忆　却谢谢能与我相逢　我怕你在异乡夜里孤独醒来<br>要拒绝两人单调的生活　想寻找自由　迷信了爱情　就迷失了我自己<br>你就这样　离开吧　抛弃吧　他乡的旅人<br>你就那样　离开吧　抛弃吧　一个人生活</p><p>你说要一个人去旅行　眼里藏着一朵乌云　知道你藏不住秘密　天空就会飘着雨<br>你说你带着一本日记　却不想再拥有回忆　我怕你在异乡孤独的醒来<br>要拒绝两人单调的生活　不想再随波逐流　迷信了孤独　就软弱的抛弃了我的等待</p><p>你就这样　离开吧　抛弃吧　他乡的旅人<br>你就那样　离开吧　抛弃吧　让我孤独生活</p><p>你就这样　离开吧　抛弃我　孤独的旅人<br>你就这样　离开我　抛弃我　让我孤独生活</p><p>我想要一个人去旅行　但愿归期会有约定　每个人都在问我　是否可以找到自由的你<br>亚得里亚海边他乡的人和风中的吉他声　我怕你一个人在异乡孤独醒来<br>我会带着你回来</p>]]></content>
-    
-    <summary type="html">
-    
-      先用陈升先生的一首《一个人去旅行》做我这个博客的开场白
-    
-    </summary>
-    
-      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="音乐" scheme="http://yoursite.com/tags/%E9%9F%B3%E4%B9%90/"/>
-    
-      <category term="感悟" scheme="http://yoursite.com/tags/%E6%84%9F%E6%82%9F/"/>
     
   </entry>
   
