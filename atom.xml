@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-15T16:56:02.479Z</updated>
+  <updated>2018-01-16T00:25:42.279Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>记录日志系统ELKB 5.6.4的搭建过程</title>
+    <link href="http://yoursite.com/2018/01/16/%E8%AE%B0%E5%BD%95%E6%97%A5%E5%BF%97%E7%B3%BB%E7%BB%9FELKB-5-6-4%E7%9A%84%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/01/16/记录日志系统ELKB-5-6-4的搭建过程/</id>
+    <published>2018-01-15T23:59:43.000Z</published>
+    <updated>2018-01-16T00:25:42.279Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>ELK是最近比较流行的免费的日志系统解决方案，注意，ELK不是一个软件名，而是一个结局方案的缩写，即Elasticsearch+Logstash+Kibana（ELK Stack）。这哥几个都是java系的产品，但是众所周知，java的东西很吃内存和CPU，Logstash在当作为收集日志的Agent时，就显得太过臃肿了。听说直播平台“斗鱼”团队很为logstash占用资源的情况很而苦恼，后来为了解决这个问题，他们自己写了一个agent。不过后来官方在logstash-forwarder的基础上推出了beat系列，里面包括四个兄弟，分别是：Packetbeat（搜集网络流量数据）；Topbeat（搜集系统、进程和文件系统级别的 CPU 和内存使用情况等数据）；Filebeat（搜集文件数据）；Winlogbeat（搜集 Windows 事件日志数据）。而Filebeat也就这样加入了“日志收集分析”的团队里，所以虽然大家还是习惯性的叫ELK，其实准确的说法已经是ELKB了。</p><p>ELKB这几个哥们的分工如下：</p><ol><li>Elasticsearch：分布式搜索和分析引擎，具有高可伸缩、高可靠和易管理等特点。基于 Apache Lucene 构建，能对大容量的数据进行接近实时的存储、搜索和分析操作。通常被用作某些应用的基础搜索引擎，使其具有复杂的搜索功能；</li><li>Logstash：数据收集额外处理和数据引擎。它支持动态的从各种数据源搜集数据，并对数据进行过滤、分析、丰富、统一格式等操作，然后存储到用户指定的位置；</li><li>Kibana：数据分析和可视化平台。通常与 Elasticsearch 配合使用，对其中数据进行搜索、分析和以统计图表的方式展示；</li><li>Filebeat：ELK 协议栈的新成员，在需要采集日志数据的 server 上安装 Filebeat，并指定日志目录或日志文件后，Filebeat 就能读取数据，迅速发送到 Logstash 进行解析，亦或直接发送到 Elasticsearch 进行集中式存储和分析。</li></ol><h2><span id="设计架构">设计架构</span></h2><p><img src="/images/elk1.jpg" alt="办公室"></p><p>本文的设计结构就是这样，其中红色的redis/RebbitMQ部分可以省略（我这个例子里暂省略），让日志直接传递到logstash，如果日志量较大，最好还是添加上redis，同时再横向扩容Elasticsearch，搞成一个集群。</p><p>对于这几个模块服务器多说几句：<br>1）Logstash要选择计算能力强的，CPU和内存比较丰满的；<br>2）Elasticsearch要选择磁盘容量大的，同时CPU和内存也比较丰满的；</p><h2><span id="实验软件版本">实验软件版本</span></h2><p>Elasticsearch 5.6.4<br>Logstash 5.6.4<br>Kibana 5.6.4<br>Filebeat 5.6.4<br>Java 1.8+，安装方法：<code>http://blog.51cto.com/chenx1242/2043924</code><br>由于ELKB这几个东西都是墙外的，墙内的下载可能会比较费劲。所以我稍后会把所有ELKB的5.6.4程序都放在51CTO的存储空间里，需要的朋友可以去下载，还是那话，虽然ELK升级频率很快，但是5.6.4已经足够稳定了。</p><h2><span id="实验服务器情况">实验服务器情况</span></h2><p><img src="/images/elk2.png" alt="办公室"></p><h2><span id="安装elasticsearch-564-以下所有操作都是root下进行的">安装Elasticsearch 5.6.4 ##（以下所有操作都是root下进行的）</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https:<span class="comment">//artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.rpm</span></span><br><span class="line">rpm -ivh elasticsearch<span class="number">-5.6</span><span class="number">.4</span>.rpm</span><br></pre></td></tr></table></figure></code></pre><p>然后编辑<code>/etc/elasticsearch/elasticsearch.yml</code>，不然的话logstash无法与之相连：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: my-application  #如果是集群的es就把这个打开，Elasticsearch 启动时会根据配置文件中设置的集群名字（cluster.name）自动查找并加入集群，端口是9300</span><br><span class="line">network.host: 0.0.0.0    #取消注释，并且改成0.0.0.0</span><br><span class="line">http.port: 9200    #取消注释</span><br></pre></td></tr></table></figure></p><p>保存之后，启动并且添加开机启动：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start elasticsearch     </span><br><span class="line">systemctl enable elasticsearch</span><br></pre></td></tr></table></figure></p><p>使用<code>curl localhost:9200</code>能看到这样的情景就证明已经成功启动了：<br><img src="/images/elk3.png" alt="办公室"></p><h2><span id="安装kibana-564-以下所有操作都是root下进行的">安装kibana 5.6.4 ##(以下所有操作都是root下进行的)</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https:<span class="comment">//artifacts.elastic.co/downloads/kibana/kibana-5.6.4-linux-x86_64.tar.gz</span></span><br><span class="line">tar xzvf kibana<span class="number">-5.6</span><span class="number">.4</span>-linux-x86_64.tar.gz</span><br><span class="line">cd kibana<span class="number">-5.6</span><span class="number">.4</span>-linux-x86_64/</span><br><span class="line">vim config/kibana.yml</span><br></pre></td></tr></table></figure></code></pre><p>把kibana.yml里的<code>server.host: localhost</code>改成<code>server.host: 0.0.0.0</code>，然后保存退出，在kibana的bin文件夹里执行<code>./kibana</code>即可。如果要后台启动就是<code>nohup /kibana安装路径/bin/kibana &amp;</code>。</p><p>启动之后，如图：<br><img src="/images/elk4.png" alt="办公室"></p><h2><span id="安装logstash-564-以下所有操作都是root下进行的">安装Logstash 5.6.4 ##（以下所有操作都是root下进行的）</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https:<span class="comment">//artifacts.elastic.co/downloads/logstash/logstash-5.6.4.rpm </span></span><br><span class="line">rpm -ivh logstash<span class="number">-5.6</span><span class="number">.4</span>.rpm</span><br></pre></td></tr></table></figure></code></pre><p>如果安装的时候爆错：<code>/usr/share/logstash/vendor/jruby/bin/jruby: line 388: /usr/bin/java: No such file or directory</code>。那么就先<code>which java</code>查看一下java的文件，然后做一个软连接过去，然后重装logstash即可，如图：<br><img src="/images/elk5.png" alt="办公室"></p><p><img src="/images/elk6.png" alt="办公室"></p><p>用户可以使用TLS双向认证加密Filebeat和Logstash的连接，保证Filebeat只向可信的Logstash发送加密的数据（如果你的logstash和filebeat是内网通信，而且你认可当前内网的安全度，这一步可以省略）。同样的，Logstash也只接收可信的Filebeat发送的数据。这个功能默认是关闭的，要开启的话需要先<code>vim /etc/pki/tls/openssl.cnf</code>，如图：<br><img src="/images/elk7.png" alt="办公室"></p><p>找到<code>[ v3_ca ]</code>的字段，在底下添加<code>subjectAltName = IP:logstash的内网IP</code>字段，保存退出来到/etc/pki/tls/，执行下面命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -x509 -days <span class="number">365</span> -batch -nodes -newkey rsa:<span class="number">2048</span> -keyout private/logstash-forwarder.key -out certs/logstash-forwarder.crt</span><br></pre></td></tr></table></figure></p><p>来生成一个期限为365天的IP SAN证书对，如果想生成一个十年的证书，就把365改成3650即可，如图：</p><p>安装完毕之后，<code>vim /etc/logstash/logstash.yml</code>，编辑成如下的样子：<br><img src="/images/elk8.png" alt="办公室"></p><p>然后在<code>/etc/logstash/</code>下手动建立一个目录conf.d，在conf.d里新建一个<code>logstash.conf</code>的文件，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">$ cat /usr/local/logstash/config/conf.d/logstash.conf</span><br><span class="line">#在输入部分，配置Logstash通信端口以及添加SSL证书，从而进行安全通信。</span><br><span class="line">input &#123;</span><br><span class="line"> beats &#123;</span><br><span class="line">   port =&gt; <span class="number">5044</span></span><br><span class="line">   ssl =&gt; <span class="literal">true</span></span><br><span class="line">   ssl_certificate =&gt; <span class="string">"/etc/pki/tls/certs/logstash-forwarder.crt"</span></span><br><span class="line">   ssl_key =&gt; <span class="string">"/etc/pki/tls/private/logstash-forwarder.key"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">#在过滤器部分，我们将使用Grok来解析这些日志，然后将其发送到Elasticsearch。以下grok过滤器将查找“syslog”标记的日志，并尝试解析它们，以生成结构化索引。</span><br><span class="line">filter &#123;</span><br><span class="line"> <span class="keyword">if</span> [type] == <span class="string">"syslog"</span> &#123;</span><br><span class="line">    grok &#123;</span><br><span class="line">      match =&gt; &#123; <span class="string">"message"</span> =&gt; <span class="string">"%&#123;SYSLOGTIMESTAMP:syslog_timestamp&#125; %&#123;SYSLOGHOST:syslog_hostname&#125; %&#123;DATA:syslog_program&#125;(?:\[%&#123;POSINT:syslog_pid&#125;\])?: %&#123;GREEDYDATA:syslog_message&#125;"</span> &#125;</span><br><span class="line">      add_field =&gt; [ <span class="string">"received_at"</span>, <span class="string">"%&#123;@timestamp&#125;"</span> ]</span><br><span class="line">      add_field =&gt; [ <span class="string">"received_from"</span>, <span class="string">"%&#123;host&#125;"</span> ]</span><br><span class="line">    &#125;</span><br><span class="line">    syslog_pri &#123; &#125;</span><br><span class="line">    date &#123;</span><br><span class="line">      match =&gt; [ <span class="string">"syslog_timestamp"</span>, <span class="string">"MMM  d HH:mm:ss"</span>, <span class="string">"MMM dd HH:mm:ss"</span> ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line">#输出部分，我们将定义要存储的日志位置</span><br><span class="line">output &#123;</span><br><span class="line">elasticsearch &#123;</span><br><span class="line"> hosts =&gt; [ "10.162.80.192:9200" ]                #这个地址是elasticsearch的内网地址</span><br><span class="line">index =&gt; "filebeat-%&#123;+YYYY.MM.dd&#125;"#设定这个是索引</span><br><span class="line">   #index =&gt; "auclogstash-%&#123;+YYYY.MM.dd&#125;"    #这行是后来作实验的，可以忽视            </span><br><span class="line">user =&gt; elastic                    #这个是为了将来装x-pack准备的</span><br><span class="line">password =&gt; changeme                #同上</span><br><span class="line">      &#125;</span><br><span class="line">stdout &#123;</span><br><span class="line">   codec =&gt; rubydebug</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>然后就是启动并且添加开机自启动:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start logstash        </span><br><span class="line">systemctl enable logstash</span><br></pre></td></tr></table></figure></p><h2><span id="安装filebeat-以下所有操作都是root下进行的">安装filebeat ##（以下所有操作都是root下进行的）</span></h2><p>在模块服务器上安装filebeat的方法如下:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https:<span class="comment">//artifacts.elastic.co/downloads/beats/filebeat/filebeat-5.6.4-x86_64.rpm </span></span><br><span class="line">rpm -ivh filebeat<span class="number">-5.6</span><span class="number">.4</span>-x86_64.rpm</span><br></pre></td></tr></table></figure></p><p>之前在logstash上生成了一个IP SAN证书，现在需要把这个证书传递给filebeat的机器里，使用scp语句如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">scp -pr root@10.162.80.171:/etc/pki/tls/certs/logstash-forwarder.crt /etc/ssl/certs/        #10.162.80.171就是logstash的内网IP</span><br></pre></td></tr></table></figure></p><p>输入logstash的密码，并且密钥文件复制完毕之后，需要修改filebeat.yml，于是#vim /etc/filebeat/filebeat.yml：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@func-auc-001 log]# grep -iv '#' /etc/filebeat/filebeat.yml | grep -iv '^$'</span><br><span class="line">filebeat.prospectors:</span><br><span class="line">- input_type: log</span><br><span class="line">  paths:</span><br><span class="line">    -  <span class="regexp">/mnt/</span>hswx/auc/logs<span class="comment">/*.log        #这个是那个auc模块的路径</span></span><br><span class="line"><span class="comment">    -    /第二个日志路径/*.log                   #如果有第二个文件路径的话</span></span><br><span class="line"><span class="comment">  tail_files: true                                 #从文件末尾开始读取</span></span><br><span class="line"><span class="comment">  document_type: "newnginx-api"                    #logstash那里已经设定了index，如果要使用了document_type，那么在logstash的index就要这么写："%&#123;type&#125;-%&#123;+YYYY.MM.dd&#125;"</span></span><br><span class="line"><span class="comment">  # 以下是规避数据热点的优化参数：</span></span><br><span class="line"><span class="comment">    spool_size: 1024         # 积累1024条消息才上报</span></span><br><span class="line"><span class="comment">    idle_timeout: "5s"        # 空闲5s上报</span></span><br><span class="line"><span class="comment">   </span></span><br><span class="line"><span class="comment">output.logstash:</span></span><br><span class="line"><span class="comment">  hosts: ["10.162.80.171:5044"]            #这个地方要写logstash的内网地址</span></span><br><span class="line"><span class="comment">  ssl.certificate_authorities: ["/etc/ssl/certs/logstash-forwarder.crt"]    #这里就是刚刚复制的那个密钥文件路径</span></span><br><span class="line"><span class="comment">  #注意上面是ssl而不是tls，1.0版本才是tls，如果这个写错了，启动的时候会出现“read: connection reset by peer”的错误</span></span><br></pre></td></tr></table></figure></p><p>注意！Filebeat的配置文件采用YAML格式，这意味着缩进非常重要！请务必使用与这些说明相同数量的空格。</p><p>保存之后，使用<code>/etc/init.d/filebeat start</code>启动filebeat，如图：<br><img src="/images/elk10.png" alt="办公室"></p><h2><span id="故障解决">故障解决</span></h2><p>ELK几个部件现在都已经启动了，并且互相telnet端口都是通的，在elasticsearch的服务器上使用<code>curl -XGET &#39;http://elasticsearch内网IP:9200/filebeat-*/_search?pretty&#39;</code>却出现这样的情况：<br><img src="/images/elk9.png" alt="办公室"></p><p>而使用<code>tailf /var/log/filebeat/filebeat</code>去查看filebeat的日志是这样的：<br><img src="/images/elk11.png" alt="办公室"></p><p>再看看logstash-plain.log，里面的情况是这样的：<br><img src="/images/elk12.png" alt="办公室"></p><p>从此可见，filebeat与logstash的联系是error状态，那么停止filebeat的进程，改用<code>/etc/init.d/filebeat start -c /etc/filebeat/filebeat.yml</code>，重新在elasticsearch的服务器上使用<code>curl -XGET &#39;http://elasticsearch内网IP:9200/filebeat-*/_search?pretty&#39;</code>发现已经成功读到了我们之前配置的目录“/mng/hswx/auc/log”，如图：<br><img src="/images/elk13.png" alt="办公室"></p><h2><span id="配置kibana">配置kibana</span></h2><p>在浏览器输入<code>kibana服务器外网IP：5601</code>打开kibana的web界面，把<code>idenx pattern</code>的地方改成<code>filebeat-*</code>(同之前配置的index索引一致)，然后点击<code>create</code>，如图：<br><img src="/images/elk14.png" alt="办公室"></p><p>然后就得到了细节的web界面，如图：<br><img src="/images/elk15.png" alt="办公室"></p><p>点击左侧框的<code>Discover</code>，就会看到梦寐以求的日志web界面，如图：<br><img src="/images/elk16.png" alt="办公室"></p><p>看一下红色框的内容里面有时间，有host主机，有source来源，还有具体的日志信息，我们再去func-auc-001这个日志源主机上查询一下日志：<br><img src="/images/elk17.png" alt="办公室"></p><p>两个日志是一样的，可见实现了预期的日志展示的目标！</p><p>最后一步，就是把kibana与nginx联系起来（也可以把kibana做阿里云负载均衡的后端服务器），这样通过nginx/负载均衡来访问kibana的界面，对kibana来说更安全。配置端口监听如图，再把kibana服务器挂在负载均衡后面即可。<br><img src="/images/elk18.png" alt="办公室"></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk-filebeat/index.html" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/opensource/os-cn-elk-filebeat/index.html</a><br><a href="https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/" target="_blank" rel="noopener">https://www.ibm.com/developerworks/cn/opensource/os-cn-elk/</a><br><a href="http://www.jinsk.vip/2017/05/24/elksetup/" target="_blank" rel="noopener">http://www.jinsk.vip/2017/05/24/elksetup/</a><br><a href="https://renwole.com/archives/661" target="_blank" rel="noopener">https://renwole.com/archives/661</a><br><a href="https://www.zybuluo.com/dume2007/note/665868" target="_blank" rel="noopener">https://www.zybuluo.com/dume2007/note/665868</a><br><a href="https://www.elastic.co/guide/en/beats/libbeat/5.6/getting-started.html" target="_blank" rel="noopener">https://www.elastic.co/guide/en/beats/libbeat/5.6/getting-started.html</a><br><a href="https://discuss.elastic.co/search?q=ERR%20Failed%20to%20publish%20events%20caused%20by%3A%20read%20tcp" target="_blank" rel="noopener">https://discuss.elastic.co/search?q=ERR%20Failed%20to%20publish%20events%20caused%20by%3A%20read%20tcp</a><br><a href="http://jaminzhang.github.io/elk/ELK-config-and-use-Filebeat/" target="_blank" rel="noopener">http://jaminzhang.github.io/elk/ELK-config-and-use-Filebeat/</a> （这个博主很好，但是就是博客无法留言，这点比较坑）</p>]]></content>
+    
+    <summary type="html">
+    
+      从搭建ELK开始日志分析之路
+    
+    </summary>
+    
+      <category term="用来混饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E6%B7%B7%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="ELK" scheme="http://yoursite.com/tags/ELK/"/>
+    
+      <category term="大数据分析" scheme="http://yoursite.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
+    
+  </entry>
   
   <entry>
     <title>从“No space left on device”到删除海量文件</title>
@@ -276,9 +300,9 @@
       <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
-    
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
@@ -326,9 +350,9 @@
       <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
-    
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
     
   </entry>
   
@@ -350,9 +374,9 @@
       <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
-    
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
     
   </entry>
   
@@ -467,30 +491,6 @@
       <category term="其他软件" scheme="http://yoursite.com/tags/%E5%85%B6%E4%BB%96%E8%BD%AF%E4%BB%B6/"/>
     
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>pictest</title>
-    <link href="http://yoursite.com/2017/12/13/pictest/"/>
-    <id>http://yoursite.com/2017/12/13/pictest/</id>
-    <published>2017-12-13T13:40:06.000Z</published>
-    <updated>2018-01-03T07:06:26.282Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这是一个我用来测试图片上传的文章<br><a id="more"></a></p><p>啊！五环，你比四环多一环！<br>啊！五环，你比六环少一环！<br><img src="/images/1.gif" alt="akb48" title="天气妹儿"><br>终于有一天，你会修到七环</p><p><img src="/images/paradin.jpg" alt="paradin" title="SQ"></p>]]></content>
-    
-    <summary type="html">
-    
-      这是一个我用来测试图片上传的文章
-    
-    </summary>
-    
-      <category term="用来保护视力的图片" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E4%BF%9D%E6%8A%A4%E8%A7%86%E5%8A%9B%E7%9A%84%E5%9B%BE%E7%89%87/"/>
-    
-    
-      <category term="美女" scheme="http://yoursite.com/tags/%E7%BE%8E%E5%A5%B3/"/>
-    
-      <category term="图片" scheme="http://yoursite.com/tags/%E5%9B%BE%E7%89%87/"/>
     
   </entry>
   
