@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/docker1.png">
 <meta property="og:image" content="http://yoursite.com/images/docker2.png">
 <meta property="og:image" content="http://yoursite.com/images/docker3.png">
-<meta property="og:updated_time" content="2018-01-16T00:41:05.612Z">
+<meta property="og:updated_time" content="2018-01-16T00:42:01.519Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker出现客户端与服务端有差的错误...">
 <meta name="twitter:description" content="一不小心手欠，执行了一下yum -y update...">
@@ -374,8 +374,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/为了混饭吃的技术/" itemprop="url" rel="index">
-                    <span itemprop="name">为了混饭吃的技术</span>
+                  <a href="/categories/用来讨饭吃的技术/" itemprop="url" rel="index">
+                    <span itemprop="name">用来讨饭吃的技术</span>
                   </a>
                 </span>
 
@@ -474,7 +474,7 @@
 <p>可见使用了<code>docker version</code>的时候也有提示：当前docker客户端比服务端版本更新。这样是无法创建镜像的，遇到这个问题很简单，那就是重启一下docker，命令如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop docker</span><br><span class="line">systemctl start docker</span><br></pre></td></tr></table></figure></p>
 <p>然后我们再<code>docker version</code>看一下效果：<br><img src="/images/docker2.png" alt="akb48"></p>
 <p>我做这个的时候，docker升级了也一样可以读到原先的镜像，但是出于保险起见我们也应该学会如何保存和导入镜像，比如现在我现在有这个叫<code>docker.io/ubuntu</code>的镜像，如图：<br><img src="/images/docker3.png" alt="akb48"></p>
-<p>如果要备份它的话，语句就是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save docker.io/ubuntu&gt; <span class="regexp">/root/u</span>buntu.image</span><br></pre></td></tr></table></figure></p>
+<p>如果要备份它的话，语句就是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save docker.io/ubuntu &gt; <span class="regexp">/root/u</span>buntu.image</span><br></pre></td></tr></table></figure></p>
 <p>这里备份后的文件名就是ubuntu.image。</p>
 <p>如果要导入的话，语句就是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker load &lt; <span class="regexp">/root/u</span>buntu.image</span><br></pre></td></tr></table></figure></p>
 <p>这样导入的话，images create时间是不变的。</p>
