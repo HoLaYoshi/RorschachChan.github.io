@@ -114,7 +114,7 @@
 <meta property="og:image" content="http://yoursite.com/images/elk16.png">
 <meta property="og:image" content="http://yoursite.com/images/elk17.png">
 <meta property="og:image" content="http://yoursite.com/images/elk18.png">
-<meta property="og:updated_time" content="2018-01-16T00:42:21.452Z">
+<meta property="og:updated_time" content="2018-01-16T00:43:18.881Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录日志系统ELKB 5.6.4的搭建过程">
 <meta name="twitter:description" content="从搭建ELK开始日志分析之路">
@@ -444,7 +444,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,681
+                  2,683
                 </span>
               
 
@@ -498,8 +498,7 @@
 <p>对于这几个模块服务器多说几句：<br>1）Logstash要选择计算能力强的，CPU和内存比较丰满的；<br>2）Elasticsearch要选择磁盘容量大的，同时CPU和内存也比较丰满的；</p>
 <h2><span id="实验软件版本">实验软件版本</span></h2><p>Elasticsearch 5.6.4<br>Logstash 5.6.4<br>Kibana 5.6.4<br>Filebeat 5.6.4<br>Java 1.8+，安装方法：<code>http://blog.51cto.com/chenx1242/2043924</code><br>由于ELKB这几个东西都是墙外的，墙内的下载可能会比较费劲。所以我稍后会把所有ELKB的5.6.4程序都放在51CTO的存储空间里，需要的朋友可以去下载，还是那话，虽然ELK升级频率很快，但是5.6.4已经足够稳定了。</p>
 <h2><span id="实验服务器情况">实验服务器情况</span></h2><p><img src="/images/elk2.png" alt="办公室"></p>
-<h2><span id="安装elasticsearch-564以下所有操作都是root下进行的">安装Elasticsearch 5.6.4（以下所有操作都是root下进行的）</span></h2><pre><code>curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.rpm
-rpm -ivh elasticsearch-5.6.4.rpm
+<h2><span id="安装elasticsearch-564以下所有操作都是root下进行的">安装Elasticsearch 5.6.4（以下所有操作都是root下进行的）</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https:<span class="comment">//artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.rpm</span></span><br><span class="line">rpm -ivh elasticsearch<span class="number">-5.6</span><span class="number">.4</span>.rpm</span><br></pre></td></tr></table></figure>
 </code></pre><p>然后编辑<code>/etc/elasticsearch/elasticsearch.yml</code>，不然的话logstash无法与之相连：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: my-application  #如果是集群的es就把这个打开，Elasticsearch 启动时会根据配置文件中设置的集群名字（cluster.name）自动查找并加入集群，端口是9300</span><br><span class="line">network.host: 0.0.0.0    #取消注释，并且改成0.0.0.0</span><br><span class="line">http.port: 9200    #取消注释</span><br></pre></td></tr></table></figure></p>
 <p>保存之后，启动并且添加开机启动：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start elasticsearch     </span><br><span class="line">systemctl enable elasticsearch</span><br></pre></td></tr></table></figure></p>
 <p>使用<code>curl localhost:9200</code>能看到这样的情景就证明已经成功启动了：<br><img src="/images/elk3.png" alt="办公室"></p>
