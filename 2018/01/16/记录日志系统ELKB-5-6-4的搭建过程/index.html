@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="从搭建ELK开始日志分析之路">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/elk1.jpg">
+<meta property="og:image" content="http://yoursite.com/images/elk1.png">
 <meta property="og:image" content="http://yoursite.com/images/elk2.png">
 <meta property="og:image" content="http://yoursite.com/images/elk3.png">
 <meta property="og:image" content="http://yoursite.com/images/elk4.png">
@@ -114,11 +114,11 @@
 <meta property="og:image" content="http://yoursite.com/images/elk16.png">
 <meta property="og:image" content="http://yoursite.com/images/elk17.png">
 <meta property="og:image" content="http://yoursite.com/images/elk18.png">
-<meta property="og:updated_time" content="2018-01-16T00:25:42.279Z">
+<meta property="og:updated_time" content="2018-01-16T00:30:36.880Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录日志系统ELKB 5.6.4的搭建过程">
 <meta name="twitter:description" content="从搭建ELK开始日志分析之路">
-<meta name="twitter:image" content="http://yoursite.com/images/elk1.jpg">
+<meta name="twitter:image" content="http://yoursite.com/images/elk1.png">
 
 
 
@@ -444,7 +444,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,683
+                  2,681
                 </span>
               
 
@@ -485,7 +485,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>ELK是最近比较流行的免费的日志系统解决方案，注意，ELK不是一个软件名，而是一个结局方案的缩写，即Elasticsearch+Logstash+Kibana（ELK Stack）。这哥几个都是java系的产品，但是众所周知，java的东西很吃内存和CPU，Logstash在当作为收集日志的Agent时，就显得太过臃肿了。听说直播平台“斗鱼”团队很为logstash占用资源的情况很而苦恼，后来为了解决这个问题，他们自己写了一个agent。不过后来官方在logstash-forwarder的基础上推出了beat系列，里面包括四个兄弟，分别是：Packetbeat（搜集网络流量数据）；Topbeat（搜集系统、进程和文件系统级别的 CPU 和内存使用情况等数据）；Filebeat（搜集文件数据）；Winlogbeat（搜集 Windows 事件日志数据）。而Filebeat也就这样加入了“日志收集分析”的团队里，所以虽然大家还是习惯性的叫ELK，其实准确的说法已经是ELKB了。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>ELK是最近比较流行的免费的日志系统解决方案，注意，ELK不是一个软件名，而是一个结局方案的缩写，即<code>Elasticsearch+Logstash+Kibana（ELK Stack）</code>。这哥几个都是java系的产品，但是众所周知，java的东西很吃内存和CPU，Logstash在当作为收集日志的Agent时，就显得太过臃肿了。听说直播平台“斗鱼”团队很为logstash占用资源的情况很而苦恼，后来为了解决这个问题，他们自己写了一个agent。不过后来官方在logstash-forwarder的基础上推出了beat系列，里面包括四个兄弟，分别是：Packetbeat（搜集网络流量数据）；Topbeat（搜集系统、进程和文件系统级别的 CPU 和内存使用情况等数据）；Filebeat（搜集文件数据）；Winlogbeat（搜集 Windows 事件日志数据）。而Filebeat也就这样加入了“日志收集分析”的团队里，所以虽然大家还是习惯性的叫ELK，其实准确的说法已经是ELKB了。</p>
 <p>ELKB这几个哥们的分工如下：</p>
 <ol>
 <li>Elasticsearch：分布式搜索和分析引擎，具有高可伸缩、高可靠和易管理等特点。基于 Apache Lucene 构建，能对大容量的数据进行接近实时的存储、搜索和分析操作。通常被用作某些应用的基础搜索引擎，使其具有复杂的搜索功能；</li>
@@ -493,12 +493,13 @@
 <li>Kibana：数据分析和可视化平台。通常与 Elasticsearch 配合使用，对其中数据进行搜索、分析和以统计图表的方式展示；</li>
 <li>Filebeat：ELK 协议栈的新成员，在需要采集日志数据的 server 上安装 Filebeat，并指定日志目录或日志文件后，Filebeat 就能读取数据，迅速发送到 Logstash 进行解析，亦或直接发送到 Elasticsearch 进行集中式存储和分析。</li>
 </ol>
-<h2><span id="设计架构">设计架构</span></h2><p><img src="/images/elk1.jpg" alt="办公室"></p>
+<h2><span id="设计架构">设计架构</span></h2><p><img src="/images/elk1.png" alt="办公室"></p>
 <p>本文的设计结构就是这样，其中红色的redis/RebbitMQ部分可以省略（我这个例子里暂省略），让日志直接传递到logstash，如果日志量较大，最好还是添加上redis，同时再横向扩容Elasticsearch，搞成一个集群。</p>
 <p>对于这几个模块服务器多说几句：<br>1）Logstash要选择计算能力强的，CPU和内存比较丰满的；<br>2）Elasticsearch要选择磁盘容量大的，同时CPU和内存也比较丰满的；</p>
 <h2><span id="实验软件版本">实验软件版本</span></h2><p>Elasticsearch 5.6.4<br>Logstash 5.6.4<br>Kibana 5.6.4<br>Filebeat 5.6.4<br>Java 1.8+，安装方法：<code>http://blog.51cto.com/chenx1242/2043924</code><br>由于ELKB这几个东西都是墙外的，墙内的下载可能会比较费劲。所以我稍后会把所有ELKB的5.6.4程序都放在51CTO的存储空间里，需要的朋友可以去下载，还是那话，虽然ELK升级频率很快，但是5.6.4已经足够稳定了。</p>
 <h2><span id="实验服务器情况">实验服务器情况</span></h2><p><img src="/images/elk2.png" alt="办公室"></p>
-<h2><span id="安装elasticsearch-564-以下所有操作都是root下进行的">安装Elasticsearch 5.6.4 ##（以下所有操作都是root下进行的）</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -L -O https:<span class="comment">//artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.rpm</span></span><br><span class="line">rpm -ivh elasticsearch<span class="number">-5.6</span><span class="number">.4</span>.rpm</span><br></pre></td></tr></table></figure>
+<h2><span id="安装elasticsearch-564-以下所有操作都是root下进行的">安装Elasticsearch 5.6.4 ##（以下所有操作都是root下进行的）</span></h2><pre><code>curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.rpm
+rpm -ivh elasticsearch-5.6.4.rpm
 </code></pre><p>然后编辑<code>/etc/elasticsearch/elasticsearch.yml</code>，不然的话logstash无法与之相连：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cluster.name: my-application  #如果是集群的es就把这个打开，Elasticsearch 启动时会根据配置文件中设置的集群名字（cluster.name）自动查找并加入集群，端口是9300</span><br><span class="line">network.host: 0.0.0.0    #取消注释，并且改成0.0.0.0</span><br><span class="line">http.port: 9200    #取消注释</span><br></pre></td></tr></table></figure></p>
 <p>保存之后，启动并且添加开机启动：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start elasticsearch     </span><br><span class="line">systemctl enable elasticsearch</span><br></pre></td></tr></table></figure></p>
 <p>使用<code>curl localhost:9200</code>能看到这样的情景就证明已经成功启动了：<br><img src="/images/elk3.png" alt="办公室"></p>
