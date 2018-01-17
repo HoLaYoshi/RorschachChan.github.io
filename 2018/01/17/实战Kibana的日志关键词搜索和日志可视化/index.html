@@ -115,7 +115,7 @@
 <meta property="og:image" content="http://yoursite.com/images/kibana14.png">
 <meta property="og:image" content="http://yoursite.com/images/kibana15.png">
 <meta property="og:image" content="http://yoursite.com/images/kibana16.png">
-<meta property="og:updated_time" content="2018-01-17T08:40:04.073Z">
+<meta property="og:updated_time" content="2018-01-17T08:41:35.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="实战Kibana的日志关键词搜索和日志可视化">
 <meta name="twitter:description" content="Kibana那个界面做的还是挺好看的">
@@ -445,7 +445,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,225
+                  1,224
                 </span>
               
 
@@ -513,7 +513,7 @@
 <p>我们这里先建立一个饼型的，还是上面那个台词多少的例子，首先选择<code>shakespeare</code>作为数据源，然后点击<code>split slices</code>，如图：<br><img src="/images/kibana12.png" alt="akb48"></p>
 <p>然后在<code>Aggergation</code>里选择<code>Terms</code>，然后在<code>Field</code>里选择<code>Speaker</code>,size那里写8,最后点击上面的那个三角播放键，看看结果：<br><img src="/images/kibana13.png" alt="akb48"></p>
 <p>这就很清晰的看出，亨利四世一共说了1086句话，占比11.11%。</p>
-<p>如果我们再加一个“Split Slices”，这一次在原有的specker的基础上选择“play_name”，图象变成了一个同心圆，最外面的一层就是新增的“play_name”的情况，如图显示FALSTAFF的所有台词会在两个play_name里出现：<br><img src="/images/kibana14.png" alt="akb48"></p>
+<p>如果我们再加一个<code>Split Slices</code>，这一次在原有的specker的基础上选择<code>play_name</code>，图象变成了一个同心圆，最外面的一层就是新增的“play_name”的情况，如图显示FALSTAFF的所有台词会在两个play_name里出现：<br><img src="/images/kibana14.png" alt="akb48"></p>
 <p>如果这个盘子里不想统计FALSTAFF这个话包，就添加一个过滤器，选择<code>speaker is not</code>，后面写上FALSTAFF即可，如图：<br><img src="/images/kibana15.png" alt="akb48"></p>
 <p>效仿刚才的方法也可以做一个仪表盘，如图：<br><img src="/images/kibana16.png" alt="akb48"></p>
 <p>可视化的数据也可以save和share，同样在web界面的右上角。保存的数据是可以在左侧菜单栏里的Dashboard里展示，做成一个类似zabbix那样的展示！</p>
