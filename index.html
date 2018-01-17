@@ -317,6 +317,207 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/Ansible的几个基本语句/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/17/Ansible的几个基本语句/" itemprop="url">Ansible的几个基本语句</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-17T11:43:52+08:00">
+                2018-01-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/17/Ansible的几个基本语句/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/17/Ansible的几个基本语句/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/01/17/Ansible的几个基本语句/" class="leancloud_visitors" data-flag-title="Ansible的几个基本语句">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,135
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="开篇的废话">开篇的废话</span></h2><p>批处理工具我最早接触的是pssh，因为它实在很简单粗暴，但是它由于太简单粗暴了，应付十台二十台机器还OK，应付五十台一百台服务器就心有余力不足了（而且xshell右键有一个“发送键入到所有会话”的功能，与pssh效果几乎一样），而且我还不太喜欢puppet，总觉得那玩意跟我八字不合，于是乎，在新头头的推荐下，我把目光放在了Ansible。</p>
+<p>Ansible的安装很简单，在Redhat环境下直接<code>yum install -y ansible</code>就行。Redhat已经将Ansible公司收购了，所以在安装上提供了不小的便利。</p>
+<p>Ansible在安装完毕之后，会在<code>/etc/ansible/</code>目录下看见一个叫hosts的文件，这里是所有你要控制的服务器的ip们，可以排列写，比如：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.122</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.133</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.144</span></span><br></pre></td></tr></table></figure></p>
+<p>也可以分组写，比如：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[aliyun]</span><br><span class="line"><span class="number">10.22</span><span class="number">.33</span><span class="number">.44</span></span><br><span class="line"><span class="number">10.22</span><span class="number">.33</span><span class="number">.45</span></span><br><span class="line">[jinshanyun]</span><br><span class="line"><span class="number">121.23</span><span class="number">.45</span><span class="number">.66</span></span><br><span class="line"><span class="number">121.23</span><span class="number">.45</span><span class="number">.67</span></span><br><span class="line"><span class="number">121.23</span><span class="number">.45</span><span class="number">.68</span>:<span class="number">2222</span>  （这个不是使用ssh默认的<span class="number">22</span>端口，就需要特别指出）</span><br></pre></td></tr></table></figure></p>
+<p>默认情况下，Ansible会把命令全用于这个hosts文件，比如<br>    ansible all -m ping  -u ashin<br>这句话意思是整个hosts里的机器以ashin账户启动，而且都要ping 一下当前本机。</p>
+<h2><span id="具体语句">具体语句</span></h2><p>怎么连接主机与要控制的远程机器请按之前写的“<a href="http://chenx1242.blog.51cto.com/10430133/1763978”一文进行操作，这里先说几个命令语句：" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1763978”一文进行操作，这里先说几个命令语句：</a></p>
+<p>1)<code>ansible all -m shell -a &quot;/bin/echo hello&quot;</code><br>对hosts里所有的机器一起使用”输出hello这个文字”。-m shell可以忽略不写，但是不是shell而是其他的模块就要写出来；</p>
+<p>2)<code>ansible aliyun -m copy -a &quot;src=~/projects/tests/t.py dest=~&quot;</code><br>把hosts里aliyun组的机器的/projects/tests/t.py复制到~目录下；<br>[注意！]copy模块不支持变量路径，也就是说如果目标服务器的部署路径不同，copy不会很智能的去访问.bash_profile来得到用户的自定义变量，写变量替换路径是不会达到目的的。</p>
+<p>3)<code>ansible jinshanyun[0:9] -i -m file -a &quot;dest=~/tests state=absent&quot;</code><br>把hosts里jinshanyun组中从0~9这十台机器的/tests文件夹删除掉，absent是“缺席，不在”的意思；</p>
+<p>4)<code>ansible 192.168.1.133 -m ping</code><br>这句话=<code>ping 192.168.1.133</code>；</p>
+<p>5)<code>ansible v1 -m service -a &quot;name=mysql state=started&quot; -u ashin --sudo -K</code><br>以用户名为ashin登陆hosts里所有v1组的机器，然后检查mysql是否是started状态，若不是就start，同时要输入root的密码作为确认；</p>
+<p>6)<code>ansible 10.11.22.* -m user -a &quot;name=foo password=foo&quot; --sudo -K</code><br>hosts文件里所有10.11.22开头的机器，都要添加一个新的用户名foo，同时密码是foo，并且输入root密码确认身份；</p>
+<p>7)<code>ansible v1:!v2 -m apt -a &quot;name=git state=latest&quot;</code><br>检查所有属于v1组同时还不属于v2组的机器里的git文件是否是最新版本；</p>
+<p>8)<code>ansible webservers:&amp;dbservers -a &quot;/sbin/reboot&quot; -f 10 --sudo -K</code><br>重新启动既是webservers组又是dbservers组的所有机器；</p>
+<p>9)<code>ansible webservers -m raw -a &#39;yum -y install python-simplejson&#39;</code><br>用ansible去链接低版本的centos时，就乎出现“ansible requires a json module, none found! ”的错误，需要远程机安装samplejson包。raw模块是靠底层ssh的通讯，不依靠python的模块，所以如果碰到低版本的系统，如果command和shell模块无法使用，可以先用这条命令安装完需要的包。</p>
+<p>10)<code>ansible all -m synchronize -a &quot;src=/chenshuo/1.sh dest=/chenshuo delete=yes&quot;</code><br>synchronize原意是“同步”，而这个模块是分发模块，这句话的意思是把控制端的/chenshuo/1.sh分发给host文件里的所有ip服务器，delete=yes意思是以控制端服务器的文件为准。</p>
+<p>11)<code>ansible 10.168.194.89 -m synchronize -a &quot;mode=pull src=/chenshuo/nba.txt dest=/chenshuo/a.txt&quot;</code><br>将10.168.194.89这台服务器上的/chenshuo/nba.txt拉到控制服务器的/chenshuo文件夹下，顺便改名叫a.txt。</p>
+<p>12)<code>ansible all -m get_url -a &quot;url=https://pypi.python.org/packages/56/2b/9c9c113fb88082950067a42cc99e3c61f1df72035f89bb0bdf0a60308ca0/pexpect-4.1.0.tar.gz#md5=562a1a21f2a60b36dfd5d906dbf0943e dest=/chenshuo&quot;</code><br>把那一大串网址的下载连接下载到host文件里的所有ip的/chenshuo文件夹下。</p>
+<p>13)<code>ansible 10.117.14.37 -m script -a &quot;/chenshuo/free.sh&quot;</code><br>在10.117.14.37上执行操作端的free.sh，注意操作端必须要有free.sh这个脚本，而10.117.14.37这台机器上并不一定要有。</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.csdn.net/iloveyin/article/details/46982023" target="_blank" rel="noopener">http://blog.csdn.net/iloveyin/article/details/46982023</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+		</div>
+	
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/Zabbix用户密码忘记怎么办/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2176,214 +2377,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/10/使用Zabbix去监控Redis/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chris Chan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chris Chan's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/10/使用Zabbix去监控Redis/" itemprop="url">使用Zabbix去监控Redis</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-10T22:49:04+08:00">
-                2018-01-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/用来讨饭吃的技术/" itemprop="url" rel="index">
-                    <span itemprop="name">用来讨饭吃的技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/01/10/使用Zabbix去监控Redis/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/10/使用Zabbix去监控Redis/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2018/01/10/使用Zabbix去监控Redis/" class="leancloud_visitors" data-flag-title="使用Zabbix去监控Redis">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">热度&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-				 <span>℃</spam>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,404
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  6
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          要好好对待自己的那个Redis
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/10/使用Zabbix去监控Redis/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-	
-	
-	
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-		   
-		<div>    
-			
-		</div>
-	
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2440,7 +2433,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2639,7 +2632,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共22.5k字</span>
+  <span class="post-count">博客全站共23.7k字</span>
 </div>
         
 
