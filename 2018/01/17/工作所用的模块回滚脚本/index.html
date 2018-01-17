@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Linux,Shell," />
 
 
 
@@ -88,16 +88,23 @@
 
 
 
-<meta name="description" content="生活就是等待戈多">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Chris Chan&#39;s BLOG">
-<meta property="og:url" content="http://yoursite.com/tags/容器/index.html">
+<meta name="description" content="俗话说的好：“真男人从来不回滚”!">
+<meta name="keywords" content="Linux,Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作所用的模块回滚脚本">
+<meta property="og:url" content="http://yoursite.com/2018/01/17/工作所用的模块回滚脚本/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="生活就是等待戈多">
+<meta property="og:description" content="俗话说的好：“真男人从来不回滚”!">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/rollback1.png">
+<meta property="og:image" content="http://yoursite.com/images/rollback2.png">
+<meta property="og:image" content="http://yoursite.com/images/rollback3.png">
+<meta property="og:image" content="http://yoursite.com/images/rollback4.gif">
+<meta property="og:updated_time" content="2018-01-17T04:33:23.443Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Chris Chan&#39;s BLOG">
-<meta name="twitter:description" content="生活就是等待戈多">
+<meta name="twitter:title" content="工作所用的模块回滚脚本">
+<meta name="twitter:description" content="俗话说的好：“真男人从来不回滚”!">
+<meta name="twitter:image" content="http://yoursite.com/images/rollback1.png">
 
 
 
@@ -127,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/容器/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/17/工作所用的模块回滚脚本/"/>
 
 
 
 
 
-  <title>标签: 容器 | Chris Chan's BLOG</title>
+  <title>工作所用的模块回滚脚本 | Chris Chan's BLOG</title>
   
 
 
@@ -152,7 +159,7 @@
     
   
 
-  <div class="container sidebar-position-right ">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
 	<a href="https://github.com/RorschachChan" class="github-corner" aria-label="View source on Github"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
@@ -302,54 +309,343 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>容器<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/17/工作所用的模块回滚脚本/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2018/01/16/Docker出现客户端与服务端有差的错误/" itemprop="url">
-              
-                <span itemprop="name">Docker出现客户端与服务端有差的错误...</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">工作所用的模块回滚脚本</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-16T08:36:32+08:00"
-              content="2018-01-16" >
-          01-16
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-17T12:25:25+08:00">
+                2018-01-17
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/用来讨饭吃的技术/" itemprop="url" rel="index">
+                    <span itemprop="name">用来讨饭吃的技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/17/工作所用的模块回滚脚本/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/17/工作所用的模块回滚脚本/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/01/17/工作所用的模块回滚脚本/" class="leancloud_visitors" data-flag-title="工作所用的模块回滚脚本">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  764
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+              <div class="post-description">
+                  俗话说的好：“真男人从来不回滚”!
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言与脚本内容">前言与脚本内容</span></h2><p>部署中常备一个回滚脚本也是很有必要的，我所在公司的服务器模块名都是在初始化的时候写进<code>/etc/role_install</code>这个文件里，如下图的这个服务器就是fss服务器：<br><img src="/images/rollback1.png" alt="akb48"></p>
+<p>再比如下面这个服务器，虽然包含nginx的组件但是httpproxy的服务器：<br><img src="/images/rollback2.png" alt="akb48"></p>
+<p>那么有了这样的前提，整个回滚的脚本内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#Written by ChrisChan @July-4th-2017</span><br><span class="line">#Desription:这是一个回滚的脚本。</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>=$(cat /etc/role_install |grep -v zkclient|grep -v nginx)</span><br><span class="line">echo -e <span class="string">'\033[31m现在将执行回滚操作，本次回滚只回滚普通模块，不包含nginx和zkclient!\033[0m'</span> </span><br><span class="line">echo <span class="string">"回滚的模块名称："</span>$<span class="built_in">module</span></span><br><span class="line">echo -e <span class="string">'\033[33m如果想取消回滚操作，请ctrl+c立即停止本脚本...\033[0m'</span></span><br><span class="line">sleep <span class="number">5</span></span><br><span class="line"></span><br><span class="line">cd /dxpbackup/hswx/$module &amp;&amp; zip $module.zip -x "*og*" -r .    #到备份的文件夹里去压缩</span><br><span class="line">mv /dxpbackup/hswx/$<span class="built_in">module</span>/$<span class="built_in">module</span>.zip /mnt/hswx    </span><br><span class="line">echo $<span class="built_in">module</span><span class="string">".zip文件已经生成！"</span></span><br><span class="line"> </span><br><span class="line">until [ <span class="string">"$decision"</span> == <span class="string">"Y"</span> -o <span class="string">"$decision"</span> == <span class="string">"y"</span> -o <span class="string">"$decision"</span> == <span class="string">"N"</span> -o <span class="string">"$decision"</span> == <span class="string">"n"</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        read -p <span class="string">"请问是否用回滚的压缩包覆盖到/mnt/hswx下？(y/n)"</span> decision</span><br><span class="line">        echo <span class="string">"您的选择是："</span>$decision</span><br><span class="line">        <span class="keyword">if</span> [ $decision == Y -o $decision == y ]</span><br><span class="line">   	            then</span><br><span class="line">       	                echo <span class="string">"现在已经开始覆盖..."</span></span><br><span class="line">       	                rm -rf /mnt/hswx/$module    #先把原来的内容删除</span><br><span class="line">       	                unzip /mnt/hswx/$module.zip -d /mnt/hswx/$module    #重新解压缩进去</span><br><span class="line">       	                echo -e <span class="string">'\033[32m覆盖已经完成，可以直接执行/startall脚本!\033[0m'</span></span><br><span class="line">       	elif [ $decision == N -o $decision == n ]</span><br><span class="line">       	        then</span><br><span class="line">       	                echo -e <span class="string">'\033[32m生成的'</span>$<span class="built_in">module</span><span class="string">'.zip文件保存在/root文件夹里\033[0m'</span></span><br><span class="line">       	<span class="keyword">else</span></span><br><span class="line">       	        echo -e <span class="string">'\033[31m输入字符不符合!请重新输入!\033[0m'</span></span><br><span class="line">       	fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
+<h2><span id="新的知识点">新的知识点！</span></h2><p>1）zip在压缩文件夹的时候要过滤掉某些文件使用“-x”参数，比如说要在AAA文件夹里面过滤掉abc和jqk这两个文件，那么语句就是<code>zip AAA.zip -x &quot;abc&quot; -x &quot;jqk&quot; -r .</code>或者是<code>zip -r -x=abc -x=jqk AAA.zip .</code> 这样两个语句。</p>
+<p>如果你要过滤掉的是一个文件夹，比如那么就要在文件夹后面名字加上一个<em>，下图就是要压缩整个auc文件夹为456.zip但是又不想要lib这个文件夹，就使用了`zip 456.zip -x “lib</em>“ -r .`：<br><img src="/images/rollback3.png" alt="akb48"></p>
+<p>不过如果文件夹里还有其他lib开头的文件夹也会被过滤掉，这一点要注意。</p>
+<p>2）本shell里面涉及了逻辑判断，而<code>[[</code>和<code>[</code>的区别如下图：<br><img src="/images/rollback4.gif" alt="akb48"></p>
+<p>3）如果if语句中出现报错“[: too many arguments”，很有可能就是字符串变量中可能存在空格，shell解析时将其认为是多个参数，再进行判断时，无法知道该获取哪个值，所以最好都用双引号括起来； </p>
+<p>4）如果是“变量a等于aa且变量b等于bb  或者 变量c等于cc且变量d等于dd ” 这样的判断句怎么写？答曰：<br>    [ $a = “aa” -a $b = “bb” ] || [$c = “cc” -a $d = “dd” ]</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://zhangge.net/4776.html" target="_blank" rel="noopener">https://zhangge.net/4776.html</a></p>
 
       
     </div>
+    
+    
+    
+	
+	
+	  <div>
+    <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------This article is over!<i class="fa fa-paw"></i>Thanks for reading!-------------</div>
+    
+</div>
+	  </div>
+	
+	
+    
 
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>感谢您请我喝咖啡！(o´ω`o)</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Chris Chan 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/zhifubaopay.jpg" alt="Chris Chan 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+			<ul class="post-copyright">
+				<li class="post-copyright-link">
+					<strong>本文作者：</strong>
+					<a href="/" title="欢迎访问 Chris Chan 的个人博客">Chris Chan</a>
+				</li>
+
+				<li class="post-copyright-link">
+					<strong>本文标题：</strong>
+					<a href="http://yoursite.com/2018/01/17/工作所用的模块回滚脚本/" title="工作所用的模块回滚脚本">工作所用的模块回滚脚本</a>
+				</li>
+
+				<li class="post-copyright-date">
+					<strong>发布时间：</strong>2018年1月17日 - 12时01分
+				</li>  
+
+				<li class="post-copyright-license">
+					<strong>版权声明： </strong>
+					本文由 Chris Chan 原创，采用 <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" rel="license" target="_blank">保留署名-非商业性使用-禁止演绎 4.0-国际许可协议</a> </br>转载请保留以上声明信息！
+				</li>
+			</ul>
+			
+		</div>
+	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+        <div class="post-widgets">
+        
+          <div class="wp_rating">
+			<div style="color: rgba(0, 0, 0, 0.75); font-size:13px; letter-spacing:3px">(&gt;欢迎各位看官给我的这篇文章打个分！&lt;)</div>
+            <div id="wpac-rating"></div>
+          </div>
+        
+
+        
+
+        
+        </div>
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/01/17/Ansible的几个基本语句/" rel="next" title="Ansible的几个基本语句">
+                <i class="fa fa-chevron-left"></i> Ansible的几个基本语句
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+        <!-- JiaThis Button BEGIN -->
+<div class="jiathis_style">
+<span class="jiathis_txt">分享到：</span>
+<a class="jiathis_button_fav">收藏夹</a>
+<a class="jiathis_button_copy">复制网址</a>
+<a class="jiathis_button_email">邮件</a>
+<a class="jiathis_button_weixin">微信</a>
+<a class="jiathis_button_qzone">QQ空间</a>
+<a class="jiathis_button_tqq">腾讯微博</a>
+<a class="jiathis_button_douban">豆瓣</a>
+<a class="jiathis_button_share">一键分享</a>
+
+<a href="http://www.jiathis.com/share?uid=2140465" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+<a class="jiathis_counter_style"></a>
+</div>
+<script type="text/javascript" >
+var jiathis_config={
+  data_track_clickback:true,
+  summary:"",
+  shortUrl:false,
+  hideMore:false
+}
+</script>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=" charset="utf-8"></script>
+<!-- JiaThis Button END -->
+      
+    </div>
+  </div>
 
 
           </div>
@@ -357,6 +653,15 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="hypercomments_widget"></div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -377,8 +682,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -552,6 +866,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;&#x4E0E;&#x811A;&#x672C;&#x5185;&#x5BB9;">&#x524D;&#x8A00;&#x4E0E;&#x811A;&#x672C;&#x5185;&#x5BB9;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x65B0;&#x7684;&#x77E5;&#x8BC6;&#x70B9;">&#x65B0;&#x7684;&#x77E5;&#x8BC6;&#x70B9;&#xFF01;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -705,6 +1035,10 @@ show_date_time();
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
 
   
 
@@ -728,6 +1062,8 @@ show_date_time();
 
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
+		
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/17/工作所用的模块回滚脚本/"});
 		
 
 		(function() {
@@ -1196,6 +1532,23 @@ show_date_time();
 
   
   
+  <script type="text/javascript">
+  wpac_init = window.wpac_init || [];
+  wpac_init.push({widget: 'Rating', id: 8956,
+    el: 'wpac-rating',
+    color: 'f79533'
+  });
+  (function() {
+    if ('WIDGETPACK_LOADED' in window) return;
+    WIDGETPACK_LOADED = true;
+    var mc = document.createElement('script');
+    mc.type = 'text/javascript';
+    mc.async = true;
+    mc.src = '//embed.widgetpack.com/widget.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(mc, s.nextSibling);
+  })();
+  </script>
+
 
   
 
