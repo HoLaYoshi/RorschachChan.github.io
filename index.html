@@ -359,6 +359,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/用来讨饭吃的技术/" itemprop="url" rel="index">
+                    <span itemprop="name">用来讨饭吃的技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -442,40 +464,14 @@
 
       
         
-          
-            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="准备工作">准备工作</span></h2><p>首先，先下载一个elastic网站上下载一个它提供的demo—莎翁的《亨利四世》，下载地址是<a href="https://download.elastic.co/demos/kibana/gettingstarted/shakespeare.json" target="_blank" rel="noopener">https://download.elastic.co/demos/kibana/gettingstarted/shakespeare.json</a> 。</p>
-<p>打开这个json字符串，里面就是《亨利四世》的话剧剧本，长得是这个样子：<br><img src="/images/kibana1.png" alt="akb48"></p>
-<p>可以看到里面有<code>play_name</code>、<code>speaker</code>、<code>speech_number</code>、<code>line_id</code>等等名称，每个名称后面都有一个对应的值。</p>
-<p>然后启动elasticsearch，按照上面的文件格式生成索引。语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">curl -XPUT http:<span class="comment">//localhost:9200/shakespeare -d '</span></span><br><span class="line">&#123;</span><br><span class="line"> <span class="string">"mappings"</span> : &#123;</span><br><span class="line">  <span class="string">"_default_"</span> : &#123;</span><br><span class="line">   <span class="string">"properties"</span> : &#123;</span><br><span class="line">    "speaker" : &#123;"type": "string", "index" : "not_analyzed" &#125;,    #确定type是字符</span><br><span class="line">    <span class="string">"play_name"</span> : &#123;<span class="string">"type"</span>: <span class="string">"string"</span>, <span class="string">"index"</span> : <span class="string">"not_analyzed"</span> &#125;,</span><br><span class="line">    "line_id" : &#123; "type" : "integer" &#125;,    #确定type是数字</span><br><span class="line">    <span class="string">"speech_number"</span> : &#123; <span class="string">"type"</span> : <span class="string">"integer"</span> &#125;</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="string">';</span></span><br></pre></td></tr></table></figure></p>
-<p>导入刚刚下载的那个json：<code>curl -XPOST &#39;localhost:9200/shakespeare/_bulk?pretty&#39; --data-binary @shakespeare.json</code></p>
-<p>具体elasticsearch的增删改查语法可以参看阮大师的<a href="http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html" target="_blank" rel="noopener">http://www.ruanyifeng.com/blog/2017/08/elasticsearch.html</a> ，个人建议将elasticsearch和mysql对比一下，这样更方便理解。</p>
-<p>然后后台启动kibana，确认5601端口已经stand by，如图：<br><img src="/images/kibana2.png" alt="akb48"></p>
-<p>然后在浏览器地址栏输入<code>服务器外网ip：5601</code>打开kibana。</p>
-<p>导入数据结束之后，使用<code>curl &#39;localhost:9200/_cat/indices?v&#39;</code>，去查看一下效果，如果看到index里有shakespeare那一栏就是导入成功了，如图：<br><img src="/images/kibana3.png" alt="akb48"></p>
-<p>在启动Kibana后，Kibana会自动在配置的es中创建一个名为<code>.kibana</code>的索引（上图第二个），这个索引用来存储数据，注意！不要删除了它。</p>
-<h2><span id="kibana的界面搜索">Kibana的界面搜索</span></h2><p>如果此时的kibana里是第一次配置的话，那么第一步就是配置新索引，我们之前在生成索引的时候写的是<code>shakespeare</code>，那么现在也写<code>shakespeare</code>，然后点击<code>create</code>，如图：<br><img src="/images/kibana4.png" alt="akb48"></p>
-<p>然后在菜单栏左侧的<code>discover</code>里选择刚刚建立的<code>shakespeare</code>，就会看到这样的东西：<br><img src="/images/kibana5.png" alt="akb48"></p>
-<p>在Search上就可以进行搜寻，比如说我搜寻<code>freedom</code>，如图：<br><img src="/images/kibana6.png" alt="akb48"></p>
-<p>如果我搜寻<code>KING HENRY IV</code>，他不分大小写的把所有king、henry、iv都搜索出来。</p>
-<p>如果我想搜寻line_id的第一行到第三行，那么语句就是<code>line_id:[1 TO 3]</code>，如图：<br><img src="/images/kibana17.png" alt="akb48"></p>
-<p>如果想在上面的基础上进一步细化，比如说要在line_id是从第一行到第三行，同时_type是scene的语句：<code>line_id:[1 TO 3] AND _type:scene</code>：<br><img src="/images/kibana18.png" alt="akb48"></p>
-<p>假如不想要scene，那么就把<code>AND</code>改成<code>NOT</code>。</p>
-<p>如果这个时候只想关注一些指定的字段，那么可以将鼠标移动到索引下面的字段上，然后选在add即可，同样的移动上面已经选择的字段选择remove进行移除，比如我们试一下这个<code>speaker</code>：<br><img src="/images/kibana19.png" alt="akb48"></p>
-<p>add之后在点击右侧的具体的speaker，就会看到里面的细节，比如这位westmoreland（威斯摩兰伯爵）：<br><img src="/images/kibana7.png" alt="akb48"></p>
-<p>这个时候就能看见这位伯爵大哥的台词细节，在第几场的第几节，说的是什么台词。再返回菜单左侧点击这个speaker，我们还会看到一个比重：<br><img src="/images/kibana8.png" alt="akb48"></p>
-<p>从这里就很清晰的看到，FALSTAFF（法斯塔夫）这个哥们的台词最多，也符合书里塑造的那个嗜酒话痨的艺术形象。而我们的KING HENRY IV(亨利四世)的台词只是第四位，占比重11%而已…</p>
-<p>这样具体的搭配搜索之后，可以点击界面右上侧的save进行保存搜寻结果，再搭配share分享搜索结果的url网址，如图：<br><img src="/images/kibana9.png" alt="akb48"></p>
-<h2><span id="kibana的图像化展示">Kibana的图像化展示</span></h2><p>Kibana也能做到类似grafana那样的炫酷图象化展示，更加立体的表现日志情况，首先选择左侧菜单栏里的<code>Visualize</code>（可视化）：<br><img src="/images/kibana10.png" alt="akb48"></p>
-<p>然后点击<code>Create a Visualization</code>,里面既有很多种图形供你选择，有饼型，有箭头的，有文字的，有仪表盘的，如图：<br><img src="/images/kibana11.png" alt="akb48"></p>
-<p>我们这里先建立一个饼型的，还是上面那个台词多少的例子，首先选择<code>shakespeare</code>作为数据源，然后点击<code>split slices</code>，如图：<br><img src="/images/kibana12.png" alt="akb48"></p>
-<p>然后在<code>Aggergation</code>里选择<code>Terms</code>，然后在<code>Field</code>里选择<code>Speaker</code>,size那里写8,最后点击上面的那个三角播放键，看看结果：<br><img src="/images/kibana13.png" alt="akb48"></p>
-<p>这就很清晰的看出，亨利四世一共说了1086句话，占比11.11%。</p>
-<p>如果我们再加一个“Split Slices”，这一次在原有的specker的基础上选择“play_name”，图象变成了一个同心圆，最外面的一层就是新增的“play_name”的情况，如图显示FALSTAFF的所有台词会在两个play_name里出现：<br><img src="/images/kibana14.png" alt="akb48"></p>
-<p>如果这个盘子里不想统计FALSTAFF这个话包，就添加一个过滤器，选择<code>speaker is not</code>，后面写上FALSTAFF即可，如图：<br><img src="/images/kibana15.png" alt="akb48"></p>
-<p>效仿刚才的方法也可以做一个仪表盘，如图：<br><img src="/images/kibana16.png" alt="akb48"></p>
-<p>可视化的数据也可以save和share，同样在web界面的右上角。保存的数据是可以在左侧菜单栏里的Dashboard里展示，做成一个类似zabbix那样的展示！</p>
-
-          
+          Kibana那个界面做的还是挺好看的
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/01/17/实战Kibana的日志关键词搜索和日志可视化/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2466,7 +2462,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
