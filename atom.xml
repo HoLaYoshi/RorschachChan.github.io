@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-16T00:42:01.519Z</updated>
+  <updated>2018-01-17T03:30:19.415Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Zabbix用户密码忘记怎么办</title>
+    <link href="http://yoursite.com/2018/01/17/Zabbix%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E5%BF%98%E8%AE%B0%E6%80%8E%E4%B9%88%E5%8A%9E/"/>
+    <id>http://yoursite.com/2018/01/17/Zabbix用户密码忘记怎么办/</id>
+    <published>2018-01-17T03:12:57.000Z</published>
+    <updated>2018-01-17T03:30:19.415Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>zabbix的超级用户也是人，人就难免会忘记密码（或者清除了当前浏览器的缓存），忘记密码不要怕，因为zabbix所有的用户数据都是保存在server机器上的mysql里，只要打开<code>zabbix_server.conf</code>，就会查得到mysql的登录账号密码以及zabbix对应的数据库。（这里多说一句，zabbix自带的guest基本就是一个废物，forget it~）</p><p>在zabbix_server机器上输入mysql的账号密码来到mysql里，<code>USE zabbix</code>，然后<code>SELECT * FROM users</code>,就会看到笔者的画面。<br><img src="/images/zabbix_user1.png" alt="akb48"></p><p>这个时候就可以使用数据库的update命令去更改密码，比如说新的密码是“woshitiancai”，就可以写<code>update  users set passwd=md5(&quot;woshitiancai&quot;) where userid=&#39;1&#39;;</code><br>然后就可以用woshitiancai来登陆啦~</p><p>但是！！！你以为这就结束了吗？nononono！！！</p><p>很多人即使更改了密码还是登陆不上去，很简单，那就是你连用户名都忘记了！或者是用户名你记得但是你手贱在zabbix的administration里的users对原来的设定增加了新东西，而且这些东西还特么的是中文！！！于是就像我上面图那样出现了???的字样。</p><p>那些？？？很重要吗？当然了！！！因为那些才是zabbix的登录用户名！！！看见了吗，zabbix使用蛋疼的alias作为真正的登录名而不是用name or surname，这真是一个蛋疼的事儿！</p><p>那么剩下的问题很简单了，就是把???改变成中文，使用语句<code>set names utf8;</code> 然后界面就成了这样：<br><img src="/images/zabbix_user2.png" alt="akb48"></p><p>这次再使用“主管理员”搭配新的密码就可以华丽的登录了！~~我他妈当时都差点要把这个user表格删掉然后重拽一个表格进来，但是终于还是被我识破了，啊哈哈哈哈，我真是个天才！！！</p>]]></content>
+    
+    <summary type="html">
+    
+      忘记密码不要怕!
+    
+    </summary>
+    
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
+    
+  </entry>
   
   <entry>
     <title>Docker出现客户端与服务端有差的错误...</title>
@@ -467,30 +491,6 @@
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>关于阿里云CDN的两个故障解决</title>
-    <link href="http://yoursite.com/2017/12/28/CDN%E7%BD%91%E7%AB%99%E4%B8%80%E6%AC%A1%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2017/12/28/CDN网站一次打不开的问题/</id>
-    <published>2017-12-28T09:34:57.000Z</published>
-    <updated>2018-01-11T16:23:36.477Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>测试中心今天在测试时候发现了一个问题：官方的A网站做了域名跳转，跳转到阿里云CDN，但是在浏览器里输入A地址栏的时候，发现域名的确变成了CDN的域名，但是页面是403。</p><p>如图：<br><img src="/images/cdn403.png" alt="跳转CDN出现403" title="跳转CDN出现403"></p><p>但是奇怪的是，再在浏览器点击一下回车，网页就神奇的打开了。</p><p>这个原因就是阿里云的CDN有一个“Refer防盗链”，需要在防盗链里面把A域名添加到白名单，这样的话就可以直接访问了。至于为什么第二次回车就可以访问，是因为那时候域名已经成CDN自己的域名了，当然可以访问。<br><img src="/images/referer.png" alt="refer防盗链配置" title="在这里添加防盗链的白名单"></p><p>但是这个防盗链也要注意！毕竟白/黑名单添加都是一个危险举动，一定三思后行。有可能你的css\js是用cdn加速的，一旦加上了白名单，可能css就会变得很难看。</p><p>不就之后，商城也下来一个需求，说公司有两个多年不用的域名B和C，打算废物利用，两个都要达到直接“跳转官网”的目的。</p><p>于是我就到阿里云域名管理的那里搜索一下，发现目前官网域名后端绑定的是一个CDN，于是也把域名B和域名C做一个CNAME到这个域名，不过登陆浏览器发现域名B和域名C都反馈502。</p><p>于是我就到电子商城后端的nginx.conf里查看，确认server_name字段没有写错，然后把域名B和域名C的CNAME直接改成了CDN的域名，再通过了dig确认。但是等于浏览器还是发现502。</p><p>最后找了阿里云的人了解，原来阿里云规定“一个CDN只能绑定一个域名，因为节点上没有那两个域名的配置，所以只要不符合节点上有配置文件信息的，全部502”。所以B和C是无法访问的。要解决这个问题有两招，1）把域名B和域名C直接A记录绑定CDN后面的SLB上，但是代价就是访问速度不如CDN快；2）重新购买两个CDN，都绑定SLB，然后把这两个CDN分别绑定到域名B和域名C上，代价是多收一点流量费…</p><p><img src="/images/messi.jpg" alt="梅西在国家德比进球" title="在伯纳乌进球感觉真好！"></p>]]></content>
-    
-    <summary type="html">
-    
-      为啥有些网站必须要点两次才能打开？
-    
-    </summary>
-    
-      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="CDN" scheme="http://yoursite.com/tags/CDN/"/>
-    
-      <category term="网站技术" scheme="http://yoursite.com/tags/%E7%BD%91%E7%AB%99%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Zabbix用户密码忘记怎么办]]></title>
+    <url>%2F2018%2F01%2F17%2FZabbix%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E5%BF%98%E8%AE%B0%E6%80%8E%E4%B9%88%E5%8A%9E%2F</url>
+    <content type="text"><![CDATA[zabbix的超级用户也是人，人就难免会忘记密码（或者清除了当前浏览器的缓存），忘记密码不要怕，因为zabbix所有的用户数据都是保存在server机器上的mysql里，只要打开zabbix_server.conf，就会查得到mysql的登录账号密码以及zabbix对应的数据库。（这里多说一句，zabbix自带的guest基本就是一个废物，forget it~） 在zabbix_server机器上输入mysql的账号密码来到mysql里，USE zabbix，然后SELECT * FROM users,就会看到笔者的画面。 这个时候就可以使用数据库的update命令去更改密码，比如说新的密码是“woshitiancai”，就可以写update users set passwd=md5(&quot;woshitiancai&quot;) where userid=&#39;1&#39;;然后就可以用woshitiancai来登陆啦~ 但是！！！你以为这就结束了吗？nononono！！！ 很多人即使更改了密码还是登陆不上去，很简单，那就是你连用户名都忘记了！或者是用户名你记得但是你手贱在zabbix的administration里的users对原来的设定增加了新东西，而且这些东西还特么的是中文！！！于是就像我上面图那样出现了???的字样。 那些？？？很重要吗？当然了！！！因为那些才是zabbix的登录用户名！！！看见了吗，zabbix使用蛋疼的alias作为真正的登录名而不是用name or surname，这真是一个蛋疼的事儿！ 那么剩下的问题很简单了，就是把???改变成中文，使用语句set names utf8; 然后界面就成了这样： 这次再使用“主管理员”搭配新的密码就可以华丽的登录了！~~我他妈当时都差点要把这个user表格删掉然后重拽一个表格进来，但是终于还是被我识破了，啊哈哈哈哈，我真是个天才！！！]]></content>
+      <categories>
+        <category>用来讨饭吃的技术</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+        <tag>zabbix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Docker出现客户端与服务端有差的错误...]]></title>
     <url>%2F2018%2F01%2F16%2FDocker%E5%87%BA%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%8E%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%9C%89%E5%B7%AE%E7%9A%84%E9%94%99%E8%AF%AF%2F</url>
     <content type="text"><![CDATA[今天用docker搞redis镜像的的时候，出现了这样的错误提示：Error response from daemon: client is newer than server (client API version: 1.24, server API version: 1.22)，如图： 可见使用了docker version的时候也有提示：当前docker客户端比服务端版本更新。这样是无法创建镜像的，遇到这个问题很简单，那就是重启一下docker，命令如下： 12systemctl stop dockersystemctl start docker 然后我们再docker version看一下效果： 我做这个的时候，docker升级了也一样可以读到原先的镜像，但是出于保险起见我们也应该学会如何保存和导入镜像，比如现在我现在有这个叫docker.io/ubuntu的镜像，如图： 如果要备份它的话，语句就是： 1docker save docker.io/ubuntu &gt; /root/ubuntu.image 这里备份后的文件名就是ubuntu.image。 如果要导入的话，语句就是： 1docker load &lt; /root/ubuntu.image 这样导入的话，images create时间是不变的。]]></content>
@@ -243,8 +255,8 @@
         <category>用来讨饭吃的技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>其他软件</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
