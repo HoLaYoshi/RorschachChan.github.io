@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/ecstore4.png">
 <meta property="og:image" content="http://yoursite.com/images/ecstore5.png">
 <meta property="og:image" content="http://yoursite.com/images/ecstore6.png">
-<meta property="og:updated_time" content="2018-01-18T07:44:45.084Z">
+<meta property="og:updated_time" content="2018-01-18T09:26:59.938Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="将电商平台测试环境添加了域名和https">
 <meta name="twitter:description" content="一次通宵，腰疼三天...">
@@ -432,7 +432,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  429
+                  590
                 </span>
               
 
@@ -482,7 +482,9 @@
 <p>然后又回到SLB界面，新增新的https监听，前端端口443，后端是80，搭配正确的证书，SLB保存之后，在浏览器输入测试环境的<code>https://网址</code>之后，发现整个界面全乱了，如图：<br><img src="/images/ecstore4.png" alt="paradin"></p>
 <p>但是使用<code>http://网址</code>去访问还是正常的，如图：<br><img src="/images/ecstore5.png" alt="paradin"></p>
 <p>很明显，这是因为https下跨协议调用http的是不行的，所以那些css、js如果不支持https的话就无法正常显示。使用<code>ctrl+shift+c</code>看错误更加明显。<br><img src="/images/ecstore6.png" alt="paradin"></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://thehackernews.com/2015/04/disable-mixed-content-warning.html" target="_blank" rel="noopener">https://thehackernews.com/2015/04/disable-mixed-content-warning.html</a></p>
+<p>遇到这个问题，就有如下几种方法：</p>
+<p>第一种：将所有的访问路径都写死<code>https</code>，不过这个我们公司代码规范不准许;<br>第二种：去掉URL中的<code>http://</code>或<code>https://</code>，将其替换为<code>//</code>，这样，浏览器就可以根据当前页面的请求方式来动态切换了；<br>第三种：可以在<code>&lt;head&gt;</code>中添加<code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;upgrade-insecure-requests&quot;&gt;</code>,浏览器会在加载HTTP资源时自动替换成HTTPS请求；<br>第四种：在nginx里写一个proxy_redirect跳转，这个就比较有技术含量了；</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://thehackernews.com/2015/04/disable-mixed-content-warning.html" target="_blank" rel="noopener">https://thehackernews.com/2015/04/disable-mixed-content-warning.html</a><br><a href="https://www.tuicool.com/articles/ARVVFjI" target="_blank" rel="noopener">https://www.tuicool.com/articles/ARVVFjI</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content/How_to_fix_website_with_mixed_content" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content/How_to_fix_website_with_mixed_content</a></p>
 
       
     </div>
@@ -930,7 +932,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共26.8k字</span>
+  <span class="post-count">博客全站共26.9k字</span>
 </div>
         
 
