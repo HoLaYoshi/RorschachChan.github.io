@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-18T09:28:04.250Z</updated>
+  <updated>2018-01-18T09:33:31.201Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>记录一次配置http跳转https的过程</title>
+    <link href="http://yoursite.com/2018/01/18/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%85%8D%E7%BD%AEhttp%E8%B7%B3%E8%BD%AChttps%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/01/18/记录一次配置http跳转https的过程/</id>
+    <published>2018-01-18T09:33:31.000Z</published>
+    <updated>2018-01-18T09:33:31.201Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>将电商平台测试环境添加了域名和https</title>
@@ -45,9 +66,9 @@
     <link href="http://yoursite.com/2018/01/17/Linux%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%AC%94%E8%AF%95%E9%A2%98%E7%AC%AC%E5%8D%81%E5%9B%9B%E5%A5%97/"/>
     <id>http://yoursite.com/2018/01/17/Linux运维工程师笔试题第十四套/</id>
     <published>2018-01-17T14:18:33.000Z</published>
-    <updated>2018-01-18T06:12:41.662Z</updated>
+    <updated>2018-01-18T15:37:21.516Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>这几天一边看着《nginx高性能WEB服务器详解》，一边看着基础知识。那么最容易入眼的基础知识是什么呢？当然是面试题了，于是乎就找出来一些阿里（含滴滴和蚂蚁金服）的运维面试题，以题带看。</p><p>看完之后觉得阿里真的不是盖的，面试题的质量比那些晚上乱七八糟的题质量好多了，细节抠的真是非常细。我记得曾经有一个前辈曾经说过，工作中我们经常注意一些奇淫技巧，但是忽视了基础知识的重要性，现在好多程序员不会认认真真地读本书，喜欢快餐文化，受了市面上很多培训机构的影响，这是要不得的。</p><h2><span id="废话到此为止上题">废话到此为止，上题</span></h2><p>1）<font color="bule">http一般是无状态的，怎么让它变成有状态的？</font></p><p>2）<font color="bule">解释一下cookie和session的区别</font><br>Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中， session 是一个抽象概念，开发者为了实现中断和继续等操作，抽象出来的一个“会话”；<br>Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式，cookie 是一个实际存在的东西，http 协议中定义在 header 中的字段。</p><p>session的常见实现要借助cookie来发送sessionID，如果浏览器禁用cookie，那么就要通过重写url来获取session id。现在很流行一个token，其实token和session_id是一个意思。</p><p>3）<font color="bule">多进程和多线程的区别，自己喜欢用哪个？为什么？</font></p><p>4) <font color="bule">lvs脑裂如何解决，为什么会产生双master？双master时VIP通不通?</font></p><p>5) <font color="bule">为什么TCP比UDP的信息更加可靠？</font><br>tcp滑动窗口，详细说说原理，窗口的大小如何确定。<br>6) <font color="bule">cdn的工作原理。如何评估一个cdn sp做的好不好。</font></p><p>7）<font color="bule">dns查询的过程说一下，为什么要有cname而不是直接返回一个cdn边缘节点的ip。</font></p><p>8）<font color="bule">举例说下正则表达式和扩展正则表达式例如：url、ip、邮箱的正则表达式？</font></p><p>9）<font color="bule">解释raid0、raid1、raid01、raid10、raid5、raid6，并分析各自读写性能？</font></p><p>10）<font color="bule">radi为什么不搞个raid50、raid15，不能搞是因为有什么冲突还是什么等等?</font></p><h2><span id="拓展阅读">拓展阅读</span></h2><p><a href="https://segmentfault.com/a/1190000007243675" target="_blank" rel="noopener">https://segmentfault.com/a/1190000007243675</a><br><a href="http://mertensming.github.io/2016/10/19/cookie-session/" target="_blank" rel="noopener">http://mertensming.github.io/2016/10/19/cookie-session/</a><br><a href="https://wizardforcel.gitbooks.io/network-basic/content/index.html" target="_blank" rel="noopener">https://wizardforcel.gitbooks.io/network-basic/content/index.html</a><br><a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="noopener">https://coolshell.cn/articles/11564.html</a><br><a href="https://coolshell.cn/articles/11609.html" target="_blank" rel="noopener">https://coolshell.cn/articles/11609.html</a></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>这几天一边看着《nginx高性能WEB服务器详解》，一边看着基础知识。那么最容易入眼的基础知识是什么呢？当然是面试题了，于是乎就找出来一些阿里（含滴滴和蚂蚁金服）的运维面试题，以题带看。</p><p>看完之后觉得阿里真的不是盖的，面试题的质量比那些晚上乱七八糟的题质量好多了，细节抠的真是非常细。我记得曾经有一个前辈曾经说过，工作中我们经常注意一些奇淫技巧，但是忽视了基础知识的重要性，现在好多程序员不会认认真真地读本书，喜欢快餐文化，受了市面上很多培训机构的影响，这是要不得的。</p><p>最后再说一句，以下所有的题都属于“开放性”试题，可以根据基本点去发散，但是注意，不要避重就轻，问你A，你可以发散到A1、A2…但是不要发散到X、Y、Z，然后大谈特谈XYZ，这种“小聪明”就是找死行为。</p><h2><span id="废话到此为止上题">废话到此为止，上题</span></h2><p>1）<font color="blue">http一般是无状态的，怎么让它变成有状态的？</font><br>[我的答案]http跟IP、UDP一样都是无状态的，http的无状态意思是“每次的请求都是独立的，它的执行情况和结果与前面的请求和之后的请求是无直接关系的，它不会受前面的请求应答情况直接影响，也不会直接影响后面的请求应答情况”。<font color="green">补充一下，TCP是有状态的，它的请求并不独立，它通过包头的一些控制字段来分别包的关系，这里可以自行脑补一下“三次握手”的图。</font></p><p>那么http是无状态的这一点是无法改变的，那么要变得“有状态”，就需要引入cookie和session，通过这两个机制去实现一个有状态的WEB应用。用一个表达式可以这么理解：<code>Web应用=http协议+session、cookies等状态机制+其他辅助的机制</code>。</p><p>2）<font color="blue">解释一下cookie和session的区别</font><br>[我的答案]Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中，session是一个抽象概念，开发者为了实现中断和继续等操作，抽象出来的一个“会话”，接上面那道题，session这个东西能不用就不要用，因为它是有状态的，服务器要维护一个有状态的东西是很消耗资源的（比如内存和空间），我估计，天猫京东那规模的电商，肯定有一个专门的session集群。</p><p>Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式，cookie是一个实际存在的东西，它是在http协议中定义在header中的字段。</p><p>session的常见实现要借助cookie来发送sessionID给客户端，如果浏览器禁用cookie，那么就要通过重写url来获取sessionid，各位可以联想一下电商的购物车，购物车可以实现在一个网站的不同页面把东西都放进一个购物车，这就是session的重点应用。现在也很流行一个token，其实token和sessionid是一个意思。</p><p>3）<font color="blue">多进程和多线程的区别，自己喜欢用哪个？为什么？</font></p><p>4) <font color="blue">lvs脑裂如何解决，为什么会产生双master？双master时VIP通不通?</font></p><p>5) <font color="blue">为什么TCP比UDP的信息更加可靠？</font><br>tcp滑动窗口，详细说说原理，窗口的大小如何确定。</p><p>6) <font color="blue">cdn的工作原理。如何评估一个cdn sp做的好不好。</font><br>[我的答案]</p><p>IT界有个很有名的比喻，正向代理是“找马云借钱”，反向代理是“给10086打电话”，而反向代理就是CDN的原理雏形。</p><p>7）<font color="blue">dns查询的过程说一下，为什么要有cname而不是直接返回一个cdn边缘节点的ip。</font></p><p>8）<font color="blue">举例说下正则表达式和扩展正则表达式例如：url、ip、邮箱的正则表达式？</font></p><p>9）<font color="blue">解释raid0、raid1、raid01、raid10、raid5、raid6，并分析各自读写性能？</font></p><p>10）<font color="blue">radi为什么不搞个raid50、raid15，不能搞是因为有什么冲突还是什么等等?</font></p><h2><span id="拓展阅读">拓展阅读</span></h2><p><a href="https://segmentfault.com/a/1190000007243675" target="_blank" rel="noopener">https://segmentfault.com/a/1190000007243675</a><br><a href="http://mertensming.github.io/2016/10/19/cookie-session/" target="_blank" rel="noopener">http://mertensming.github.io/2016/10/19/cookie-session/</a><br><a href="https://wizardforcel.gitbooks.io/network-basic/content/index.html" target="_blank" rel="noopener">https://wizardforcel.gitbooks.io/network-basic/content/index.html</a><br><a href="https://coolshell.cn/articles/11564.html" target="_blank" rel="noopener">https://coolshell.cn/articles/11564.html</a><br><a href="https://coolshell.cn/articles/11609.html" target="_blank" rel="noopener">https://coolshell.cn/articles/11609.html</a><br><a href="http://blog.sina.com.cn/s/blog_93b45b0f0101a4ix.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_93b45b0f0101a4ix.html</a></p>]]></content>
     
     <summary type="html">
     
@@ -226,9 +247,9 @@
       <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
@@ -250,9 +271,9 @@
       <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
@@ -471,32 +492,6 @@
       <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>自己动手搭建一个hexo博客demo</title>
-    <link href="http://yoursite.com/2018/01/10/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AAhexo%E5%8D%9A%E5%AE%A2demo/"/>
-    <id>http://yoursite.com/2018/01/10/自己动手搭建一个hexo博客demo/</id>
-    <published>2018-01-10T02:54:51.000Z</published>
-    <updated>2018-01-10T03:39:34.098Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>曾几何时，自己动手做一个博客的想法愈加强烈，想在里面放一些更多除了技术之外的东西，比如烹饪的美食，比如PVP的视频，比如拍摄的照片，比如篮球足球的评论。在这种需求下，我从众多博客框架里面选择了hexo，原因就是“很多人都推荐hexo”….（囧）于是乎我在windows里搞一个，由于我在公司的网络是可以跨越长城的，所以搞github有一点天然的优势。而且github的博客不用花钱搞域名，他直接免费提供…</p><p><strong>在搞github的时候墙裂推荐各位去用命令行，有linux的基本基础就可以很熟练的使用命令行搞github， 它的客户端真的不如命令行好用。</strong></p><h2><span id="准备工作">准备工作</span></h2><p>先去注册一个github，然后去<a href="https://git-scm.com" target="_blank" rel="noopener">https://git-scm.com</a> 上下载一个最新的git windows的客户端，我下载的是2.15.1版本，如图：<br><img src="/images/zhucegithub.png" alt="抱光妹" title="windows下载github"></p><p>下载完毕之后，就把这个exe文件安装，然后在“开始”里找到git再打开“Git Bash”，我的github账号是<code>RorschachChan</code>，电子邮件也已经配置过，所以现在就在这个bash窗口里写入如下语句：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name <span class="string">"RorschachChan"</span></span><br><span class="line">git config --global user.email <span class="string">"chenx1242@163.com"</span></span><br></pre></td></tr></table></figure></p><p><img src="/images/config1.png" alt="抱光妹" title="确定用户名和邮箱"><br>上面git config –global 参数，表示你这台机器上所有的Git仓库都会使用这个配置。</p><p>再去<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">https://nodejs.org/en/download/</a> 上根据自己windows的情况，下载最新的nodejs，下载完了之后就一路next，然后需要退出重进一下git bash，在bash的命令行里输入<code>node -v</code>，看到版本号就是OK，同时输入node，$会变成&gt;，然后输入.exit就可以退出返回到bash。<br><img src="/images/nodeV.png" alt="抱光妹" title="查看node版本"></p><p>然后就是安装hexo，hexo的安装比较简单，就是在git bash里输入<code>npm install -g hexo-cli</code>和<code>npm install -g hexo</code>，然后需要等待一会，如果出现了“npm ERR! ”不要怕，重新输入一次应该就会好了，安装完毕之后，输入$ hexo -v查看hexo的版本，如图：<br><img src="/images/installhexo1.png" alt="抱光妹" title="安装hexo-cli"><br><img src="/images/installhexo2.png" alt="抱光妹" title="安装hexo"></p><p>然后建立一个github ssh密钥，在git bash里输入<code>ssh-keygen -t rsa -C &quot;你的邮箱&quot;</code>，然后告诉密钥生成的路径（下图黄框）以及会让你输入对应的口诀（红色箭头），这个口诀很重要，要妥善保存，如图：<br><img src="/images/githubak.png" alt="抱光妹" title="配置密钥"></p><p>这个密码会在你提交项目（<code>hexo d</code>）时使用，如果为空的话提交项目时则不用输入。这个设置是防止别人往你的项目里提交内容。这时候去<code>C:\Users\33664\.ssh</code>的路径里就会看到一对钥匙，<strong>id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥，可以放心地告诉任何人。</strong><br><img src="/images/miyao.png" alt="抱光妹" title="密钥在这里"></p><p>来到github的个人配置里，选择“SSH and GPG keys”，然后输入title和id_rsa.pub的内容，点击“add ssh key”。如图：<br><img src="/images/addak.png" alt="抱光妹" title="在github添加ak"><br>准备工作的最后一步，就是建立一个文件夹，我的文件夹建立在E盘下，名字就叫hexo。</p><h2><span id="开始搭建博客">开始搭建博客</span></h2><p>首先在git bash里进入/e/hexo，然后输入<code>hexo init</code>，这个命令是初始化命令，再输入<code>hexo -g</code>来生成静态文件，执行之后，hexo就会在public文件夹生成相关html文件，这些文件将来都是要提交到github上你的用户名.github.io的仓库上去的。然后可以输入<code>hexo s</code>来本地启动hexo，这个时候跑到浏览器里输入<code>localhost:4000</code>就会看到hexo博客最初的一个样子，如图：<br><img src="/images/hexo1.png" alt="抱光妹" title="最初是状态的hexo"></p><p>这个默认的主题比较难看，我们去<a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next</a> 下载最近一个比较火爆的主题next,并且把这个下载到hexo文件夹里的themes/next里，语句是：<code>git clone https://github.com/iissnan/hexo-theme-next.git themes/next</code><br><img src="/images/installnext.png" alt="抱光妹" title="安装next主题"></p><p>然后打开hexo文件夹里的_config.xml，把原有的theme注释，换成新的next，注意，中间是有空格的！<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#theme: landscape</span><br><span class="line">theme: next</span><br></pre></td></tr></table></figure></p><p>然后<code>hexo clean</code>和<code>hexo g</code>清除 Hexo 的缓存和重新生成静态文件，再次<code>hexo s</code>启动进程，来到浏览看一下发现博客的样子就变成下面的样子了：<br><img src="/images/next1.png" alt="抱光妹" title="展示next主题"><br>这个看上去就简单大方很多了吧。</p><h2><span id="把博客上传到github">把博客上传到github</span></h2><p>现在有人问了，这个博客看上去好像很美，但是有两个致命的缺陷：第一，内容都是在我的windows里，如果我这个电脑坏了/出差/换新硬盘，那么如何保证我以前文件？第二，我启动进程需要执行 <code>hexo -s</code>，如果我电脑关机了，岂不是博客无法打开？</p><p>需要解决就要把磁盘上的内容传递到github库里了，同时github是常开进程的，这样既可以更新我们的内容又不会关闭博客进程，除非github这个网站黄了。</p><p>先去github网站去建立一个库（repository），这里我直接选择了公共读，如图：<br><img src="/images/repository.png" alt="抱光妹" title="建立一个新库"></p><p>然后在hexo文件夹里面，修改一下_config.xml的几个地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: 石锤淡啤酒    #这个是网站在标签页的标题</span><br><span class="line">subtitle: 生活就是等待戈多    #这个是副标题</span><br><span class="line">description: 这里记录的不只有代码，还有生活和思想！    #这里也可以写网站的关键词，也可以矫情的写点别的</span><br><span class="line">author: Chris Chan    #这个作者会在网页最下面显示</span><br><span class="line">language: zh-Hans    #这里表示简体中文</span><br><span class="line">timezone:</span><br><span class="line"></span><br><span class="line"># Deployment</span><br><span class="line">## Docs: https://hexo.io/docs/deployment.html</span><br><span class="line">deploy:</span><br><span class="line"> type: git</span><br><span class="line"> repository: git@github.com:RorschachChan/RorschachChan.github.io.git    #这里写的就是刚刚申请的库名</span><br><span class="line"> branch: master</span><br></pre></td></tr></table></figure></p><p>建立完库以及修改保存了_config.xml之后，我们执行一句<code>hexo d</code>部署命令，在执行的时候需要输入当时你建立id_rsa时候的口诀，刚刚申请的那个口诀不会这么快就忘了吧。<br><img src="/images/hexod.png" alt="抱光妹" title="部署博客"></p><p>返回到github的网站就看到hexo里所有的内容都上传到了github网站里了，如图:<br><img src="/images/hexod2.png" alt="抱光妹" title="上传成功"></p><p>在浏览器里输入“<a href="https://你的用户名.github.io”，就看到了博客界面：" target="_blank" rel="noopener">https://你的用户名.github.io”，就看到了博客界面：</a><br><img src="/images/newnext.png" alt="抱光妹" title="更改了主题和作者的界面"></p><p>同理，如果你的github用户名是test，建立的是test.github.io的仓库（必须是你的用户名，其它名称无效），将来你的网站访问地址就是 <a href="http://test.github.io" target="_blank" rel="noopener">http://test.github.io</a> 了，每一个github账户最多只能创建一个这样可以直接使用域名访问的仓库。</p><p>至此，建立一个博客demo就到此结束了！</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://baoyuzhang.github.io/2017/04/28/【Hexo搭建独立博客全纪录】（一）使用Git和Github/" target="_blank" rel="noopener">https://baoyuzhang.github.io/2017/04/28/【Hexo搭建独立博客全纪录】（一）使用Git和Github/</a><br><a href="https://github.com/iissnan/hexo-theme-next" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next</a><br><a href="http://opiece.me/2015/04/09/hexo-guide/" target="_blank" rel="noopener">http://opiece.me/2015/04/09/hexo-guide/</a><br><a href="http://shenzekun.cn/hexo的next主题个性化配置教程.html" target="_blank" rel="noopener">http://shenzekun.cn/hexo的next主题个性化配置教程.html</a> 强烈推荐这篇文章，可以让你把next主题的博客做的更加漂亮！</p>]]></content>
-    
-    <summary type="html">
-    
-      记录自己搭窝的过程，方便以后搭更多的窝...
-    
-    </summary>
-    
-      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
-    
-      <category term="github" scheme="http://yoursite.com/tags/github/"/>
-    
-      <category term="博客搭建" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   
