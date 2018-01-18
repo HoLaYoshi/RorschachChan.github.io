@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="大牛之路，如此辛苦">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-18T15:37:21.516Z">
+<meta property="og:updated_time" content="2018-01-18T18:28:50.900Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师笔试题第十四套">
 <meta name="twitter:description" content="大牛之路，如此辛苦">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,170
+                  1,181
                 </span>
               
 
@@ -468,7 +468,7 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>这几天一边看着《nginx高性能WEB服务器详解》，一边看着基础知识。那么最容易入眼的基础知识是什么呢？当然是面试题了，于是乎就找出来一些阿里（含滴滴和蚂蚁金服）的运维面试题，以题带看。</p>
 <p>看完之后觉得阿里真的不是盖的，面试题的质量比那些晚上乱七八糟的题质量好多了，细节抠的真是非常细。我记得曾经有一个前辈曾经说过，工作中我们经常注意一些奇淫技巧，但是忽视了基础知识的重要性，现在好多程序员不会认认真真地读本书，喜欢快餐文化，受了市面上很多培训机构的影响，这是要不得的。</p>
-<p>最后再说一句，以下所有的题都属于“开放性”试题，可以根据基本点去发散，但是注意，不要避重就轻，问你A，你可以发散到A1、A2…但是不要发散到X、Y、Z，然后大谈特谈XYZ，这种“小聪明”就是找死行为。</p>
+<p>最后再说一句，以下所有的题都属于“开放性”试题，可以根据基本点去发散，说出你的理解和认识。但是注意，不要避重就轻耍滑头，问A，可以发散到A1、A2…但是不要发散到X、Y、Z，然后大谈特谈XYZ，这种“小聪明”就是找死的行为。</p>
 <h2><span id="废话到此为止上题">废话到此为止，上题</span></h2><p>1）<font color="blue">http一般是无状态的，怎么让它变成有状态的？</font><br>[我的答案]http跟IP、UDP一样都是无状态的，http的无状态意思是“每次的请求都是独立的，它的执行情况和结果与前面的请求和之后的请求是无直接关系的，它不会受前面的请求应答情况直接影响，也不会直接影响后面的请求应答情况”。<font color="green">补充一下，TCP是有状态的，它的请求并不独立，它通过包头的一些控制字段来分别包的关系，这里可以自行脑补一下“三次握手”的图。</font></p>
 <p>那么http是无状态的这一点是无法改变的，那么要变得“有状态”，就需要引入cookie和session，通过这两个机制去实现一个有状态的WEB应用。用一个表达式可以这么理解：<code>Web应用=http协议+session、cookies等状态机制+其他辅助的机制</code>。</p>
 <p>2）<font color="blue">解释一下cookie和session的区别</font><br>[我的答案]Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中，session是一个抽象概念，开发者为了实现中断和继续等操作，抽象出来的一个“会话”，接上面那道题，session这个东西能不用就不要用，因为它是有状态的，服务器要维护一个有状态的东西是很消耗资源的（比如内存和空间），我估计，天猫京东那规模的电商，肯定有一个专门的session集群。</p>
