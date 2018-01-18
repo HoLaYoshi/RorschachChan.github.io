@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-18T06:12:41.662Z</updated>
+  <updated>2018-01-18T07:37:13.150Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>将电商平台测试环境添加了域名和https</title>
+    <link href="http://yoursite.com/2018/01/18/%E5%B0%86%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E6%B7%BB%E5%8A%A0%E4%BA%86%E5%9F%9F%E5%90%8D%E5%92%8Chttps/"/>
+    <id>http://yoursite.com/2018/01/18/将电商平台测试环境添加了域名和https/</id>
+    <published>2018-01-18T06:42:12.000Z</published>
+    <updated>2018-01-18T07:37:13.150Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天电商平台来了新的产品经理。摸了一遍情况之后，提出了两个需求，第一个是要把测试环境也要上https，达到与线上一致；第二个就是测试环境要配上域名，不要再用IP地址登陆。</p><p>配置域名是很简单的，在阿里云的云解析上直接给测试环境新加一个域名，然后对应添加阿里云外网SLB的IP地址即可。进入页面也发现首页地址显示正常，但是再点点就发现了里面有点不对。</p><p>没错，现象就是“只有首页是域名，其他网站都是IP”，<br><img src="/images/ecstore1.jpg" alt="paradin"></p><p>遇到这个情况，我就跑去<code>nginx.conf</code>里，看一下<code>server_name</code>的配置，看到的确写得是func.lechange.com，如图：<br><img src="/images/ecstore2.png" alt="paradin"></p><p>于是就在页面上使用<code>ctrl+shift+c</code>查看具体情况，发现里面的代码是这个样的：<br><img src="/images/ecstore3.jpg" alt="paradin"></p><p>这就人赃俱获了，<strong>开发已经在html里把地址写死了，使用了绝对路径而不是相对路径</strong>，于是就打回让开发自己慢慢改。</p><p>然后又回到SLB界面，新增新的https监听，前端端口443，后端是80，搭配正确的证书，SLB保存之后，在浏览器输入测试环境的<code>https://网址</code>之后，发现整个界面全乱了，如图：<br><img src="/images/ecstore4.png" alt="paradin"></p><p>但是使用<a href="http://网址去访问还是正常的，如图：" target="_blank" rel="noopener">http://网址去访问还是正常的，如图：</a><br><img src="/images/ecstore5.png" alt="paradin"></p><p>很明显，这是因为https下跨协议调用http的是不行的，所以那些css、js如果不支持https的话就无法正常显示。使用<code>ctrl+shift+c</code>看错误更加明显。<br><img src="/images/ecstore6.png" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      一次通宵，腰疼三天...
+    
+    </summary>
+    
+      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="网络基础" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux运维工程师笔试题第十四套</title>
@@ -473,30 +497,6 @@
       <category term="github" scheme="http://yoursite.com/tags/github/"/>
     
       <category term="博客搭建" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Query String跟Arg的差异</title>
-    <link href="http://yoursite.com/2018/01/09/Query-String%E8%B7%9Farg%E7%9A%84%E5%BC%82%E5%90%8C/"/>
-    <id>http://yoursite.com/2018/01/09/Query-String跟arg的异同/</id>
-    <published>2018-01-09T12:47:40.000Z</published>
-    <updated>2018-01-09T14:06:15.915Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言与需求">前言与需求</span></h2><p>在<a href="https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/09/记一次配置rewrite和return的经历/</a> 里记录了一次rewrite和return的故事，不过我当时在最后的return里是把域名给写死了：<code>rewrite ^.*$ http://dvlshop.lechange.com/index.php/wap/$id$query last;</code>。</p><p>现在新的需求又来了，说域名不要写死，<code>http://dvlshop.lechange.com/index.php/</code>这部分要跟整个uri的state部分保持一致。</p><p>于是我这里再把整个uri贴出来，辣一下各位的眼睛：<br><a href="http://dvlshop.lechange.com/index.php/wap/?" target="_blank" rel="noopener">http://dvlshop.lechange.com/index.php/wap/?</a><br><em>client_id</em>=lc_mall_m&amp;<br><em>redirect_uri</em>=https%3A%2F%2Fdvlshop.lechange.com%2Fopenapi%2Ftrustlogin_api%2Fparse%2Fwap_trustlogin_lecheng%2Fcallback&amp;<br><em>response_type</em>=code&amp;    <code>#满足条件的话把这个改成+auto+</code><br><em>scope</em>=read&amp;<br><em>state</em>=http%3A%2F%2Fdvlshop.lechange.com%2Findex.php%2Fwap&amp;<br><em>user</em>=token%2Flcid_9f9lmo2u6i7hkl6t6eaodn2blmg5jbsg&amp;<br><em>expire</em>=1514191636&amp;<br><em>source_type</em>=lc_app&amp;<br><em>nonce</em>=cdizHO6uvSx5JK79Kmtz5RBpSi0ROhpF&amp;signature=VeCceYCWDE6BZjIdni/68YCmhqc=%27 </p><p>也就是说现在只需要变量state那点部分，那么这个时候就不能再使用$query_string了，要使用$arg。</p><p>$arg可以精确匹配变量，比如说我有一个参数（uri里？后面的那部分全叫参数）：&amp;p=你大爷&amp;q=你大娘，用$query_string和$arg就是获取所有，而使用$arg_p就是可以获取“你大爷”。</p><p>于是说动手就动手，把nginx.conf改成了：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">location ~ .*\.php.*</span><br><span class="line">&#123;</span><br><span class="line">    include php_fcgi.conf;</span><br><span class="line">    include pathinfo.conf;</span><br><span class="line">    set $flag <span class="string">"0"</span>;</span><br><span class="line">    <span class="keyword">if</span> ( $args ~ <span class="string">"source_type=lc_app"</span> ) &#123;</span><br><span class="line">       set $flag  <span class="string">"1"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ( $args ~ <span class="string">"(.*)response_type(.*)"</span> )&#123;</span><br><span class="line">       set $Flag  <span class="string">"$flag$flag"</span>;</span><br><span class="line">       set $id $<span class="number">1</span>;</span><br><span class="line">       set $query $<span class="number">2</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> ($Flag = <span class="string">"11"</span>)&#123;</span><br><span class="line">        set $flag <span class="string">"0"</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">301</span>  $arg_state$id+auto+$query;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>但是通过日志查看，发现$arg_state得到的是<code>/http%3A%2F%2Fdvlshop.lechange.com%2Fproduct-79.html</code>,这就很囧了，我希望获取<code>http%3A%2F%2Fdvlshop.lechange.com%2Fproduct-79.html</code>（不要前面的反斜杠）或者是<code>/product-79.html</code>（不要中间的网站）。这可怎么办？</p><p>答案是，<strong>原生的nginx是做不到这一点，因为nginx不参与业务层逻辑方面的业务。</strong>如果说要达到改写的目的，就要搭配lua或者把nginx换成openresty。于是乎就让开发修改一下传递的state来达到目的。</p><h2><span id="扩展与补充">扩展与补充</span></h2><p>看到这个结果突然让我想起来一道面试题，说开发有一个模块，同时这个模块会给nginx提供几个状态码，比如状态码是111，那就是代表OK，状态码不是111，那就是代表不OK，现在想写一个语句，如果nginx获得的状态码不是111，返回一个404的页面，怎么写？</p><p>没错，答案也是“原生nginx写不了”，原因跟上面的一样，应用模块状态码是业务层的，nginx是http层的，不在一层压根就无法交流。</p><p>在这里也顺道补充一下“在浏览器中输入一个URL后都发生了什么？”，以下是一个大概流程：</p><ol><li>浏览器向DNS服务器查找输入URL对应的IP地址；</li><li>DNS服务器返回网站的IP地址；</li><li>浏览器根据IP地址与目标web服务器建立TCP连接；</li><li>发送HTTP请求；</li><li>服务器处理请求；</li><li>返回响应结果；</li><li>关闭TCP连接；</li><li>浏览器解析HTML；</li><li>浏览器布局渲染；</li></ol><p><img src="/images/家有喜事.gif" alt="星爷、李丽珍、张曼玉" title="《家有喜事》"></p>]]></content>
-    
-    <summary type="html">
-    
-      $query_string搞不定的事情，$arg来！
-    
-    </summary>
-    
-      <category term="用来讨饭吃的技术" scheme="http://yoursite.com/categories/%E7%94%A8%E6%9D%A5%E8%AE%A8%E9%A5%AD%E5%90%83%E7%9A%84%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="Nginx" scheme="http://yoursite.com/tags/Nginx/"/>
-    
-      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
