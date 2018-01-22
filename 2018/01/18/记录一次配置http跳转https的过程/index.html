@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="nginx,https," />
 
 
 
@@ -88,14 +88,18 @@
 
 
 
+<meta name="description" content="有了https，不用白不用">
+<meta name="keywords" content="nginx,https">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记录一次配置http跳转https的过程">
 <meta property="og:url" content="http://yoursite.com/2018/01/18/记录一次配置http跳转https的过程/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
+<meta property="og:description" content="有了https，不用白不用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-18T09:33:31.201Z">
+<meta property="og:updated_time" content="2018-01-22T02:29:10.622Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录一次配置http跳转https的过程">
+<meta name="twitter:description" content="有了https，不用白不用">
 
 
 
@@ -354,6 +358,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -399,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  685
                 </span>
               
 
@@ -415,12 +441,16 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  3
                 </span>
               
             </div>
           
 
+          
+              <div class="post-description">
+                  有了https，不用白不用
+              </div>
           
 
         </div>
@@ -436,7 +466,30 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script>
+        <script src="\assets\js\APlayer.min.js"> </script><p>公司最近搞了一个数据运营平台，这个平台会以web界面的形式把各个数据展示出来，这个项目是我们一个经理的重点关照项目。把平台模块部署完毕并且启动之后，又把这个平台服务器的外网IP绑定到<code>alkaid.lechange.com</code>这个域名上，在浏览器里输入<code>https://alkaid.lechange.com</code>,就看到了前端同行们写的网页。</p>
+<p>但是我们的霸气经理说这样不行，说要更多要求更高标准更好体验，于是乎提出一个需求就是：在输入<code>alkaid.lechange.com</code>的时候会自动跳转到<code>https://alkaid.lechange.com</code>。</p>
+<p>既然如此，我们就在nginx上原有的<code>nginx.conf</code>里补充几个配置文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include upstream</span><br><span class="line">include upstream.conf;</span><br><span class="line"># include servers</span><br><span class="line">include alkaid.conf;</span><br><span class="line">include alkaid-https.conf;</span><br></pre></td></tr></table></figure></p>
+<p>这样在执行<code>nginx.conf</code>的时候，就会调用<code>upstream.conf</code>、<code>alkaid.conf</code>和<code>alkaid-https.conf</code>，我们主要看一下这三个文件。</p>
+<p>alkaid.conf文件如下：<br>    ```js<br>    server {<br>        listen 80;<br>        server_name *.lechange.com;<br>        proxy_buffering off;<br>        location / {<br>                rewrite ^/ <a href="https://alkaid.lechange.com" target="_blank" rel="noopener">https://alkaid.lechange.com</a> permanent;<br>                client_max_body_size 100m;<br>            }<br>    }</p>
+<p>这里我们监听了80端口，下面那个<code>client_max_body_size 100m</code>是用来设定<code>nginx+php</code>上传文件的大小，这里规定是100m，这个可以写进<code>nginx.conf</code>里，如果有对上传文件方面感兴趣，可以看<a href="http://www.cnblogs.com/zhwl/archive/2012/09/18/2690714.html" target="_blank" rel="noopener">http://www.cnblogs.com/zhwl/archive/2012/09/18/2690714.html</a> 。</p>
+<p>再来看看<code>alkaid-https.conf</code>，如下：<br>    <code>``js
+    server {
+        listen 10000;
+        server_name *.lechange.com;
+        proxy_buffering off;
+        location / {
+                proxy_pass http://alkaid_backend;
+                proxy_set_header   X-Real-IP        $remote_addr;
+                proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
+                proxy_redirect     off;
+            }
+    }
+这里监听了10000端口，location写的是</code><a href="http://alkaid_backend`,这个`alkaid_backend`是啥东西?" target="_blank" rel="noopener">http://alkaid_backend`,这个`alkaid_backend`是啥东西?</a></p>
+<p>这个时候我们就需要看一下<code>upstream.conf</code>，里面内容是:<br>    ```js<br>    upstream alkaid_backend {<br>        server   X.X.X.X:JQK;<br>        check interval=5000 rise=2 fall=5 timeout=1000 type=tcp default_down=false;<br>    }</p>
+<p>X.X.X.X是模块服务器的内网IP地址，而JQK是模块服务器的模块端口，这里要根据实际的情况来写。可见<code>alkaid_backend</code>对应的就是模块服务器和它的端口，下面是检查间隔等等数值。</p>
+<p>现在我们启动<code>nginx</code>，然后把nginx的外网地址绑定去<code>alkaid.lechange.com</code>这个域名，在浏览器里输入<code>alkaid.lechange.com</code>，就会达到自动跳转的目的了！</p>
+<p>这里要额外多说一下，我们这里设定了80的配置文件也设置了443的文件，但是这俩文件的转发过程却不同：<code>alkaid-https.conf</code>文件把443的请求转向了平台模块服务器的服务，而<code>alkaid.conf</code>文件把凡是从80端口进来的请求直接全部永久重定向到<code>https://alkaid.lechange.com</code> ，但是这个<code>alkaid.lechange.com</code>还是会去访问平台模块服务器的服务，也就是说<code>alkaid.conf</code>文件多了一步重定向。</p>
+
       
     </div>
     
@@ -515,6 +568,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+          
+            <a href="/tags/https/" rel="tag"><i class="fa fa-tag"></i> https</a>
+          
+        </div>
       
 
       
@@ -854,7 +915,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共29.9k字</span>
+  <span class="post-count">博客全站共30.6k字</span>
 </div>
         
 
