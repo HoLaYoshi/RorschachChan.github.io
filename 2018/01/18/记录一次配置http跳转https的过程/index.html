@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="有了https，不用白不用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-22T02:29:10.622Z">
+<meta property="og:updated_time" content="2018-01-22T02:35:54.038Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录一次配置http跳转https的过程">
 <meta name="twitter:description" content="有了https，不用白不用">
@@ -467,7 +467,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>公司最近搞了一个数据运营平台，这个平台会以web界面的形式把各个数据展示出来，这个项目是我们一个经理的重点关照项目。把平台模块部署完毕并且启动之后，又把这个平台服务器的外网IP绑定到<code>alkaid.lechange.com</code>这个域名上，在浏览器里输入<code>https://alkaid.lechange.com</code>,就看到了前端同行们写的网页。</p>
-<p>但是我们的霸气经理说这样不行，说要更多要求更高标准更好体验，于是乎提出一个需求就是：在输入<code>alkaid.lechange.com</code>的时候会自动跳转到<code>https://alkaid.lechange.com</code>。</p>
+<p>但是我们的霸气经理说这样不行，说要更多要求更高标准更好体验，于是乎提出一个需求就是：<font color="blue">在输入<code>alkaid.lechange.com</code>的时候会自动跳转到<code>https://alkaid.lechange.com</code>。</font></p>
 <p>既然如此，我们就在nginx上原有的<code>nginx.conf</code>里补充几个配置文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include upstream</span><br><span class="line">include upstream.conf;</span><br><span class="line"># include servers</span><br><span class="line">include alkaid.conf;</span><br><span class="line">include alkaid-https.conf;</span><br></pre></td></tr></table></figure></p>
 <p>这样在执行<code>nginx.conf</code>的时候，就会调用<code>upstream.conf</code>、<code>alkaid.conf</code>和<code>alkaid-https.conf</code>，我们主要看一下这三个文件。</p>
 <p>alkaid.conf文件如下：<br>    ```js<br>    server {<br>        listen 80;<br>        server_name *.lechange.com;<br>        proxy_buffering off;<br>        location / {<br>                rewrite ^/ <a href="https://alkaid.lechange.com" target="_blank" rel="noopener">https://alkaid.lechange.com</a> permanent;<br>                client_max_body_size 100m;<br>            }<br>    }</p>
@@ -716,7 +716,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -915,7 +915,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共30.6k字</span>
+  <span class="post-count">博客全站共31.2k字</span>
 </div>
         
 
