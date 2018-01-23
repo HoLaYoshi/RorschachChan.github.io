@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/zabbixnet4.png">
 <meta property="og:image" content="http://yoursite.com/images/zabbixnet5.png">
 <meta property="og:image" content="http://yoursite.com/images/zabbixnet6.png">
-<meta property="og:updated_time" content="2018-01-23T13:47:23.659Z">
+<meta property="og:updated_time" content="2018-01-23T13:51:44.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zabbix添加网卡内外流量监控">
 <meta name="twitter:description" content="zabbix讲究一气呵成，从头到尾没人打扰然后布置。但是干运维难免有人来打扰，这个过来要求布环境，那个要求来买服务器。所以zabbix之路难免走的坑坑洼洼。">
@@ -483,7 +483,7 @@
 <p>最后就是要形成图表来糊弄领导，让领导感受一下什么叫做高大上，在graph的界面里选择<code>create graph</code>，然后就如图所示的填写：<br><img src="/images/zabbixnet5.png" alt="akb48"></p>
 <p>一个是红色线，一个是绿色线，双龙戏珠，<code>save</code>。</p>
 <p>最后来到<code>Monitoring</code>—<code>Graphs</code>里，找到正确的host,group和graph，就会看到激动人心的图表了：<br><img src="/images/zabbixnet6.png" alt="akb48"></p>
-<p>这里要注意几点，有时候zabbix反应较慢，可能写好的key会出现<code>not support</code>的情况，这个时候可以先登录zabbix_server去<code>zabbix_get</code>一下，get的方法之前有讲过，请见<a href="http://chenx1242.blog.51cto.com/10430133/1738820，如果get是成功返回值的，先检查对应的单位（结果是浮点值，但是units设定是一个整数值肯定会not" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1738820，如果get是成功返回值的，先检查对应的单位（结果是浮点值，但是units设定是一个整数值肯定会not</a> support）,如果单位检查正确，就修改zabbix重新check的时间，实在不行就重新建立一个items。</p>
+<p>这里要注意几点，有时候zabbix反应较慢，可能写好的key会出现<code>not support</code>的情况，这个时候可以先登录zabbix_server去<code>zabbix_get</code>一下，<code>zabbix_get</code>的方法之前有讲过，请见<a href="http://chenx1242.blog.51cto.com/10430133/1738820" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1738820</a> ，如果<code>zabbix_get</code>是成功返回值的，先检查对应的单位（结果是浮点值，但是units设定是一个整数值肯定会<code>not support</code>）,如果单位检查正确，就修改zabbix重新check的时间，实在不行就重新建立一个items。</p>
 
       
     </div>
