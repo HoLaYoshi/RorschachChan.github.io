@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Linux,运维," />
+  <meta name="keywords" content="shell,面试经验," />
 
 
 
@@ -88,23 +88,18 @@
 
 
 
-<meta name="description" content="给Linux服务器再加一把锁">
-<meta name="keywords" content="Linux,运维">
+<meta name="description" content="comm命令、diff命令和grep命令">
+<meta name="keywords" content="shell,面试经验">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用Google Authenticator给ssh进行登录验证">
-<meta property="og:url" content="http://yoursite.com/2018/01/16/使用Google-Authenticator给ssh进行登录验证/index.html">
+<meta property="og:title" content="一道传说中是百度面试的shell试题">
+<meta property="og:url" content="http://yoursite.com/2018/01/23/一道传说中是百度面试的shell试题/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="给Linux服务器再加一把锁">
+<meta property="og:description" content="comm命令、diff命令和grep命令">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/google1.png">
-<meta property="og:image" content="http://yoursite.com/images/google2.png">
-<meta property="og:image" content="http://yoursite.com/images/google3.png">
-<meta property="og:image" content="http://yoursite.com/images/google4.png">
-<meta property="og:updated_time" content="2018-01-22T02:32:42.229Z">
+<meta property="og:updated_time" content="2018-01-23T01:45:15.170Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用Google Authenticator给ssh进行登录验证">
-<meta name="twitter:description" content="给Linux服务器再加一把锁">
-<meta name="twitter:image" content="http://yoursite.com/images/google1.png">
+<meta name="twitter:title" content="一道传说中是百度面试的shell试题">
+<meta name="twitter:description" content="comm命令、diff命令和grep命令">
 
 
 
@@ -134,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/16/使用Google-Authenticator给ssh进行登录验证/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/23/一道传说中是百度面试的shell试题/"/>
 
 
 
 
 
-  <title>使用Google Authenticator给ssh进行登录验证 | Chris Chan's BLOG</title>
+  <title>一道传说中是百度面试的shell试题 | Chris Chan's BLOG</title>
   
 
 
@@ -323,7 +318,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/16/使用Google-Authenticator给ssh进行登录验证/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/23/一道传说中是百度面试的shell试题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chris Chan">
@@ -340,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用Google Authenticator给ssh进行登录验证</h1>
+          <h1 class="post-title" itemprop="name headline">一道传说中是百度面试的shell试题</h1>
         
 
         <div class="post-meta">
@@ -352,8 +347,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-16T00:39:26+08:00">
-                2018-01-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-23T09:37:31+08:00">
+                2018-01-23
               </time>
             
 
@@ -394,8 +389,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/16/使用Google-Authenticator给ssh进行登录验证/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/16/使用Google-Authenticator给ssh进行登录验证/" itemprop="commentsCount"></span>
+                <a href="/2018/01/23/一道传说中是百度面试的shell试题/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/23/一道传说中是百度面试的shell试题/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -404,7 +399,7 @@
 
           
           
-             <span id="/2018/01/16/使用Google-Authenticator给ssh进行登录验证/" class="leancloud_visitors" data-flag-title="使用Google Authenticator给ssh进行登录验证">
+             <span id="/2018/01/23/一道传说中是百度面试的shell试题/" class="leancloud_visitors" data-flag-title="一道传说中是百度面试的shell试题">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -430,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,645
+                  590
                 </span>
               
 
@@ -446,7 +441,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  7
+                  2
                 </span>
               
             </div>
@@ -454,7 +449,7 @@
 
           
               <div class="post-description">
-                  给Linux服务器再加一把锁
+                  comm命令、diff命令和grep命令
               </div>
           
 
@@ -471,39 +466,16 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>普通情况下的服务器登录，是“服务器+密码”这种直白的验证方式，但是这种方式太过简单，一旦密码泄露，服务器就有危险，于是为了安全我们就要在登录上再加一把锁，那就是使用Google Authenticator（谷歌身份验证器）这个工具，在登录的时候进行一次验证，只有“验证通过了”+“密码正确”才能登陆服务器。</p>
-<h2><span id="安装前准备">安装前准备</span></h2><p>1）关闭Selinux ：<code>setenforce 0</code><br>2）安装依赖：<code>yum -y install gcc make pam-devel libpng-devel libtool wget git</code><br>3）添加阿里云epel 源：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RHEL <span class="number">6</span>/Centos <span class="number">6</span></span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http:<span class="comment">//mirrors.aliyun.com/repo/epel-6.repo</span></span><br><span class="line">RHEL <span class="number">7</span>/Centos <span class="number">7</span></span><br><span class="line">wget -O /etc/yum.repos.d/epel.repo http:<span class="comment">//mirrors.aliyun.com/repo/epel-7.repo</span></span><br></pre></td></tr></table></figure></p>
-<p>4）安装Qrencode，谷歌身份验证器需要调用该程序生成二维码并显示：<code>yum install -y qrencode</code></p>
-<h2><span id="安装谷歌身份验证器">安装谷歌身份验证器</span></h2><p>这个时候很多教程会让你去执行<code>git clone https://github.com/google/google-authenticator.git</code>，然而现在这个git里面已经不再含有libpam这个文件夹了，下载下来是一个错误的包，那么这个时候你可以使用<code>yum install google-authenticator</code>，不过yum安装的身份验证器的版本很老，这个时候可以执行<code>wget https://github.com/google/google-authenticator-libpam/archive/1.04.tar.gz</code>。</p>
-<p>下载下来1.0.4版本的然后拆包解压缩，里面是这样几个文件：<br><img src="/images/google1.png" alt="办公室"></p>
-<p>然后就<code>./bootstrap.sh &amp;&amp; ./configure &amp;&amp; make &amp;&amp; make install</code>进行编译和安装。</p>
-<p>安装过程完毕之后，还要复制google身份验证器pam模块到系统下，命令是：<code>cp /usr/local/lib/security/pam_google_authenticator.so /lib64/security/</code>。</p>
-<h2><span id="调整登陆方式">调整登陆方式</span></h2><p>1）编辑<code>/etc/pam.d/sshd</code>这个文件，我这个centos的版本是7.0的，里面的内容可能跟centos 6.x的优点不同，不过没关系，就需要插入黄色框内的<code>auth required pam_google_authenticator.so</code>，如图：<br><img src="/images/google2.png" alt="办公室"></p>
-<p>修改完毕之后，保存退出。</p>
-<p>注意！修改了这步之后，服务器千万不能断开连接，否则再连是需要google验证码的，而我们现在还没有生成码，所以肯定是无法连接服务器，如果是云服务器，可以通过登陆控制台的方式把这个文件修改回来，如果是实体服务器，那就呵呵呵了。</p>
-<p>2）编辑<code>/etc/ssh/sshd_config</code>，就修改一个地方：<code>ChallengeResponseAuthentication yes</code><br>3）保存退出之后，重启一下ssh服务：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RHEL6 /Centos6：Service sshd restart</span><br><span class="line">RHEL7 /Centos7：Systemctl resart sshd</span><br></pre></td></tr></table></figure></p>
-<h2><span id="生成登陆验证码">生成登陆验证码</span></h2><p>这次以root用户为例，那么切换成root用户执行下面的过程。<br>1）执行<code>google-authenticator</code>，由于我们之前已经安装了<code>qrencode</code>，那么这个时候会生成一个超级超级巨大的二维码，给各位感受一下：<br><img src="/images/google3.png" alt="办公室"></p>
-<p>红色内容是生成的密钥，很重要。绿色的内容是备用的紧急救助码，紧急救助码就是当你无法获取认证码时（比如手机丢了），可以当做认证码来用，每用一个少一个，但其实可以手动添加的，建议如果 root 账户使用 Google Authenticator 的话一定要把紧急救助码另外保存一份。</p>
-<pre><code>Do you want me to update your &quot;/home/test/.google_authenticator&quot; file? (y/n) y
-</code></pre><p>是否更新用户的 Google Authenticator 配置文件，选择 y 才能使上面操作对当前用户生效，其实就是在对应用户的 Home 目录下生成了一个 .google_authenticator 文件，如果你想停用这个用户的 Google Authenticator 验证，只需要删除这个用户 Home 目录下的 .google_authenticator 文件就可以了。</p>
-<pre><code>Do you want to disallow multiple uses of the same authentication token? This restricts you to one login about every 30s, but it increases your chances to notice or even prevent man-in-the-middle attacks (y/n) y
-</code></pre><p>每次生成的认证码是否同时只允许一个人使用？这里选择 y。</p>
-<pre><code>By default, tokens are good for 30 seconds. In order to compensate for possible time-skew between the client and the server, we allow an extra token before and after the current time. If you experience problems with poor time synchronization, you can increase the window from its default size of +-1min (window size of 3) to about +-4min (window size of 17 acceptable tokens). Do you want to do so? (y/n) n
-</code></pre><p>是否增加时间误差？这里随便选择， ny都可以。</p>
-<pre><code>If the computer that you are logging into isn&apos;t hardened against brute-force login attempts, you can enable rate-limiting for the authentication module. By default, this limits attackers to no more than 3 login attempts every 30s. Do you want to enable rate-limiting (y/n) y
-</code></pre><p>是否启用次数限制？这里选择 y，默认每 30 秒最多尝试登录 3 次。</p>
-<p>如果想要写成脚本的话，那么上面交互式的设置也可用通过参数一次性设置：<code>google-authenticator -t -f -d -l test@chen.super -i MR.chen -r 3 -R 30 -W</code>。</p>
-<p>-I和-i是可以随便写的，但是-i后期可以改，-I不能改。</p>
-<h2><span id="搭配手机端">搭配手机端</span></h2><p>如果手机是ios，就去apple store里搜索“Google Authenticator”，如果是安卓，就去应用商店搜索“谷歌动态口令”。</p>
-<p>安装完后，打开App，点击“开始设置”，选择“扫描条形码”扫描上面google-authenticator命令生成的二维码，或者是选择“输入密钥”，然后手机上就能看到对应的六位数认证码了。</p>
-<p>最后一步，返回xshell，修改登陆方式，设置登陆方法为<code>Keyboard Interactive</code>，如图：<br><img src="/images/google4.png" alt="办公室"></p>
-<p>这个时候，推荐各位保留原有的ssh不要动，在另外一个xshell窗口登陆一下看看效果，如果正常的话，这个时候会看到系统会让你先输入一个<code>Verification code</code>。这个值就是手机里的那个六位数，然后再输入密码，只有两个都是正确的，才能登陆！</p>
-<p>至此整个配置完成，如果登陆时遇到问题，请查看日志文件<code>/var/log/secure</code>。</p>
-<h2><span id="更改存储位置">更改存储位置</span></h2><p>在生成二维码那一步的时候，如果你错过了记住密钥也不要怕，系统会自动把密钥和紧急救助码保存在<code>~/.google_authenticator</code>这个文件里。</p>
-<p>如果想要改变密钥存储位置，请使用–secret参数:<code>google-authenticator --secret=&quot;/文件路径/用户名&quot;</code>。</p>
-<p>然后更改/etc/pam.d/sshd内的路径配置:<code>auth required pam_google_authenticator.so user=root secret=/PATH_FOLDER/${USER}</code>。</p>
-<p>上面那句话里“user=root” 用于强制PAM使用root用户权限来搜索文件。</p>
-<p>另外请注意，由于我们当时切换成了root用户，所以密钥文件的所有者是root，生成文件的用户只能读取文件(chmod: 400)：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">chown root.root /PATH_FILE/SECRET_KEY_FILES</span><br><span class="line">chmod <span class="number">400</span> /PATH_FILE/SECRET_KEY_FILES</span><br></pre></td></tr></table></figure></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>【问题】<font color="blue">写脚本实现，可以用shell、perl等。把文件b中有的，但是文件a中没有的所有行，保存为文件c，并统计c的行数。</font><br>翻译成人话就是，假设有一个文件a是:<br>a<br>b<br>c<br>d</p>
+<p>文件b是:<br>1<br>2<br>3<br>4<br>a<br>b</p>
+<p>现在要求输出“b有a没有”的行，即1 2 3 4，然后<code>wc -l</code>一下。</p>
+<p>【思路】两个文件比较，第一想法就是<code>diff</code>，但是<code>diff</code>无论是<code>-c</code>还是<code>-y</code>会牵扯进大量的<code>&gt; &lt; + -</code>不说，而且diff命令是直白对比，即使字母相同但所在行不同，也会被<code>diff</code>记录。如果再用<code>for in</code>语句然后一项一项对比也不会很清晰的解决这个问题，所以要换个方法。</p>
+<p>第二个方法就是<code>comm</code>命令，但是这个命令有一个前提，就是要<code>sort</code>排序，<code>comm</code>比<code>diff</code>高明之处在于它只比较内容而不在意是否同一行，但是要注意对比文件的先后。<code>comm -12 a b</code>是找”a和b都有”的项，<code>comm -23 a b</code>就是找”a有而b没有”。</p>
+<p>【解答】perl我不会，我就用shell写：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#written by ChrisChan @ 2016-4-21</span><br><span class="line">sort a.txt&gt;a1.txt        #排序，不然会有提示</span><br><span class="line">sort b.txt&gt;b1.txt</span><br><span class="line">comm -23 b1.txt a1.txt &gt;c.txt    #由于是要找b有a没有的,就要b写在前，a写在后</span><br><span class="line">echo $(cat c.txt|wc -l)</span><br></pre></td></tr></table></figure></p>
+<p>其实还有一个更简单的，只用一句话:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -v -x b.txt -f a.txt|wc -l</span><br></pre></td></tr></table></figure></p>
+<p>很多书上不写<code>grep -x -f</code>的意思，这里补一下：<br><code>-f</code>:指定范本文件，其内容含有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每列一个范本样式。<br><code>-x</code>:只显示全列符合的列。</p>
+<p>从一个题就能轻松看出shell的能力级别，用diff死纠缠就是初级，用comm就是中级，而grep就是高级。的确是一个好题。</p>
+<p>【补充】如果考python，求这种类似“你有我没有”的东西，用set里面的差集算法。<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;A=&#123;<span class="number">1</span>，<span class="number">2</span>，<span class="number">3</span>，<span class="number">4</span>&#125;</span><br><span class="line">&gt;&gt;&gt;B=&#123;<span class="number">3</span>，<span class="number">4</span>，<span class="number">5</span>，<span class="number">6</span>&#125;</span><br><span class="line">&gt;&gt;&gt;print(A-B)</span><br><span class="line">set([1,2])    #A有B没有</span><br><span class="line">&gt;&gt;&gt;print(A ^ B)</span><br><span class="line">set([1,2,5,6])  #差集的补集</span><br><span class="line">&gt;&gt;&gt; A&amp;B</span><br><span class="line">&#123;3, 4&#125;    #交集</span><br><span class="line">&gt;&gt;&gt; A|B</span><br><span class="line">&#123;1, 2, 3, 4, 5, 6&#125;    #全集</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -568,11 +540,11 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/16/使用Google-Authenticator给ssh进行登录验证/" title="使用Google Authenticator给ssh进行登录验证">使用Google Authenticator给ssh进行登录验证</a>
+					<a href="http://yoursite.com/2018/01/23/一道传说中是百度面试的shell试题/" title="一道传说中是百度面试的shell试题">一道传说中是百度面试的shell试题</a>
 				</li>
 
 				<li class="post-copyright-date">
-					<strong>发布时间：</strong>2018年1月16日 - 00时01分
+					<strong>发布时间：</strong>2018年1月23日 - 09时01分
 				</li>  
 
 				<li class="post-copyright-license">
@@ -586,9 +558,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+            <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
           
-            <a href="/tags/运维/" rel="tag"><i class="fa fa-tag"></i> 运维</a>
+            <a href="/tags/面试经验/" rel="tag"><i class="fa fa-tag"></i> 面试经验</a>
           
         </div>
       
@@ -614,8 +586,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/12/记录一次处理https监听不正确的过程/" rel="next" title="记录一次处理https监听不正确的过程">
-                <i class="fa fa-chevron-left"></i> 记录一次处理https监听不正确的过程
+              <a href="/2018/01/22/解决Zabbix在web界面中文显示的问题/" rel="next" title="解决Zabbix在web界面中文显示的问题">
+                <i class="fa fa-chevron-left"></i> 解决Zabbix在web界面中文显示的问题
               </a>
             
           </div>
@@ -623,10 +595,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/16/从“No-space-left-on-device”到删除海量文件/" rel="prev" title="从“No space left on device”到删除海量文件">
-                从“No space left on device”到删除海量文件 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -709,17 +677,8 @@ var jiathis_config={
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -892,22 +851,6 @@ show_date_time();
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x524D;&#x51C6;&#x5907;">&#x5B89;&#x88C5;&#x524D;&#x51C6;&#x5907;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x8C37;&#x6B4C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x5668;">&#x5B89;&#x88C5;&#x8C37;&#x6B4C;&#x8EAB;&#x4EFD;&#x9A8C;&#x8BC1;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x8C03;&#x6574;&#x767B;&#x9646;&#x65B9;&#x5F0F;">&#x8C03;&#x6574;&#x767B;&#x9646;&#x65B9;&#x5F0F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x751F;&#x6210;&#x767B;&#x9646;&#x9A8C;&#x8BC1;&#x7801;">&#x751F;&#x6210;&#x767B;&#x9646;&#x9A8C;&#x8BC1;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x642D;&#x914D;&#x624B;&#x673A;&#x7AEF;">&#x642D;&#x914D;&#x624B;&#x673A;&#x7AEF;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x66F4;&#x6539;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;">&#x66F4;&#x6539;&#x5B58;&#x50A8;&#x4F4D;&#x7F6E;</span></span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -1090,7 +1033,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/16/使用Google-Authenticator给ssh进行登录验证/"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/23/一道传说中是百度面试的shell试题/"});
 		
 
 		(function() {

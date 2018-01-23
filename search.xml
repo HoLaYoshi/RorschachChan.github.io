@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[一道传说中是百度面试的shell试题]]></title>
+    <url>%2F2018%2F01%2F23%2F%E4%B8%80%E9%81%93%E4%BC%A0%E8%AF%B4%E4%B8%AD%E6%98%AF%E7%99%BE%E5%BA%A6%E9%9D%A2%E8%AF%95%E7%9A%84shell%E8%AF%95%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[【问题】写脚本实现，可以用shell、perl等。把文件b中有的，但是文件a中没有的所有行，保存为文件c，并统计c的行数。翻译成人话就是，假设有一个文件a是:abcd 文件b是:1234ab 现在要求输出“b有a没有”的行，即1 2 3 4，然后wc -l一下。 【思路】两个文件比较，第一想法就是diff，但是diff无论是-c还是-y会牵扯进大量的&gt; &lt; + -不说，而且diff命令是直白对比，即使字母相同但所在行不同，也会被diff记录。如果再用for in语句然后一项一项对比也不会很清晰的解决这个问题，所以要换个方法。 第二个方法就是comm命令，但是这个命令有一个前提，就是要sort排序，comm比diff高明之处在于它只比较内容而不在意是否同一行，但是要注意对比文件的先后。comm -12 a b是找”a和b都有”的项，comm -23 a b就是找”a有而b没有”。 【解答】perl我不会，我就用shell写： 123456#!/bin/bash#written by ChrisChan @ 2016-4-21sort a.txt&gt;a1.txt #排序，不然会有提示sort b.txt&gt;b1.txtcomm -23 b1.txt a1.txt &gt;c.txt #由于是要找b有a没有的,就要b写在前，a写在后echo $(cat c.txt|wc -l) 其实还有一个更简单的，只用一句话: 1grep -v -x b.txt -f a.txt|wc -l 很多书上不写grep -x -f的意思，这里补一下：-f:指定范本文件，其内容含有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每列一个范本样式。-x:只显示全列符合的列。 从一个题就能轻松看出shell的能力级别，用diff死纠缠就是初级，用comm就是中级，而grep就是高级。的确是一个好题。 【补充】如果考python，求这种类似“你有我没有”的东西，用set里面的差集算法。 12345678910&gt;&gt;&gt;A=&#123;1，2，3，4&#125;&gt;&gt;&gt;B=&#123;3，4，5，6&#125;&gt;&gt;&gt;print(A-B)set([1,2]) #A有B没有&gt;&gt;&gt;print(A ^ B)set([1,2,5,6]) #差集的补集&gt;&gt;&gt; A&amp;B&#123;3, 4&#125; #交集&gt;&gt;&gt; A|B&#123;1, 2, 3, 4, 5, 6&#125; #全集]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>shell</tag>
+        <tag>面试经验</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[解决Zabbix在web界面中文显示的问题]]></title>
     <url>%2F2018%2F01%2F22%2F%E8%A7%A3%E5%86%B3Zabbix%E5%9C%A8web%E7%95%8C%E9%9D%A2%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[注意！这个是解决web界面中文显示乱码的问题，不是zabbix web界面全中文汉化的问题。 2.2版本的处理方法zabbix里给host或者item等项目起中文名字的时候，可能在graph上无法正确显示中文字符，如图： 那么遇到这样的情况其实很简单，就是zabbix的web界面没有安装中文字库的问题，那就对症下药，下载中文字库。 中文字库的下载地址在这里：http://linux.linuxidc.com/2012%E5%B9%B4%E8%B5%84%E6%96%99/11%E6%9C%88/22%E6%97%A5/Zabbix%E4%B8%AD%E6%96%87%E4%B8%8D%E8%83%BD%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/ ，下载“LinuxIDC.com下载-kaiti.tar.gz”。 后把这个文件改一下名，可能很多linux不识别那个中文字“下载”,mv LinuxIDC.com下载-kaiti.tar.gz kaiti.tar.gz，tar -zxvf kaiti.tar.gz 然后就会发现当前路径里生成了一个叫kaiti.ttf，这个就是我们所需要的中文“楷体”字体文件。 来到zabbix的web字体路径，在我的机器里，这个负责字体的文件夹叫/usr/local/nginx/html/zabbix/fonts/。虽然各位安装zabbix的路径各有差别，但是这个文件夹一般都是在nginx or apache的html下，所以很好找的。 在这个fonts文件夹里默认已经有一个叫DejaVuSans.ttf的文件了，于是就把这个kaiti.tff也放到这个文件夹下。 光有字体文件没有用，还需要在配置文件里使用这个字体文件，于是就vim一下同样在nginx or apache/html/zabbix/include的defines.inc.php。把里面所有的DejaVuSans替换成kaiti，.tff这个后缀是不用加的。然后保存退出，重新刷一下界面就看到效果了。 vim的替换语句 :%s/DejaVuSans/kaiti/g 3.x版本的处理方法现在zabbix已经升级到3.x了，上述的方法已经失效了，这里记录一下新的中文配置方法。 首先从windows里，拷贝一个中文字体的文件到zabbix的服务器的/usr/share/zabbix/fonts文件夹里，比如我先择了“楷体”，这个文件叫simkai.ttf，chmod +x simkai.ttf 给予可执行权限。 然后vim /usr/share/zabbix/include/defines.inc.php，修改两处地方，分别是第四十五行，把原来的改成simkai，如图： 还有一处就是第九十三行，也是改成SIMKAI： 保存文件之后，刷新一下zabbix界面即可。]]></content>
@@ -92,8 +104,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>Ansible</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -140,8 +152,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Linux</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -152,8 +164,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Linux</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -334,8 +346,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Linux</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-22T04:42:32.036Z</updated>
+  <updated>2018-01-23T01:45:15.170Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一道传说中是百度面试的shell试题</title>
+    <link href="http://yoursite.com/2018/01/23/%E4%B8%80%E9%81%93%E4%BC%A0%E8%AF%B4%E4%B8%AD%E6%98%AF%E7%99%BE%E5%BA%A6%E9%9D%A2%E8%AF%95%E7%9A%84shell%E8%AF%95%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/01/23/一道传说中是百度面试的shell试题/</id>
+    <published>2018-01-23T01:37:31.000Z</published>
+    <updated>2018-01-23T01:45:15.170Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>【问题】<font color="blue">写脚本实现，可以用shell、perl等。把文件b中有的，但是文件a中没有的所有行，保存为文件c，并统计c的行数。</font><br>翻译成人话就是，假设有一个文件a是:<br>a<br>b<br>c<br>d</p><p>文件b是:<br>1<br>2<br>3<br>4<br>a<br>b</p><p>现在要求输出“b有a没有”的行，即1 2 3 4，然后<code>wc -l</code>一下。</p><p>【思路】两个文件比较，第一想法就是<code>diff</code>，但是<code>diff</code>无论是<code>-c</code>还是<code>-y</code>会牵扯进大量的<code>&gt; &lt; + -</code>不说，而且diff命令是直白对比，即使字母相同但所在行不同，也会被<code>diff</code>记录。如果再用<code>for in</code>语句然后一项一项对比也不会很清晰的解决这个问题，所以要换个方法。</p><p>第二个方法就是<code>comm</code>命令，但是这个命令有一个前提，就是要<code>sort</code>排序，<code>comm</code>比<code>diff</code>高明之处在于它只比较内容而不在意是否同一行，但是要注意对比文件的先后。<code>comm -12 a b</code>是找”a和b都有”的项，<code>comm -23 a b</code>就是找”a有而b没有”。</p><p>【解答】perl我不会，我就用shell写：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#written by ChrisChan @ 2016-4-21</span><br><span class="line">sort a.txt&gt;a1.txt        #排序，不然会有提示</span><br><span class="line">sort b.txt&gt;b1.txt</span><br><span class="line">comm -23 b1.txt a1.txt &gt;c.txt    #由于是要找b有a没有的,就要b写在前，a写在后</span><br><span class="line">echo $(cat c.txt|wc -l)</span><br></pre></td></tr></table></figure></p><p>其实还有一个更简单的，只用一句话:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -v -x b.txt -f a.txt|wc -l</span><br></pre></td></tr></table></figure></p><p>很多书上不写<code>grep -x -f</code>的意思，这里补一下：<br><code>-f</code>:指定范本文件，其内容含有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每列一个范本样式。<br><code>-x</code>:只显示全列符合的列。</p><p>从一个题就能轻松看出shell的能力级别，用diff死纠缠就是初级，用comm就是中级，而grep就是高级。的确是一个好题。</p><p>【补充】如果考python，求这种类似“你有我没有”的东西，用set里面的差集算法。<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;A=&#123;<span class="number">1</span>，<span class="number">2</span>，<span class="number">3</span>，<span class="number">4</span>&#125;</span><br><span class="line">&gt;&gt;&gt;B=&#123;<span class="number">3</span>，<span class="number">4</span>，<span class="number">5</span>，<span class="number">6</span>&#125;</span><br><span class="line">&gt;&gt;&gt;print(A-B)</span><br><span class="line">set([1,2])    #A有B没有</span><br><span class="line">&gt;&gt;&gt;print(A ^ B)</span><br><span class="line">set([1,2,5,6])  #差集的补集</span><br><span class="line">&gt;&gt;&gt; A&amp;B</span><br><span class="line">&#123;3, 4&#125;    #交集</span><br><span class="line">&gt;&gt;&gt; A|B</span><br><span class="line">&#123;1, 2, 3, 4, 5, 6&#125;    #全集</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      comm命令、diff命令和grep命令
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="shell" scheme="http://yoursite.com/tags/shell/"/>
+    
+      <category term="面试经验" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/"/>
+    
+  </entry>
   
   <entry>
     <title>解决Zabbix在web界面中文显示的问题</title>
@@ -202,9 +226,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
       <category term="Ansible" scheme="http://yoursite.com/tags/Ansible/"/>
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
@@ -298,9 +322,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
-    
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
@@ -322,9 +346,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
-    
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
     
   </entry>
   
@@ -471,30 +495,6 @@
       <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
       <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>django新增class的时候数据库格式出错</title>
-    <link href="http://yoursite.com/2018/01/10/django%E6%96%B0%E5%A2%9Eclass%E7%9A%84%E6%97%B6%E5%80%99%E6%95%B0%E6%8D%AE%E5%BA%93%E6%A0%BC%E5%BC%8F%E5%87%BA%E9%94%99/"/>
-    <id>http://yoursite.com/2018/01/10/django新增class的时候数据库格式出错/</id>
-    <published>2018-01-10T07:33:06.000Z</published>
-    <updated>2018-01-22T02:27:44.606Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这几天开发频繁要求查看生产环境zookeeper的配置，于是就想在django里添加一个新的栏，以文本的形式随时更新zookeeper的情况。</p><p>于是我就登陆了django，在<code>model.py</code>里添加一个新的class，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#建立杭州测试ZK配置</span><br><span class="line">class HZfunczk(models.Model):</span><br><span class="line">   hzfunczk_remark = models.CharField(verbose_name=<span class="string">'杭州测试ZK配置'</span>,max_length=<span class="number">50000</span>,blank=<span class="literal">true</span>)</span><br><span class="line">   hzfunczk_signer = models.CharField(verbose_name=<span class="string">'登记人'</span>,max_length=<span class="number">30</span>,<span class="keyword">default</span>=<span class="string">'system'</span>)</span><br><span class="line">   hzfunczk_signtime = models.DateField(auto_now_add=True)</span><br><span class="line"></span><br><span class="line">   def __unicode__(self):</span><br><span class="line">       <span class="keyword">return</span> self.domain_name</span><br></pre></td></tr></table></figure></p><p>然后在django的目录下执行<code>python manage.py makemigrations</code>，这一步没问题，但是在执行<code>python manage.py migrate</code>的时候，就出现了下面的错误：<br><img src="/images/django1.png" alt="akb48" title="数据库格式不对"></p><p>我开始认为是charfield写错了，应该写Textfield，于是更改了一下，但是保存之后，再执行<code>python manage.py migrate</code>还是出错。其实这个错误主要原因就是因为我那个50000设置错了，因为字段hzfunczk_remark定义的长度50000超出了mysql的varchar的最大长度21845（在utf8编码情况下）。于是我就在<code>model.py</code>里把这个长度改成20000，保存之后，还是执行到<code>python manage.py migrate</code>这一步，依旧爆上面的错误。于是我就干脆把这个class先删除掉，没想到都删除光了，还是在<code>make</code>的时候会爆错。</p><p>这就很奇怪了，我已经删掉了为啥还有这样的事儿？于是就干脆进入到数据库去看，由于我现在只知道列名叫hzfunczk_remark，所以我要根据这个列名去查它所在的表，maria反馈如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [abccs]&gt; select TABLE_SCHEMA, TABLE_NAME <span class="keyword">from</span> information_schema.columns where COLUMN_NAME = <span class="string">'hzfunczk_remark'</span>; </span><br><span class="line">Empty set (<span class="number">0.02</span> sec)</span><br></pre></td></tr></table></figure></p><p>好尴尬呀，数据库里压根就没有列名为“hzfunczk_remark”的表。然后由于<code>python manage.py migrate</code>报错，现在无法启动django。怎么办？</p><p>遇到这种状况，就去django里的migrations文件夹，这个文件夹里有很多的以时间命名的py文件，它们记录着数据库的每一步操作，不过这里面的py还没有真正执行到数据库里，我找到当时添加class那个时间段的py文件，里面是这样的：<br><img src="/images/django2.png" alt="akb48" title="记录数据库操作的PY细节"></p><p>先把里面CharField改成TextField，然后把50000改成小于21845的就行了。如果你性子比较烈，那就干脆把这个文件以及之后产生的所有文件都删除掉。重新的去<code>make</code>。</p><p>如果还是实在不行，还有一个万不得已的办法，几乎所有的数据库错误都可以用这个方法解决：<font color="red">将migrations文件夹下的文件除了<strong>init</strong>.py全部删掉，然后将数据库drop掉，重新建数据库。然后make和migrate，就可以使用一个新的数据库</font>（但愿你永远用不到这个方法）。</p>]]></content>
-    
-    <summary type="html">
-    
-      sql添加行的时候可不能为所欲为...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="django" scheme="http://yoursite.com/tags/django/"/>
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
   </entry>
   
