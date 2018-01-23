@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/suipian4.png">
 <meta property="og:image" content="http://yoursite.com/images/suipian5.png">
 <meta property="og:image" content="http://yoursite.com/images/suipian2.png">
-<meta property="og:updated_time" content="2018-01-23T03:30:59.528Z">
+<meta property="og:updated_time" content="2018-01-23T06:47:49.775Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql清除磁盘碎片">
 <meta name="twitter:description" content="InnoDB使用的Clustered Index,索引和数据绑定在一起,重排序是不现实的。所以不支持MyISAM式的OPTIMIZE,而是绑定到了ALTER TABLE命令上面。可以通过执行以下语句来整理碎片,提高索引速度">
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  898
+                  908
                 </span>
               
 
@@ -484,7 +484,7 @@
 <p>再执行了<code>OPTIMIZE TABLE history_device_flow_day;</code>之后，大约9分钟，就会看到“OK”的字样：<br><img src="/images/suipian5.png" alt="paradin"></p>
 <p>估计有的朋友会问，那上面不是明明写了“Table does not support optimize, doing recreate + analyze instead”吗？这个其实无妨，实际上磁盘碎片已经被清除掉了。我们可以再用一次查询磁盘碎片的命令看一下，如图：<br><img src="/images/suipian2.png" alt="paradin"></p>
 <p>的确释放了900多M。</p>
-<p>或者使用<code>ALTER TABLE 表名 ENGINE = Innodb;</code>（只是<code>InnoDB</code>的表可以这么做）来达到清理磁盘碎片的目的，这个命令表面上看什么也不做,实际上是重新整理碎片了。当执行优化操作时,实际执行的是一个空的<code>ALTER</code>命令,但是这个命令也会起到优化的作用,它会重建整个表,删掉未使用的空白空间。</p>
+<p>或者使用<code>ALTER TABLE 表名 ENGINE = Innodb;</code>（只是<code>InnoDB</code>的表可以这么做，而且据说这么做更友好）来达到清理磁盘碎片的目的，这个命令表面上看什么也不做,实际上是重新整理碎片了。当执行优化操作时,实际执行的是一个空的<code>ALTER</code>命令,但是这个命令也会起到优化的作用,它会重建整个表,删掉未使用的空白空间。</p>
 <h2><span id="补充">补充</span></h2><p>为什么会产生磁盘碎片？那是因为某一个表如果经常插入数据和删除数据，必然会产生很多未使用的空白空间，这些空白空间就是不连续的碎片，这样久而久之，这个表就会占用很大空间，但实际上表里面的记录数却很少，这样不但会浪费空间，并且查询速度也更慢。</p>
 <p><font color="red">注意！<code>OPTIMIZE</code>操作会暂时锁住表,而且数据量越大,耗费的时间也越长,它毕竟不是简单查询操作。</font>所以把<code>OPTIMIZE</code>命令放在程序中是不妥当的,不管设置的命中率多低,当访问量增大的时候,整体命中率也会上升,这样肯定会对程序的运行效率造成很大影响。比较好的方式就是做个shell,定期检查mysql中 <code>information_schema</code>.<code>TABLES</code>字段,查看<code>DATA_FREE</code>字段,大于0的话,就表示有碎片，然后启动脚本。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://pengbotao.cn/mysql-suipian-youhua.html" target="_blank" rel="noopener">http://pengbotao.cn/mysql-suipian-youhua.html</a><br><a href="http://irfen.me/mysql-data-fragmentation-appear-and-optimization/" target="_blank" rel="noopener">http://irfen.me/mysql-data-fragmentation-appear-and-optimization/</a></p>
