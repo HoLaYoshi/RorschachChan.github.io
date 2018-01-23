@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-23T01:45:15.170Z</updated>
+  <updated>2018-01-23T03:20:33.444Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>mysql清除磁盘碎片</title>
+    <link href="http://yoursite.com/2018/01/23/mysql%E6%B8%85%E9%99%A4%E7%A3%81%E7%9B%98%E7%A2%8E%E7%89%87/"/>
+    <id>http://yoursite.com/2018/01/23/mysql清除磁盘碎片/</id>
+    <published>2018-01-23T02:44:23.000Z</published>
+    <updated>2018-01-23T03:20:33.444Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="任务背景">任务背景</span></h2><p>接到金山云报警短信，说某数据库的容量已经达到了90%的水位线，于是登陆控制台查看详细情况。</p><p>在控制台首先发现，每一天的磁盘容量的确有所波动，那么就证明开发人员写的“资源回收”模块是在正常运行的，如图：<br><img src="/images/suipian3.png" alt="paradin"></p><p>那么就说明没有什么数据是可以删的，既然删不掉又不想多掏钱扩磁盘容量，只能从“磁盘碎片”下手了。而清理磁盘碎片的命令就是<code>OPTIMIZE</code>。</p><h2><span id="具体操作">具体操作</span></h2><p>首先我先查询一下所有的“磁盘碎片情况”，使用语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select CONCAT(TABLE_SCHEMA,<span class="string">'.'</span>,TABLE_NAME) <span class="keyword">as</span> 数据表名,concat(truncate(sum(DATA_LENGTH+DATA_FREE+INDEX_LENGTH)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">' MB'</span>) <span class="keyword">as</span> total_size, concat(truncate(sum(DATA_LENGTH)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">' MB'</span>) <span class="keyword">as</span> data_size,concat(truncate(sum(DATA_FREE)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">' MB'</span>) <span class="keyword">as</span> data_free, concat(truncate(sum(INDEX_LENGTH)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">'MB'</span>) <span class="keyword">as</span> index_size <span class="keyword">from</span> information_schema.tables group by TABLE_NAME order by data_length desc;</span><br></pre></td></tr></table></figure></p><p>或者使用<code>select table_schema, table_name, data_free, engine from information_schema.tables where table_schema not in (&#39;information_schema&#39;, &#39;mysql&#39;) and data_free &gt; 0;</code>也可以，这个是查询<code>Data_free</code>大于0的所有表。</p><p>然后看到我这个叫<code>history_device_flow_month</code>的表里情况如下：<br><img src="/images/suipian1.png" alt="paradin"></p><p>表里的<code>data_free</code>就是磁盘碎片的量，比如我现在要干掉<code>history_device_flow_day</code>里所有的磁盘碎片，是952MB，于是我先查询一下这个<code>history_device_flow_day</code>的存储引擎，使用语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show table status <span class="keyword">from</span> jsonlinefssrds where name=<span class="string">'history_device_flow_day'</span>;</span><br></pre></td></tr></table></figure></p><p>上面语句里的<code>jsonlinefssrds</code>是对应的数据库，看到的效果如下：<br><img src="/images/suipian4.png" alt="paradin"></p><p>存储引擎是<code>InnoDB</code>，那么就可以启动清除碎片的语句了：<code>OPTIMIZE TABLE 数据表表名;</code>，因为<code>OPTIMIZE TABLE</code>只对<code>MyISAM</code>、<code>BDB</code>和<code>InnoDB</code>表起作用。</p><p>再执行了<code>OPTIMIZE TABLE history_device_flow_day;</code>之后，大约9分钟，就会看到“OK”的字样：<br><img src="/images/suipian5.png" alt="paradin"></p><p>估计有的朋友会问，那上面不是明明写了“Table does not support optimize, doing recreate + analyze instead”吗？这个其实无妨，实际上磁盘碎片已经被清除掉了。我们可以再用一次查询磁盘碎片的命令看一下，如图：<br><img src="/images/suipian2.png" alt="paradin"></p><p>的确释放了900M。</p><h2><span id="补充">补充</span></h2><p>为什么会产生磁盘碎片？那是因为某一个表如果经常插入数据和删除数据，则会产生很多不连续的碎片，这样久而久之，这个表就会占用很大空间，但实际上表里面的记录数却很少，这样不但会浪费空间，并且查询速度也更慢。</p><p><font color="red">注意！<code>OPTIMIZE</code>操作会暂时锁住表,而且数据量越大,耗费的时间也越长,它毕竟不是简单查询操作。</font>所以把<code>OPTIMIZE</code>命令放在程序中是不妥当的,不管设置的命中率多低,当访问量增大的时候,整体命中率也会上升,这样肯定会对程序的运行效率造成很大影响。比较好的方式就是做个shell,定期检查mysql中 <code>information_schema</code>.<code>TABLES</code>字段,查看<code>DATA_FREE</code>字段,大于0的话,就表示有碎片，然后启动脚本。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://pengbotao.cn/mysql-suipian-youhua.html" target="_blank" rel="noopener">http://pengbotao.cn/mysql-suipian-youhua.html</a><br><a href="http://irfen.me/mysql-data-fragmentation-appear-and-optimization/" target="_blank" rel="noopener">http://irfen.me/mysql-data-fragmentation-appear-and-optimization/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;任务背景&quot;&gt;任务背景&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;接到金山云报警短信，说某数据库的容量已经达到了90%的水位线，于是登陆控制台查看详细情况。&lt;/p&gt;
+&lt;
+      
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+  </entry>
   
   <entry>
     <title>一道传说中是百度面试的shell试题</title>
@@ -471,30 +499,6 @@
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
     
       <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>通过nginx配置修改网页cookie属性</title>
-    <link href="http://yoursite.com/2018/01/10/%E9%80%9A%E8%BF%87nginx%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9%E7%BD%91%E9%A1%B5cookie%E5%B1%9E%E6%80%A7/"/>
-    <id>http://yoursite.com/2018/01/10/通过nginx配置修改网页cookie属性/</id>
-    <published>2018-01-10T07:48:08.000Z</published>
-    <updated>2018-01-22T02:33:37.326Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="需求与具体配置">需求与具体配置</span></h2><p>公司的电子商城在十九大等保安检时期被折腾出去，结果这几天又折腾回来了，据说还会是明年大数据研究院的主要开发项目。结果回来没几天被测试中心的人在cookie方面发现了几个问题，如下：</p><ol><li>cookie没有使用http-only；</li><li>cookie没有携带secure属性；</li><li>http头中需要配置“X-Frame-Options：SAMEORIGIN”；</li></ol><p>以上这几点可以通过nginx的配置来轻松实现，具体方法就是在需要更改的网页server的配置里面添加下面几句话。如图：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">add_header                  <span class="built_in">Set</span>-Cookie <span class="string">"HttpOnly"</span>;</span><br><span class="line">add_header                  <span class="built_in">Set</span>-Cookie <span class="string">"Secure"</span>;</span><br><span class="line">add_header                  X-Frame-Options <span class="string">"SAMEORIGIN"</span>;</span><br></pre></td></tr></table></figure></p><p><img src="/images/addheader.png" alt="好车" title="修改配置文件如图"></p><p>然后保存配置文件，<code>nginx -s reload</code>平滑重启即可，通过chrome在目标网页里按下<code>ctrl+shift+c</code>，先选择好<code>network</code>，然后重新刷新一下界面，选择域名，对应域名下点击<code>headers</code>，就会看到<code>cookie</code>的配置情况，如图：<br><img src="/images/seecookie.png" alt="好车" title="cookie生效"></p><h2><span id="扩展内容">扩展内容</span></h2><p>看到配置已经生效。那么这几个配置主要是干什么的呢？其实主要都是防范XSS攻击（跨域脚本攻击）的。</p><p>Cookie的Secure属性，意味着保持Cookie通信只限于加密传输，指示浏览器仅仅在通过安全/加密连接才能使用该Cookie。如果一个Web服务器从一个非安全连接里设置了一个带有secure属性的Cookie，当Cookie被发送到客户端时，它仍然能通过中间人攻击来拦截。 </p><p>Cookie的HttpOnly属性，指示浏览器不要在除HTTP（和HTTPS)请求之外暴露Cookie。一个有HttpOnly属性的Cookie，是不可以通过例如调用JavaScript(引用document.cookie)这种非HTTP方式来访问。因此，也不可能通过跨域脚本（一种非常普通的攻击技术）来偷走这种Cookie。</p><p>X-Frame-Options HTTP 响应头是用来给浏览器指示允许一个页面可否在<code>frame</code>, <code>iframe</code>或者<code>object</code>中展现的标记。网站可以使用此功能，来确保自己网站的内容没有被嵌到别人的网站中去，也从而避免了点击劫持 (clickjacking) 的攻击。它有三个可选择项：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">DENY：表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许；</span><br><span class="line">SAMEORIGIN：表示该页面可以在相同域名页面的 frame 中展示；</span><br><span class="line">ALLOW-FROM uri地址：表示该页面可以在指定来源的 frame 中展示；</span><br></pre></td></tr></table></figure></p><p>如果设置为 DENY，不光在别人的网站 frame 嵌入时会无法加载，在同域名页面中同样会无法加载。另一方面，如果设置为 SAMEORIGIN，那么页面就可以在同域名页面的 frame 中嵌套。</p><p>这里还要额外注意一下！<font color="red">配置了Cookie的HttpOnly属性和Secure属性之后，如果测试中心的人使用的协议是http而不是https的话，会有“浏览器请求后端服务时header不会带上cookie参数”的现象，那是因为“由于secure属性的存在，导致浏览器在与服务器通信时不会使用该cookie”。这个时候就需要把secure=”true”这个配置去掉才可以达到正确测试的目的。</font></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://imququ.com/post/my-nginx-conf-for-security.html" target="_blank" rel="noopener">https://imququ.com/post/my-nginx-conf-for-security.html</a></p>]]></content>
-    
-    <summary type="html">
-    
-      用配置cookie来防御xss攻击
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
