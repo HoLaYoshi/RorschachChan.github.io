@@ -88,23 +88,23 @@
 
 
 
-<meta name="description" content="任务背景接到金山云报警短信，说某数据库的容量已经达到了90%的水位线，于是登陆控制台查看详细情况。 在控制台首先发现，每一天的磁盘容量的确有所波动，那么就证明开发人员写的“资源回收”模块是在正常运行的，如图： 那么就说明没有什么数据是可以删的，既然删不掉又不想多掏钱扩磁盘容量，只能从“磁盘碎片”下手了。而清理磁盘碎片的命令就是OPTIMIZE。 具体操作首先我先查询一下所有的“磁盘碎片情况”，使">
+<meta name="description" content="InnoDB使用的Clustered Index,索引和数据绑定在一起,重排序是不现实的。所以不支持MyISAM式的OPTIMIZE,而是绑定到了ALTER TABLE命令上面。可以通过执行以下语句来整理碎片,提高索引速度">
 <meta name="keywords" content="mysql,数据库">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql清除磁盘碎片">
 <meta property="og:url" content="http://yoursite.com/2018/01/23/mysql清除磁盘碎片/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="任务背景接到金山云报警短信，说某数据库的容量已经达到了90%的水位线，于是登陆控制台查看详细情况。 在控制台首先发现，每一天的磁盘容量的确有所波动，那么就证明开发人员写的“资源回收”模块是在正常运行的，如图： 那么就说明没有什么数据是可以删的，既然删不掉又不想多掏钱扩磁盘容量，只能从“磁盘碎片”下手了。而清理磁盘碎片的命令就是OPTIMIZE。 具体操作首先我先查询一下所有的“磁盘碎片情况”，使">
+<meta property="og:description" content="InnoDB使用的Clustered Index,索引和数据绑定在一起,重排序是不现实的。所以不支持MyISAM式的OPTIMIZE,而是绑定到了ALTER TABLE命令上面。可以通过执行以下语句来整理碎片,提高索引速度">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/suipian3.png">
 <meta property="og:image" content="http://yoursite.com/images/suipian1.png">
 <meta property="og:image" content="http://yoursite.com/images/suipian4.png">
 <meta property="og:image" content="http://yoursite.com/images/suipian5.png">
 <meta property="og:image" content="http://yoursite.com/images/suipian2.png">
-<meta property="og:updated_time" content="2018-01-23T03:25:11.407Z">
+<meta property="og:updated_time" content="2018-01-23T03:27:02.561Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql清除磁盘碎片">
-<meta name="twitter:description" content="任务背景接到金山云报警短信，说某数据库的容量已经达到了90%的水位线，于是登陆控制台查看详细情况。 在控制台首先发现，每一天的磁盘容量的确有所波动，那么就证明开发人员写的“资源回收”模块是在正常运行的，如图： 那么就说明没有什么数据是可以删的，既然删不掉又不想多掏钱扩磁盘容量，只能从“磁盘碎片”下手了。而清理磁盘碎片的命令就是OPTIMIZE。 具体操作首先我先查询一下所有的“磁盘碎片情况”，使">
+<meta name="twitter:description" content="InnoDB使用的Clustered Index,索引和数据绑定在一起,重排序是不现实的。所以不支持MyISAM式的OPTIMIZE,而是绑定到了ALTER TABLE命令上面。可以通过执行以下语句来整理碎片,提高索引速度">
 <meta name="twitter:image" content="http://yoursite.com/images/suipian3.png">
 
 
@@ -453,6 +453,10 @@
             </div>
           
 
+          
+              <div class="post-description">
+                  InnoDB使用的Clustered Index,索引和数据绑定在一起,重排序是不现实的。所以不支持MyISAM式的OPTIMIZE,而是绑定到了ALTER TABLE命令上面。可以通过执行以下语句来整理碎片,提高索引速度
+              </div>
           
 
         </div>
