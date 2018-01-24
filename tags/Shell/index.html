@@ -91,7 +91,7 @@
 <meta name="description" content="生活就是等待戈多">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Chris Chan&#39;s BLOG">
-<meta property="og:url" content="http://yoursite.com/tags/shell/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/Shell/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="生活就是等待戈多">
 <meta property="og:locale" content="zh-CN">
@@ -127,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/shell/"/>
+  <link rel="canonical" href="http://yoursite.com/tags/Shell/"/>
 
 
 
 
 
-  <title>标签: shell | Chris Chan's BLOG</title>
+  <title>标签: Shell | Chris Chan's BLOG</title>
   
 
 
@@ -309,7 +309,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>shell<small>标签</small>
+        <h1>Shell<small>标签</small>
         </h1>
       </div>
 
@@ -321,37 +321,9 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2018/01/23/由一个实例浅析sed用法/" itemprop="url">
+            <a class="post-title-link" href="/2018/01/17/工作所用的模块回滚脚本/" itemprop="url">
               
-                <span itemprop="name">由一个实例浅析sed用法</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-23T22:27:54+08:00"
-              content="2018-01-23" >
-          01-23
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-      
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/01/23/一道传说中是百度面试的shell试题/" itemprop="url">
-              
-                <span itemprop="name">一道传说中是百度面试的shell试题</span>
+                <span itemprop="name">工作所用的模块回滚脚本</span>
               
             </a>
         
@@ -359,9 +331,9 @@
 
       <div class="post-meta">
         <time class="post-time" itemprop="dateCreated"
-              datetime="2018-01-23T09:37:31+08:00"
-              content="2018-01-23" >
-          01-23
+              datetime="2018-01-17T12:25:25+08:00"
+              content="2018-01-17" >
+          01-17
         </time>
       </div>
 
@@ -427,7 +399,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -449,7 +421,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -1211,6 +1183,59 @@ show_date_time();
       if ($('.leancloud_visitors').length == 1) {
         addCount(Counter);
       } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+<div id="hexo-helper-live2d">
+  <canvas id="live2dcanvas" width="150" height="300"></canvas>
+</div>
+<style>
+  #live2dcanvas{
+    position: fixed;
+    width: 150px;
+    height: 300px;
+    opacity:0.7;
+    right: 0px;
+    z-index: 999;
+    pointer-events: none;
+    bottom: -20px;
+  }
+</style>
+<script type="text/javascript" src="/live2d/device.min.js"></script>
+<script type="text/javascript">
+const loadScript = function loadScript(c,b){var a=document.createElement("script");a.type="text/javascript";"undefined"!=typeof b&&(a.readyState?a.onreadystatechange=function(){if("loaded"==a.readyState||"complete"==a.readyState)a.onreadystatechange=null,b()}:a.onload=function(){b()});a.src=c;document.body.appendChild(a)};
+(function(){
+  if((typeof(device) != 'undefined') && (device.mobile())){
+    document.getElementById("live2dcanvas").style.width = '75px';
+    document.getElementById("live2dcanvas").style.height = '150px';
+  }else
+    if (typeof(device) === 'undefined') console.error('Cannot find current-device script.');
+  loadScript("/live2d/script.js", function(){loadlive2d("live2dcanvas", "/live2d/assets/z16.model.json", 0.5);});
+})();
+</script>
+
+</body>
+</html>
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>t-title-link').length > 1) {
         showTime(Counter);
       }
     });
