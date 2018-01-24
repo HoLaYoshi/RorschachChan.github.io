@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Crontab里解决脚本时间重叠的问题]]></title>
+    <url>%2F2018%2F01%2F24%2FCrontab%E9%87%8C%E8%A7%A3%E5%86%B3%E8%84%9A%E6%9C%AC%E6%97%B6%E9%97%B4%E9%87%8D%E5%8F%A0%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[正文Linux里的Crontab是一个好东西，但是它的默认最小执行频率是1分钟，但是我们在实际生产环境里有的时候遇到的脚本执行时间是大于1分钟的，这样就会出现一个很尴尬的情况，就是在1分钟过后，系统进程会出现多个脚本，neck and neck式的在后台运行，比如这样： 从上面的图可以看到，10点36分log499.sh没有执行完毕，10点37又开始了执行了一个新的log499.sh脚本。这种脚本冲突肯定不是我们所希望的，那么如何才能保证后台只是在一段时间里只执行一个脚本呢？ 这个时候我们就要使用文件锁，flock，这种方法要比判断pid高大上的多。 首先假设我们的脚本名字叫abc.sh，这个脚本文件的执行时间是要大于1分钟的，同时我们再设定一个锁文件，位置就叫/tmp/abc.lock,这个文件可以是空的，然后crontab -e，添加一句命令如下： 1* * * * * flock -xn /tmp/abc.lock -c 'sh /路径/abc.sh &gt;&gt; /记录日志的路径 2&gt;&amp;1' 这个时候静候crontab启动abc.sh，通过ps -ef|grep abc，发现在后台始终只有一个abc进程。 但是有的时候会有这样的一个问题，就是abc执行一次之后，在下一次该执行的时候却没有执行，好像crontab失效了一样，对于这样的情况，就需要添加下面的语句到abc.sh末尾： 123rm -rf /tmp/abc.lock #删除掉原有的锁文件sleep n #睡n秒touch /tmp/abc.lock #再新建一个锁文件 这样不断地更新lock锁文件，就会保证crontab每次都会按期执行。 这里要注意一下，里面我加了一句sleep n，这里的n是为了跨分钟的存在，这是为了防止没有走到下一个分钟又会生成一个新的lock锁文件，这样还是会出现重复启动脚本的情况。 这里就涉及到flock的一个原理：在每一次执行任务的时候都会先去尝试取到锁文件，如果取到了锁文件，那么就会下一步，反之就会放弃执行。A任务在运行的时候已经占据了lock文件，那么B任务来了，发现没有lock了，就不会执行任务。 这里我们使用了flock的三个参数： 123-x, --exclusive: 获得一个独占锁-n, --nonblock: 如果没有立即获得锁，直接失败而不是等待-c, --command: 在shell中运行一个单独的命令 当然，flock还是有很多丰富的参数可以供各位使用，大家就各自去google一下吧。 参考资料http://blog.csdn.net/fdipzone/article/details/38284009http://chuansong.me/n/285635151949https://segmentfault.com/q/1010000008039907]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>crontab</tag>
+        <tag>运维技术</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[yum提示Error: rpmdb open failed]]></title>
     <url>%2F2018%2F01%2F24%2Fyum%E6%8F%90%E7%A4%BAError-rpmdb-open-failed%2F</url>
     <content type="text"><![CDATA[今天在一台机器里，使用yum安装的时候，出现了如下的故障： 这种情况就是RPM数据库被破坏了，这个时候就需要我们重建数据库，于是就输入如下的命令： 1234cd / var / lib / rpm /for i in ` ls | grep 'db.' ` ; do mv $i $i .bak ; donerpm -- rebuilddbyum clean all 重新cleanup就正常了。]]></content>
@@ -43,8 +55,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nessus</tag>
         <tag>运维技术</tag>
+        <tag>nessus</tag>
       </tags>
   </entry>
   <entry>
@@ -296,8 +308,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>运维技术</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
