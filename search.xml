@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[阿里云购买、启动、停止ecs等等操作的python脚本]]></title>
+    <url>%2F2018%2F01%2F24%2F%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%AD%E4%B9%B0%E3%80%81%E5%90%AF%E5%8A%A8%E3%80%81%E5%81%9C%E6%AD%A2ecs%E7%9A%84python%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[以下所有脚本都是在python 2.7的环境亲自测试的。阿里云的ak/sk是没有地域概念的，在任何地域都可以使用。 购买服务器以在新加坡购买服务器为例子： 12345678910111213141516171819202122232425262728#!/usr/bin/env python#coding=utf-8#注意！服务器创建完毕之后，状态是关机的。from aliyunsdkcore import clientfrom aliyunsdkcore.acs_exception.exceptions import ClientExceptionfrom aliyunsdkcore.acs_exception.exceptions import ServerExceptionfrom aliyunsdkecs.request.v20140526 import CreateInstanceRequest# 创建 Client 实例clt = client.AcsClient('阿里云ak','阿里云sk','地域名') #各地域的缩写请看：https://help.aliyun.com/document_detail/40654.html?spm=5176.doc25499.2.14.yh6n8c# 创建 request，并设置参数request = CreateInstanceRequest.CreateInstanceRequest()# 设置ECS细节request.set_ImageId("centos_7_04_64_20G_alibase_201701015.vhd") #这里是镜像request.set_InstanceName("xjp-test-001") #这里写名称request.set_SecurityGroupId("sg-23t6c6mjw") #这里是安全组request.set_Password("W2.bi7FX1dyb)T3Wh^,[") #这里是密码，推荐使用https传输，安全request.set_InstanceChargeType("PrePaid") #确定是包年包月request.set_Period("2") #先买两个月的request.set_SystemDiskCategory("cloud_efficiency") #注意，如果是海外的机器的话，要额外说明，海外的机器只有高速云盘和SSD盘# 设置实例规格request.set_InstanceType("ecs.s2.large")# 发起 API 请求并打印返回response = clt.do_action_with_exception(request)print response 服务器停机12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849 #!/usr/bin/env python #coding=utf-8 from aliyunsdkcore import client from aliyunsdkecs.request.v20140526 import StopInstanceRequest list1 = ['要停机的ecs id1','要停机的ecs id2','要停机的ecs id3'...] clt = client.AcsClient('阿里云ak','阿里云sk','地域名') for i in list1: shutdown = StopInstanceRequest.StopInstanceRequest() shutdown.set_InstanceId(i) action = clt.do_action_with_exception(shutdown) print "现在停机:" + i print action## 服务器启动 ## ```js #!/usr/bin/env python #coding=utf-8 from aliyunsdkcore import client from aliyunsdkecs.request.v20140526 import StartInstanceRequest list = ['要停机的ecs id1','要停机的ecs id2','要停机的ecs id3'...] clt = client.AcsClient('阿里云ak','阿里云sk','地域名') for i in list: start = StartInstanceRequest.StartInstanceRequest() start.set_InstanceId(i) action = clt.do_action_with_exception(start) print "现在启动:" + i print action## 查询阿里云镜像 ## ```js #!/usr/bin/env python #coding=utf-8 from aliyunsdkcore import client from aliyunsdkecs.request.v20140526 import DescribeImagesRequest import aliyunsdkcore.request clt = client.AcsClient('阿里云ak','阿里云sk','地域名') request = DescribeImagesRequest.DescribeImagesRequest() request.set_accept_format('json') # 发起请求 response = clt.do_action_with_exception(request) print response 查询服务器规格123456789101112131415#!/usr/bin/env python#coding=utf-8from aliyunsdkcore import clientfrom aliyunsdkecs.request.v20140526 import DescribeInstanceTypesRequestimport aliyunsdkcore.requestclt = client.AcsClient('阿里云ak','阿里云sk','地域名')request = DescribeInstanceTypesRequest.DescribeInstanceTypesRequest()request.set_accept_format('json')# 发起请求response = clt.do_action_with_exception(request)print response 参考资料：https://help.aliyun.com/document_detail/25499.html?spm=5176.doc25501.6.857.wR0MHP]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>阿里云api</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Crontab里解决脚本时间重叠的问题]]></title>
     <url>%2F2018%2F01%2F24%2FCrontab%E9%87%8C%E8%A7%A3%E5%86%B3%E8%84%9A%E6%9C%AC%E6%97%B6%E9%97%B4%E9%87%8D%E5%8F%A0%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[正文Linux里的Crontab是一个好东西，但是它的默认最小执行频率是1分钟，但是我们在实际生产环境里有的时候遇到的脚本执行时间是大于1分钟的，这样就会出现一个很尴尬的情况，就是在1分钟过后，系统进程会出现多个脚本，neck and neck式的在后台运行，比如这样： 从上面的图可以看到，10点36分log499.sh没有执行完毕，10点37又开始了执行了一个新的log499.sh脚本。这种脚本冲突肯定不是我们所希望的，那么如何才能保证后台只是在一段时间里只执行一个脚本呢？ 这个时候我们就要使用文件锁，flock，这种方法要比判断pid高大上的多。 首先假设我们的脚本名字叫abc.sh，这个脚本文件的执行时间是要大于1分钟的，同时我们再设定一个锁文件，位置就叫/tmp/abc.lock,这个文件可以是空的，然后crontab -e，添加一句命令如下： 1* * * * * flock -xn /tmp/abc.lock -c 'sh /路径/abc.sh &gt;&gt; /记录日志的路径 2&gt;&amp;1' 这个时候静候crontab启动abc.sh，通过ps -ef|grep abc，发现在后台始终只有一个abc进程。 但是有的时候会有这样的一个问题，就是abc执行一次之后，在下一次该执行的时候却没有执行，好像crontab失效了一样，对于这样的情况，就需要添加下面的语句到abc.sh末尾： 123rm -rf /tmp/abc.lock #删除掉原有的锁文件sleep n #睡n秒touch /tmp/abc.lock #再新建一个锁文件 这样不断地更新lock锁文件，就会保证crontab每次都会按期执行。 这里要注意一下，里面我加了一句sleep n，这里的n是为了跨分钟的存在，这是为了防止没有走到下一个分钟又会生成一个新的lock锁文件，这样还是会出现重复启动脚本的情况。 这里就涉及到flock的一个原理：在每一次执行任务的时候都会先去尝试取到锁文件，如果取到了锁文件，那么就会下一步，反之就会放弃执行。A任务在运行的时候已经占据了lock文件，那么B任务来了，发现没有lock了，就不会执行任务。 这里我们使用了flock的三个参数： 123-x, --exclusive: 获得一个独占锁-n, --nonblock: 如果没有立即获得锁，直接失败而不是等待-c, --command: 在shell中运行一个单独的命令 当然，flock还是有很多丰富的参数可以供各位使用，大家就各自去google一下吧。 参考资料http://blog.csdn.net/fdipzone/article/details/38284009http://chuansong.me/n/285635151949https://segmentfault.com/q/1010000008039907]]></content>
@@ -8,8 +20,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>运维技术</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
@@ -55,8 +67,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nessus</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -308,8 +320,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nginx</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
