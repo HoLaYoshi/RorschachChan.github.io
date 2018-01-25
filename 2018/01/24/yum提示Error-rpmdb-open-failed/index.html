@@ -97,7 +97,7 @@
 <meta property="og:description" content="解决yum的小故障">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/yum1.png">
-<meta property="og:updated_time" content="2018-01-24T06:12:19.644Z">
+<meta property="og:updated_time" content="2018-01-25T09:35:20.166Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="yum提示Error: rpmdb open failed">
 <meta name="twitter:description" content="解决yum的小故障">
@@ -468,7 +468,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>今天在一台机器里，使用yum安装的时候，出现了如下的故障：<br><img src="/images/yum1.png" alt="akb48"></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>今天在一台机器里，使用<code>yum</code>安装的时候，出现了如下的故障：<br><img src="/images/yum1.png" alt="akb48"></p>
 <p>这种情况就是RPM数据库被破坏了，这个时候就需要我们重建数据库，于是就输入如下的命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd / <span class="keyword">var</span> / lib / rpm /</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">` ls | grep 'db.' `</span> ; <span class="keyword">do</span> mv $i $i .bak ; done</span><br><span class="line">rpm -- rebuilddb</span><br><span class="line">yum clean all</span><br></pre></td></tr></table></figure></p>
 <p>重新<code>cleanup</code>就正常了。</p>
 
@@ -698,7 +698,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-count">41</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -720,7 +720,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">51</span>
+                  <span class="site-state-item-count">53</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -897,7 +897,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共37.7k字</span>
+  <span class="post-count">博客全站共37.9k字</span>
 </div>
         
 
