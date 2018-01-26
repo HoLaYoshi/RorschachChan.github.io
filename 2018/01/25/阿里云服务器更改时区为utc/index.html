@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/time1.png">
 <meta property="og:image" content="http://yoursite.com/images/time2.png">
 <meta property="og:image" content="http://yoursite.com/images/time3.png">
-<meta property="og:updated_time" content="2018-01-25T14:53:17.246Z">
+<meta property="og:updated_time" content="2018-01-26T06:55:58.895Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里云服务器更改时区为utc">
 <meta name="twitter:description" content="为美国人服务的模块就要改成美国时间">
@@ -471,11 +471,11 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>开发提出需求说，某个模块是给洋人使用，于是把服务器里的时间改成UTC时间。我登陆到服务器里使用<code>date</code>查看了一下，发现目前使用的是东八区时间，如图：<br><img src="/images/time1.png" alt="goodbye,Kobe"></p>
-<p>首先先开启UTC，方法就是在<code>/etc/sysconfig/clock</code>的文件里修改这样一处：<code>UTC=true</code>。这样即使机器重启，UTC时间依旧会“BIOS ▶ UTC时区转换 ▶ 系统时间”的顺序正常使用。</p>
-<p>在Centos 6.5里，各时区的时间是在一个叫<code>/usr/share/zoneinfo/</code>的文件夹下，在里面我们发现了我们的目标—-UTC，如图：<br><img src="/images/time2.png" alt="goodbye,Kobe"></p>
+<p>首先先开启UTC，方法就是在<code>/etc/sysconfig/clock</code>的文件里修改这样一处：<code>UTC=true</code>。这样即使机器重启，UTC时间依旧会“<code>BIOS ▶ UTC时区转换 ▶ 系统时间</code>”的顺序正常使用。</p>
+<p>在Centos 6.5里，各时区的时间是在一个叫<code>/usr/share/zoneinfo/</code>的文件夹下，在里面我们发现了我们的目标—-<code>UTC</code>，如图：<br><img src="/images/time2.png" alt="goodbye,Kobe"></p>
 <p>然后就是修改，方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/localtime /etc/localtime-bak</span><br><span class="line">ln -s /usr/share/zoneinfo/UTC /etc/localtime</span><br></pre></td></tr></table></figure></p>
 <p>先把老的时间文件备份，然后把UTC文件做一个软连接过来即可。我们所熟悉的<code>date</code>命令就是<code>/etc/localtime</code>的输出结果。</p>
-<p>现在去<code>date</code>一下，看看结果，果然改成了UTC：<br><img src="/images/time3.png" alt="goodbye,Kobe"></p>
+<p>现在去<code>date</code>一下，看看结果，果然改成了<code>UTC</code>：<br><img src="/images/time3.png" alt="goodbye,Kobe"></p>
 <p>这个时候，如果你服务器里装的是nginx的话，就会发现nginx日志里的时间也会变成<code>UTC</code>而不会再是<code>CST</code>了。</p>
 
       
