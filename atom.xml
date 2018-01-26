@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-26T09:23:12.380Z</updated>
+  <updated>2018-01-26T10:03:53.515Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CentOS 6.x安装php 5.6和redis扩展的全过程</title>
+    <link href="http://yoursite.com/2018/01/26/CentOS-6-x%E5%AE%89%E8%A3%85php-5-6%E5%92%8Credis%E6%89%A9%E5%B1%95%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/01/26/CentOS-6-x安装php-5-6和redis扩展的全过程/</id>
+    <published>2018-01-26T10:00:08.000Z</published>
+    <updated>2018-01-26T10:03:53.515Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装php-56">安装PHP 5.6</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br><span class="line">yum update    整体升级一下yum包</span><br><span class="line">yum install -y epel-release</span><br><span class="line">yum list installed | grep php    检查时候安装过PHP</span><br><span class="line">rpm -Uvh http:<span class="comment">//mirror.webtatic.com/yum/el6/latest.rpm </span></span><br><span class="line">yum -y install php56w.x86_64</span><br><span class="line">yum -y --enablerepo=webtatic install php56w-devel</span><br><span class="line">yum -y install php56w-xml.x86_64 php56w-gd.x86_64 php56w-ldap.x86_64 php56w-mbstring.x86_64 php56w-mcrypt.x86_64 php56w-mysql.x86_64 php56w-pdo.x86_64 php56w-opcache.x86_64</span><br><span class="line">yum -y install php56w-fpm</span><br><span class="line">chkconfig php-fpm on    开机自启动</span><br><span class="line">/etc/init.d/php-fpm start    启动进程</span><br><span class="line">php -v    查看是否安装成功</span><br></pre></td></tr></table></figure></code></pre><p><img src="/images/php1.png" alt=""><br>注1：如果想更换到php5.5或5.4版本, 直接把上面的56w换成55w或者54w就可以了；<br>注2：php-opcache和php-xcache会有效的提高php执行速度；</p><p>装php的扩展其实不是很麻烦，主要的步骤如下：<br>1）在扩展模块的客户端文件夹里面使用phpize，这样会生成一个configure文件；<br>2）执行configure文件，后面要加上php的路径；<br>3）将“模块.so”文件名添加到php.ini文件里，重启php-fpm进程；<br>4）通过so文件去调用扩展模块的客户端，实现连接对应的模块；</p><h2><span id="安装redis扩展">安装redis扩展</span></h2><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">redis-cli -v    检查是否安装了redis</span><br><span class="line">redis-server -v</span><br><span class="line">wget http:<span class="comment">//pecl.php.net/get/redis-2.2.8.tgz </span></span><br><span class="line">tar -zxvf redis<span class="number">-2.2</span><span class="number">.8</span>.tgz</span><br><span class="line">cd redis<span class="number">-2.2</span><span class="number">.8</span>    </span><br><span class="line">phpize    一个专门挂接php扩展的工具，该命令一定要使用在php的模块文件夹主目录下，这里报错Cannot find config.m4。因为phpize要根据模块生成模块的配置文件放在模块文件夹下面</span><br></pre></td></tr></table></figure></code></pre><p><img src="/images/php2.png" alt=""><br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="keyword">with</span>-php-config=<span class="regexp">/usr/</span>bin/php-config</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">make test</span><br><span class="line">vim /etc/php.ini      在php.ini里添加一句“extension=<span class="string">"redis.so"</span>”</span><br><span class="line">service php-fpm restart</span><br></pre></td></tr></table></figure></p><p><img src="/images/php3.png" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      《世界第一等》---伍佰         听闽南语歌，就有一个感觉：我虽卑微平凡，但是不甘平庸，最穷不过要饭，不死总会出头！
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="centos" scheme="http://yoursite.com/tags/centos/"/>
+    
+      <category term="php" scheme="http://yoursite.com/tags/php/"/>
+    
+      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
+    
+  </entry>
   
   <entry>
     <title>一个连接两个文件的python脚本</title>
@@ -80,9 +108,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
-    
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
   </entry>
   
@@ -465,30 +493,6 @@
       <category term="Ansible" scheme="http://yoursite.com/tags/Ansible/"/>
     
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Zabbix用户密码忘记怎么办</title>
-    <link href="http://yoursite.com/2018/01/17/Zabbix%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E5%BF%98%E8%AE%B0%E6%80%8E%E4%B9%88%E5%8A%9E/"/>
-    <id>http://yoursite.com/2018/01/17/Zabbix用户密码忘记怎么办/</id>
-    <published>2018-01-17T03:12:57.000Z</published>
-    <updated>2018-01-22T02:29:28.186Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>zabbix的超级用户也是人，人就难免会忘记密码（或者清除了当前浏览器的缓存），忘记密码不要怕，因为zabbix所有的用户数据都是保存在server机器上的mysql里，只要打开<code>zabbix_server.conf</code>，就会查得到mysql的登录账号密码以及zabbix对应的数据库。（这里多说一句，zabbix自带的guest基本就是一个废物，forget it~）</p><p>在zabbix_server机器上输入mysql的账号密码来到mysql里，<code>USE zabbix</code>，然后<code>SELECT * FROM users</code>,就会看到笔者的画面。<br><img src="/images/zabbix_user1.png" alt="akb48"></p><p>这个时候就可以使用数据库的update命令去更改密码，比如说新的密码是“woshitiancai”，就可以写<code>update  users set passwd=md5(&quot;woshitiancai&quot;) where userid=&#39;1&#39;;</code><br>然后就可以用woshitiancai来登陆啦~</p><p>但是！！！你以为这就结束了吗？nononono！！！</p><p>很多人即使更改了密码还是登陆不上去，很简单，那就是你连用户名都忘记了！或者是用户名你记得但是你手贱在zabbix的administration里的users对原来的设定增加了新东西，而且这些东西还特么的是中文！！！于是就像我上面图那样出现了???的字样。</p><p>那些？？？很重要吗？当然了！！！因为那些才是zabbix的登录用户名！！！看见了吗，zabbix使用蛋疼的alias作为真正的登录名而不是用name or surname，这真是一个蛋疼的事儿！</p><p>那么剩下的问题很简单了，就是把???改变成中文，使用语句<code>set names utf8;</code> 然后界面就成了这样：<br><img src="/images/zabbix_user2.png" alt="akb48"></p><p>这次再使用“主管理员”搭配新的密码就可以华丽的登录了！~~我他妈当时都差点要把这个user表格删掉然后重拽一个表格进来，但是终于还是被我识破了，啊哈哈哈哈，我真是个天才！！！</p>]]></content>
-    
-    <summary type="html">
-    
-      忘记密码不要怕!
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
     
   </entry>
   

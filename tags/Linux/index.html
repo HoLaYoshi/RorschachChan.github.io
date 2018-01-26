@@ -321,6 +321,34 @@
 
       <h2 class="post-title">
         
+            <a class="post-title-link" href="/2018/01/26/CentOS-6-x安装php-5-6和redis扩展的全过程/" itemprop="url">
+              
+                <span itemprop="name">CentOS 6.x安装php 5.6和redis扩展的全过程</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-01-26T18:00:08+08:00"
+              content="2018-01-26" >
+          01-26
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
             <a class="post-title-link" href="/2018/01/25/阿里云服务器更改时区为utc/" itemprop="url">
               
                 <span itemprop="name">阿里云服务器更改时区为utc</span>
@@ -399,7 +427,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -421,7 +449,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">54</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -598,7 +626,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共41.5k字</span>
+  <span class="post-count">博客全站共41.9k字</span>
 </div>
         
 
@@ -1235,27 +1263,7 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
 </body>
 </html>
 <!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/src/love.js"></script>og("Error: " + error.code + " " + error.message);
-        });
-    }
-
-    function addCount(Counter) {
-      var $visitors = $(".leancloud_visitors");
-      var url = $visitors.attr('id').trim();
-      var title = $visitors.attr('data-flag-title').trim();
-      var query = new AV.Query(Counter);
-
-      query.equalTo("url", url);
-      query.find({
-        success: function(results) {
-          if (results.length > 0) {
-            var counter = results[0];
-            counter.fetchWhenSave(true);
-            counter.increment("time");
-            counter.save(null, {
-              success: function(counter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+<script type="text/javascript" src="/js/src/love.js"></script>cloud-visitors-count').text(counter.get('time'));
               },
               error: function(counter, error) {
                 console.log('Failed to save Visitor num, with error message: ' + error.message);
