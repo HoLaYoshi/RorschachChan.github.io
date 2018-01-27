@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Ansible部署模块的时候出现中文乱码的问题]]></title>
+    <url>%2F2018%2F01%2F27%2FAnsible%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9D%97%E7%9A%84%E6%97%B6%E5%80%99%E5%87%BA%E7%8E%B0%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
+    <content type="text"><![CDATA[今天在部署服务的时候遇到了一个很罕见的现象，线上有15台服务器是手机推送消息的服务，新来的小运维使用ansible批量跑部署脚本的时候，发现手机端接收到来的消息全是乱码，然后登陆到服务器，查看日志发现，日志里面就是乱码，如图： 由于这个问题用户是有感知的，所以属于“事故”级别了，于是小boss大怒，叫运维赶快回滚，然后让开发赶紧重新检查代码，然后开骂测试都是吃屎的么这么大的一个问题都看不出来真是一群猪伤不起啊。 开发看了半天自己的代码，发现没有任何问题，战战兢兢跑来跟新来的小运维窃窃私语，结果我发现这个模块用手动单独部署，日志却是正常的，中文显示十分OK。 这一下开发就腰杆硬了，说这不是我的锅啊我是无辜的啊老子天天辛苦加班没有功劳也有苦劳没有苦劳也有疲劳老子的代码经得住考验这一切就是部署的问题。 于是我就查看了一下ansible的配置文件，vim /etc/ansible/ansible.cfg，发现了问题所在： 这里最后三行需要改成下面的样子，这样就解决了乱码问题。 1234#module_lang = C#module_set_locale = Falsemodule_lang = zh_CN.UTF-8module_set_locale = True]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>ansible</tag>
+        <tag>自动化部署</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[CentOS 6.x安装php 5.6和redis扩展的全过程]]></title>
     <url>%2F2018%2F01%2F26%2FCentOS-6-x%E5%AE%89%E8%A3%85php-5-6%E5%92%8Credis%E6%89%A9%E5%B1%95%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B%2F</url>
     <content type="text"><![CDATA[安装PHP 5.6123456789101112yum clean allyum update 整体升级一下yum包yum install -y epel-releaseyum list installed | grep php 检查时候安装过PHPrpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm yum -y install php56w.x86_64yum -y --enablerepo=webtatic install php56w-develyum -y install php56w-xml.x86_64 php56w-gd.x86_64 php56w-ldap.x86_64 php56w-mbstring.x86_64 php56w-mcrypt.x86_64 php56w-mysql.x86_64 php56w-pdo.x86_64 php56w-opcache.x86_64yum -y install php56w-fpmchkconfig php-fpm on 开机自启动/etc/init.d/php-fpm start 启动进程php -v 查看是否安装成功 注1：如果想更换到php5.5或5.4版本, 直接把上面的56w换成55w或者54w就可以了；注2：php-opcache和php-xcache会有效的提高php执行速度； 装php的扩展其实不是很麻烦，主要的步骤如下：1）在扩展模块的客户端文件夹里面使用phpize，这样会生成一个configure文件；2）执行configure文件，后面要加上php的路径；3）将“模块.so”文件名添加到php.ini文件里，重启php-fpm进程；4）通过so文件去调用扩展模块的客户端，实现连接对应的模块； 安装redis扩展123456redis-cli -v 检查是否安装了redisredis-server -vwget http://pecl.php.net/get/redis-2.2.8.tgz tar -zxvf redis-2.2.8.tgzcd redis-2.2.8 phpize 一个专门挂接php扩展的工具，该命令一定要使用在php的模块文件夹主目录下，这里报错Cannot find config.m4。因为phpize要根据模块生成模块的配置文件放在模块文件夹下面 12345./configure --with-php-config=/usr/bin/php-configmake &amp;&amp; make installmake testvim /etc/php.ini 在php.ini里添加一句“extension="redis.so"”service php-fpm restart]]></content>
@@ -236,8 +248,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Ansible</tag>
         <tag>Linux</tag>
+        <tag>Ansible</tag>
       </tags>
   </entry>
   <entry>
@@ -284,8 +296,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -296,8 +308,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -478,8 +490,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -502,8 +514,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>其他软件</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>

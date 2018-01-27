@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-26T10:03:53.515Z</updated>
+  <updated>2018-01-27T06:02:16.658Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ansible部署模块的时候出现中文乱码的问题</title>
+    <link href="http://yoursite.com/2018/01/27/Ansible%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9D%97%E7%9A%84%E6%97%B6%E5%80%99%E5%87%BA%E7%8E%B0%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/01/27/Ansible部署模块的时候出现中文乱码的问题/</id>
+    <published>2018-01-27T05:58:49.000Z</published>
+    <updated>2018-01-27T06:02:16.658Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天在部署服务的时候遇到了一个很罕见的现象，线上有15台服务器是手机推送消息的服务，新来的小运维使用ansible批量跑部署脚本的时候，发现手机端接收到来的消息全是乱码，然后登陆到服务器，查看日志发现，日志里面就是乱码，如图：<br><img src="/images/luanma1.png" alt=""></p><p>由于这个问题用户是有感知的，所以属于“事故”级别了，于是小boss大怒，叫运维赶快回滚，然后让开发赶紧重新检查代码，然后开骂测试都是吃屎的么这么大的一个问题都看不出来真是一群猪伤不起啊。</p><p>开发看了半天自己的代码，发现没有任何问题，战战兢兢跑来跟新来的小运维窃窃私语，结果我发现这个模块用手动单独部署，日志却是正常的，中文显示十分OK。<br><img src="/images/luanma2.png" alt=""></p><p>这一下开发就腰杆硬了，说这不是我的锅啊我是无辜的啊老子天天辛苦加班没有功劳也有苦劳没有苦劳也有疲劳老子的代码经得住考验这一切就是部署的问题。</p><p>于是我就查看了一下ansible的配置文件，<code>vim /etc/ansible/ansible.cfg</code>，发现了问题所在：<br><img src="/images/luanma3.png" alt=""></p><p>这里最后三行需要改成下面的样子，这样就解决了乱码问题。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#module_lang    = C</span><br><span class="line">#module_set_locale = False</span><br><span class="line">module_lang    = zh_CN.UTF<span class="number">-8</span></span><br><span class="line">module_set_locale = True</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      这个情况纯属意外...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="ansible" scheme="http://yoursite.com/tags/ansible/"/>
+    
+      <category term="自动化部署" scheme="http://yoursite.com/tags/%E8%87%AA%E5%8A%A8%E5%8C%96%E9%83%A8%E7%BD%B2/"/>
+    
+  </entry>
   
   <entry>
     <title>CentOS 6.x安装php 5.6和redis扩展的全过程</title>
@@ -469,30 +493,6 @@
       <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
       <category term="Shell" scheme="http://yoursite.com/tags/Shell/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ansible的几个基本语句</title>
-    <link href="http://yoursite.com/2018/01/17/Ansible%E7%9A%84%E5%87%A0%E4%B8%AA%E5%9F%BA%E6%9C%AC%E8%AF%AD%E5%8F%A5/"/>
-    <id>http://yoursite.com/2018/01/17/Ansible的几个基本语句/</id>
-    <published>2018-01-17T03:43:52.000Z</published>
-    <updated>2018-01-22T02:27:27.780Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="开篇的废话">开篇的废话</span></h2><p>批处理工具我最早接触的是pssh，因为它实在很简单粗暴，但是它由于太简单粗暴了，应付十台二十台机器还OK，应付五十台一百台服务器就心有余力不足了（而且xshell右键有一个“发送键入到所有会话”的功能，与pssh效果几乎一样），而且我还不太喜欢puppet，总觉得那玩意跟我八字不合，于是乎，在新头头的推荐下，我把目光放在了Ansible。</p><p>Ansible的安装很简单，在Redhat环境下直接<code>yum install -y ansible</code>就行。Redhat已经将Ansible公司收购了，所以在安装上提供了不小的便利。</p><p>Ansible在安装完毕之后，会在<code>/etc/ansible/</code>目录下看见一个叫hosts的文件，这里是所有你要控制的服务器的ip们，可以排列写，比如：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.122</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.133</span></span><br><span class="line"><span class="number">192.168</span><span class="number">.1</span><span class="number">.144</span></span><br></pre></td></tr></table></figure></p><p>也可以分组写，比如：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[aliyun]</span><br><span class="line"><span class="number">10.22</span><span class="number">.33</span><span class="number">.44</span></span><br><span class="line"><span class="number">10.22</span><span class="number">.33</span><span class="number">.45</span></span><br><span class="line">[jinshanyun]</span><br><span class="line"><span class="number">121.23</span><span class="number">.45</span><span class="number">.66</span></span><br><span class="line"><span class="number">121.23</span><span class="number">.45</span><span class="number">.67</span></span><br><span class="line"><span class="number">121.23</span><span class="number">.45</span><span class="number">.68</span>:<span class="number">2222</span>  （这个不是使用ssh默认的<span class="number">22</span>端口，就需要特别指出）</span><br></pre></td></tr></table></figure></p><p>默认情况下，Ansible会把命令全用于这个hosts文件，比如<br>    ansible all -m ping  -u ashin<br>这句话意思是整个hosts里的机器以ashin账户启动，而且都要ping 一下当前本机。</p><h2><span id="具体语句">具体语句</span></h2><p>怎么连接主机与要控制的远程机器请按之前写的“<a href="http://chenx1242.blog.51cto.com/10430133/1763978”一文进行操作，这里先说几个命令语句：" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1763978”一文进行操作，这里先说几个命令语句：</a></p><p>1)<code>ansible all -m shell -a &quot;/bin/echo hello&quot;</code><br>对hosts里所有的机器一起使用”输出hello这个文字”。-m shell可以忽略不写，但是不是shell而是其他的模块就要写出来；</p><p>2)<code>ansible aliyun -m copy -a &quot;src=~/projects/tests/t.py dest=~&quot;</code><br>把hosts里aliyun组的机器的/projects/tests/t.py复制到~目录下；<br>[注意！]copy模块不支持变量路径，也就是说如果目标服务器的部署路径不同，copy不会很智能的去访问.bash_profile来得到用户的自定义变量，写变量替换路径是不会达到目的的。</p><p>3)<code>ansible jinshanyun[0:9] -i -m file -a &quot;dest=~/tests state=absent&quot;</code><br>把hosts里jinshanyun组中从0~9这十台机器的/tests文件夹删除掉，absent是“缺席，不在”的意思；</p><p>4)<code>ansible 192.168.1.133 -m ping</code><br>这句话=<code>ping 192.168.1.133</code>；</p><p>5)<code>ansible v1 -m service -a &quot;name=mysql state=started&quot; -u ashin --sudo -K</code><br>以用户名为ashin登陆hosts里所有v1组的机器，然后检查mysql是否是started状态，若不是就start，同时要输入root的密码作为确认；</p><p>6)<code>ansible 10.11.22.* -m user -a &quot;name=foo password=foo&quot; --sudo -K</code><br>hosts文件里所有10.11.22开头的机器，都要添加一个新的用户名foo，同时密码是foo，并且输入root密码确认身份；</p><p>7)<code>ansible v1:!v2 -m apt -a &quot;name=git state=latest&quot;</code><br>检查所有属于v1组同时还不属于v2组的机器里的git文件是否是最新版本；</p><p>8)<code>ansible webservers:&amp;dbservers -a &quot;/sbin/reboot&quot; -f 10 --sudo -K</code><br>重新启动既是webservers组又是dbservers组的所有机器；</p><p>9)<code>ansible webservers -m raw -a &#39;yum -y install python-simplejson&#39;</code><br>用ansible去链接低版本的centos时，就乎出现“ansible requires a json module, none found! ”的错误，需要远程机安装samplejson包。raw模块是靠底层ssh的通讯，不依靠python的模块，所以如果碰到低版本的系统，如果command和shell模块无法使用，可以先用这条命令安装完需要的包。</p><p>10)<code>ansible all -m synchronize -a &quot;src=/chenshuo/1.sh dest=/chenshuo delete=yes&quot;</code><br>synchronize原意是“同步”，而这个模块是分发模块，这句话的意思是把控制端的/chenshuo/1.sh分发给host文件里的所有ip服务器，delete=yes意思是以控制端服务器的文件为准。</p><p>11)<code>ansible 10.168.194.89 -m synchronize -a &quot;mode=pull src=/chenshuo/nba.txt dest=/chenshuo/a.txt&quot;</code><br>将10.168.194.89这台服务器上的/chenshuo/nba.txt拉到控制服务器的/chenshuo文件夹下，顺便改名叫a.txt。</p><p>12)<code>ansible all -m get_url -a &quot;url=https://pypi.python.org/packages/56/2b/9c9c113fb88082950067a42cc99e3c61f1df72035f89bb0bdf0a60308ca0/pexpect-4.1.0.tar.gz#md5=562a1a21f2a60b36dfd5d906dbf0943e dest=/chenshuo&quot;</code><br>把那一大串网址的下载连接下载到host文件里的所有ip的/chenshuo文件夹下。</p><p>13)<code>ansible 10.117.14.37 -m script -a &quot;/chenshuo/free.sh&quot;</code><br>在10.117.14.37上执行操作端的free.sh，注意操作端必须要有free.sh这个脚本，而10.117.14.37这台机器上并不一定要有。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.csdn.net/iloveyin/article/details/46982023" target="_blank" rel="noopener">http://blog.csdn.net/iloveyin/article/details/46982023</a></p>]]></content>
-    
-    <summary type="html">
-    
-      Ansible的基础用法
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="Ansible" scheme="http://yoursite.com/tags/Ansible/"/>
-    
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
     
   </entry>
   
