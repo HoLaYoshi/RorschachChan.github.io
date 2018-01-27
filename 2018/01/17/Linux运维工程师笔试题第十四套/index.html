@@ -97,7 +97,7 @@
 <meta property="og:description" content="大牛之路，如此辛苦">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/cdnyuanli.png">
-<meta property="og:updated_time" content="2018-01-23T14:16:45.049Z">
+<meta property="og:updated_time" content="2018-01-27T08:59:30.548Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux运维工程师笔试题第十四套">
 <meta name="twitter:description" content="大牛之路，如此辛苦">
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,723
+                  1,936
                 </span>
               
 
@@ -443,7 +443,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  7
                 </span>
               
             </div>
@@ -476,7 +476,8 @@
 <p>2）<font color="blue">解释一下cookie和session的区别</font><br>[我的答案]Session是在服务端保存的一个数据结构，用来跟踪用户的状态，这个数据可以保存在集群、数据库、文件中，session是一个抽象概念，开发者为了实现中断和继续等操作，抽象出来的一个“会话”，接上面那道题，session这个东西能不用就不要用，因为它是有状态的，服务器要维护一个有状态的东西是很消耗资源的（比如内存和空间），我估计，天猫京东那规模的电商，肯定有一个专门的session集群。</p>
 <p>Cookie是客户端保存用户信息的一种机制，用来记录用户的一些信息，也是实现Session的一种方式，cookie是一个实际存在的东西，它是在http协议中定义在header中的字段。</p>
 <p>session的常见实现要借助cookie来发送sessionID给客户端，如果浏览器禁用cookie，那么就要通过重写url来获取sessionid，各位可以联想一下电商的购物车，购物车可以实现在一个网站的不同页面把东西都放进一个购物车，这就是session的重点应用。现在也很流行一个token，其实token和sessionid是一个意思。</p>
-<p>3）<font color="blue">多进程和多线程的区别，自己喜欢用哪个？为什么？</font></p>
+<p>3）<font color="blue">多进程和多线程的区别，自己喜欢用哪个？为什么？</font><br>[我的答案]多进程：服务器每当接收到一个客户端信息的时候，从主进程里生成一个<font color="red">子进程</font>与客户端建立连接开始交互，每一个子进程之间互相独立不受干扰，完成任务就收回资源，内存等也会被回收；<br>多线程：服务器每当接收到一个客户端信息的时候，从主进程里生成一个<font color="red">线程</font>与客户端建立连接开始交互,多个线程位于同一个进程内，可以互相访问同样的内存等资源，彼此之间会有影响；<br>我个人更喜欢多进程，因为简单粗暴！</p>
+<p><ps>关于多进程、多线程、同步、异步的原理，可以去看一下《nginx高性能WEB服务器详解》，第54页到56页的内容。</ps></p>
 <p>4) <font color="blue">lvs脑裂如何解决，为什么会产生双master？双master时VIP通不通?</font><br>[我的答案]</p>
 <p>额外补充一句，<font color="red">要排除脑裂问题，第一步是检查iptables，重要的话不说三遍也重要！</font></p>
 <p>5) <font color="blue">为什么TCP比UDP的信息更加可靠？</font><br>tcp滑动窗口，详细说说原理，窗口的大小如何确定。</p>
@@ -939,7 +940,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共42.5k字</span>
+  <span class="post-count">博客全站共42.7k字</span>
 </div>
         
 
