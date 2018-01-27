@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[SFTP不能连接服务器怎么办？]]></title>
     <url>%2F2018%2F01%2F27%2FSFTP%E4%B8%8D%E8%83%BD%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%2F</url>
-    <content type="text"><![CDATA[今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况： 登陆到这个跳板机里，使用tail /var/log/secure，看到了拒绝的具体信息，如下： 这个时候，我就需要locate sftp-server，用locate定位一下sftp文件，但是发现服务器竟然回答我“-bash: locate: command not found”。 于是就yum -y install mlocate，安装mlocate之后执行updatedb，需要等待一小会，然后再次执行locate sftp-server，就可以得到sftp-server的文件路径了，如下图： 打开sshd的配置文件，vi /etc/ssh/sshd_config，把Subsystem这一行前面的#去掉： 然后重启启动ssh服务，语句是/etc/init.d/sshd reload，重新连接一下，发现就恢复正常了。]]></content>
+    <content type="text"><![CDATA[今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况： 登陆到这个跳板机里，使用tail /var/log/secure，看到了拒绝的具体信息，如下： 这个时候，我就需要locate sftp-server，用locate定位一下sftp文件，但是发现服务器竟然回答我-bash: locate: command not found。 于是就yum -y install mlocate，安装mlocate之后执行updatedb，需要等待一小会，然后再次执行locate sftp-server，就可以得到sftp-server的文件路径了，如下图： 打开sshd的配置文件，vi /etc/ssh/sshd_config，把Subsystem这一行前面的#去掉： 然后重启启动ssh服务，语句是/etc/init.d/sshd reload，重新连接一下，发现就恢复正常了。]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>

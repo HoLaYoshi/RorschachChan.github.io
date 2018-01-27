@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-27T08:23:37.322Z</updated>
+  <updated>2018-01-27T08:26:24.750Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2018/01/27/SFTP%E4%B8%8D%E8%83%BD%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F/"/>
     <id>http://yoursite.com/2018/01/27/SFTP不能连接服务器怎么办？/</id>
     <published>2018-01-27T08:19:55.000Z</published>
-    <updated>2018-01-27T08:23:37.322Z</updated>
+    <updated>2018-01-27T08:26:24.750Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况：<br><img src="/images/sftp1.png" alt=""></p><p>登陆到这个跳板机里，使用<code>tail /var/log/secure</code>，看到了拒绝的具体信息，如下：<br><img src="/images/sftp2.png" alt=""></p><p>这个时候，我就需要<code>locate sftp-server</code>，用locate定位一下<code>sftp</code>文件，但是发现服务器竟然回答我“<code>-bash: locate: command not found</code>”。</p><p>于是就<code>yum -y install mlocate</code>，安装mlocate之后执行<code>updatedb</code>，需要等待一小会，然后再次执行<code>locate sftp-server</code>，就可以得到sftp-server的文件路径了，如下图：<br><img src="/images/sftp3.png" alt=""></p><p>打开sshd的配置文件，<code>vi /etc/ssh/sshd_config</code>，把<code>Subsystem</code>这一行前面的<code>#</code>去掉：<br><img src="/images/sftp4.png" alt=""></p><p>然后重启启动ssh服务，语句是<code>/etc/init.d/sshd reload</code>，重新连接一下，发现就恢复正常了。</p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况：<br><img src="/images/sftp1.png" alt=""></p><p>登陆到这个跳板机里，使用<code>tail /var/log/secure</code>，看到了拒绝的具体信息，如下：<br><img src="/images/sftp2.png" alt=""></p><p>这个时候，我就需要<code>locate sftp-server</code>，用locate定位一下<code>sftp</code>文件，但是发现服务器竟然回答我<code>-bash: locate: command not found</code>。</p><p>于是就<code>yum -y install mlocate</code>，安装mlocate之后执行<code>updatedb</code>，需要等待一小会，然后再次执行<code>locate sftp-server</code>，就可以得到sftp-server的文件路径了，如下图：<br><img src="/images/sftp3.png" alt=""></p><p>打开sshd的配置文件，<code>vi /etc/ssh/sshd_config</code>，把<code>Subsystem</code>这一行前面的<code>#</code>去掉：<br><img src="/images/sftp4.png" alt=""></p><p>然后重启启动ssh服务，语句是<code>/etc/init.d/sshd reload</code>，重新连接一下，发现就恢复正常了。</p>]]></content>
     
     <summary type="html">
     
