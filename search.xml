@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[SFTP不能连接服务器怎么办？]]></title>
+    <url>%2F2018%2F01%2F27%2FSFTP%E4%B8%8D%E8%83%BD%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%2F</url>
+    <content type="text"><![CDATA[今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况： 登陆到这个跳板机里，使用tail /var/log/secure，看到了拒绝的具体信息，如下： 这个时候，我就需要locate sftp-server，用locate定位一下sftp文件，但是发现服务器竟然回答我“-bash: locate: command not found”。 于是就yum -y install mlocate，安装mlocate之后执行updatedb，需要等待一小会，然后再次执行locate sftp-server，就可以得到sftp-server的文件路径了，如下图： 打开sshd的配置文件，vi /etc/ssh/sshd_config，把Subsystem这一行前面的#去掉： 然后重启启动ssh服务，语句是/etc/init.d/sshd reload，重新连接一下，发现就恢复正常了。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>sftp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Ansible部署模块的时候出现中文乱码的问题]]></title>
     <url>%2F2018%2F01%2F27%2FAnsible%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9D%97%E7%9A%84%E6%97%B6%E5%80%99%E5%87%BA%E7%8E%B0%E4%B8%AD%E6%96%87%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%2F</url>
     <content type="text"><![CDATA[今天在部署服务的时候遇到了一个很罕见的现象，线上有15台服务器是手机推送消息的服务，新来的小运维使用ansible批量跑部署脚本的时候，发现手机端接收到来的消息全是乱码，然后登陆到服务器，查看日志发现，日志里面就是乱码，如图： 由于这个问题用户是有感知的，所以属于“事故”级别了，于是小boss大怒，叫运维赶快回滚，然后让开发赶紧重新检查代码，然后开骂测试都是吃屎的么这么大的一个问题都看不出来真是一群猪伤不起啊。 开发看了半天自己的代码，发现没有任何问题，战战兢兢跑来跟新来的小运维窃窃私语，结果我发现这个模块用手动单独部署，日志却是正常的，中文显示十分OK。 这一下开发就腰杆硬了，说这不是我的锅啊我是无辜的啊老子天天辛苦加班没有功劳也有苦劳没有苦劳也有疲劳老子的代码经得住考验这一切就是部署的问题。 于是我就查看了一下ansible的配置文件，vim /etc/ansible/ansible.cfg，发现了问题所在： 这里最后三行需要改成下面的样子，这样就解决了乱码问题。 1234#module_lang = C#module_set_locale = Falsemodule_lang = zh_CN.UTF-8module_set_locale = True]]></content>
@@ -248,8 +260,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>Ansible</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -260,8 +272,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -296,8 +308,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Linux</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -308,8 +320,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Linux</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -393,8 +405,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>django</tag>
         <tag>python</tag>
+        <tag>django</tag>
       </tags>
   </entry>
   <entry>
@@ -417,8 +429,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>zabbix</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -490,8 +502,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维</tag>
         <tag>Linux</tag>
+        <tag>运维</tag>
       </tags>
   </entry>
   <entry>
@@ -514,8 +526,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>其他软件</tag>
         <tag>Linux</tag>
+        <tag>其他软件</tag>
       </tags>
   </entry>
   <entry>

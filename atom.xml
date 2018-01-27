@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-27T06:02:16.658Z</updated>
+  <updated>2018-01-27T08:23:37.322Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>SFTP不能连接服务器怎么办？</title>
+    <link href="http://yoursite.com/2018/01/27/SFTP%E4%B8%8D%E8%83%BD%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F/"/>
+    <id>http://yoursite.com/2018/01/27/SFTP不能连接服务器怎么办？/</id>
+    <published>2018-01-27T08:19:55.000Z</published>
+    <updated>2018-01-27T08:23:37.322Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况：<br><img src="/images/sftp1.png" alt=""></p><p>登陆到这个跳板机里，使用<code>tail /var/log/secure</code>，看到了拒绝的具体信息，如下：<br><img src="/images/sftp2.png" alt=""></p><p>这个时候，我就需要<code>locate sftp-server</code>，用locate定位一下<code>sftp</code>文件，但是发现服务器竟然回答我“<code>-bash: locate: command not found</code>”。</p><p>于是就<code>yum -y install mlocate</code>，安装mlocate之后执行<code>updatedb</code>，需要等待一小会，然后再次执行<code>locate sftp-server</code>，就可以得到sftp-server的文件路径了，如下图：<br><img src="/images/sftp3.png" alt=""></p><p>打开sshd的配置文件，<code>vi /etc/ssh/sshd_config</code>，把<code>Subsystem</code>这一行前面的<code>#</code>去掉：<br><img src="/images/sftp4.png" alt=""></p><p>然后重启启动ssh服务，语句是<code>/etc/init.d/sshd reload</code>，重新连接一下，发现就恢复正常了。</p>]]></content>
+    
+    <summary type="html">
+    
+      总有意向不到的插曲
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="sftp" scheme="http://yoursite.com/tags/sftp/"/>
+    
+  </entry>
   
   <entry>
     <title>Ansible部署模块的时候出现中文乱码的问题</title>
@@ -469,30 +493,6 @@
       <category term="elk" scheme="http://yoursite.com/tags/elk/"/>
     
       <category term="大数据" scheme="http://yoursite.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>工作所用的模块回滚脚本</title>
-    <link href="http://yoursite.com/2018/01/17/%E5%B7%A5%E4%BD%9C%E6%89%80%E7%94%A8%E7%9A%84%E6%A8%A1%E5%9D%97%E5%9B%9E%E6%BB%9A%E8%84%9A%E6%9C%AC/"/>
-    <id>http://yoursite.com/2018/01/17/工作所用的模块回滚脚本/</id>
-    <published>2018-01-17T04:25:25.000Z</published>
-    <updated>2018-01-22T02:31:05.833Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言与脚本内容">前言与脚本内容</span></h2><p>部署中常备一个回滚脚本也是很有必要的，我所在公司的服务器模块名都是在初始化的时候写进<code>/etc/role_install</code>这个文件里，如下图的这个服务器就是fss服务器：<br><img src="/images/rollback1.png" alt="akb48"></p><p>再比如下面这个服务器，虽然包含nginx的组件但是httpproxy的服务器：<br><img src="/images/rollback2.png" alt="akb48"></p><p>那么有了这样的前提，整个回滚的脚本内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#Written by ChrisChan @July-4th-2017</span><br><span class="line">#Desription:这是一个回滚的脚本。</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>=$(cat /etc/role_install |grep -v zkclient|grep -v nginx)</span><br><span class="line">echo -e <span class="string">'\033[31m现在将执行回滚操作，本次回滚只回滚普通模块，不包含nginx和zkclient!\033[0m'</span> </span><br><span class="line">echo <span class="string">"回滚的模块名称："</span>$<span class="built_in">module</span></span><br><span class="line">echo -e <span class="string">'\033[33m如果想取消回滚操作，请ctrl+c立即停止本脚本...\033[0m'</span></span><br><span class="line">sleep <span class="number">5</span></span><br><span class="line"></span><br><span class="line">cd /dxpbackup/hswx/$module &amp;&amp; zip $module.zip -x "*og*" -r .    #到备份的文件夹里去压缩</span><br><span class="line">mv /dxpbackup/hswx/$<span class="built_in">module</span>/$<span class="built_in">module</span>.zip /mnt/hswx    </span><br><span class="line">echo $<span class="built_in">module</span><span class="string">".zip文件已经生成！"</span></span><br><span class="line"> </span><br><span class="line">until [ <span class="string">"$decision"</span> == <span class="string">"Y"</span> -o <span class="string">"$decision"</span> == <span class="string">"y"</span> -o <span class="string">"$decision"</span> == <span class="string">"N"</span> -o <span class="string">"$decision"</span> == <span class="string">"n"</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        read -p <span class="string">"请问是否用回滚的压缩包覆盖到/mnt/hswx下？(y/n)"</span> decision</span><br><span class="line">        echo <span class="string">"您的选择是："</span>$decision</span><br><span class="line">        <span class="keyword">if</span> [ $decision == Y -o $decision == y ]</span><br><span class="line">               then</span><br><span class="line">                       echo <span class="string">"现在已经开始覆盖..."</span></span><br><span class="line">                       rm -rf /mnt/hswx/$module    #先把原来的内容删除</span><br><span class="line">                       unzip /mnt/hswx/$module.zip -d /mnt/hswx/$module    #重新解压缩进去</span><br><span class="line">                       echo -e <span class="string">'\033[32m覆盖已经完成，可以直接执行/startall脚本!\033[0m'</span></span><br><span class="line">       elif [ $decision == N -o $decision == n ]</span><br><span class="line">               then</span><br><span class="line">                       echo -e <span class="string">'\033[32m生成的'</span>$<span class="built_in">module</span><span class="string">'.zip文件保存在/root文件夹里\033[0m'</span></span><br><span class="line">       <span class="keyword">else</span></span><br><span class="line">               echo -e <span class="string">'\033[31m输入字符不符合!请重新输入!\033[0m'</span></span><br><span class="line">       fi</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p><h2><span id="新的知识点">新的知识点！</span></h2><p>1）zip在压缩文件夹的时候要过滤掉某些文件使用“-x”参数，比如说要在AAA文件夹里面过滤掉abc和jqk这两个文件，那么语句就是<code>zip AAA.zip -x &quot;abc&quot; -x &quot;jqk&quot; -r .</code>或者是<code>zip -r -x=abc -x=jqk AAA.zip .</code> 这样两个语句。</p><p>如果你要过滤掉的是一个文件夹，比如那么就要在文件夹后面名字加上一个<em>，下图就是要压缩整个auc文件夹为456.zip但是又不想要lib这个文件夹，就使用了`zip 456.zip -x “lib</em>“ -r .`：<br><img src="/images/rollback3.png" alt="akb48"></p><p>不过如果文件夹里还有其他lib开头的文件夹也会被过滤掉，这一点要注意。</p><p>2）本shell里面涉及了逻辑判断，而<code>[[</code>和<code>[</code>的区别如下图：<br><img src="/images/rollback4.gif" alt="akb48"></p><p>3）如果if语句中出现报错“[: too many arguments”，很有可能就是字符串变量中可能存在空格，shell解析时将其认为是多个参数，再进行判断时，无法知道该获取哪个值，所以最好都用双引号括起来； </p><p>4）如果是“变量a等于aa且变量b等于bb  或者 变量c等于cc且变量d等于dd ” 这样的判断句怎么写？答曰：<br>    [ $a = “aa” -a $b = “bb” ] || [$c = “cc” -a $d = “dd” ]</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://zhangge.net/4776.html" target="_blank" rel="noopener">https://zhangge.net/4776.html</a></p>]]></content>
-    
-    <summary type="html">
-    
-      俗话说的好：“真男人从来不回滚”!
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
-    
-      <category term="Shell" scheme="http://yoursite.com/tags/Shell/"/>
     
   </entry>
   
