@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-29T04:41:51.202Z</updated>
+  <updated>2018-01-29T04:45:06.196Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,19 +21,20 @@
     <link href="http://yoursite.com/2018/01/29/Python%E9%87%8C%E8%B0%83%E7%94%A8redis%E7%9A%84%E6%96%B9%E6%B3%95/"/>
     <id>http://yoursite.com/2018/01/29/Python里调用redis的方法/</id>
     <published>2018-01-29T04:38:39.000Z</published>
-    <updated>2018-01-29T04:41:51.202Z</updated>
+    <updated>2018-01-29T04:45:06.196Z</updated>
     
     <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>Python 2.7里不是自带<code>redis</code>模块的，那么在调用redis的时候自然也会报错，比如：<br><img src="/images/pyredis1.png" alt=""></p><p>遇到这种情况怎么办？</p><p>第一种方法：<br>    pip install redis<br>第二种方法：<br>    easy_install redis<br>第三种方法：<br>去登录<code>https://github.com/andymccurdy/redis-py</code>，下载包上传到linux里之后，<br>    python setup.py install<br><img src="/images/pyredis2.png" alt=""></p><p>flask模块的安装也是同理。</p><p>注意！这里只有<code>Redis</code>，如果使用<code>StrictRedis</code>会报错：<code>AttributeError: &#39;Redis&#39; object has no attribute &#39;StrictRedis&#39;</code>。这个是版本的问题。见<br><a href="https://github.com/andymccurdy/redis-py/issues/188" target="_blank" rel="noopener">https://github.com/andymccurdy/redis-py/issues/188</a></p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://debugo.com/python-redis/" target="_blank" rel="noopener">http://debugo.com/python-redis/</a></p><p><img src="/images/欧文骚脚步.gif" alt="" title="这脚步把我看高潮了..."></p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;h2&gt;&lt;span id=&quot;正文&quot;&gt;正文&lt;/span&gt;&lt;/h2&gt;&lt;p&gt;Python 2.7里不是自带&lt;code&gt;redis&lt;/code&gt;模块的，那么在调用redis的时候自然也会报
-      
+      本文的写作来源于《第一本 docker书》的第189页。
     
     </summary>
     
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
   </entry>
   
