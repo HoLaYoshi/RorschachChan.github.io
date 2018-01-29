@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/sftp2.png">
 <meta property="og:image" content="http://yoursite.com/images/sftp3.png">
 <meta property="og:image" content="http://yoursite.com/images/sftp4.png">
-<meta property="og:updated_time" content="2018-01-29T03:35:48.541Z">
+<meta property="og:updated_time" content="2018-01-29T04:35:52.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SFTP不能连接服务器怎么办？">
 <meta name="twitter:description" content="总有意向不到的插曲">
@@ -430,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  196
+                  195
                 </span>
               
 
@@ -471,7 +471,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况：<br><img src="/images/sftp1.png" alt=""></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>今天在跳板机上传送文件，发现使用<code>SFTP</code>连接的时候，出现了这样的一个拒绝情况：<br><img src="/images/sftp1.png" alt=""></p>
 <p>登陆到这个跳板机里，使用<code>tail /var/log/secure</code>，看到了拒绝的具体信息，如下：<br><img src="/images/sftp2.png" alt=""></p>
 <p>这个时候，我就需要<code>locate sftp-server</code>，用<code>locate</code>定位一下<code>sftp</code>文件，但是发现服务器竟然回答我<code>-bash: locate: command not found</code>。</p>
 <p>于是就<code>yum -y install mlocate</code>，安装<code>mlocate</code>之后执行<code>updatedb</code>，需要等待一小会，然后再次执行<code>locate sftp-server</code>，就可以得到sftp-server的文件路径了，如下图：<br><img src="/images/sftp3.png" alt=""></p>
@@ -704,7 +704,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -903,7 +903,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共43.1k字</span>
+  <span class="post-count">博客全站共43.3k字</span>
 </div>
         
 
