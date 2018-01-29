@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-29T04:48:40.333Z</updated>
+  <updated>2018-01-29T06:59:00.836Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>处理掉积压过多的activemq持久化消息</title>
+    <link href="http://yoursite.com/2018/01/29/%E5%A4%84%E7%90%86%E6%8E%89%E7%A7%AF%E5%8E%8B%E8%BF%87%E5%A4%9A%E7%9A%84activemq%E6%8C%81%E4%B9%85%E5%8C%96%E6%B6%88%E6%81%AF/"/>
+    <id>http://yoursite.com/2018/01/29/处理掉积压过多的activemq持久化消息/</id>
+    <published>2018-01-29T06:27:26.000Z</published>
+    <updated>2018-01-29T06:59:00.836Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在项目使用<code>activemq 5.14</code>时，客户端发送消息而没有得到回复（在不考虑消费者是什么问题的情况下），导致持久化消息不断积压而得不到释放，最后造成队列堵塞而嗝屁。</p><p>一般来说遇到这样的情况，可以在配置文件中配置消息的过期时间和死信处理来防止消息的积压，配置如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugins&gt;</span><br><span class="line">       &lt;!-- <span class="number">86</span>,<span class="number">400</span>,<span class="number">000</span>ms = <span class="number">1</span> day --&gt;</span><br><span class="line">         &lt;timeStampingBrokerPlugin ttlCeiling=<span class="string">"10000"</span> zeroExpirationOverride=<span class="string">"10000"</span>/&gt;</span><br><span class="line">     &lt;<span class="regexp">/plugins&gt;</span></span><br></pre></td></tr></table></figure></p><p>配置消息过期时间使用<code>timeStampingBrokerPlugin</code>插件,<code>ttlCeiling</code>：表示过期时间上限（模块程序写的过期时间不能超过此时间，超过则以此时间为准），<code>zeroExpirationOverride</code>：表示过期时间（给未分配过期时间的消息分配过期时间）。一般来说这两个值是一样的，然后message过期则客户端不能接收，那些已经过期的message将会保存在<code>data/kahadb</code>目录下。</p><p>但是最近发现了一个问题，就是<code>data/kahadb</code>这个目录最近越来越大，越积越多。但是这个topic和quere又依旧是“持续订阅”的，它的消费者还在。遇到这样的情况，如何在activemq里配置呢？</p><ol><li>配置message过期自动丢弃策略 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;borker&gt;</span><br><span class="line">   &lt;destinationPolicy&gt;</span><br><span class="line">       &lt;policyMap&gt;</span><br><span class="line">           &lt;policyEntries&gt;</span><br><span class="line">               &lt;policyEntry topic=<span class="string">"&gt;"</span> expireMessagesPeriod=<span class="string">"60000"</span>&gt;</span><br><span class="line">                   &lt;deadLetterStrategy&gt;</span><br><span class="line">                        &lt;sharedDeadLetterStrategy processExpired=<span class="string">"false"</span> /&gt;</span><br><span class="line">                   &lt;<span class="regexp">/deadLetterStrategy&gt;</span></span><br><span class="line"><span class="regexp">               &lt;/</span>policyEntry&gt;</span><br><span class="line">           &lt;<span class="regexp">/policyEntries&gt;</span></span><br><span class="line"><span class="regexp">       &lt;/</span>policyMap&gt;</span><br><span class="line">   &lt;<span class="regexp">/destinationPolicy&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>borker&gt;</span><br></pre></td></tr></table></figure></li></ol><p>标签<code>processExpired=&quot;false&quot;</code>表示<font color="red">不保存过期消息到死信队列，处理手段为删除</font>，为<code>true</code>则是保留。<br>标签<code>expireMessagesPeriod=&quot;60000&quot;</code>属性表示每隔60秒钟检查message是否过期。<br><code>topic=&quot;&gt;&quot;</code>表示该策略对所有topic都生效。而<code>topic=&quot;active.&gt;&quot;</code>就表示该策略对以<code>active.</code>开头的所有<code>topic</code>生效，注意有个点号<code>.</code>。</p><ol><li>message过期时间设置<br>修改<code>timeStampingBrokerPlugin</code>标签里<code>ttlCeiling=&quot;360000&quot; zeroExpirationOverride=&quot;360000&quot;</code>表示过期时间为360000ms（1小时）。 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;borker&gt;</span><br><span class="line">   &lt;plugins&gt;</span><br><span class="line">       &lt;!-- <span class="number">86</span>,<span class="number">400</span>,<span class="number">000</span>ms = <span class="number">1</span> day --&gt;</span><br><span class="line">       &lt;timeStampingBrokerPlugin ttlCeiling=<span class="string">"360000"</span> zeroExpirationOverride=<span class="string">"360000"</span> /&gt;</span><br><span class="line">   &lt;<span class="regexp">/plugins&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>borker&gt;</span><br></pre></td></tr></table></figure></li></ol><p>如果不是那种“持续订阅”的topic，那就简单了，配置如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;broker xmlns=<span class="string">"http://activemq.apache.org/schema/core"</span> schedulePeriodForDestinationPurge=<span class="string">"10000"</span>&gt;</span><br><span class="line">   &lt;destinationPolicy&gt;</span><br><span class="line">      &lt;policyMap&gt;</span><br><span class="line">         &lt;policyEntries&gt;</span><br><span class="line">            &lt;policyEntry queue=<span class="string">"&gt;"</span> gcInactiveDestinations=<span class="string">"true"</span> inactiveTimoutBeforeGC=<span class="string">"30000"</span>/&gt;</span><br><span class="line">         &lt;<span class="regexp">/policyEntries&gt;</span></span><br><span class="line"><span class="regexp">      &lt;/</span>policyMap&gt;</span><br><span class="line">   &lt;<span class="regexp">/destinationPolicy&gt;     </span></span><br><span class="line"><span class="regexp"> &lt;/</span>broker&gt;</span><br></pre></td></tr></table></figure></p><p><code>schedulePeriodForDestinationPurge</code>执行清理任务的周期，<code>gcInactiveDestinations=&quot;true&quot;</code>表示启用清理功能，<code>inactiveTimoutBeforeGC=&quot;30000&quot;</code>这个是Topic或Queue超时时间,在规定的时间内，无有效订阅，没有入队记录，超时后就会被清理。<br><img src="/images/大帝扣威少.gif" alt="" title="大帝扣威少！"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;p&gt;在项目使用&lt;code&gt;activemq 5.14&lt;/code&gt;时，客户端发送消息而没有得到回复（在不考虑消费者是什么问题的情况下），导致持久化消息不断积压而得不到释放，最后造
+      
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="activemq" scheme="http://yoursite.com/tags/activemq/"/>
+    
+      <category term="消息队列" scheme="http://yoursite.com/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
+    
+  </entry>
   
   <entry>
     <title>Python里调用redis的方法</title>
@@ -467,30 +494,6 @@
       <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
       <category term="https" scheme="http://yoursite.com/tags/https/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>将电商平台测试环境添加了域名和https</title>
-    <link href="http://yoursite.com/2018/01/18/%E5%B0%86%E7%94%B5%E5%95%86%E5%B9%B3%E5%8F%B0%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E6%B7%BB%E5%8A%A0%E4%BA%86%E5%9F%9F%E5%90%8D%E5%92%8Chttps/"/>
-    <id>http://yoursite.com/2018/01/18/将电商平台测试环境添加了域名和https/</id>
-    <published>2018-01-18T06:42:12.000Z</published>
-    <updated>2018-01-22T02:35:56.432Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="情况描述">情况描述</span></h2><p>今天电商平台来了新的产品经理。摸了一遍情况之后，提出了两个需求，<font color="blue">第一个是要把测试环境也要上https，达到与线上一致；第二个就是测试环境要配上域名，不要再用IP地址登陆。</font></p><p>配置域名是很简单的，在阿里云的云解析上直接给测试环境新加一个域名，然后对应添加阿里云外网SLB的IP地址即可。进入页面也发现首页地址显示正常，但是再点点就发现了里面有点不对。</p><p>没错，现象就是“只有首页是域名，其他网站都是IP”，<br><img src="/images/ecstore1.jpg" alt="paradin"></p><p>遇到这个情况，我就跑去<code>nginx.conf</code>里，看一下<code>server_name</code>的配置，看到的确写得是func.lechange.com，如图：<br><img src="/images/ecstore2.png" alt="paradin"></p><p>于是就在页面上使用<code>ctrl+shift+c</code>查看具体情况，发现里面的代码是这个样的：<br><img src="/images/ecstore3.jpg" alt="paradin"></p><p>这就人赃俱获了，<strong>开发已经在html里把地址写死了，使用了绝对路径而不是相对路径</strong>，于是就打回让开发自己慢慢改。</p><p>然后又回到SLB界面，新增新的https监听，前端端口443，后端是80，搭配正确的证书，SLB保存之后，在浏览器输入测试环境的<code>https://网址</code>之后，发现整个界面全乱了，如图：<br><img src="/images/ecstore4.png" alt="paradin"></p><p>但是使用<code>http://网址</code>去访问还是正常的，如图：<br><img src="/images/ecstore5.png" alt="paradin"></p><p>很明显，这是因为https下跨协议调用http的是不行的，所以那些css、js如果不支持https的话就无法正常显示。使用<code>ctrl+shift+c</code>看错误更加明显。<br><img src="/images/ecstore6.png" alt="paradin"></p><p>遇到这个问题，就有如下几种方法：</p><p>第一种：将所有的访问路径都写死<code>https</code>，不过这个我们公司代码规范不准许;<br>第二种：去掉URL中的<code>http://</code>或<code>https://</code>，将其替换为<code>//</code>，这样，浏览器就可以根据当前页面的请求方式来动态切换了；<br>第三种：可以在<code>&lt;head&gt;</code>中添加<code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;upgrade-insecure-requests&quot;&gt;</code>,浏览器会在加载HTTP资源时自动替换成HTTPS请求；<br>第四种：在nginx里写一个proxy_redirect跳转，这个就比较有技术含量了；</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://thehackernews.com/2015/04/disable-mixed-content-warning.html" target="_blank" rel="noopener">https://thehackernews.com/2015/04/disable-mixed-content-warning.html</a><br><a href="https://www.tuicool.com/articles/ARVVFjI" target="_blank" rel="noopener">https://www.tuicool.com/articles/ARVVFjI</a><br><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content/How_to_fix_website_with_mixed_content" target="_blank" rel="noopener">https://developer.mozilla.org/en-US/docs/Web/Security/Mixed_content/How_to_fix_website_with_mixed_content</a></p>]]></content>
-    
-    <summary type="html">
-    
-      一次通宵，腰疼三天...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="网络基础" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/"/>
     
   </entry>
   

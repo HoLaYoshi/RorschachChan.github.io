@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="http,网络相关," />
+  <meta name="keywords" content="activemq,消息队列," />
 
 
 
@@ -88,22 +88,20 @@
 
 
 
-<meta name="description" content="捍卫自己的图片合法权利！">
-<meta name="keywords" content="http,网络相关">
+<meta name="description" content="在项目使用activemq 5.14时，客户端发送消息而没有得到回复（在不考虑消费者是什么问题的情况下），导致持久化消息不断积压而得不到释放，最后造成队列堵塞而嗝屁。 一般来说遇到这样的情况，可以在配置文件中配置消息的过期时间和死信处理来防止消息的积压，配置如下：    1234&amp;lt;plugins&amp;gt;       &amp;lt;!-- 86,400,000ms = 1 day --&amp;gt;">
+<meta name="keywords" content="activemq,消息队列">
 <meta property="og:type" content="article">
-<meta property="og:title" content="防盗链的等等相关">
-<meta property="og:url" content="http://yoursite.com/2018/01/22/防盗链的等等相关/index.html">
+<meta property="og:title" content="处理掉积压过多的activemq持久化消息">
+<meta property="og:url" content="http://yoursite.com/2018/01/29/处理掉积压过多的activemq持久化消息/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="捍卫自己的图片合法权利！">
+<meta property="og:description" content="在项目使用activemq 5.14时，客户端发送消息而没有得到回复（在不考虑消费者是什么问题的情况下），导致持久化消息不断积压而得不到释放，最后造成队列堵塞而嗝屁。 一般来说遇到这样的情况，可以在配置文件中配置消息的过期时间和死信处理来防止消息的积压，配置如下：    1234&amp;lt;plugins&amp;gt;       &amp;lt;!-- 86,400,000ms = 1 day --&amp;gt;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/daolian1.jpg">
-<meta property="og:image" content="http://yoursite.com/images/daolian2.jpg">
-<meta property="og:image" content="http://yoursite.com/images/daolian3.jpg">
-<meta property="og:updated_time" content="2018-01-22T02:27:02.701Z">
+<meta property="og:image" content="http://yoursite.com/images/大帝扣威少.gif">
+<meta property="og:updated_time" content="2018-01-29T06:59:00.836Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="防盗链的等等相关">
-<meta name="twitter:description" content="捍卫自己的图片合法权利！">
-<meta name="twitter:image" content="http://yoursite.com/images/daolian1.jpg">
+<meta name="twitter:title" content="处理掉积压过多的activemq持久化消息">
+<meta name="twitter:description" content="在项目使用activemq 5.14时，客户端发送消息而没有得到回复（在不考虑消费者是什么问题的情况下），导致持久化消息不断积压而得不到释放，最后造成队列堵塞而嗝屁。 一般来说遇到这样的情况，可以在配置文件中配置消息的过期时间和死信处理来防止消息的积压，配置如下：    1234&amp;lt;plugins&amp;gt;       &amp;lt;!-- 86,400,000ms = 1 day --&amp;gt;">
+<meta name="twitter:image" content="http://yoursite.com/images/大帝扣威少.gif">
 
 
 
@@ -133,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/22/防盗链的等等相关/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/29/处理掉积压过多的activemq持久化消息/"/>
 
 
 
 
 
-  <title>防盗链的等等相关 | Chris Chan's BLOG</title>
+  <title>处理掉积压过多的activemq持久化消息 | Chris Chan's BLOG</title>
   
 
 
@@ -322,7 +320,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/22/防盗链的等等相关/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/29/处理掉积压过多的activemq持久化消息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chris Chan">
@@ -339,7 +337,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">防盗链的等等相关</h1>
+          <h1 class="post-title" itemprop="name headline">处理掉积压过多的activemq持久化消息</h1>
         
 
         <div class="post-meta">
@@ -351,8 +349,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T09:48:38+08:00">
-                2018-01-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T14:27:26+08:00">
+                2018-01-29
               </time>
             
 
@@ -393,8 +391,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/22/防盗链的等等相关/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/22/防盗链的等等相关/" itemprop="commentsCount"></span>
+                <a href="/2018/01/29/处理掉积压过多的activemq持久化消息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/29/处理掉积压过多的activemq持久化消息/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -403,7 +401,7 @@
 
           
           
-             <span id="/2018/01/22/防盗链的等等相关/" class="leancloud_visitors" data-flag-title="防盗链的等等相关">
+             <span id="/2018/01/29/处理掉积压过多的activemq持久化消息/" class="leancloud_visitors" data-flag-title="处理掉积压过多的activemq持久化消息">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -429,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,412
+                  598
                 </span>
               
 
@@ -445,16 +443,12 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  2
                 </span>
               
             </div>
           
 
-          
-              <div class="post-description">
-                  捍卫自己的图片合法权利！
-              </div>
           
 
         </div>
@@ -470,37 +464,21 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="为什么网站们都要限制流量">为什么网站们都要限制流量？</span></h2><p>无论是网站服务器亦或是游戏服务器还是邮件服务器，说穿了也是一台电脑，也有CPU和内存。只不过服务器的CPU功能比个人电脑的CPU功能强大，比如个人电脑的CPU一秒钟能算1亿个数，那么服务器的CPU一秒钟就能算十亿个数。毕竟个人电脑只针对个人，但是服务器是要“接客”的，有了强大的硬件做后盾，网页/游戏/邮箱才不会那么轻易的Down掉。</p>
-<p>但是CPU不是人类大脑，人脑是越用越聪明，CPU是越用越磨损，毕竟始终在连电的环境下。于是乎，没有必要的运算能省就省，一个人省一次，十万个人就省十万次，一千万个人就省一千万次，这样达到积少成多的目的。</p>
-<p>CPU计算的是各种数据，而这些数据也叫作流量。有用的流量、有价值的流量通过CPU计算无可厚非，但是出现了没有用的流量或者是别人盗用我们的资源，那么这种情况能避免都要避免。什么叫盗用我们的资源，比如自己网站（网站A）上的图片或者视频，被其他人直接复制网站然后粘贴到他们的主页（网站B）上，其他用户登录了B网站，然后点击了那个图片和视频，由于是网址重链接，里外里提供数据的还是我们的服务器。也就是说B网站就是一个中介，而真正提供服务的是网站A，但是广告费和点击率都要网站B赚走了，这事儿实在是叔可忍婶不可忍。</p>
-<h2><span id="什么是盗链如何发现被盗链">什么是盗链？如何发现被盗链？</span></h2><p>什么叫盗链，上面已经说的差不多了，如果上面的文字没有看懂的话，举个例子，如果您看到了这两个图片，证明这个网站就是在盗链。<br><img src="/images/daolian1.jpg" alt="paradin"></p>
-<p><img src="/images/daolian2.jpg" alt="paradin"><br>这两个就是一个盗取的是QQ空间的图片，另一个就是百度的图片。用其他网站的图片这事儿本身是无所谓的，只要不涉及版权问题，都希望自己的作品能广泛传播，但是请不要直接通过网址重定向，厚道一点的行为应该是：“图片另存为”，然后到目标网站上去重新上传一下。</p>
-<p>这里再多说一点网站的基础知识。</p>
-<p>PV值：<code>PV=page view</code>，网站是有少则一个网页多则N多网页组成的一个整体，PV值就是统计用户访问网站的总页数。比如www.JQK.com这个网站，今天有100个用户登录，平均每个用户翻阅了里面5个网页。那么这个网站的PV值就是500。若一个IP地址，对一个页面刷新10000次，PV值也是1.要查询网站的PV值登陆<code>http://www.alexa.cn</code>就行。</p>
-<p>Hit值：这个就是对网页里每个元素的点击量，一个网页里的图片就是一个元素，一个flv文件也是一个元素，一首歌曲也是一个元素。这些的总量就是hit值，hit值越高就证明这个网站被人查看的情况越高，那么也证明网站的高人气，那么自然广告也会卖出去很多钱。</p>
-<p>因为建网站这事儿关心到了金钱利益，网站越被人关注，自然价值也越大。于是会有一个公式来评判网站的“每日贡献”：<code>总流量=访问流量+下载流量= Page view值 x 页面大小+下载文件大小 x 下载次数</code></p>
-<p>作为管理者，每天观察一下自己一亩三分地儿的网站数据情况是本职工作。但是有时候也会遇到网站流量很惊人的情况，一般来说，网站流量过大（CPU运转很多）的原因如下：</p>
-<p>1）网站是一个很大的网站：比如说淘宝，京东，网易，youtube,facebook那种大网站，里面成万上亿的网页，而且每天又有那么多人登陆，自然浏览量很大。虽然这些大集团的服务器也是少则几千，多则上万，甚至在不同地区也会有不少的服务器集群，但是这几万台服务器需要提供的数据会很多也是不争的事实。这种现象是正常的。</p>
-<p>2）网页内容太大：可能本身网站是一个小网站，加起来也就十页二十页的内容，但是每一天的流量依旧很惊人，那么很有可能是单页或者某几页的字节太大。比如网页里有太多的图片，太多的视频，太多的其他链接，也有可能是前端码农们给这个网页的规划不合理。导致这个网页每一次被点击都要大费周折（hit值和PV值不高，但是日流量很高），长此以往不仅会耽误用户的整体体验，对服务器也是一个重大伤害。</p>
-<p>3）搜索引擎产生了大量的数据流量：网站需要推广，于是就在各种搜索引擎上打广告，也有自己网站的很多图片用于外部调用。这样的结果就是本身来观摩网站的人很少，但是“借着引擎经过”的人很多，所以就会有PV值不高，但是Hit值和日流量很高的现象出现。</p>
-<p>4）图片或者其他元素被盗链：第一部分就说过了，别人拿我们的图片去吸引别人关注，然后别人想要深入了解，还要来使用我们的服务器去提供详细数据。这种“用我们的牌子住我们的房，吃我们的饭却不给我们钱”的现象实在应该被弄死。这种现象的特征也是PV值不高（没人真正点击网站），但是Hit值和日流量很大（自己服务器的数据都给别的网站提供了）。</p>
-<p>5）网站被DDos攻击了：被一些恶意的IP地址频繁登陆，来回的刷流量。这样迫使CPU做出运算的行为其实就是在远程的破坏服务器的硬件CPU，遇到这种现象，之前Nginx文章里有写，要么通过access.log找到这些IP封掉，要么就在配置文件里加上限制<code>limit-rate</code>。</p>
-<h2><span id="服务器是如何知道图片是从站外而来的呢">服务器是如何知道图片是从站外而来的呢？</span></h2><p>在http协议里有一个重要的选项叫refer，这个选项的内容就是该元素的来源地址。如果这个元素是服务器自己提供的，那么头文件里是没有refer这个选项的。通过refer这个信息，我们也可以知道登陆网站的客户是从哪个网站点击链接而来的。这样方便进行一个统计和规划。</p>
-<p>假如，我在QQ空间里面发现一个图，然后右键图片，选择”在新标签栏里打开图片”，这时候通过浏览器“审查元素”的功能，能查查看请求头信息和响应头信息，发现响应头信息里多了一个refer，里面的内容就是图片的源地址：<br><img src="/images/daolian3.jpg" alt="paradin"></p>
-<p>我在QQ空间里看腾讯的照片自然是可以的，但是如果我在别的网站里看腾讯的照片，加重了腾讯服务器的负担，自然腾讯公司会不满意。于是腾讯服务器发现当前要引用这个图片的地址与refer头信息不是一个来源之后，就不会把这个图片的数据传送过来，于是就看到那个“此图片来自QQ空间，未经准许不可饮用”的警告图片。</p>
-<p>既然知道了服务器是如何判断文件是否盗链，那么只要伪装一个refer就可以欺骗服务器达到“反防盗链”的目的了。至于这部分，可以自己单独研究。<br>如何使用Nginx反盗链？</p>
-<p>同样的使用<code>Nginx.conf</code>，在http的大括号下面，新建一个location，加入如下信息：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">location</span><br><span class="line">	~ .*\.(wma|wmv|asf|mp3|mmf|zip|rar|jpg|gif|png|swf|flv)$ &#123;</span><br><span class="line">#指定对以上几种类型的文件建立防盗链</span><br><span class="line">   	 valid_referers</span><br><span class="line">	none blocked *.alala.com alala.com;</span><br><span class="line">#盗链的范围不包括alala.com和alala.com下的二级网站，</span><br><span class="line">     <span class="keyword">if</span></span><br><span class="line">($invalid_referer)</span><br><span class="line"> &#123;</span><br><span class="line">     #rewrite</span><br><span class="line"> ^<span class="regexp">/ http:/</span><span class="regexp">/www.alala.com/</span>error.html;</span><br><span class="line">     <span class="keyword">return</span></span><br><span class="line"><span class="number">403</span>;</span><br><span class="line">#如果发现有引用以上文件的地址与refer头信息不符的情况，直接重定向成error.html这个网页，服务器返回403，forbidden。</span><br><span class="line">      &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2><span id="使用第三方模块ngx_http_accesskey_module实现nginx防盗链">使用第三方模块ngx_http_accesskey_module实现Nginx防盗链</span></h2><p>实现方法如下：</p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>在项目使用<code>activemq 5.14</code>时，客户端发送消息而没有得到回复（在不考虑消费者是什么问题的情况下），导致持久化消息不断积压而得不到释放，最后造成队列堵塞而嗝屁。</p>
+<p>一般来说遇到这样的情况，可以在配置文件中配置消息的过期时间和死信处理来防止消息的积压，配置如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;plugins&gt;</span><br><span class="line">       &lt;!-- <span class="number">86</span>,<span class="number">400</span>,<span class="number">000</span>ms = <span class="number">1</span> day --&gt;</span><br><span class="line">         &lt;timeStampingBrokerPlugin ttlCeiling=<span class="string">"10000"</span> zeroExpirationOverride=<span class="string">"10000"</span>/&gt;</span><br><span class="line">     &lt;<span class="regexp">/plugins&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>配置消息过期时间使用<code>timeStampingBrokerPlugin</code>插件,<code>ttlCeiling</code>：表示过期时间上限（模块程序写的过期时间不能超过此时间，超过则以此时间为准），<code>zeroExpirationOverride</code>：表示过期时间（给未分配过期时间的消息分配过期时间）。一般来说这两个值是一样的，然后message过期则客户端不能接收，那些已经过期的message将会保存在<code>data/kahadb</code>目录下。</p>
+<p>但是最近发现了一个问题，就是<code>data/kahadb</code>这个目录最近越来越大，越积越多。但是这个topic和quere又依旧是“持续订阅”的，它的消费者还在。遇到这样的情况，如何在activemq里配置呢？</p>
 <ol>
-<li>下载NginxHttpAccessKeyModule模块文件：<code>http://wiki.nginx.org/File:Nginx-accesskey-2.0.3.tar.gz</code>；</li>
-<li>解压此文件后，找到nginx-accesskey-2.0.3下的config文件。编辑此文件：替换其中的<code>$HTTP_ACCESSKEY_MODULE</code>为<code>ngx_http_accesskey_module</code>；</li>
-<li><p>用一下参数重新编译nginx：<br> ./configure –add-module=Nginx目录/to/nginx-accesskey<br>然后执行: <code>make &amp;&amp; make install</code></p>
-</li>
-<li><p>修改nginx的conf文件，添加以下几行：</p>
- <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">location /download &#123;</span><br><span class="line">  accesskey on;</span><br><span class="line">  accesskey_hashmethod md5;</span><br><span class="line">  accesskey_arg <span class="string">"key"</span>;</span><br><span class="line">  accesskey_signature <span class="string">"mypass$remote_addr"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>配置message过期自动丢弃策略 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">	&lt;borker&gt;</span><br><span class="line">	   &lt;destinationPolicy&gt;</span><br><span class="line">	       &lt;policyMap&gt;</span><br><span class="line">	           &lt;policyEntries&gt;</span><br><span class="line">	               &lt;policyEntry topic=<span class="string">"&gt;"</span> expireMessagesPeriod=<span class="string">"60000"</span>&gt;</span><br><span class="line">	                   &lt;deadLetterStrategy&gt;</span><br><span class="line">                        &lt;sharedDeadLetterStrategy processExpired=<span class="string">"false"</span> /&gt;</span><br><span class="line">  	                 &lt;<span class="regexp">/deadLetterStrategy&gt;</span></span><br><span class="line"><span class="regexp">  	             &lt;/</span>policyEntry&gt;</span><br><span class="line">  	         &lt;<span class="regexp">/policyEntries&gt;</span></span><br><span class="line"><span class="regexp">  	     &lt;/</span>policyMap&gt;</span><br><span class="line">  	 &lt;<span class="regexp">/destinationPolicy&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>borker&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>其中：<br>1.accesskey为模块开关；<br>2.accesskey_hashmethod为加密方式MD5或者SHA-1；<br>3.accesskey_arg为url中的关键字参数；<br>4.accesskey_signature为加密值，此处为mypass和访问IP构成的字符串。</p>
+<p>标签<code>processExpired=&quot;false&quot;</code>表示<font color="red">不保存过期消息到死信队列，处理手段为删除</font>，为<code>true</code>则是保留。<br>标签<code>expireMessagesPeriod=&quot;60000&quot;</code>属性表示每隔60秒钟检查message是否过期。<br><code>topic=&quot;&gt;&quot;</code>表示该策略对所有topic都生效。而<code>topic=&quot;active.&gt;&quot;</code>就表示该策略对以<code>active.</code>开头的所有<code>topic</code>生效，注意有个点号<code>.</code>。</p>
+<ol>
+<li>message过期时间设置<br>修改<code>timeStampingBrokerPlugin</code>标签里<code>ttlCeiling=&quot;360000&quot; zeroExpirationOverride=&quot;360000&quot;</code>表示过期时间为360000ms（1小时）。 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;borker&gt;</span><br><span class="line">   	&lt;plugins&gt;</span><br><span class="line">   	    &lt;!-- <span class="number">86</span>,<span class="number">400</span>,<span class="number">000</span>ms = <span class="number">1</span> day --&gt;</span><br><span class="line">   	    &lt;timeStampingBrokerPlugin ttlCeiling=<span class="string">"360000"</span> zeroExpirationOverride=<span class="string">"360000"</span> /&gt;</span><br><span class="line">   	&lt;<span class="regexp">/plugins&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>borker&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果不是那种“持续订阅”的topic，那就简单了，配置如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;broker xmlns=<span class="string">"http://activemq.apache.org/schema/core"</span> schedulePeriodForDestinationPurge=<span class="string">"10000"</span>&gt;</span><br><span class="line">   	&lt;destinationPolicy&gt;</span><br><span class="line">   	   &lt;policyMap&gt;</span><br><span class="line">   	      &lt;policyEntries&gt;</span><br><span class="line">   	         &lt;policyEntry queue=<span class="string">"&gt;"</span> gcInactiveDestinations=<span class="string">"true"</span> inactiveTimoutBeforeGC=<span class="string">"30000"</span>/&gt;</span><br><span class="line">   	      &lt;<span class="regexp">/policyEntries&gt;</span></span><br><span class="line"><span class="regexp">   	   &lt;/</span>policyMap&gt;</span><br><span class="line">   	&lt;<span class="regexp">/destinationPolicy&gt;     </span></span><br><span class="line"><span class="regexp"> 	&lt;/</span>broker&gt;</span><br></pre></td></tr></table></figure></p>
+<p><code>schedulePeriodForDestinationPurge</code>执行清理任务的周期，<code>gcInactiveDestinations=&quot;true&quot;</code>表示启用清理功能，<code>inactiveTimoutBeforeGC=&quot;30000&quot;</code>这个是Topic或Queue超时时间,在规定的时间内，无有效订阅，没有入队记录，超时后就会被清理。<br><img src="/images/大帝扣威少.gif" alt="" title="大帝扣威少！"></p>
 
       
     </div>
@@ -565,11 +543,11 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/22/防盗链的等等相关/" title="防盗链的等等相关">防盗链的等等相关</a>
+					<a href="http://yoursite.com/2018/01/29/处理掉积压过多的activemq持久化消息/" title="处理掉积压过多的activemq持久化消息">处理掉积压过多的activemq持久化消息</a>
 				</li>
 
 				<li class="post-copyright-date">
-					<strong>发布时间：</strong>2018年1月22日 - 09时01分
+					<strong>发布时间：</strong>2018年1月29日 - 14时01分
 				</li>  
 
 				<li class="post-copyright-license">
@@ -583,9 +561,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/http/" rel="tag"><i class="fa fa-tag"></i> http</a>
+            <a href="/tags/activemq/" rel="tag"><i class="fa fa-tag"></i> activemq</a>
           
-            <a href="/tags/网络相关/" rel="tag"><i class="fa fa-tag"></i> 网络相关</a>
+            <a href="/tags/消息队列/" rel="tag"><i class="fa fa-tag"></i> 消息队列</a>
           
         </div>
       
@@ -611,8 +589,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/18/记录一次配置http跳转https的过程/" rel="next" title="记录一次配置http跳转https的过程">
-                <i class="fa fa-chevron-left"></i> 记录一次配置http跳转https的过程
+              <a href="/2018/01/29/Python里调用redis的方法/" rel="next" title="Python里调用redis的方法">
+                <i class="fa fa-chevron-left"></i> Python里调用redis的方法
               </a>
             
           </div>
@@ -620,10 +598,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/22/解决Zabbix在web界面中文显示的问题/" rel="prev" title="解决Zabbix在web界面中文显示的问题">
-                解决Zabbix在web界面中文显示的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -706,17 +680,8 @@ var jiathis_config={
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -889,22 +854,6 @@ show_date_time();
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x4E3A;&#x4EC0;&#x4E48;&#x7F51;&#x7AD9;&#x4EEC;&#x90FD;&#x8981;&#x9650;&#x5236;&#x6D41;&#x91CF;">&#x4E3A;&#x4EC0;&#x4E48;&#x7F51;&#x7AD9;&#x4EEC;&#x90FD;&#x8981;&#x9650;&#x5236;&#x6D41;&#x91CF;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x4EC0;&#x4E48;&#x662F;&#x76D7;&#x94FE;&#x5982;&#x4F55;&#x53D1;&#x73B0;&#x88AB;&#x76D7;&#x94FE;">&#x4EC0;&#x4E48;&#x662F;&#x76D7;&#x94FE;&#xFF1F;&#x5982;&#x4F55;&#x53D1;&#x73B0;&#x88AB;&#x76D7;&#x94FE;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x670D;&#x52A1;&#x5668;&#x662F;&#x5982;&#x4F55;&#x77E5;&#x9053;&#x56FE;&#x7247;&#x662F;&#x4ECE;&#x7AD9;&#x5916;&#x800C;&#x6765;&#x7684;&#x5462;">&#x670D;&#x52A1;&#x5668;&#x662F;&#x5982;&#x4F55;&#x77E5;&#x9053;&#x56FE;&#x7247;&#x662F;&#x4ECE;&#x7AD9;&#x5916;&#x800C;&#x6765;&#x7684;&#x5462;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x4F7F;&#x7528;&#x7B2C;&#x4E09;&#x65B9;&#x6A21;&#x5757;ngx_http_accesskey_module&#x5B9E;&#x73B0;nginx&#x9632;&#x76D7;&#x94FE;">&#x4F7F;&#x7528;&#x7B2C;&#x4E09;&#x65B9;&#x6A21;&#x5757;ngx_http_accesskey_module&#x5B9E;&#x73B0;Nginx&#x9632;&#x76D7;&#x94FE;</span></span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
@@ -1087,7 +1036,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/22/防盗链的等等相关/"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/29/处理掉积压过多的activemq持久化消息/"});
 		
 
 		(function() {
