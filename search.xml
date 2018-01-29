@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Ssh连接port 22: Connection refused]]></title>
+    <url>%2F2018%2F01%2F29%2FSsh%E8%BF%9E%E6%8E%A5port-22-Connection-refused%2F</url>
+    <content type="text"><![CDATA[金山云有一个服务器需要连接到数据库但是总是失败，检查之后发现它的VPC配错了，更改VPC之后，这台服务器也会更换一个新的内网IP地址，但是问题来了，更换了内网IP之后，从跳板机连接，提示port 22: Connection refused。 ssh -v 新的ip地址发现根本没有到Connection established。直接就提示port 22: Connection refused。这基本可以断定不是跳板机的问题了，那么就需要在远程机器里看配置。 但是远程机器是无法连接的啊，怎么办？从金山控制台“连接实例”。 然后键盘随便按一下，就会看到linux界面，输入账号名和密码，这里密码不支持复制粘贴，需要手动输入。然后就会看到如下界面。 这样，我们就可以登陆这台机器了，然后vim /etc/ssh/sshd_config，看到最上面有这样的内容。 这个listenaddress后面就是跳板机ssh的地址，但是这个地址还是老的，而不是更改过后的内网ip地址，所以ssh的连接自然就是refuse。所以我们只需要手动更改成新的内网ip地址就好了。 更改完之后，重启一下服务器或者/etc/init.d/sshd restart就可以从跳板机上正常连接了。 如果在/etc/init.d/sshd restart的时候爆出“address family must be specified before ListenAddress”的错误，那么就把AddressFamily移到ListenAddress上面就可以了，如图：]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>linux</tag>
+        <tag>ssh</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[SFTP不能连接服务器怎么办？]]></title>
     <url>%2F2018%2F01%2F27%2FSFTP%E4%B8%8D%E8%83%BD%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%2F</url>
     <content type="text"><![CDATA[今天在跳板机上传送文件，发现使用SFTP了连接的时候，出现了这样的一个拒绝情况： 登陆到这个跳板机里，使用tail /var/log/secure，看到了拒绝的具体信息，如下： 这个时候，我就需要locate sftp-server，用locate定位一下sftp文件，但是发现服务器竟然回答我-bash: locate: command not found。 于是就yum -y install mlocate，安装mlocate之后执行updatedb，需要等待一小会，然后再次执行locate sftp-server，就可以得到sftp-server的文件路径了，如下图： 打开sshd的配置文件，vi /etc/ssh/sshd_config，把Subsystem这一行前面的#去掉： 然后重启启动ssh服务，语句是/etc/init.d/sshd reload，重新连接一下，发现就恢复正常了。]]></content>

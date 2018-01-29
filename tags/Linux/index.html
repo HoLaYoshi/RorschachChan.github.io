@@ -321,6 +321,34 @@
 
       <h2 class="post-title">
         
+            <a class="post-title-link" href="/2018/01/29/Ssh连接port-22-Connection-refused/" itemprop="url">
+              
+                <span itemprop="name">Ssh连接port 22: Connection refused</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated"
+              datetime="2018-01-29T11:30:18+08:00"
+              content="2018-01-29" >
+          01-29
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
             <a class="post-title-link" href="/2018/01/27/SFTP不能连接服务器怎么办？/" itemprop="url">
               
                 <span itemprop="name">SFTP不能连接服务器怎么办？</span>
@@ -455,7 +483,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -477,7 +505,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">59</span>
+                  <span class="site-state-item-count">60</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -654,7 +682,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共42.7k字</span>
+  <span class="post-count">博客全站共43.1k字</span>
 </div>
         
 
@@ -1291,28 +1319,7 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
 </body>
 </html>
 <!-- 页面点击小红心 -->
-<script type="text/javascript" src="/js/src/love.js"></script>   success: function(newcounter) {
-                var $element = $(document.getElementById(url));
-                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
-              },
-              error: function(newcounter, error) {
-                console.log('Failed to create');
-              }
-            });
-          }
-        },
-        error: function(error) {
-          console.log('Error:' + error.code + " " + error.message);
-        }
-      });
-    }
-
-    $(function() {
-      var Counter = AV.Object.extend("Counter");
-      if ($('.leancloud_visitors').length == 1) {
-        addCount(Counter);
-      } else if ($('.post-title-link').length > 1) {
-        showTime(Counter);
+<script type="text/javascript" src="/js/src/love.js"></script>     showTime(Counter);
       }
     });
   </script>

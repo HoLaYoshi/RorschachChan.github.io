@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="python,编程," />
+  <meta name="keywords" content="linux,ssh," />
 
 
 
@@ -88,20 +88,23 @@
 
 
 
-<meta name="description" content="以后要多用yaml格式做配置文件...">
-<meta name="keywords" content="python,编程">
+<meta name="description" content="调换了内网IP之后，来了这么一出">
+<meta name="keywords" content="linux,ssh">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在Python使用yaml的几个例子">
-<meta property="og:url" content="http://yoursite.com/2018/01/11/在Python使用yaml的几个例子/index.html">
+<meta property="og:title" content="Ssh连接port 22: Connection refused">
+<meta property="og:url" content="http://yoursite.com/2018/01/29/Ssh连接port-22-Connection-refused/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="以后要多用yaml格式做配置文件...">
+<meta property="og:description" content="调换了内网IP之后，来了这么一出">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/todalaugh.gif">
-<meta property="og:updated_time" content="2018-01-22T02:33:38.843Z">
+<meta property="og:image" content="http://yoursite.com/images/ksssh1.png">
+<meta property="og:image" content="http://yoursite.com/images/ksssh2.png">
+<meta property="og:image" content="http://yoursite.com/images/ksssh3.png">
+<meta property="og:image" content="http://yoursite.com/images/ksssh4.png">
+<meta property="og:updated_time" content="2018-01-29T03:38:54.116Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在Python使用yaml的几个例子">
-<meta name="twitter:description" content="以后要多用yaml格式做配置文件...">
-<meta name="twitter:image" content="http://yoursite.com/images/todalaugh.gif">
+<meta name="twitter:title" content="Ssh连接port 22: Connection refused">
+<meta name="twitter:description" content="调换了内网IP之后，来了这么一出">
+<meta name="twitter:image" content="http://yoursite.com/images/ksssh1.png">
 
 
 
@@ -131,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/11/在Python使用yaml的几个例子/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/29/Ssh连接port-22-Connection-refused/"/>
 
 
 
 
 
-  <title>在Python使用yaml的几个例子 | Chris Chan's BLOG</title>
+  <title>Ssh连接port 22: Connection refused | Chris Chan's BLOG</title>
   
 
 
@@ -320,7 +323,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/11/在Python使用yaml的几个例子/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/29/Ssh连接port-22-Connection-refused/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chris Chan">
@@ -337,7 +340,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">在Python使用yaml的几个例子</h1>
+          <h1 class="post-title" itemprop="name headline">Ssh连接port 22: Connection refused</h1>
         
 
         <div class="post-meta">
@@ -349,8 +352,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T10:11:17+08:00">
-                2018-01-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-29T11:30:18+08:00">
+                2018-01-29
               </time>
             
 
@@ -391,8 +394,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/11/在Python使用yaml的几个例子/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/11/在Python使用yaml的几个例子/" itemprop="commentsCount"></span>
+                <a href="/2018/01/29/Ssh连接port-22-Connection-refused/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/29/Ssh连接port-22-Connection-refused/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -401,7 +404,7 @@
 
           
           
-             <span id="/2018/01/11/在Python使用yaml的几个例子/" class="leancloud_visitors" data-flag-title="在Python使用yaml的几个例子">
+             <span id="/2018/01/29/Ssh连接port-22-Connection-refused/" class="leancloud_visitors" data-flag-title="Ssh连接port 22: Connection refused">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -427,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  770
+                  384
                 </span>
               
 
@@ -443,7 +446,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  1
                 </span>
               
             </div>
@@ -451,7 +454,7 @@
 
           
               <div class="post-description">
-                  以后要多用yaml格式做配置文件...
+                  调换了内网IP之后，来了这么一出
               </div>
           
 
@@ -468,28 +471,14 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>python版本：<code>2.7.5</code><br>安装方法：<code>pip install PyYaml</code></p>
-<p>“把变量写进yaml做配置文件，然后python脚本从yaml文件里面取到变量”的方法最近是在python编程里比较流行的配置项方法。yaml更加易读，而且通过缩进表示结构，这一点与python不谋而合。</p>
-<p>Yaml有四个比较常用的用法，分别是<code>load()</code>、<code>dump()</code>、<code>load_all()</code>、<code>dump_all()</code>。这篇文章主要就是了解一下这四个方法。</p>
-<p>首先我们先写一个很简单的test.py：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line">yaml_str = <span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">name: Gakki</span></span><br><span class="line"><span class="string">age: 29</span></span><br><span class="line"><span class="string">job: Actress</span></span><br><span class="line"><span class="string">relationship: Wife</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span></span><br><span class="line"> </span><br><span class="line">aaa = yaml.load(yaml_str)</span><br><span class="line">print aaa</span><br></pre></td></tr></table></figure></p>
-<p>执行的话，看到的效果就是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@paas-online-crs-001 chentest]# python test.py </span><br><span class="line">&#123;<span class="string">'job'</span>: <span class="string">'Actress'</span>, <span class="string">'age'</span>: <span class="number">29</span>, <span class="string">'relationship'</span>: <span class="string">'Wife'</span>, <span class="string">'name'</span>: <span class="string">'Gakki'</span>&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这个aaa的类型是一个<code>字典（dict）</code>，如果要得到里面那个”Gakki”，那么就是aaa[‘name’]。通过load方法，一个字符串变成了一个字典。</p>
-<p>现在把test.py换成如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line">yaml_dict = &#123;<span class="string">"name"</span>: <span class="string">"Gakki"</span>,</span><br><span class="line">         <span class="string">"age"</span>: <span class="number">29</span>,</span><br><span class="line">         <span class="string">"job"</span>: <span class="string">"Actress"</span>,</span><br><span class="line">         <span class="string">"relationship"</span>: <span class="string">"Wife"</span></span><br><span class="line">              &#125;</span><br><span class="line">aaa = yaml.dump(yaml_dict, default_flow_style=False)</span><br><span class="line">print aaa</span><br><span class="line">print (type(aaa))</span><br></pre></td></tr></table></figure></p>
-<p>执行后的效果如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@paas-online-crs-001 chentest]# python test.py </span><br><span class="line">age: <span class="number">29</span></span><br><span class="line">job: Actress</span><br><span class="line">name: Gakki</span><br><span class="line">relationship: Wife</span><br><span class="line">&lt;type <span class="string">'str'</span>&gt;</span><br></pre></td></tr></table></figure></p>
-<p>可见，通过dump方法，把一个dict变成了一个字符串。</p>
-<p>现在写一个配置文件，假如它叫test.yaml:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">- Gakki</span><br><span class="line">- <span class="number">29</span>	</span><br><span class="line">- Actress</span><br><span class="line">- Wife</span><br></pre></td></tr></table></figure></p>
-<p>再来一个test.py，内容如下:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"> </span><br><span class="line">aaa = yaml.load(file(<span class="string">'test.yaml'</span>, <span class="string">'r'</span>))</span><br><span class="line">print aaa</span><br><span class="line">print (type(aaa))</span><br></pre></td></tr></table></figure></p>
-<p>执行这个test.py：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@paas-online-crs-001 chentest]# python test.py 	</span><br><span class="line">[<span class="string">'Gakki'</span>, <span class="number">29</span>, <span class="string">'Actress'</span>, <span class="string">'Wife'</span>]</span><br><span class="line">&lt;type 'list'&gt;    #得到了一个列表</span><br></pre></td></tr></table></figure></p>
-<p>如果把那个test.yaml升级成字典和列表的混合结构，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- name: Chris</span><br><span class="line"> 	age: <span class="number">29</span></span><br><span class="line"> 	job: OM Engineer</span><br><span class="line">- name: Gakki</span><br><span class="line"> 	age: <span class="number">29</span></span><br><span class="line"> 	job: Actress</span><br><span class="line"> 	relationship: Wife</span><br></pre></td></tr></table></figure></p>
-<p>执行test.py的效果如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@paas-online-crs-001 chentest]# python test.py </span><br><span class="line">[&#123;<span class="string">'job'</span>: <span class="string">'OM Engineer'</span>, <span class="string">'age'</span>: <span class="number">29</span>, <span class="string">'name'</span>: <span class="string">'Chris'</span>&#125;, &#123;<span class="string">'job'</span>: <span class="string">'Actress'</span>, <span class="string">'age'</span>: <span class="number">29</span>, <span class="string">'relationship'</span>: <span class="string">'Wife'</span>, <span class="string">'name'</span>: <span class="string">'Gakki'</span>&#125;]</span><br><span class="line">&lt;type <span class="string">'list'</span>&gt;</span><br></pre></td></tr></table></figure></p>
-<p>既然获得的结果是一个包含字典的列表，那么如果要获得“Gakki”就是aaa[1][‘name’]</p>
-<p>如果想要复制和引用，那么要用&amp;和*，比如把test.yaml改成这样：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name: &amp;name Gakki</span><br><span class="line">wife: *name</span><br></pre></td></tr></table></figure></p>
-<p>执行test.py的效果如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@paas-online-crs-001 chentest]# python test.py </span><br><span class="line">&#123;<span class="string">'name'</span>: <span class="string">'Gakki'</span>, <span class="string">'wife'</span>: <span class="string">'Gakki'</span>&#125;</span><br><span class="line">&lt;type <span class="string">'dict'</span>&gt;</span><br></pre></td></tr></table></figure></p>
-<p>在同一个yaml文件中，可以用 — 来分段，这样可以将多个文档写在一个文件中：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"> 	name: Chris</span><br><span class="line"> 	age: <span class="number">29</span></span><br><span class="line"> 	job: OM Engineer</span><br><span class="line">---</span><br><span class="line"> 	name: Gakki</span><br><span class="line"> 	age: <span class="number">29</span></span><br><span class="line"> 	job: Actress</span><br><span class="line"> 	relationship: Wife</span><br></pre></td></tr></table></figure></p>
-<p>再写一个新的test.py如下:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line">ys = yaml.load_all(file('gakki.yaml', 'r'))    #load_all() 方法会生成一个迭代器，可以用for输出出来</span><br><span class="line"><span class="keyword">for</span> y <span class="keyword">in</span> ys:</span><br><span class="line">   	print y</span><br></pre></td></tr></table></figure></p>
-<p>执行这个py的效果：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@paas-online-crs-001 chentest]# python test.py </span><br><span class="line">&#123;<span class="string">'job'</span>: <span class="string">'OM Engineer'</span>, <span class="string">'age'</span>: <span class="number">29</span>, <span class="string">'name'</span>: <span class="string">'Chris'</span>&#125;</span><br><span class="line">&#123;<span class="string">'job'</span>: <span class="string">'Actress'</span>, <span class="string">'age'</span>: <span class="number">29</span>, <span class="string">'relationship'</span>: <span class="string">'Wife'</span>, <span class="string">'name'</span>: <span class="string">'Gakki'</span>&#125;</span><br></pre></td></tr></table></figure></p>
-<p>参考文档：<a href="https://huilansame.github.io/huilansame.github.io/archivers/recommond-case-file-type-yaml" target="_blank" rel="noopener">https://huilansame.github.io/huilansame.github.io/archivers/recommond-case-file-type-yaml</a></p>
-<p><img src="/images/todalaugh.gif" alt="抱光妹" title="Toda马笑"></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>金山云有一个服务器需要连接到数据库但是总是失败，检查之后发现它的VPC配错了，更改VPC之后，这台服务器也会更换一个新的内网IP地址，但是问题来了，更换了内网IP之后，从跳板机连接，提示<code>port 22: Connection refused</code>。</p>
+<p><code>ssh -v 新的ip地址</code>发现根本没有到<code>Connection established</code>。直接就提示<code>port 22: Connection refused</code>。这基本可以断定不是跳板机的问题了，那么就需要在远程机器里看配置。</p>
+<p>但是远程机器是无法连接的啊，怎么办？从金山控制台“连接实例”。<br><img src="/images/ksssh1.png" alt=""></p>
+<p>然后键盘随便按一下，就会看到linux界面，输入账号名和密码，这里密码不支持复制粘贴，需要手动输入。然后就会看到如下界面。<br><img src="/images/ksssh2.png" alt=""></p>
+<p>这样，我们就可以登陆这台机器了，然后<code>vim /etc/ssh/sshd_config</code>，看到最上面有这样的内容。<br><img src="/images/ksssh3.png" alt=""></p>
+<p>这个<code>listenaddress</code>后面就是跳板机ssh的地址，但是这个地址还是老的，而不是更改过后的内网ip地址，所以ssh的连接自然就是<code>refuse</code>。所以我们只需要手动更改成新的内网ip地址就好了。</p>
+<p>更改完之后，重启一下服务器或者<code>/etc/init.d/sshd restart</code>就可以从跳板机上正常连接了。</p>
+<p>如果在<code>/etc/init.d/sshd restart</code>的时候爆出“address family must be specified before ListenAddress”的错误，那么就把<code>AddressFamily</code>移到<code>ListenAddress</code>上面就可以了，如图：<br><img src="/images/ksssh4.png" alt=""></p>
 
       
     </div>
@@ -554,11 +543,11 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/11/在Python使用yaml的几个例子/" title="在Python使用yaml的几个例子">在Python使用yaml的几个例子</a>
+					<a href="http://yoursite.com/2018/01/29/Ssh连接port-22-Connection-refused/" title="Ssh连接port 22: Connection refused">Ssh连接port 22: Connection refused</a>
 				</li>
 
 				<li class="post-copyright-date">
-					<strong>发布时间：</strong>2018年1月11日 - 10时01分
+					<strong>发布时间：</strong>2018年1月29日 - 11时01分
 				</li>  
 
 				<li class="post-copyright-license">
@@ -572,9 +561,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+            <a href="/tags/linux/" rel="tag"><i class="fa fa-tag"></i> linux</a>
           
-            <a href="/tags/编程/" rel="tag"><i class="fa fa-tag"></i> 编程</a>
+            <a href="/tags/ssh/" rel="tag"><i class="fa fa-tag"></i> ssh</a>
           
         </div>
       
@@ -600,8 +589,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/10/使用Zabbix去监控Redis/" rel="next" title="使用Zabbix去监控Redis">
-                <i class="fa fa-chevron-left"></i> 使用Zabbix去监控Redis
+              <a href="/2018/01/27/SFTP不能连接服务器怎么办？/" rel="next" title="SFTP不能连接服务器怎么办？">
+                <i class="fa fa-chevron-left"></i> SFTP不能连接服务器怎么办？
               </a>
             
           </div>
@@ -609,10 +598,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/11/Zabbix监控ActiveMQ队列数以及结合Grafana展示/" rel="prev" title="Zabbix监控ActiveMQ队列数以及结合Grafana展示">
-                Zabbix监控ActiveMQ队列数以及结合Grafana展示 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -1051,7 +1036,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/11/在Python使用yaml的几个例子/"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/29/Ssh连接port-22-Connection-refused/"});
 		
 
 		(function() {
