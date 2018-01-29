@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/pyredis1.png">
 <meta property="og:image" content="http://yoursite.com/images/pyredis2.png">
 <meta property="og:image" content="http://yoursite.com/images/欧文骚脚步.gif">
-<meta property="og:updated_time" content="2018-01-29T04:45:06.196Z">
+<meta property="og:updated_time" content="2018-01-29T04:48:40.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python里调用redis的方法">
 <meta name="twitter:description" content="本文的写作来源于《第一本 docker书》的第189页。">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  140
+                  142
                 </span>
               
 
@@ -472,7 +472,9 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>Python 2.7里不是自带<code>redis</code>模块的，那么在调用redis的时候自然也会报错，比如：<br><img src="/images/pyredis1.png" alt=""></p>
 <p>遇到这种情况怎么办？</p>
-<p>第一种方法：<br>    pip install redis<br>第二种方法：<br>    easy_install redis<br>第三种方法：<br>去登录<code>https://github.com/andymccurdy/redis-py</code>，下载包上传到linux里之后，<br>    python setup.py install<br><img src="/images/pyredis2.png" alt=""></p>
+<p>第一种方法：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install redis</span><br></pre></td></tr></table></figure></p>
+<p>第二种方法：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">easy_install redis</span><br></pre></td></tr></table></figure></p>
+<p>第三种方法：<br>去登录<code>https://github.com/andymccurdy/redis-py</code>，下载包上传到linux里之后，<code>python setup.py install</code>。<br><img src="/images/pyredis2.png" alt=""></p>
 <p>flask模块的安装也是同理。</p>
 <p>注意！这里只有<code>Redis</code>，如果使用<code>StrictRedis</code>会报错：<code>AttributeError: &#39;Redis&#39; object has no attribute &#39;StrictRedis&#39;</code>。这个是版本的问题。见<br><a href="https://github.com/andymccurdy/redis-py/issues/188" target="_blank" rel="noopener">https://github.com/andymccurdy/redis-py/issues/188</a></p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://debugo.com/python-redis/" target="_blank" rel="noopener">http://debugo.com/python-redis/</a></p>

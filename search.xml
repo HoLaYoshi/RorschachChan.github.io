@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Python里调用redis的方法]]></title>
     <url>%2F2018%2F01%2F29%2FPython%E9%87%8C%E8%B0%83%E7%94%A8redis%E7%9A%84%E6%96%B9%E6%B3%95%2F</url>
-    <content type="text"><![CDATA[正文Python 2.7里不是自带redis模块的，那么在调用redis的时候自然也会报错，比如： 遇到这种情况怎么办？ 第一种方法： pip install redis第二种方法： easy_install redis第三种方法：去登录https://github.com/andymccurdy/redis-py，下载包上传到linux里之后， python setup.py install flask模块的安装也是同理。 注意！这里只有Redis，如果使用StrictRedis会报错：AttributeError: &#39;Redis&#39; object has no attribute &#39;StrictRedis&#39;。这个是版本的问题。见https://github.com/andymccurdy/redis-py/issues/188 参考资料http://debugo.com/python-redis/]]></content>
+    <content type="text"><![CDATA[正文Python 2.7里不是自带redis模块的，那么在调用redis的时候自然也会报错，比如： 遇到这种情况怎么办？ 第一种方法： 1pip install redis 第二种方法： 1easy_install redis 第三种方法：去登录https://github.com/andymccurdy/redis-py，下载包上传到linux里之后，python setup.py install。 flask模块的安装也是同理。 注意！这里只有Redis，如果使用StrictRedis会报错：AttributeError: &#39;Redis&#39; object has no attribute &#39;StrictRedis&#39;。这个是版本的问题。见https://github.com/andymccurdy/redis-py/issues/188 参考资料http://debugo.com/python-redis/]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
