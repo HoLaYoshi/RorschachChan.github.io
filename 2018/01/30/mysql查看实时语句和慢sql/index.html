@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="shell,yum," />
+  <meta name="keywords" content="mysql," />
 
 
 
@@ -88,20 +88,20 @@
 
 
 
-<meta name="description" content="解决yum的小故障">
-<meta name="keywords" content="shell,yum">
+<meta name="description" content="查看实时语句Mysql除了手动执行的语句，还有很多在后台由其他模块执行的语句，按理来说，那些由其他模块执行的语句是不能实时查看的，因为这个资源消耗特别的大，但是当我们实在需要查看实时sql语句的时候也不是做不到，需要手动开启一个日志开关general_log。 首先登陆mysql，然后执行SHOW VARIABLES LIKE &amp;quot;general_log%&amp;quot;;，看一下反馈的结果">
+<meta name="keywords" content="mysql">
 <meta property="og:type" content="article">
-<meta property="og:title" content="yum提示Error: rpmdb open failed">
-<meta property="og:url" content="http://yoursite.com/2018/01/24/yum提示Error-rpmdb-open-failed/index.html">
+<meta property="og:title" content="mysql查看实时语句和慢sql">
+<meta property="og:url" content="http://yoursite.com/2018/01/30/mysql查看实时语句和慢sql/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="解决yum的小故障">
+<meta property="og:description" content="查看实时语句Mysql除了手动执行的语句，还有很多在后台由其他模块执行的语句，按理来说，那些由其他模块执行的语句是不能实时查看的，因为这个资源消耗特别的大，但是当我们实在需要查看实时sql语句的时候也不是做不到，需要手动开启一个日志开关general_log。 首先登陆mysql，然后执行SHOW VARIABLES LIKE &amp;quot;general_log%&amp;quot;;，看一下反馈的结果">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/yum1.png">
-<meta property="og:updated_time" content="2018-01-25T09:35:20.166Z">
+<meta property="og:image" content="http://yoursite.com/images/curry3p.gif">
+<meta property="og:updated_time" content="2018-01-30T13:28:07.468Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="yum提示Error: rpmdb open failed">
-<meta name="twitter:description" content="解决yum的小故障">
-<meta name="twitter:image" content="http://yoursite.com/images/yum1.png">
+<meta name="twitter:title" content="mysql查看实时语句和慢sql">
+<meta name="twitter:description" content="查看实时语句Mysql除了手动执行的语句，还有很多在后台由其他模块执行的语句，按理来说，那些由其他模块执行的语句是不能实时查看的，因为这个资源消耗特别的大，但是当我们实在需要查看实时sql语句的时候也不是做不到，需要手动开启一个日志开关general_log。 首先登陆mysql，然后执行SHOW VARIABLES LIKE &amp;quot;general_log%&amp;quot;;，看一下反馈的结果">
+<meta name="twitter:image" content="http://yoursite.com/images/curry3p.gif">
 
 
 
@@ -131,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/01/24/yum提示Error-rpmdb-open-failed/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/01/30/mysql查看实时语句和慢sql/"/>
 
 
 
 
 
-  <title>yum提示Error: rpmdb open failed | Chris Chan's BLOG</title>
+  <title>mysql查看实时语句和慢sql | Chris Chan's BLOG</title>
   
 
 
@@ -320,7 +320,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/24/yum提示Error-rpmdb-open-failed/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/30/mysql查看实时语句和慢sql/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Chris Chan">
@@ -337,7 +337,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">yum提示Error: rpmdb open failed</h1>
+          <h1 class="post-title" itemprop="name headline">mysql查看实时语句和慢sql</h1>
         
 
         <div class="post-meta">
@@ -349,8 +349,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T14:09:35+08:00">
-                2018-01-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-30T20:50:14+08:00">
+                2018-01-30
               </time>
             
 
@@ -391,8 +391,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2018/01/24/yum提示Error-rpmdb-open-failed/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/24/yum提示Error-rpmdb-open-failed/" itemprop="commentsCount"></span>
+                <a href="/2018/01/30/mysql查看实时语句和慢sql/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/01/30/mysql查看实时语句和慢sql/" itemprop="commentsCount"></span>
                 </a>
               </span>
               <!--/noindex-->
@@ -401,7 +401,7 @@
 
           
           
-             <span id="/2018/01/24/yum提示Error-rpmdb-open-failed/" class="leancloud_visitors" data-flag-title="yum提示Error: rpmdb open failed">
+             <span id="/2018/01/30/mysql查看实时语句和慢sql/" class="leancloud_visitors" data-flag-title="mysql查看实时语句和慢sql">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  94
+                  1,045
                 </span>
               
 
@@ -443,16 +443,12 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  4
                 </span>
               
             </div>
           
 
-          
-              <div class="post-description">
-                  解决yum的小故障
-              </div>
           
 
         </div>
@@ -468,9 +464,21 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>今天在一台机器里，使用<code>yum</code>安装的时候，出现了如下的故障：<br><img src="/images/yum1.png" alt="akb48"></p>
-<p>这种情况就是RPM数据库被破坏了，这个时候就需要我们重建数据库，于是就输入如下的命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd / <span class="keyword">var</span> / lib / rpm /</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">` ls | grep 'db.' `</span> ; <span class="keyword">do</span> mv $i $i .bak ; done</span><br><span class="line">rpm -- rebuilddb</span><br><span class="line">yum clean all</span><br></pre></td></tr></table></figure></p>
-<p>重新<code>cleanup</code>就正常了。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="查看实时语句">查看实时语句</span></h2><p>Mysql除了手动执行的语句，还有很多在后台由其他模块执行的语句，按理来说，那些由其他模块执行的语句是不能实时查看的，因为这个资源消耗特别的大，但是当我们实在需要查看实时sql语句的时候也不是做不到，需要手动开启一个日志开关<code>general_log</code>。</p>
+<p>首先登陆mysql，然后执行<code>SHOW VARIABLES LIKE &quot;general_log%&quot;;</code>，看一下反馈的结果，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SHOW VARIABLES LIKE <span class="string">"general_log%"</span>;</span><br><span class="line">+------------------+-------+</span><br><span class="line">| Variable_name    | Value |</span><br><span class="line">+------------------+-------+</span><br><span class="line">| general_log      | OFF   |</span><br><span class="line">| general_log_file |       |</span><br><span class="line">+------------------+-------+</span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> set (<span class="number">0.04</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>发现这个Value是<code>off</code>，那么就说明实时记录<code>general_log</code>没有开启，如果我们要开启它很简单，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SET GLOBAL log_output = file;</span><br><span class="line">mysql&gt; SET GLOBAL general_log = <span class="string">'ON'</span>;</span><br><span class="line">mysql&gt; SET GLOBAL general_log_file = <span class="string">'/tmp/mysql/general_log.log'</span>;</span><br></pre></td></tr></table></figure></p>
+<p>可见我们不仅打开了<code>general_log</code>的开关，而且设置日志输出方式为文件（如果设置log_output=table的话，则日志结果会记录到名为gengera_log的表中，这表的默认引擎都是CSV）。同时规定它的保存位置是<code>/tmp/mysql/general_log.log</code>。</p>
+<p>但是这个是临时方法，如果mysql重启了那么就会失效，如果想要永久有效的话，就要编辑<code>my.cnf</code>，添加下面两句话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">general_log = <span class="number">1</span></span><br><span class="line">general_log_file = <span class="regexp">/tmp/my</span>sql/general_sql.log</span><br></pre></td></tr></table></figure></p>
+<p>这里要注意！<font color="red">开启general_log会影响性能，谨慎使用!正式系统用完要关闭!!!</font>关闭的语句<code>SET GLOBAL general_log = &#39;OFF&#39;;</code>。</p>
+<h2><span id="查看慢sql">查看慢sql</span></h2><p>慢sql的意思就是那些执行很慢的sql，这些sql拖慢进程的执行效率而且有很大的优化空间。默认的来说，执行时间超过1秒就算慢sql了，在mysql里输入<code>show variables like &#39;long%&#39;</code>，就会看到如下的内容：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like <span class="string">'long%'</span>;</span><br><span class="line">+-----------------+----------+</span><br><span class="line">| Variable_name   | Value    |</span><br><span class="line">+-----------------+----------+</span><br><span class="line">| long_query_time | <span class="number">1.000000</span> |</span><br><span class="line">+-----------------+----------+</span><br><span class="line"><span class="number">1</span> row <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>这个<code>long_query_time</code>是可以更改的，这里是1，那就是代表查询时间大于(不是大于等于)1秒的都是记录到日志，最大值是10。如果写的是0，那么就是输出所有的语句。</p>
+<p>这里多说一句，使用命令<code>set global long_query_time=4</code>修改慢查询阈值为4秒后，需要重新连接或新开一个会话才能看到修改值。你用<code>show variables like &#39;long_query_time&#39;</code>查看是当前会话的变量值，你也可以不用重新连接会话，而是用<code>show global variables like &#39;long_query_time&#39;;</code>。</p>
+<p>那么记录这些慢日志的地方在哪呢？使用<code>show variables  like &#39;%slow_query_log%&#39;;</code>看看：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables  like <span class="string">'%slow_query_log%'</span>;</span><br><span class="line">+---------------------+-----------------------------------------------+</span><br><span class="line">| Variable_name       | Value                                         |</span><br><span class="line">+---------------------+-----------------------------------------------+</span><br><span class="line">| slow_query_log      | OFF                                           |</span><br><span class="line">| slow_query_log_file | <span class="regexp">/tmp/my</span>sql/DB-Server-slow.log 				  |</span><br><span class="line">+---------------------+-----------------------------------------------+</span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>这里说明慢日志的地址是<code>/tmp/mysql/DB-Server-slow.log</code>，但是慢日志记录的功能没有启动。如果要启动，语句是：<code>set global slow_query_log=1;</code>，跟上面开启实时日志<code>general_log</code>一样，这个方法仅仅是一个临时方法，重启了mysql就会失效，如果要长期生效，还是在<code>my.cnf</code>文件里添加如下两句话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slow_query_log =<span class="number">1</span></span><br><span class="line">slow_query_log_file=<span class="regexp">/tmp/my</span>sql/DB-Server-slow.log</span><br></pre></td></tr></table></figure></p>
+<p>慢日志还有一个系统变量叫<code>log-queries-not-using-indexes</code>，它的意思是未使用索引的查询也被记录到慢查询日志中，哪怕他可能执行的非常快（可选项）。如果调优的话，建议开启这个选项。另外，开启了这个参数，其实使用<code>full index scan</code>的sql也会被记录到慢查询日志。如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like <span class="string">'log_queries_not_using_indexes'</span>;</span><br><span class="line">+-------------------------------+-------+</span><br><span class="line">| Variable_name                 | Value |</span><br><span class="line">+-------------------------------+-------+</span><br><span class="line">| log_queries_not_using_indexes | OFF   |</span><br><span class="line">+-------------------------------+-------+</span><br><span class="line"><span class="number">1</span> row <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; set global log_queries_not_using_indexes=<span class="number">1</span>;</span><br><span class="line">Query OK, <span class="number">0</span> rows affected (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>如果你想自己试试慢sql是否被记录，那么可以使用<code>select sleep(5);</code>这样的语句，执行效果如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select sleep(<span class="number">5</span>) ;</span><br><span class="line">+----------+</span><br><span class="line">| sleep(<span class="number">5</span>) |</span><br><span class="line">+----------+</span><br><span class="line">|        <span class="number">0</span> |</span><br><span class="line">+----------+</span><br><span class="line"><span class="number">1</span> row <span class="keyword">in</span> set (<span class="number">5.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * <span class="keyword">from</span> mysql.slow_log;</span><br><span class="line">+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span><br><span class="line">| start_time          | user_host                 | query_time | lock_time | rows_sent | rows_examined | db | last_insert_id | insert_id | server_id | sql_text        | thread_id |</span><br><span class="line">+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span><br><span class="line">| <span class="number">2018</span><span class="number">-01</span><span class="number">-30</span> <span class="number">21</span>:<span class="number">45</span>:<span class="number">23</span> | root[root] @ localhost [] | <span class="number">00</span>:<span class="number">00</span>:<span class="number">05</span>   | <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>  |         <span class="number">1</span> |             <span class="number">0</span> |    |              <span class="number">0</span> |         <span class="number">0</span> |         <span class="number">1</span> | select sleep(<span class="number">5</span>) |         <span class="number">2</span> |</span><br><span class="line">+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span><br><span class="line"><span class="number">1</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>参考资料<br><a href="http://www.cnblogs.com/kerrycode/p/5593204.html" target="_blank" rel="noopener">http://www.cnblogs.com/kerrycode/p/5593204.html</a><br><a href="https://www.cnblogs.com/qmfsun/p/4844472.html" target="_blank" rel="noopener">https://www.cnblogs.com/qmfsun/p/4844472.html</a></p>
+<p><img src="/images/curry3p.gif" alt="库里三分" title="神射手萌库"></p>
 
       
     </div>
@@ -535,11 +543,11 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/24/yum提示Error-rpmdb-open-failed/" title="yum提示Error: rpmdb open failed">yum提示Error: rpmdb open failed</a>
+					<a href="http://yoursite.com/2018/01/30/mysql查看实时语句和慢sql/" title="mysql查看实时语句和慢sql">mysql查看实时语句和慢sql</a>
 				</li>
 
 				<li class="post-copyright-date">
-					<strong>发布时间：</strong>2018年1月24日 - 14时01分
+					<strong>发布时间：</strong>2018年1月30日 - 20时01分
 				</li>  
 
 				<li class="post-copyright-license">
@@ -553,9 +561,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
-          
-            <a href="/tags/yum/" rel="tag"><i class="fa fa-tag"></i> yum</a>
+            <a href="/tags/mysql/" rel="tag"><i class="fa fa-tag"></i> mysql</a>
           
         </div>
       
@@ -581,8 +587,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/23/由一个实例浅析sed用法/" rel="next" title="由一个实例浅析sed用法">
-                <i class="fa fa-chevron-left"></i> 由一个实例浅析sed用法
+              <a href="/2018/01/30/Goaccess-良心nginx日志分析工具/" rel="next" title="Goaccess---良心nginx日志分析工具">
+                <i class="fa fa-chevron-left"></i> Goaccess---良心nginx日志分析工具
               </a>
             
           </div>
@@ -590,10 +596,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/24/Crontab里解决脚本时间重叠的问题/" rel="prev" title="Crontab里解决脚本时间重叠的问题">
-                Crontab里解决脚本时间重叠的问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -676,8 +678,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -850,6 +861,22 @@ show_date_time();
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x67E5;&#x770B;&#x5B9E;&#x65F6;&#x8BED;&#x53E5;">&#x67E5;&#x770B;&#x5B9E;&#x65F6;&#x8BED;&#x53E5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x67E5;&#x770B;&#x6162;sql">&#x67E5;&#x770B;&#x6162;sql</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -1032,7 +1059,7 @@ show_date_time();
 		_hcwp.push({widget:"Bloggerstream", widget_id: 99594, selector:".hc-comment-count", label: "{\%COUNT%\}" });
 
 		
-		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/24/yum提示Error-rpmdb-open-failed/"});
+		_hcwp.push({widget:"Stream", widget_id: 99594, xid: "2018/01/30/mysql查看实时语句和慢sql/"});
 		
 
 		(function() {

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[mysql查看实时语句和慢sql]]></title>
+    <url>%2F2018%2F01%2F30%2Fmysql%E6%9F%A5%E7%9C%8B%E5%AE%9E%E6%97%B6%E8%AF%AD%E5%8F%A5%E5%92%8C%E6%85%A2sql%2F</url>
+    <content type="text"><![CDATA[查看实时语句Mysql除了手动执行的语句，还有很多在后台由其他模块执行的语句，按理来说，那些由其他模块执行的语句是不能实时查看的，因为这个资源消耗特别的大，但是当我们实在需要查看实时sql语句的时候也不是做不到，需要手动开启一个日志开关general_log。 首先登陆mysql，然后执行SHOW VARIABLES LIKE &quot;general_log%&quot;;，看一下反馈的结果，如下： 12345678mysql&gt; SHOW VARIABLES LIKE "general_log%";+------------------+-------+| Variable_name | Value |+------------------+-------+| general_log | OFF || general_log_file | |+------------------+-------+2 rows in set (0.04 sec) 发现这个Value是off，那么就说明实时记录general_log没有开启，如果我们要开启它很简单，如下： 123mysql&gt; SET GLOBAL log_output = file;mysql&gt; SET GLOBAL general_log = 'ON';mysql&gt; SET GLOBAL general_log_file = '/tmp/mysql/general_log.log'; 可见我们不仅打开了general_log的开关，而且设置日志输出方式为文件（如果设置log_output=table的话，则日志结果会记录到名为gengera_log的表中，这表的默认引擎都是CSV）。同时规定它的保存位置是/tmp/mysql/general_log.log。 但是这个是临时方法，如果mysql重启了那么就会失效，如果想要永久有效的话，就要编辑my.cnf，添加下面两句话： 12general_log = 1general_log_file = /tmp/mysql/general_sql.log 这里要注意！开启general_log会影响性能，谨慎使用!正式系统用完要关闭!!!关闭的语句SET GLOBAL general_log = &#39;OFF&#39;;。 查看慢sql慢sql的意思就是那些执行很慢的sql，这些sql拖慢进程的执行效率而且有很大的优化空间。默认的来说，执行时间超过1秒就算慢sql了，在mysql里输入show variables like &#39;long%&#39;，就会看到如下的内容： 1234567mysql&gt; show variables like 'long%';+-----------------+----------+| Variable_name | Value |+-----------------+----------+| long_query_time | 1.000000 |+-----------------+----------+1 row in set (0.00 sec) 这个long_query_time是可以更改的，这里是1，那就是代表查询时间大于(不是大于等于)1秒的都是记录到日志，最大值是10。如果写的是0，那么就是输出所有的语句。 这里多说一句，使用命令set global long_query_time=4修改慢查询阈值为4秒后，需要重新连接或新开一个会话才能看到修改值。你用show variables like &#39;long_query_time&#39;查看是当前会话的变量值，你也可以不用重新连接会话，而是用show global variables like &#39;long_query_time&#39;;。 那么记录这些慢日志的地方在哪呢？使用show variables like &#39;%slow_query_log%&#39;;看看： 12345678mysql&gt; show variables like '%slow_query_log%';+---------------------+-----------------------------------------------+| Variable_name | Value |+---------------------+-----------------------------------------------+| slow_query_log | OFF || slow_query_log_file | /tmp/mysql/DB-Server-slow.log |+---------------------+-----------------------------------------------+2 rows in set (0.00 sec) 这里说明慢日志的地址是/tmp/mysql/DB-Server-slow.log，但是慢日志记录的功能没有启动。如果要启动，语句是：set global slow_query_log=1;，跟上面开启实时日志general_log一样，这个方法仅仅是一个临时方法，重启了mysql就会失效，如果要长期生效，还是在my.cnf文件里添加如下两句话： 12slow_query_log =1slow_query_log_file=/tmp/mysql/DB-Server-slow.log 慢日志还有一个系统变量叫log-queries-not-using-indexes，它的意思是未使用索引的查询也被记录到慢查询日志中，哪怕他可能执行的非常快（可选项）。如果调优的话，建议开启这个选项。另外，开启了这个参数，其实使用full index scan的sql也会被记录到慢查询日志。如下： 12345678910mysql&gt; show variables like 'log_queries_not_using_indexes';+-------------------------------+-------+| Variable_name | Value |+-------------------------------+-------+| log_queries_not_using_indexes | OFF |+-------------------------------+-------+1 row in set (0.00 sec)mysql&gt; set global log_queries_not_using_indexes=1;Query OK, 0 rows affected (0.00 sec) 如果你想自己试试慢sql是否被记录，那么可以使用select sleep(5);这样的语句，执行效果如下： 123456789101112131415mysql&gt; select sleep(5) ;+----------+| sleep(5) |+----------+| 0 |+----------+1 row in set (5.00 sec)mysql&gt; select * from mysql.slow_log;+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+| start_time | user_host | query_time | lock_time | rows_sent | rows_examined | db | last_insert_id | insert_id | server_id | sql_text | thread_id |+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+| 2018-01-30 21:45:23 | root[root] @ localhost [] | 00:00:05 | 00:00:00 | 1 | 0 | | 0 | 0 | 1 | select sleep(5) | 2 |+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+1 rows in set (0.00 sec) 参考资料http://www.cnblogs.com/kerrycode/p/5593204.htmlhttps://www.cnblogs.com/qmfsun/p/4844472.html]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Goaccess---良心nginx日志分析工具]]></title>
     <url>%2F2018%2F01%2F30%2FGoaccess-%E8%89%AF%E5%BF%83nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7%2F</url>
     <content type="text"><![CDATA[Goaccess是一个非常良心的开源软件，它的良心之处体现在如下方面： 安装简单； 操作容易； 界面酷炫； 安装安装Goaccess十分的简单，在centos里直接yum install goaccess，如果yum源里没有goaccess，可以先安装epel。安装epel的方法如下： 123wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpmwget http://rpms.famillecollet.com/enterprise/remi-release-6.rpmrpm -Uvh remi-release-6*.rpm epel-release-6*.rpm 配置和使用安装完goaccess之后，我们需要在/etc/goaccess.conf里添加如下几句话： 123time-format %Tdate-format %d/%b/%Ylog-format %h %^[%d:%t %^] “%r” %s %b “%R” “%u” 保存退出之后，我们就可以通过goaccess来分析nginx日志了，语句格式也很简单：goaccess -f nginx日志的绝对路径。比如我的nginx日志是access-chen.log，查看一下里面的内容： 虽然有规律，但是看上去很乱，需要在分析日志之前喝两瓶静心口服液。 然后我就goaccess -f access-chen.log，就会看到如下的界面： 这一下，整个日志看起来更加友好，更加直白，更加高大上。足以吸引周围人的羡慕目光。 但是这里面还是有一个注意点：goaccess默认支持的日志格式是nginx默认的日志格式，也就是nginx.conf里的如下格式： 如果你的日志格式是有过更改的，而且还不想改回来，那么就需要去/etc/goaccess.conf里对应的log-format进行更改。 这还没有完，goaccess还可以生成html，这里goaccess -f access-chen.log -a &gt; /nginx安装路径/html/chen.html。然后在浏览器里登陆到这个服务器的chen.html，就会看到整个日志情况的网页排版，如图： 这样的话，我们可以每一天都发一份当天的日志html去运维人员的信箱里，这样更加方便我们分析日志。 缺点虽然前面说了那么多goaccess的优点，但是缺点也是有的，比如goaccess的粒度太粗，只能按天分割，如果要按小时分割，需要先grep出来，这个做法比较挫我懂… 还有一个缺点，就是访问人的来源只能定位到国家，无法具体定位到省市县村屯… 参考资料http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond]]></content>
@@ -80,9 +91,9 @@
       </categories>
       <tags>
         <tag>linux</tag>
-        <tag>redis</tag>
         <tag>centos</tag>
         <tag>php</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
@@ -428,8 +439,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
