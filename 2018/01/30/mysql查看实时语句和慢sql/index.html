@@ -97,7 +97,7 @@
 <meta property="og:description" content="这些都是在自己的mysql上使用的，云厂家的数据库就不要想了，需要在控制台查看。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/curry3p.gif">
-<meta property="og:updated_time" content="2018-01-30T13:32:36.417Z">
+<meta property="og:updated_time" content="2018-01-30T13:35:25.613Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mysql查看实时语句和慢sql">
 <meta name="twitter:description" content="这些都是在自己的mysql上使用的，云厂家的数据库就不要想了，需要在控制台查看。">
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,045
+                  1,053
                 </span>
               
 
@@ -443,7 +443,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  5
                 </span>
               
             </div>
@@ -481,7 +481,7 @@
 <p>这里说明慢日志的地址是<code>/tmp/mysql/DB-Server-slow.log</code>，但是慢日志记录的功能没有启动。如果要启动，语句是：<code>set global slow_query_log=1;</code>，跟上面开启实时日志<code>general_log</code>一样，这个方法仅仅是一个临时方法，重启了mysql就会失效，如果要长期生效，还是在<code>my.cnf</code>文件里添加如下两句话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slow_query_log =<span class="number">1</span></span><br><span class="line">slow_query_log_file=<span class="regexp">/tmp/my</span>sql/DB-Server-slow.log</span><br></pre></td></tr></table></figure></p>
 <p>慢日志还有一个系统变量叫<code>log-queries-not-using-indexes</code>，它的意思是未使用索引的查询也被记录到慢查询日志中，哪怕他可能执行的非常快（可选项）。如果调优的话，建议开启这个选项。另外，开启了这个参数，其实使用<code>full index scan</code>的sql也会被记录到慢查询日志。如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show variables like <span class="string">'log_queries_not_using_indexes'</span>;</span><br><span class="line">+-------------------------------+-------+</span><br><span class="line">| Variable_name                 | Value |</span><br><span class="line">+-------------------------------+-------+</span><br><span class="line">| log_queries_not_using_indexes | OFF   |</span><br><span class="line">+-------------------------------+-------+</span><br><span class="line"><span class="number">1</span> row <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; set global log_queries_not_using_indexes=<span class="number">1</span>;</span><br><span class="line">Query OK, <span class="number">0</span> rows affected (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
 <p>如果你想自己试试慢sql是否被记录，那么可以使用<code>select sleep(5);</code>这样的语句，执行效果如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select sleep(<span class="number">5</span>) ;</span><br><span class="line">+----------+</span><br><span class="line">| sleep(<span class="number">5</span>) |</span><br><span class="line">+----------+</span><br><span class="line">|        <span class="number">0</span> |</span><br><span class="line">+----------+</span><br><span class="line"><span class="number">1</span> row <span class="keyword">in</span> set (<span class="number">5.00</span> sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * <span class="keyword">from</span> mysql.slow_log;</span><br><span class="line">+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span><br><span class="line">| start_time          | user_host                 | query_time | lock_time | rows_sent | rows_examined | db | last_insert_id | insert_id | server_id | sql_text        | thread_id |</span><br><span class="line">+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span><br><span class="line">| <span class="number">2018</span><span class="number">-01</span><span class="number">-30</span> <span class="number">21</span>:<span class="number">45</span>:<span class="number">23</span> | root[root] @ localhost [] | <span class="number">00</span>:<span class="number">00</span>:<span class="number">05</span>   | <span class="number">00</span>:<span class="number">00</span>:<span class="number">00</span>  |         <span class="number">1</span> |             <span class="number">0</span> |    |              <span class="number">0</span> |         <span class="number">0</span> |         <span class="number">1</span> | select sleep(<span class="number">5</span>) |         <span class="number">2</span> |</span><br><span class="line">+---------------------+---------------------------+------------+-----------+-----------+---------------+----+----------------+-----------+-----------+-----------------+-----------+</span><br><span class="line"><span class="number">1</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.cnblogs.com/kerrycode/p/5593204.html" target="_blank" rel="noopener">http://www.cnblogs.com/kerrycode/p/5593204.html</a><br><a href="https://www.cnblogs.com/qmfsun/p/4844472.html" target="_blank" rel="noopener">https://www.cnblogs.com/qmfsun/p/4844472.html</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.cnblogs.com/kerrycode/p/5593204.html" target="_blank" rel="noopener">http://www.cnblogs.com/kerrycode/p/5593204.html</a><br><a href="https://www.cnblogs.com/qmfsun/p/4844472.html" target="_blank" rel="noopener">https://www.cnblogs.com/qmfsun/p/4844472.html</a><br><a href="http://www.cnblogs.com/jasondan/p/3491258.html" target="_blank" rel="noopener">http://www.cnblogs.com/jasondan/p/3491258.html</a></p>
 <p><img src="/images/curry3p.gif" alt="库里三分" title="神射手萌库"></p>
 
       
