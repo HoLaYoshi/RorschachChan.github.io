@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-29T07:59:26.144Z</updated>
+  <updated>2018-01-30T07:53:27.531Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Goaccess---良心nginx日志分析工具</title>
+    <link href="http://yoursite.com/2018/01/30/Goaccess-%E8%89%AF%E5%BF%83nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"/>
+    <id>http://yoursite.com/2018/01/30/Goaccess-良心nginx日志分析工具/</id>
+    <published>2018-01-30T07:42:33.000Z</published>
+    <updated>2018-01-30T07:53:27.531Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Goaccess是一个非常良心的开源软件，它的良心之处体现在如下方面：</p><ul><li>安装简单；</li><li>操作容易；</li><li>界面酷炫；</li></ul><h2><span id="安装">安装</span></h2><p>安装<code>Goaccess</code>十分的简单，在centos里直接<code>yum install goaccess</code>，如果yum源里没有<code>goaccess</code>，可以先安装<code>epel</code>。安装<code>epel</code>的方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpms.famillecollet.com/enterprise/remi-release-6.rpm</span></span><br><span class="line">rpm -Uvh remi-release<span class="number">-6</span>*.rpm epel-release<span class="number">-6</span>*.rpm</span><br></pre></td></tr></table></figure></p><h2><span id="配置和使用">配置和使用</span></h2><p>安装完<code>goaccess</code>之后，我们需要在<code>/etc/goaccess.conf</code>里添加如下几句话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">time-format %T</span><br><span class="line">date-format %d/%b/%Y</span><br><span class="line">log-format %h %^[%d:%t %^] “%r” %s %b “%R” “%u”</span><br></pre></td></tr></table></figure></p><p>保存退出之后，我们就可以通过<code>goaccess</code>来分析<code>nginx</code>日志了，语句格式也很简单：<code>goaccess -f nginx日志的绝对路径</code>。比如我的nginx日志是<code>access-chen.log</code>，查看一下里面的内容：<br><img src="/images/goaccess1.png" alt="goaccess"></p><p>虽然有规律，但是看上去很乱，需要在分析日志之前喝两瓶静心口服液。</p><p>然后我就<code>goaccess -f access-chen.log</code>，就会看到如下的界面：<br><img src="/images/goaccess2.png" alt="goaccess"></p><p>这一下，整个日志看起来更加友好，更加直白，更加高大上。足以吸引周围人的羡慕目光。</p><p>但是这里面还是有一个注意点：<code>goaccess</code>默认支持的日志格式是<code>nginx</code>默认的日志格式，也就是nginx.conf里的如下格式：<br><img src="/images/goaccess3.png" alt="goaccess"></p><p>如果你的日志格式是有过更改的，而且还不想改回来，那么就需要去<code>/etc/goaccess.conf</code>里对应的<code>log-format</code>进行更改。</p><p>这还没有完，goaccess还可以生成html，这里<code>goaccess -f access-chen.log  -a &gt; /nginx安装路径/html/chen.html</code>。然后在浏览器里登陆到这个服务器的chen.html，就会看到整个日志情况的网页排版，如图：<br><img src="/images/goaccess4.png" alt="goaccess"></p><p>这样的话，我们可以每一天都发一份当天的日志html去运维人员的信箱里，这样更加方便我们分析日志。</p><h2><span id="缺点">缺点</span></h2><p>虽然前面说了那么多goaccess的优点，但是缺点也是有的，比如<code>goaccess</code>的粒度太粗，只能按天分割，如果要按小时分割，需要先<code>grep</code>出来，这个做法比较挫我懂…</p><p>还有一个缺点，就是访问人的来源只能定位到国家，无法具体定位到省市县村屯…<br><img src="/images/goaccess5.png" alt="goaccess"></p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond" target="_blank" rel="noopener">http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond</a></p>]]></content>
+    
+    <summary type="html">
+    
+      面试的时候一定会被面到的问题是：给出web服务器的访问日志，请写一个脚本来统计访问前10的IP有哪些？访问前10的请求有哪些？当你领略过goaccess之后，你就明白，这些问题，除了考验你的脚本背诵记忆能力以外，唯一的作用只有装A或者装C了。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="日志统计" scheme="http://yoursite.com/tags/%E6%97%A5%E5%BF%97%E7%BB%9F%E8%AE%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>处理掉积压过多的activemq持久化消息</title>
@@ -154,11 +178,11 @@
     
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
+      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
+    
       <category term="centos" scheme="http://yoursite.com/tags/centos/"/>
     
       <category term="php" scheme="http://yoursite.com/tags/php/"/>
-    
-      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
     
   </entry>
   
@@ -467,30 +491,6 @@
       <category term="http" scheme="http://yoursite.com/tags/http/"/>
     
       <category term="网络相关" scheme="http://yoursite.com/tags/%E7%BD%91%E7%BB%9C%E7%9B%B8%E5%85%B3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>记录一次配置http跳转https的过程</title>
-    <link href="http://yoursite.com/2018/01/18/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%85%8D%E7%BD%AEhttp%E8%B7%B3%E8%BD%AChttps%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
-    <id>http://yoursite.com/2018/01/18/记录一次配置http跳转https的过程/</id>
-    <published>2018-01-18T09:33:31.000Z</published>
-    <updated>2018-01-22T02:35:54.038Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>公司最近搞了一个数据运营平台，这个平台会以web界面的形式把各个数据展示出来，这个项目是我们一个经理的重点关照项目。把平台模块部署完毕并且启动之后，又把这个平台服务器的外网IP绑定到<code>alkaid.lechange.com</code>这个域名上，在浏览器里输入<code>https://alkaid.lechange.com</code>,就看到了前端同行们写的网页。</p><p>但是我们的霸气经理说这样不行，说要更多要求更高标准更好体验，于是乎提出一个需求就是：<font color="blue">在输入<code>alkaid.lechange.com</code>的时候会自动跳转到<code>https://alkaid.lechange.com</code>。</font></p><p>既然如此，我们就在nginx上原有的<code>nginx.conf</code>里补充几个配置文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include upstream</span><br><span class="line">include upstream.conf;</span><br><span class="line"># include servers</span><br><span class="line">include alkaid.conf;</span><br><span class="line">include alkaid-https.conf;</span><br></pre></td></tr></table></figure></p><p>这样在执行<code>nginx.conf</code>的时候，就会调用<code>upstream.conf</code>、<code>alkaid.conf</code>和<code>alkaid-https.conf</code>，我们主要看一下这三个文件。</p><p>alkaid.conf文件如下：<br>    ```js<br>    server {<br>        listen 80;<br>        server_name *.lechange.com;<br>        proxy_buffering off;<br>        location / {<br>                rewrite ^/ <a href="https://alkaid.lechange.com" target="_blank" rel="noopener">https://alkaid.lechange.com</a> permanent;<br>                client_max_body_size 100m;<br>            }<br>    }</p><p>这里我们监听了80端口，下面那个<code>client_max_body_size 100m</code>是用来设定<code>nginx+php</code>上传文件的大小，这里规定是100m，这个可以写进<code>nginx.conf</code>里，如果有对上传文件方面感兴趣，可以看<a href="http://www.cnblogs.com/zhwl/archive/2012/09/18/2690714.html" target="_blank" rel="noopener">http://www.cnblogs.com/zhwl/archive/2012/09/18/2690714.html</a> 。</p><p>再来看看<code>alkaid-https.conf</code>，如下：<br>    <code>``js    server {        listen 10000;        server_name *.lechange.com;        proxy_buffering off;        location / {                proxy_pass http://alkaid_backend;                proxy_set_header   X-Real-IP        $remote_addr;                proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;                proxy_redirect     off;            }    }这里监听了10000端口，location写的是</code><a href="http://alkaid_backend`,这个`alkaid_backend`是啥东西?" target="_blank" rel="noopener">http://alkaid_backend`,这个`alkaid_backend`是啥东西?</a></p><p>这个时候我们就需要看一下<code>upstream.conf</code>，里面内容是:<br>    ```js<br>    upstream alkaid_backend {<br>        server   X.X.X.X:JQK;<br>        check interval=5000 rise=2 fall=5 timeout=1000 type=tcp default_down=false;<br>    }</p><p>X.X.X.X是模块服务器的内网IP地址，而JQK是模块服务器的模块端口，这里要根据实际的情况来写。可见<code>alkaid_backend</code>对应的就是模块服务器和它的端口，下面是检查间隔等等数值。</p><p>现在我们启动<code>nginx</code>，然后把nginx的外网地址绑定去<code>alkaid.lechange.com</code>这个域名，在浏览器里输入<code>alkaid.lechange.com</code>，就会达到自动跳转的目的了！</p><p>这里要额外多说一下，我们这里设定了80的配置文件也设置了443的文件，但是这俩文件的转发过程却不同：<code>alkaid-https.conf</code>文件把443的请求转向了平台模块服务器的服务，而<code>alkaid.conf</code>文件把凡是从80端口进来的请求直接全部永久重定向到<code>https://alkaid.lechange.com</code> ，但是这个<code>alkaid.lechange.com</code>还是会去访问平台模块服务器的服务，也就是说<code>alkaid.conf</code>文件多了一步重定向。</p>]]></content>
-    
-    <summary type="html">
-    
-      有了https，不用白不用
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="https" scheme="http://yoursite.com/tags/https/"/>
     
   </entry>
   
