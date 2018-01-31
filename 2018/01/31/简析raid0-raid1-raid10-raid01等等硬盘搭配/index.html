@@ -100,7 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/images/raid2.png">
 <meta property="og:image" content="http://yoursite.com/images/raid3.png">
 <meta property="og:image" content="http://yoursite.com/images/raid4.png">
-<meta property="og:updated_time" content="2018-01-31T12:44:28.416Z">
+<meta property="og:updated_time" content="2018-01-31T13:14:11.632Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配">
 <meta name="twitter:description" content="磁盘阵列这个东西，有钱就有安全">
@@ -430,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,910
+                  1,998
                 </span>
               
 
@@ -476,7 +476,7 @@
 <p>由于数据分布均匀，所以在访问的时候会从硬盘1~硬盘3提取数据，然后拼接在一起就是一个完整的数据。理论上从3个硬盘的RAID 0阵列读取数据比从一个硬盘读取要快3倍，换言之，使用RAID 0读数据的能力跟磁盘数量成正比。</p>
 <p>RAID 0也有缺点：如果其中一个磁盘出现故障，从其他磁盘上的数据拼起来就不再是一个完整的数据了。另外，磁盘越多，则发生磁盘故障的可能性也越高。所以如果磁盘阵列里包含着对您来说很重要的数据，则最好创建频繁的备份。</p>
 <h2><span id="raid-1">RAID 1</span></h2><p>RAID 1用于创建数据的自动副本。RAID 1会将同一份数据写入两个单独的磁盘，如果A盘出现故障，仍然可以在B磁盘上读取所有数据，当然这是比较壕的，毕竟做一件事用了两块盘。这里要注意！<font color="red">镜像和备份可不是一样！！！如果你不小心从一个磁盘A上删除了一个文件，或者某个文件被病毒侵蚀了，那它再另一个磁盘B上也是一样的待遇。只有真正的备份才能使所有文件保持其保存状态。</font>因此，如果想不让宝贵数据陷入灾难，创建频繁的备份是必须的。</p>
-<p>RAID 1中的性能通常与单独的硬盘或SSD相同。因此，使用RAID 1来获得额外的读写性能是不可能的。以下是RAID 1的工作原理图，如果HDD1坏了，那么HDD2直接上任，若HDD1里的东西被删除了，那么HDD2也会被删除，即使它上任了也是坏的。<br><img src="/images/raid2.png" alt="paradin"></p>
+<p>RAID 1中的读性能通常与单独的硬盘差不多—-从A和B里一起读数据，谁出数据快就采用谁的，写的话就是要同时写到两个盘里去。因此，使用RAID 1来获得额外更多的读写性能是不太可能的。以下是RAID 1的工作原理图，如果HDD1坏了，那么HDD2直接上任，若HDD1里的东西被删除了，那么HDD2也会被删除，即使它上任了也是坏的。<br><img src="/images/raid2.png" alt="paradin"></p>
 <h2><span id="raid-10和raid-01">RAID 10和RAID 01</span></h2><p>所谓RAID 10,其实就是磁盘阵列<code>先RAID 1,后RAID 0</code>,同理，RAID 01也是先<code>RAID 0,后RAID 1</code>。无论是1+0还是0+1，都至少需要4个硬盘。</p>
 <p>这里先看一下RAID 10和RAID 01的效果图：<br><img src="/images/raid3.png" alt="paradin"></p>
 <p>就像图里说的“在六个硬盘列里，RAID 10比RAID 01更安全”。的确，RAID 10也凭借很棒的容错能力和恢复能力当选了大多数的RAID配置，为什么不要RAID 01呢？那就是如果在RAID 0那一步磁盘就坏了，那RAID 1那步就没有意义了，因为生成的镜像全是坏镜像。</p>
@@ -485,7 +485,7 @@
 <p>RAID 5已经提供了一定程度的可靠性,然而也牺牲了一定的读取速度。RAID 5的局限性还表现在RAID 5仅能在一块硬盘发生故障的情况下修复数据,如果2块硬盘同时发生故障,RAID 5则无能为力。于是RAID 6应需诞生了，RAID 6同RAID 5最大的区别就是在RAID 5的基础上除了具有P校验位以外,还加入了第2个校验位Q位。当一块磁盘出现数据错误或者丢失的时候,恢复方法同RAID 5,无须使用Q校验位。当两块磁盘上的数据出现错误或者丢失的时候,恢复方法为:利用上边给出的P,Q的生成公式,联立方程组,无论受损的数据是否包括P或者Q,总是能够解出损失的两位的数据。</p>
 <h2><span id="raid-50-and-60">RAID 50 and 60</span></h2><p>在硬盘数量较少的情况下，RAID 5是极好的选择，如7-8块硬盘组成的RAID。但是，当硬盘的数量更多的时候，如10块、20块甚至100块，那么RAID 5就无法胜任了。RAID 50是在RAID 5的基础上，将多个RAID 5组以RAID 0的形式组成在一起。可以这么认为，一个RAID 5组在这里就是一个“大硬盘”，再把这些“大硬盘”以RAID 0的形式组成在一起。而RAID 60的组成就是在RAID 6组的上面组成一个RAID 0。理论上说在写入性能方面，RAID 50相比RAID 5要好太多，而RAID 50相比性能冠军RAID 10要差一点，考虑到RAID 5在一些负载面前的平庸性能，RAID 50是个不错的中间选择。和RAID 5和RAID 10一样，RAID 50也提供极好的读性能，同时RAID 50即使使用最低配置，也需要六个硬盘，所以安装成本很高。</p>
 <p>如果担心一个RAID组里面同时有2块硬盘发生故障，导致数据丢失，那么可以选择使用RAID 60。RAID 60提供更高的安全性，相应的其可用容量会比RAID 50少点，RAID 60即使使用最少的配置，也需要8个硬盘，所以安装成本相当高。</p>
-<h2><span id="结语">结语</span></h2><p>如果将来有一天你对这篇文章记得不是很清晰了，那么但愿你可以记住下面这张图，这几幅图虽然对于RAID 上不是完全的准确，但是已经很大的表达清楚了各种RAID的特点了。<br><img src="/images/raid4.png" alt="paradin"></p>
+<h2><span id="结语">结语</span></h2><p>以上几个磁盘阵列，从读的能力来说：RAID 5 ≈ RAID 6 ≈ RAID 60 &gt; RAID 0 ≈ RAID 10 &gt; RAID 3 ≈ RAID 1<br>从写的能力来说:RAID 10 &gt; RAID 50 &gt; RAID 1 &gt; RAID 3 &gt; RAID 5 ≈ RAID 6 ≈ RAID 60<br>如果将来有一天你对这篇文章记得不是很清晰了，那么但愿你可以记住下面这张图，这几幅图虽然对于RAID 上不是完全的准确，但是已经很大的表达清楚了各种RAID的特点了。<br><img src="/images/raid4.png" alt="paradin"></p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work" target="_blank" rel="noopener">https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work</a><br><a href="http://support.huawei.com/enterprise/zh/knowledge/KB1000149118/" target="_blank" rel="noopener">http://support.huawei.com/enterprise/zh/knowledge/KB1000149118/</a><br><a href="https://zh.wikipedia.org/wiki/RAID" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/RAID</a><br><a href="http://www.hpc.co.jp/raid_kaisetsu.html" target="_blank" rel="noopener">http://www.hpc.co.jp/raid_kaisetsu.html</a></p>
 
       
