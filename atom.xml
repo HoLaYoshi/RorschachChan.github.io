@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-30T13:40:03.228Z</updated>
+  <updated>2018-01-31T06:00:29.724Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ansible-playbook如何获取ip</title>
+    <link href="http://yoursite.com/2018/01/31/Ansible-playbook%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96ip/"/>
+    <id>http://yoursite.com/2018/01/31/Ansible-playbook如何获取ip/</id>
+    <published>2018-01-31T05:54:08.000Z</published>
+    <updated>2018-01-31T06:00:29.724Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>公司的模块都新加了加密算法，现在就是需要把约100台机器的<code>/etc/hosts</code>文件里的zookeeper server的ip调整成新的ip 地址，目前在ansible控制机上已经写好了带有新的zookeeper server的ip的<code>/etc/hosts</code>文件，然后计划是把这个新文件下发到大约100台具体模块的服务器里，然后这100台机器的文件中把他们各自的ip和hostname添加到这个新的<code>/etc/hosts</code>文件上。</p><p>于是就写了一个ansible-playbook:<br>     <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">- hosts: all</span><br><span class="line">  tasks:</span><br><span class="line">        - name: 将原有的hosts文件备份</span><br><span class="line">          shell: mv /etc/hosts /etc/hosts_bak</span><br><span class="line"></span><br><span class="line">        - name: 将ansible端的hosts复制到各自机器上</span><br><span class="line">          copy: src=<span class="regexp">/root/</span>hosts dest=<span class="regexp">/etc/</span> owner=root group=root mode=<span class="number">0544</span></span><br><span class="line"></span><br><span class="line">        - name: 在新的hosts文件后面追加各自机器内网ip和hostname</span><br><span class="line">          lineinfile: dest=<span class="regexp">/etc/</span>hosts line=<span class="string">"`ansible_all_ipv4_addresses`  `ansible_hostname`"</span></span><br></pre></td></tr></table></figure></p><p>但是写完之后执行出来，却是这样的效果：<br><img src="/images/ansibleip.png" alt="akb48"></p><p>而我想要的是这样的效果：<br><img src="/images/ansibleip2.png" alt="akb48"></p><p>遇到这种情况怎么办？</p><p>后来调整了一下，变量用<code>IP: &quot;&quot;</code>，而不是<code>ansible_all_ipv4_addresses</code>。</p><p>修改了之后的playbook 如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">- hosts: all</span><br><span class="line">  vars:</span><br><span class="line">        IP: <span class="string">"&#123;&#123; ansible_eth0['ipv4']['address'] &#125;&#125;"</span></span><br><span class="line">  tasks:</span><br><span class="line">        - name: 将原有的hosts文件备份</span><br><span class="line">          shell: mv /etc/hosts /etc/hosts_bak</span><br><span class="line"></span><br><span class="line">       - name: 将ansible端的hosts复制到各自机器上</span><br><span class="line">         copy: src=<span class="regexp">/root/</span>hosts dest=<span class="regexp">/etc/</span> owner=root group=root mode=<span class="number">0644</span></span><br><span class="line"></span><br><span class="line">        - name: 在新的hosts文件后面追加各自机器内网ip和hostname</span><br><span class="line">          lineinfile: dest=<span class="regexp">/etc/</span>hosts line=<span class="string">"`IP`  `ansible_hostname`"</span></span><br></pre></td></tr></table></figure></p><p>这样就达到目的了。</p>]]></content>
+    
+    <summary type="html">
+    
+      把每一项累手的任务都转换成累心
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="ansible" scheme="http://yoursite.com/tags/ansible/"/>
+    
+  </entry>
   
   <entry>
     <title>mysql查看实时语句和慢sql</title>
@@ -465,30 +487,6 @@
       <category term="shell" scheme="http://yoursite.com/tags/shell/"/>
     
       <category term="面试经验" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>解决Zabbix在web界面中文显示的问题</title>
-    <link href="http://yoursite.com/2018/01/22/%E8%A7%A3%E5%86%B3Zabbix%E5%9C%A8web%E7%95%8C%E9%9D%A2%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/01/22/解决Zabbix在web界面中文显示的问题/</id>
-    <published>2018-01-22T03:31:40.000Z</published>
-    <updated>2018-01-22T04:42:32.036Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><font color="red">注意！这个是解决web界面中文显示乱码的问题，不是zabbix web界面全中文汉化的问题。</font><h2><span id="22版本的处理方法">2.2版本的处理方法</span></h2><p>zabbix里给host或者item等项目起中文名字的时候，可能在graph上无法正确显示中文字符，如图：<br><img src="/images/zabbixchinese1.jpg" alt="paradin"></p><p>那么遇到这样的情况其实很简单，就是zabbix的web界面没有安装中文字库的问题，那就对症下药，下载中文字库。</p><p>中文字库的下载地址在这里：<code>http://linux.linuxidc.com/2012%E5%B9%B4%E8%B5%84%E6%96%99/11%E6%9C%88/22%E6%97%A5/Zabbix%E4%B8%AD%E6%96%87%E4%B8%8D%E8%83%BD%E6%98%BE%E7%A4%BA%E9%97%AE%E9%A2%98/</code> ，下载“LinuxIDC.com下载-kaiti.tar.gz”。</p><p>后把这个文件改一下名，可能很多linux不识别那个中文字“下载”,<code>mv LinuxIDC.com下载-kaiti.tar.gz kaiti.tar.gz</code>，<code>tar -zxvf kaiti.tar.gz</code></p><p>然后就会发现当前路径里生成了一个叫<code>kaiti.ttf</code>，这个就是我们所需要的中文“楷体”字体文件。</p><p>来到zabbix的web字体路径，在我的机器里，这个负责字体的文件夹叫<code>/usr/local/nginx/html/zabbix/fonts/</code>。虽然各位安装zabbix的路径各有差别，但是这个文件夹一般都是在<code>nginx or apache</code>的html下，所以很好找的。</p><p>在这个fonts文件夹里默认已经有一个叫<code>DejaVuSans.ttf</code>的文件了，于是就把这个<code>kaiti.tff</code>也放到这个文件夹下。</p><p>光有字体文件没有用，还需要在配置文件里使用这个字体文件，于是就vim一下同样在<code>nginx or apache/html/zabbix/include</code>的<code>defines.inc.php</code>。把里面所有的<code>DejaVuSans</code>替换成<code>kaiti</code>，.<code>tff</code>这个后缀是不用加的。然后保存退出，重新刷一下界面就看到效果了。</p><p>vim的替换语句 :<code>%s/DejaVuSans/kaiti/g</code><br><img src="/images/zabbixchinese2.png" alt="paradin"></p><p><img src="/images/zabbixchinese3.png" alt="paradin"></p><h2><span id="3x版本的处理方法">3.x版本的处理方法</span></h2><p>现在zabbix已经升级到3.x了，上述的方法已经失效了，这里记录一下新的中文配置方法。</p><p>首先从windows里，拷贝一个中文字体的文件到zabbix的服务器的<code>/usr/share/zabbix/fonts</code>文件夹里，比如我先择了“楷体”，这个文件叫<code>simkai.ttf</code>，<code>chmod +x simkai.ttf</code> 给予可执行权限。<br><img src="/images/zabbixchinese4.png" alt="paradin"></p><p>然后<code>vim /usr/share/zabbix/include/defines.inc.php</code>，修改两处地方，分别是第四十五行，把原来的改成<code>simkai</code>，如图：<br><img src="/images/zabbixchinese5.png" alt="paradin"></p><p>还有一处就是第九十三行，也是改成<code>SIMKAI</code>：<br><img src="/images/zabbixchinese6.png" alt="paradin"></p><p>保存文件之后，刷新一下zabbix界面即可。</p>]]></content>
-    
-    <summary type="html">
-    
-      我知道你懂英语，但是你的领导们未必懂啊....
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-      <category term="运维与监控" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E4%B8%8E%E7%9B%91%E6%8E%A7/"/>
     
   </entry>
   
