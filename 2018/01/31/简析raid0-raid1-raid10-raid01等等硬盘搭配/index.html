@@ -99,7 +99,8 @@
 <meta property="og:image" content="http://yoursite.com/images/raid1.png">
 <meta property="og:image" content="http://yoursite.com/images/raid2.png">
 <meta property="og:image" content="http://yoursite.com/images/raid3.png">
-<meta property="og:updated_time" content="2018-01-31T09:09:37.872Z">
+<meta property="og:image" content="http://yoursite.com/images/raid4.png">
+<meta property="og:updated_time" content="2018-01-31T09:16:19.120Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配">
 <meta name="twitter:description" content="磁盘阵列这个东西，有钱就有安全">
@@ -429,7 +430,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,735
+                  1,793
                 </span>
               
 
@@ -445,7 +446,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  7
                 </span>
               
             </div>
@@ -471,7 +472,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="raid-0分条">RAID 0(分条)</span></h2><p>RAID 0（也称为分条）可用于两个或更多硬盘或SSD。目标是提高读的性能。</p>
-<p>数据以特定大小（通常为64 kB）的块写入，并在可用驱动器中平均分配。下图显示了带有三个硬盘的RAID 0阵列的示意图。RAID控制器将第一个数据块写入硬盘1，第二个数据块写入硬盘2，第三个数据块写入硬盘3，第四个数据块写入硬盘1,以此类推，RAID 0中的三个1TB硬盘提供3TB的存储空间。<br><img src="/images/raid1.png" alt="paradin"></p>
+<p>数据以特定大小（通常为64KB）的块写入，并在可用驱动器中平均分配。下图显示了带有三个硬盘的RAID 0阵列的示意图。RAID控制器将第一个数据块写入硬盘1，第二个数据块写入硬盘2，第三个数据块写入硬盘3，第四个数据块写入硬盘1,以此类推，RAID 0中的三个1TB硬盘提供3TB的存储空间。<br><img src="/images/raid1.png" alt="paradin"></p>
 <p>由于数据分布均匀，所以在访问的时候会从硬盘1~硬盘4提取数据，然后拼接在一起就是一个完整的数据。理论上从四个硬盘的RAID 0阵列读取数据比从一个硬盘读取要快四倍，换言之，使用RAID 0读的能力跟磁盘数量成正比。</p>
 <p>RAID 0也有缺点。如果一个磁盘出现故障，从其他磁盘上的数据拼起来就不再是一个完整的数据了。另外，磁盘越多，则发生磁盘故障的可能性也越高。所以如果数组包含对您来说很重要的数据，则最好创建频繁的备份。</p>
 <h2><span id="raid-1镜像">RAID 1(镜像)</span></h2><p>RAID 1（也称为镜像）用于创建数据的自动副本。RAID 1会将数据写入两个单独的磁盘，如果A盘出现故障，您仍然可以在B磁盘上使用所有数据，当然这是比较壕的，毕竟做一件事用了两块盘。这里要注意！<font color="red">镜像和备份可不是一样！！！如果你不小心从一个磁盘上删除了一个文件，或者某个文件被病毒侵蚀了，那它再另一个磁盘上也是一样的待遇。只有真正的备份才能使所有文件保持其保存状态。</font>因此，如果您想为您的数据创造最好的机会来挽救灾难，那么您应该使用RAID 1，RAID 10或RAID 5，并创建频繁的备份。</p>
@@ -484,6 +485,7 @@
 <p>RAID5已经提供了一定程度的可靠性,然而也牺牲了一定的读取速度。RAID5的局限性还表现在RAID5仅能在一块硬盘发生故障的情况下修复数据,如果2块硬盘同时发生故障,RAID5则无能为力。于是RAID6应需诞生了，RAID6同RAID5最大的区别就是在RAID5的基础上除了具有P校验位以外,还加入了第2个校验位Q位。当一块磁盘出现数据错误或者丢失的时候,恢复方法同RAID5,无须使用Q校验位。当两块磁盘上的数据出现错误或者丢失的时候,恢复方法为:利用上边给出的P,Q的生成公式,联立方程组,无论受损的数据是否包括P或者Q,总是能够解出损失的两位的数据。</p>
 <h2><span id="raid-50-and-60">RAID 50 and 60</span></h2><p>在硬盘数量较少的情况下，RAID5是极好的选择，如7-8块硬盘组成的RAID。但是，当硬盘的数量更多的时候，如10块、20块甚至100块，那么RAID5就无法胜任了。RAID50是在RAID5的基础上，将多个RAID5组以RAID0的形式组成在一起。可以这么认为，一个RAID5组在这里就是一个“大硬盘”，再把这些“大硬盘”以RAID0的形式组成在一起。而RAID60的组成就是在RAID6组的上面组成一个RAID0。理论上说在写入性能方面，RAID50相比RAID5要好太多，而RAID50相比性能冠军RAID10要差一点，考虑到RAID5在一些负载面前的平庸性能，RAID50是个不错的中间选择。和RAID5和RAID10一样，RAID50也提供极好的读性能。</p>
 <p>如果担心一个RAID组里面同时有2块硬盘发生故障，导致数据丢失，那么可以选择使用RAID60。RAID60提供更高的安全性，相应的其可用容量会比RAID50少点。</p>
+<p>结语<br>如果你对这篇文章记得不是很清晰了，那么但愿你可以记住这样图，这幅图虽然不是很准确，但是已经很大的表达清楚了各种RAID的特点了。<br><img src="/images/raid4.png" alt="paradin"></p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work" target="_blank" rel="noopener">https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work</a><br><a href="http://support.huawei.com/enterprise/zh/knowledge/KB1000149118/" target="_blank" rel="noopener">http://support.huawei.com/enterprise/zh/knowledge/KB1000149118/</a><br><a href="https://zh.wikipedia.org/wiki/RAID" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/RAID</a></p>
 
       
