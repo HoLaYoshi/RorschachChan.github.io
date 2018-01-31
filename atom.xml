@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-31T06:21:34.530Z</updated>
+  <updated>2018-01-31T08:09:30.466Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>简析raid0,raid1,raid10,raid01等等硬盘搭配</title>
+    <link href="http://yoursite.com/2018/01/31/%E7%AE%80%E6%9E%90raid0-raid1-raid10-raid01%E7%AD%89%E7%AD%89%E7%A1%AC%E7%9B%98%E6%90%AD%E9%85%8D/"/>
+    <id>http://yoursite.com/2018/01/31/简析raid0-raid1-raid10-raid01等等硬盘搭配/</id>
+    <published>2018-01-31T06:43:03.000Z</published>
+    <updated>2018-01-31T08:09:30.466Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="raid-0分条">RAID 0(分条)</span></h2><p>RAID 0（也称为分条）可用于两个或更多硬盘或SSD。目标是提高读的性能。</p><p>数据以特定大小（通常为64 kB）的块写入，并在可用驱动器中平均分配。下图显示了带有三个硬盘的RAID 0阵列的示意图。 RAID控制器将第一个数据块写入硬盘1，第二个数据块写入硬盘2，第三个数据块写入硬盘3，第四个数据块写入硬盘1,以此类推。<br><img src="/images/raid1.png" alt="paradin"></p><p>同时访问硬盘，数据分布均匀，理论上三个硬盘的RAID 0阵列比一个硬盘快三倍。您还保留整个存储容量。例如，RAID 0中的三个1 TB硬盘提供3 TB的存储空间。</p><p>RAID 0也有缺点。主要的一个是如果一个磁盘出现故障，您不能访问任何其他磁盘上的任何数据。另外，如果您有三个磁盘，则发生磁盘故障的可能性是三倍。所以速度很快，但是如果数组包含对您来说很重要的数据，则最好创建频繁的备份。</p><h2><span id="raid-1镜像">RAID 1(镜像)</span></h2><p>RAID 1（也称为镜像）用于创建数据的自动副本。RAID 1会将数据写入两个单独的磁盘，如果出现故障，您仍然可以在另一个磁盘上使用所有数据。缺点是你浪费了一半的容量。镜像和备份可不是一样！如果你不小心从一个磁盘上删除了一个文件，或者某个文件被病毒侵蚀了，那它再另一个磁盘上也是一样的待遇。只有真正的备份才能使所有文件保持其保存状态。因此，如果您想为您的数据创造最好的机会来挽救灾难，那么您应该使用RAID 1，RAID 10或RAID 5，并创建频繁的备份。</p><p>RAID 1中的性能通常与单独的硬盘或SSD相同。因此，您不要使用RAID 1来获得性能，而是要获得所有文件的额外副本。以下是RAID 1的工作原理图。<br><img src="/images/raid2.png" alt="paradin"></p><h2><span id="raid-10">RAID 10</span></h2><p>所谓RAID 10,其实就是”先RAID 1,后RAID 0”,同理，RAID 01也是”先RAID 0,后RAID 1”。无论是1+0还是0+1，都至少需要4个硬盘。</p><p>这里先看一下RAID 10和RAID 01的效果图：<br><img src="/images/raid3.png" alt="paradin"></p><p>就像图里说的“在六个硬盘列里，RAID 10比RAID 01更安全”，而且RAID 10也是大多数的RAID配置，为什么呢？那就是如果在RAID 0那一步磁盘就坏了，那RAID 1就没有意义了，因为生成的镜像全是坏镜像。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work" target="_blank" rel="noopener">https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work</a></p>]]></content>
+    
+    <summary type="html">
+    
+      数据这个东西，有钱就有安全
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="raid" scheme="http://yoursite.com/tags/raid/"/>
+    
+      <category term="磁盘阵列" scheme="http://yoursite.com/tags/%E7%A3%81%E7%9B%98%E9%98%B5%E5%88%97/"/>
+    
+  </entry>
   
   <entry>
     <title>Ansible-playbook如何获取ip</title>
@@ -463,30 +487,6 @@
       <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
     
       <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>一道传说中是百度面试的shell试题</title>
-    <link href="http://yoursite.com/2018/01/23/%E4%B8%80%E9%81%93%E4%BC%A0%E8%AF%B4%E4%B8%AD%E6%98%AF%E7%99%BE%E5%BA%A6%E9%9D%A2%E8%AF%95%E7%9A%84shell%E8%AF%95%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/01/23/一道传说中是百度面试的shell试题/</id>
-    <published>2018-01-23T01:37:31.000Z</published>
-    <updated>2018-01-23T01:45:15.170Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>【问题】<font color="blue">写脚本实现，可以用shell、perl等。把文件b中有的，但是文件a中没有的所有行，保存为文件c，并统计c的行数。</font><br>翻译成人话就是，假设有一个文件a是:<br>a<br>b<br>c<br>d</p><p>文件b是:<br>1<br>2<br>3<br>4<br>a<br>b</p><p>现在要求输出“b有a没有”的行，即1 2 3 4，然后<code>wc -l</code>一下。</p><p>【思路】两个文件比较，第一想法就是<code>diff</code>，但是<code>diff</code>无论是<code>-c</code>还是<code>-y</code>会牵扯进大量的<code>&gt; &lt; + -</code>不说，而且diff命令是直白对比，即使字母相同但所在行不同，也会被<code>diff</code>记录。如果再用<code>for in</code>语句然后一项一项对比也不会很清晰的解决这个问题，所以要换个方法。</p><p>第二个方法就是<code>comm</code>命令，但是这个命令有一个前提，就是要<code>sort</code>排序，<code>comm</code>比<code>diff</code>高明之处在于它只比较内容而不在意是否同一行，但是要注意对比文件的先后。<code>comm -12 a b</code>是找”a和b都有”的项，<code>comm -23 a b</code>就是找”a有而b没有”。</p><p>【解答】perl我不会，我就用shell写：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line">#written by ChrisChan @ 2016-4-21</span><br><span class="line">sort a.txt&gt;a1.txt        #排序，不然会有提示</span><br><span class="line">sort b.txt&gt;b1.txt</span><br><span class="line">comm -23 b1.txt a1.txt &gt;c.txt    #由于是要找b有a没有的,就要b写在前，a写在后</span><br><span class="line">echo $(cat c.txt|wc -l)</span><br></pre></td></tr></table></figure></p><p>其实还有一个更简单的，只用一句话:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">grep -v -x b.txt -f a.txt|wc -l</span><br></pre></td></tr></table></figure></p><p>很多书上不写<code>grep -x -f</code>的意思，这里补一下：<br><code>-f</code>:指定范本文件，其内容含有一个或多个范本样式，让grep查找符合范本条件的文件内容，格式为每列一个范本样式。<br><code>-x</code>:只显示全列符合的列。</p><p>从一个题就能轻松看出shell的能力级别，用diff死纠缠就是初级，用comm就是中级，而grep就是高级。的确是一个好题。</p><p>【补充】如果考python，求这种类似“你有我没有”的东西，用set里面的差集算法。<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt;A=&#123;<span class="number">1</span>，<span class="number">2</span>，<span class="number">3</span>，<span class="number">4</span>&#125;</span><br><span class="line">&gt;&gt;&gt;B=&#123;<span class="number">3</span>，<span class="number">4</span>，<span class="number">5</span>，<span class="number">6</span>&#125;</span><br><span class="line">&gt;&gt;&gt;print(A-B)</span><br><span class="line">set([1,2])    #A有B没有</span><br><span class="line">&gt;&gt;&gt;print(A ^ B)</span><br><span class="line">set([1,2,5,6])  #差集的补集</span><br><span class="line">&gt;&gt;&gt; A&amp;B</span><br><span class="line">&#123;3, 4&#125;    #交集</span><br><span class="line">&gt;&gt;&gt; A|B</span><br><span class="line">&#123;1, 2, 3, 4, 5, 6&#125;    #全集</span><br></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      comm命令、diff命令和grep命令
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="shell" scheme="http://yoursite.com/tags/shell/"/>
-    
-      <category term="面试经验" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/"/>
     
   </entry>
   

@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[简析raid0,raid1,raid10,raid01等等硬盘搭配]]></title>
+    <url>%2F2018%2F01%2F31%2F%E7%AE%80%E6%9E%90raid0-raid1-raid10-raid01%E7%AD%89%E7%AD%89%E7%A1%AC%E7%9B%98%E6%90%AD%E9%85%8D%2F</url>
+    <content type="text"><![CDATA[RAID 0(分条)RAID 0（也称为分条）可用于两个或更多硬盘或SSD。目标是提高读的性能。 数据以特定大小（通常为64 kB）的块写入，并在可用驱动器中平均分配。下图显示了带有三个硬盘的RAID 0阵列的示意图。 RAID控制器将第一个数据块写入硬盘1，第二个数据块写入硬盘2，第三个数据块写入硬盘3，第四个数据块写入硬盘1,以此类推。 同时访问硬盘，数据分布均匀，理论上三个硬盘的RAID 0阵列比一个硬盘快三倍。您还保留整个存储容量。例如，RAID 0中的三个1 TB硬盘提供3 TB的存储空间。 RAID 0也有缺点。主要的一个是如果一个磁盘出现故障，您不能访问任何其他磁盘上的任何数据。另外，如果您有三个磁盘，则发生磁盘故障的可能性是三倍。所以速度很快，但是如果数组包含对您来说很重要的数据，则最好创建频繁的备份。 RAID 1(镜像)RAID 1（也称为镜像）用于创建数据的自动副本。RAID 1会将数据写入两个单独的磁盘，如果出现故障，您仍然可以在另一个磁盘上使用所有数据。缺点是你浪费了一半的容量。镜像和备份可不是一样！如果你不小心从一个磁盘上删除了一个文件，或者某个文件被病毒侵蚀了，那它再另一个磁盘上也是一样的待遇。只有真正的备份才能使所有文件保持其保存状态。因此，如果您想为您的数据创造最好的机会来挽救灾难，那么您应该使用RAID 1，RAID 10或RAID 5，并创建频繁的备份。 RAID 1中的性能通常与单独的硬盘或SSD相同。因此，您不要使用RAID 1来获得性能，而是要获得所有文件的额外副本。以下是RAID 1的工作原理图。 RAID 10所谓RAID 10,其实就是”先RAID 1,后RAID 0”,同理，RAID 01也是”先RAID 0,后RAID 1”。无论是1+0还是0+1，都至少需要4个硬盘。 这里先看一下RAID 10和RAID 01的效果图： 就像图里说的“在六个硬盘列里，RAID 10比RAID 01更安全”，而且RAID 10也是大多数的RAID配置，为什么呢？那就是如果在RAID 0那一步磁盘就坏了，那RAID 1就没有意义了，因为生成的镜像全是坏镜像。 参考资料https://us.hardware.info/reviews/4123/raid-0-raid-1-raid-10-and-raid-5-how-do-they-actually-work]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>raid</tag>
+        <tag>磁盘阵列</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Ansible-playbook如何获取ip]]></title>
     <url>%2F2018%2F01%2F31%2FAnsible-playbook%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96ip%2F</url>
     <content type="text"><![CDATA[公司的模块都新加了加密算法，现在就是需要把约100台机器的/etc/hosts文件里的zookeeper server的ip调整成新的ip 地址，目前在ansible控制机上已经写好了带有新的zookeeper server的ip的/etc/hosts文件，然后计划是把这个新文件下发到大约100台具体模块的服务器里，然后这100台机器的文件中把他们各自的ip和hostname添加到这个新的/etc/hosts文件上。 于是就写了一个ansible-playbook: 123456789101112---- hosts: all tasks: - name: 将原有的hosts文件备份 shell: mv /etc/hosts /etc/hosts_bak - name: 将ansible端的hosts复制到各自机器上 copy: src=/root/hosts dest=/etc/ owner=root group=root mode=0544 - name: 在新的hosts文件后面追加各自机器内网ip和hostname lineinfile: dest=/etc/hosts line="`ansible_all_ipv4_addresses` `ansible_hostname`" 但是写完之后执行出来，却是这样的效果： 而我想要的是这样的效果： 遇到这种情况怎么办？ 后来调整了一下，变量用IP: ““，而不是ansible_all_ipv4_addresses。 修改了之后的playbook 如下： 1234567891011121314---- hosts: all vars: IP: "&#123;&#123; ansible_eth0['ipv4']['address'] &#125;&#125;" tasks: - name: 将原有的hosts文件备份 shell: mv /etc/hosts /etc/hosts_bak - name: 将ansible端的hosts复制到各自机器上 copy: src=/root/hosts dest=/etc/ owner=root group=root mode=0644 - name: 在新的hosts文件后面追加各自机器内网ip和hostname lineinfile: dest=/etc/hosts line="`IP` `ansible_hostname`" 这样就达到目的了。]]></content>
@@ -462,8 +474,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>运维技术</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
