@@ -91,7 +91,7 @@
 <meta name="description" content="磁盘阵列这个东西，有钱就有安全">
 <meta name="keywords" content="raid,磁盘阵列">
 <meta property="og:type" content="article">
-<meta property="og:title" content="简析raid0,raid1,raid10,raid01等等硬盘搭配">
+<meta property="og:title" content="浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配">
 <meta property="og:url" content="http://yoursite.com/2018/01/31/简析raid0-raid1-raid10-raid01等等硬盘搭配/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="磁盘阵列这个东西，有钱就有安全">
@@ -99,9 +99,9 @@
 <meta property="og:image" content="http://yoursite.com/images/raid1.png">
 <meta property="og:image" content="http://yoursite.com/images/raid2.png">
 <meta property="og:image" content="http://yoursite.com/images/raid3.png">
-<meta property="og:updated_time" content="2018-01-31T08:53:31.622Z">
+<meta property="og:updated_time" content="2018-01-31T09:09:37.872Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="简析raid0,raid1,raid10,raid01等等硬盘搭配">
+<meta name="twitter:title" content="浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配">
 <meta name="twitter:description" content="磁盘阵列这个东西，有钱就有安全">
 <meta name="twitter:image" content="http://yoursite.com/images/raid1.png">
 
@@ -139,7 +139,7 @@
 
 
 
-  <title>简析raid0,raid1,raid10,raid01等等硬盘搭配 | Chris Chan's BLOG</title>
+  <title>浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配 | Chris Chan's BLOG</title>
   
 
 
@@ -339,7 +339,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">简析raid0,raid1,raid10,raid01等等硬盘搭配</h1>
+          <h1 class="post-title" itemprop="name headline">浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配</h1>
         
 
         <div class="post-meta">
@@ -403,7 +403,7 @@
 
           
           
-             <span id="/2018/01/31/简析raid0-raid1-raid10-raid01等等硬盘搭配/" class="leancloud_visitors" data-flag-title="简析raid0,raid1,raid10,raid01等等硬盘搭配">
+             <span id="/2018/01/31/简析raid0-raid1-raid10-raid01等等硬盘搭配/" class="leancloud_visitors" data-flag-title="浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,641
+                  1,735
                 </span>
               
 
@@ -471,11 +471,11 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="raid-0分条">RAID 0(分条)</span></h2><p>RAID 0（也称为分条）可用于两个或更多硬盘或SSD。目标是提高读的性能。</p>
-<p>数据以特定大小（通常为64 kB）的块写入，并在可用驱动器中平均分配。下图显示了带有三个硬盘的RAID 0阵列的示意图。 RAID控制器将第一个数据块写入硬盘1，第二个数据块写入硬盘2，第三个数据块写入硬盘3，第四个数据块写入硬盘1,以此类推。<br><img src="/images/raid1.png" alt="paradin"></p>
-<p>同时访问硬盘，数据分布均匀，理论上三个硬盘的RAID 0阵列比一个硬盘快三倍。您还保留整个存储容量。例如，RAID 0中的三个1 TB硬盘提供3 TB的存储空间。</p>
-<p>RAID 0也有缺点。主要的一个是如果一个磁盘出现故障，您不能访问任何其他磁盘上的任何数据。另外，如果您有三个磁盘，则发生磁盘故障的可能性是三倍。所以速度很快，但是如果数组包含对您来说很重要的数据，则最好创建频繁的备份。</p>
-<h2><span id="raid-1镜像">RAID 1(镜像)</span></h2><p>RAID 1（也称为镜像）用于创建数据的自动副本。RAID 1会将数据写入两个单独的磁盘，如果出现故障，您仍然可以在另一个磁盘上使用所有数据。缺点是你浪费了一半的容量。镜像和备份可不是一样！如果你不小心从一个磁盘上删除了一个文件，或者某个文件被病毒侵蚀了，那它再另一个磁盘上也是一样的待遇。只有真正的备份才能使所有文件保持其保存状态。因此，如果您想为您的数据创造最好的机会来挽救灾难，那么您应该使用RAID 1，RAID 10或RAID 5，并创建频繁的备份。</p>
-<p>RAID 1中的性能通常与单独的硬盘或SSD相同。因此，您不要使用RAID 1来获得性能，而是要获得所有文件的额外副本。以下是RAID 1的工作原理图。<br><img src="/images/raid2.png" alt="paradin"></p>
+<p>数据以特定大小（通常为64 kB）的块写入，并在可用驱动器中平均分配。下图显示了带有三个硬盘的RAID 0阵列的示意图。RAID控制器将第一个数据块写入硬盘1，第二个数据块写入硬盘2，第三个数据块写入硬盘3，第四个数据块写入硬盘1,以此类推，RAID 0中的三个1TB硬盘提供3TB的存储空间。<br><img src="/images/raid1.png" alt="paradin"></p>
+<p>由于数据分布均匀，所以在访问的时候会从硬盘1~硬盘4提取数据，然后拼接在一起就是一个完整的数据。理论上从四个硬盘的RAID 0阵列读取数据比从一个硬盘读取要快四倍，换言之，使用RAID 0读的能力跟磁盘数量成正比。</p>
+<p>RAID 0也有缺点。如果一个磁盘出现故障，从其他磁盘上的数据拼起来就不再是一个完整的数据了。另外，磁盘越多，则发生磁盘故障的可能性也越高。所以如果数组包含对您来说很重要的数据，则最好创建频繁的备份。</p>
+<h2><span id="raid-1镜像">RAID 1(镜像)</span></h2><p>RAID 1（也称为镜像）用于创建数据的自动副本。RAID 1会将数据写入两个单独的磁盘，如果A盘出现故障，您仍然可以在B磁盘上使用所有数据，当然这是比较壕的，毕竟做一件事用了两块盘。这里要注意！<font color="red">镜像和备份可不是一样！！！如果你不小心从一个磁盘上删除了一个文件，或者某个文件被病毒侵蚀了，那它再另一个磁盘上也是一样的待遇。只有真正的备份才能使所有文件保持其保存状态。</font>因此，如果您想为您的数据创造最好的机会来挽救灾难，那么您应该使用RAID 1，RAID 10或RAID 5，并创建频繁的备份。</p>
+<p>RAID 1中的性能通常与单独的硬盘或SSD相同。因此，您不要使用RAID 1来获得额外的读写性能，而是要获得所有文件的额外副本。以下是RAID 1的工作原理图，如果HDD1坏了，那么HDD2直接上任，若HDD1里的东西被删除了，那么HDD2也会被删除，即使它上任了也是坏的。<br><img src="/images/raid2.png" alt="paradin"></p>
 <h2><span id="raid-10和raid-01">RAID 10和RAID 01</span></h2><p>所谓RAID 10,其实就是<code>先RAID 1,后RAID 0</code>,同理，RAID 01也是先<code>RAID 0,后RAID 1</code>。无论是1+0还是0+1，都至少需要4个硬盘。</p>
 <p>这里先看一下RAID 10和RAID 01的效果图：<br><img src="/images/raid3.png" alt="paradin"></p>
 <p>就像图里说的“在六个硬盘列里，RAID 10比RAID 01更安全”，而且RAID 10也是大多数的RAID配置，为什么呢？那就是如果在RAID 0那一步磁盘就坏了，那RAID 1就没有意义了，因为生成的镜像全是坏镜像。</p>
@@ -549,7 +549,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/31/简析raid0-raid1-raid10-raid01等等硬盘搭配/" title="简析raid0,raid1,raid10,raid01等等硬盘搭配">简析raid0,raid1,raid10,raid01等等硬盘搭配</a>
+					<a href="http://yoursite.com/2018/01/31/简析raid0-raid1-raid10-raid01等等硬盘搭配/" title="浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配">浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -932,7 +932,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共48.0k字</span>
+  <span class="post-count">博客全站共48.1k字</span>
 </div>
         
 
