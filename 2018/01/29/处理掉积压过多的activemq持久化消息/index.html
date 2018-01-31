@@ -97,7 +97,7 @@
 <meta property="og:description" content="“不活动的空队列”和“过期队列”可不是一个意思！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/大帝扣威少.gif">
-<meta property="og:updated_time" content="2018-01-29T07:59:26.144Z">
+<meta property="og:updated_time" content="2018-01-31T06:03:32.033Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="处理掉积压过多的activemq持久化消息">
 <meta name="twitter:description" content="“不活动的空队列”和“过期队列”可不是一个意思！">
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  624
+                  634
                 </span>
               
 
@@ -479,7 +479,7 @@
 </ul>
 <p>标签<code>processExpired=&quot;false&quot;</code>表示<font color="red">不保存过期消息到死信队列，处理手段为删除</font>，为<code>true</code>则是保留。<br>标签<code>expireMessagesPeriod=&quot;60000&quot;</code>属性表示每隔60秒钟检查message是否过期。<br><code>topic=&quot;&gt;&quot;</code>表示该策略对所有topic都生效。而<code>topic=&quot;active.&gt;&quot;</code>就表示该策略对以<code>active.</code>开头的所有<code>topic</code>生效，注意有个点号<code>.</code>。</p>
 <ul>
-<li>message过期时间设置<br>修改<code>timeStampingBrokerPlugin</code>标签里<code>ttlCeiling=&quot;360000&quot; zeroExpirationOverride=&quot;360000&quot;</code>表示过期时间为360000ms（1小时）。  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;borker&gt;</span><br><span class="line">   	&lt;plugins&gt;</span><br><span class="line">   	    &lt;!-- <span class="number">86</span>,<span class="number">400</span>,<span class="number">000</span>ms = <span class="number">1</span> day --&gt;</span><br><span class="line">   	    &lt;timeStampingBrokerPlugin ttlCeiling=<span class="string">"360000"</span> zeroExpirationOverride=<span class="string">"360000"</span> /&gt;</span><br><span class="line">   	&lt;<span class="regexp">/plugins&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>borker&gt;</span><br></pre></td></tr></table></figure>
+<li>message过期时间设置<br>上面那步搞定了之后，再修改<code>timeStampingBrokerPlugin</code>标签里<code>ttlCeiling=&quot;360000&quot; zeroExpirationOverride=&quot;360000&quot;</code>表示过期时间为360000ms（1小时）。  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;borker&gt;</span><br><span class="line">   	&lt;plugins&gt;</span><br><span class="line">   	    &lt;!-- <span class="number">86</span>,<span class="number">400</span>,<span class="number">000</span>ms = <span class="number">1</span> day --&gt;</span><br><span class="line">   	    &lt;timeStampingBrokerPlugin ttlCeiling=<span class="string">"360000"</span> zeroExpirationOverride=<span class="string">"360000"</span> /&gt;</span><br><span class="line">   	&lt;<span class="regexp">/plugins&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>borker&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2><span id="解决空队列的方法">解决“空队列”的方法</span></h2><p>如果不是那种“持续订阅”的topic，那就简单了，配置如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;broker xmlns=<span class="string">"http://activemq.apache.org/schema/core"</span> schedulePeriodForDestinationPurge=<span class="string">"10000"</span>&gt;</span><br><span class="line">   	&lt;destinationPolicy&gt;</span><br><span class="line">   	   &lt;policyMap&gt;</span><br><span class="line">   	      &lt;policyEntries&gt;</span><br><span class="line">   	         &lt;policyEntry queue=<span class="string">"&gt;"</span> gcInactiveDestinations=<span class="string">"true"</span> inactiveTimoutBeforeGC=<span class="string">"30000"</span>/&gt;</span><br><span class="line">   	      &lt;<span class="regexp">/policyEntries&gt;</span></span><br><span class="line"><span class="regexp">   	   &lt;/</span>policyMap&gt;</span><br><span class="line">   	&lt;<span class="regexp">/destinationPolicy&gt;     </span></span><br><span class="line"><span class="regexp"> 	&lt;/</span>broker&gt;</span><br></pre></td></tr></table></figure></p>
