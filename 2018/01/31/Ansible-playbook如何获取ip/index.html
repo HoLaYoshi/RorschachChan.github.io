@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/ansibleip.png">
 <meta property="og:image" content="http://yoursite.com/images/ansibleip2.png">
-<meta property="og:updated_time" content="2018-01-31T06:00:29.724Z">
+<meta property="og:updated_time" content="2018-01-31T06:21:34.530Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Ansible-playbook如何获取ip">
 <meta name="twitter:description" content="把每一项累手的任务都转换成累心">
@@ -474,7 +474,7 @@
 <p>但是写完之后执行出来，却是这样的效果：<br><img src="/images/ansibleip.png" alt="akb48"></p>
 <p>而我想要的是这样的效果：<br><img src="/images/ansibleip2.png" alt="akb48"></p>
 <p>遇到这种情况怎么办？</p>
-<p>后来调整了一下，变量用<code>IP: &quot;&quot;</code>，而不是<code>ansible_all_ipv4_addresses</code>。</p>
+<p>后来调整了一下，变量用<code>IP</code>: ““，而不是<code>ansible_all_ipv4_addresses</code>。</p>
 <p>修改了之后的playbook 如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line"></span><br><span class="line">- hosts: all</span><br><span class="line">  vars:</span><br><span class="line">        IP: <span class="string">"&#123;&#123; ansible_eth0['ipv4']['address'] &#125;&#125;"</span></span><br><span class="line">  tasks:</span><br><span class="line">        - name: 将原有的hosts文件备份</span><br><span class="line">          shell: mv /etc/hosts /etc/hosts_bak</span><br><span class="line">	</span><br><span class="line">   	    - name: 将ansible端的hosts复制到各自机器上</span><br><span class="line">   	      copy: src=<span class="regexp">/root/</span>hosts dest=<span class="regexp">/etc/</span> owner=root group=root mode=<span class="number">0644</span></span><br><span class="line"></span><br><span class="line">        - name: 在新的hosts文件后面追加各自机器内网ip和hostname</span><br><span class="line">          lineinfile: dest=<span class="regexp">/etc/</span>hosts line=<span class="string">"`IP`  `ansible_hostname`"</span></span><br></pre></td></tr></table></figure></p>
 <p>这样就达到目的了。</p>
 
