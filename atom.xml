@@ -45,19 +45,20 @@
     <link href="http://yoursite.com/2018/02/01/%E5%86%8D%E8%A7%81%EF%BC%8C%E9%AD%94%E5%85%BD%E4%B8%96%E7%95%8C/"/>
     <id>http://yoursite.com/2018/02/01/再见，魔兽世界/</id>
     <published>2018-02-01T01:56:20.000Z</published>
-    <updated>2018-02-01T01:56:20.791Z</updated>
+    <updated>2018-02-01T03:02:20.624Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><div id="aplayer0" class="aplayer" style="margin-bottom: 20px;"></div><script>var ap = new APlayer({element: document.getElementById("aplayer0"),narrow: false,autoplay: false,showlrc: 0,music: {title: "暴风城主题音乐",author: "world of warcaft",url: "http://p1x3hd2at.bkt.clouddn.com/stormwind.mp3",pic: "http://p1x3hd2at.bkt.clouddn.com/wow.jpg",}});window.aplayers || (window.aplayers = []);window.aplayers.push(ap);</script><p>这张月卡马上就要用完了，我想我的《魔兽世界》生涯也要到头了。</p><p>我从大学的时候就开始接触《魔兽世界》，当时是在同寝的许锐同学的推荐下，注册账号买了CDKey，然后在六区黑翼之巢创建了一个角色，那是留着武士头和山羊胡的暗夜精灵德鲁伊，起了一个带有劲舞团性质的ID叫“删除过去”。最开始就是在泰达希尔里背着一个木棍，记得刚出生主要靠着“愤怒”这个技能打人，于是乎，我就发出了一个又一个原谅色的冲击波，波遍了泰达希尔的每一个角落。当时作为一个萌新什么都不懂，后来在一个另外的德鲁伊的帮助下，开始做任务升级，也粗略的了解了魔兽最基本的操作。那个德鲁伊是我在游戏里认识的第一个朋友，是一个萌妹子，不过后来她游戏上的很少了，我记得后来半夜在西瘟疫之地变成小老虎一个一个挠亡灵的时候，她上过一次线，等级好像20~30级的样子，我俩说了一会话，具体说的是什么我已经记不清了，那就是我俩最后一次说话。</p><p>从泰达希尔出来，我就开始了艾泽拉斯的冒险之路，开始学变熊变豹子。开始拖尸到血色修道院，也打过那么一两次诺莫瑞根，开始在荆棘谷的森林里穿梭，也长期蹲在塔纳利斯刷“求组祖尔法拉克”。</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;
-      
+      12年了，到了说离开的时候了。
     
     </summary>
     
+      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
+    
+    
+      <category term="魔兽世界" scheme="http://yoursite.com/tags/%E9%AD%94%E5%85%BD%E4%B8%96%E7%95%8C/"/>
     
   </entry>
   
