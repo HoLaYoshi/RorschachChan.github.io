@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-01-31T13:14:11.632Z</updated>
+  <updated>2018-02-01T02:47:24.133Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>从excel的大单元格里快速提取内容</title>
+    <link href="http://yoursite.com/2018/02/01/%E4%BB%8Eexcel%E7%9A%84%E5%A4%A7%E5%8D%95%E5%85%83%E6%A0%BC%E9%87%8C%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8F%96%E5%86%85%E5%AE%B9/"/>
+    <id>http://yoursite.com/2018/02/01/从excel的大单元格里快速提取内容/</id>
+    <published>2018-02-01T02:42:54.000Z</published>
+    <updated>2018-02-01T02:47:24.133Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>我公司的服务器信息会保存在一份高加密的excel里，由于历史遗留问题，里面的格式节选一部分出来是这样的：<br><img src="/images/excel1.png" alt="抱光妹"></p><p>注意看，ip地址不分内网外网是放在一个大的单元格里，中间是用空格隔开的，造成了这样的视觉效果。</p><p>现在公司需要把所有的服务器重新更换到新的zookeeper，那么使用ansible在批量处理的时候，就需要提取这些服务器的内网ip地址录入到hosts文件里，但是由于服务器实在太多不可能一个一个手动从excel的单元格挑选出“内网IP地址”复制粘贴，那么就需要进行一下批量挑选内网IP地址的操作。</p><p>首先我们先把整个IP的单元列里的”（公）””（内）”的字样去掉，然后把整列全部拷贝，粘贴到notepad里，看到它们变成了这样的样子：<br><img src="/images/excel2.png" alt="抱光妹"></p><p>在notepad里，双引号之间的内容会被认为同一行，所以这里我们需要使用“替换”功能把所有的双引号去掉，让它变成下面这样：<br><img src="/images/excel3.png" alt="抱光妹"></p><p>这样就可以把上面的内容复制到一个新的excel去，发现每一个内容对应了一行，即一个小单元格：<br><img src="/images/excel4.png" alt="抱光妹"></p><p>然后我们把第一行染成黄色，第二行染成绿色，当然颜色你可以选择自己的口味，然后使用excel的“格式刷”功能，一拉到底，让他们变成条纹状：<br><img src="/images/excel5.png" alt="抱光妹"></p><p>然后在excel里找到“筛选”功能，先选择住这一条纹块，然后选择“按颜色筛选“，由于我们需要内网IP，那么我们就留下绿色内容即可，如图：<br><img src="/images/excel6.png" alt="抱光妹"></p><p>得到效果如下：<br><img src="/images/excel7.png" alt="抱光妹"></p><p>这样就可以把整个内容拷贝进ansible的hosts文件里，然后搭配ansible批处理这些内网IP，双管齐下，大大的提升了提取数据的效率。</p><p>如果遇到偶尔三行（即中间有空格行）的情况，那么就在notepad那一步的时候，把空格行干掉，不如下图的情况里，第五行和第八行是空格行，可能是当初记录人员复制的时候自带了空格：<br><img src="/images/excel8.png" alt="抱光妹"></p><p>如果空格很多的情况，那么就需要批处理一次性的把所有空格都干掉，干掉的方法，还是使用notepad的“替换功能”，选择“正则表达式”，然后把“\n[\s|]*\r”替换成空值就可以了。<br><img src="/images/excel9.png" alt="抱光妹"></p>]]></content>
+    
+    <summary type="html">
+    
+      没想到我的这个博客里还需要写office的操作小技巧，真是太惊喜太意外了。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="ansible" scheme="http://yoursite.com/tags/ansible/"/>
+    
+      <category term="excel" scheme="http://yoursite.com/tags/excel/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>再见，魔兽世界</title>
+    <link href="http://yoursite.com/2018/02/01/%E5%86%8D%E8%A7%81%EF%BC%8C%E9%AD%94%E5%85%BD%E4%B8%96%E7%95%8C/"/>
+    <id>http://yoursite.com/2018/02/01/再见，魔兽世界/</id>
+    <published>2018-02-01T01:56:20.000Z</published>
+    <updated>2018-02-01T01:56:20.791Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>浅谈raid0,raid1,raid10,raid01等等硬盘阵列搭配</title>
@@ -246,11 +291,11 @@
     
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
+      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
+    
       <category term="centos" scheme="http://yoursite.com/tags/centos/"/>
     
       <category term="php" scheme="http://yoursite.com/tags/php/"/>
-    
-      <category term="redis" scheme="http://yoursite.com/tags/redis/"/>
     
   </entry>
   
@@ -439,54 +484,6 @@
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
     
       <category term="服务器监控" scheme="http://yoursite.com/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9B%91%E6%8E%A7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用Nessus进行漏洞扫描的过程</title>
-    <link href="http://yoursite.com/2018/01/23/%E4%BD%BF%E7%94%A8Nessus%E8%BF%9B%E8%A1%8C%E6%BC%8F%E6%B4%9E%E6%89%AB%E6%8F%8F%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
-    <id>http://yoursite.com/2018/01/23/使用Nessus进行漏洞扫描的过程/</id>
-    <published>2018-01-23T04:53:51.000Z</published>
-    <updated>2018-01-23T06:04:53.571Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>对于一个服务器运维工作者，掌握和运用一门漏洞扫描的工具也是行走江湖的必备项，Nessus就是漏洞扫描的强力武器。Nessus为一款当下比较流行的系统弱点扫描与分析软件，他的优点是操作简单（配置几乎全web化），而且页面精美、扫描项广泛；缺点就是目前不支持中文…</p><h2><span id="下载与安装">下载与安装</span></h2><p>要安装Nessus，需要登陆<code>https://www.tenable.com/products/nessus/select-your-operating-system</code>,选择对应的系统，我这个服务器是centos 7，那么就选择下图里红色的那个rpm包：<br><img src="/images/nessus1.png" alt="paradin"></p><p>点击之后，出来一个同意条款，同意之后就开始自动下载。但是要安装nessus仅仅有程序是不够的，还需要一个对应的验证码，在上面那个界面里，下拉一点有一个<code>get an activation code</code>的check，点击之后跳转到<code>https://www.tenable.com/products/nessus/nessus-plugins/obtain-an-activation-code</code>，里选择家用free版，点击下面的<code>register now</code>：<br><img src="/images/nessus2.png" alt="paradin"></p><p>注册是很简单的，填写名称和电邮就可以了。不久后就会在电子邮件里面获得一个校验码。</p><p>把下载的那个Nessus-6.11.1-es7.x86_64.rpm包上传到centos之后，<code>rpm -ivh Nessus-6.11.1-es7.x86_64.rpm</code>进行安装，安装完成之后，<code>service nessusd start</code>启动进程，启动完毕之后，使用<code>netstat -lnpt|grep 8834</code>，来检查一下8834端口是否被监听，如图：<br><img src="/images/nessus3.png" alt="paradin"></p><p>端口监听OK，那么在浏览器里输入<code>https://服务器外网IP地址:8834</code>打开控制web界面，如果有提示当前连接不安全，无视掉就可以。nessus的欢迎界面如下：<br><img src="/images/nessus4.png" alt="paradin"></p><p>注册一个账号之后，在这个界面里面选择home那一条，输入邮箱里面获得的那个注册码：<br><img src="/images/nessus5.png" alt="paradin"></p><p>整个的配置就完事了，继而就是nessus自动安装的过程，大约需要几分钟：<br><img src="/images/nessus6.png" alt="paradin"></p><p>整个安装完毕之后，就会看到nessus的主界面，简单明了的风格：<br><img src="/images/nessus7.png" alt="paradin"></p><p>至此整个nessus的安装过程结束。</p><h2><span id="配置扫描策略以及启动扫描任务">配置扫描策略以及启动扫描任务</span></h2><p>nessus扫描漏洞的流程很简单：需要先”制定策略”，然后在这个策略的基础上建立”扫描任务”，然后执行任务。首先，我们先建立一个<code>policy</code>，如图：<br><img src="/images/nessus8.png" alt="paradin"></p><p>点击<code>New Policy</code>之后，就会出现很多种扫描策略，这里我们选择<code>Advanced Scan</code>(高级扫描)：<br><img src="/images/nessus9.png" alt="paradin"> </p><p>我给这个测试的扫描策略，起名叫”chenchenchen”，如图：<br><img src="/images/nessus10.png" alt="paradin"> </p><p>对于上面这个图，<code>Permissions</code>是权限管理，是否可以准许其他的nessus用户来使用你这个策略；<code>Discovery</code>里面有主机发现、端口扫描和服务发现等功能；<code>assessment</code>里面有对于暴力攻击的一些设定；<code>Report</code>里面是报告的一些设定；Advanced里面是一些超时、每秒扫描多少项等基础设定，一般来说这里默认就好。我们主要来看看那个<code>plugins</code>。</p><p><code>Plugins</code>里面就是具体的策略，里面有父策略，具体的父策略下面还有子策略，把这些策略制定得体的话，使用者可以更加有针对性的进行扫描。比如我这个策略是针对于centos系统的扫描策略，那么一些冗余的项目大可以完全不要，举个例子：<br><img src="/images/nessus11.png" alt="paradin"> </p><p>在上面这个图里面，我不需要<code>amazon linux local security checks</code>这个“亚马逊linux本地安全检查”父策略，那就把它disabled掉，而对于<code>centos local security checks</code>这个父策略呢，我又不需要那几个关于bind的子策略，那我就单独把那些子策略disabled掉，这样等等操作，就搭配成为了一个用时不长但是又包含了所有制定的检查项的策略，然后点击<code>save</code>保存。</p><p>保存完后，我们就发现policy里多了一条<code>chenchenchen</code>的记录：<br><img src="/images/nessus12.png" alt="paradin"> </p><p>既然策略有了，现在我们就来制定一个任务。在主界面里选择<code>My Scans</code>,点击<code>New Scans</code>,这个时候还是有很多个图标，但是我们选择后面的<code>User defined</code>，如图：<br><img src="/images/nessus13.png" alt="paradin"> </p><p>这里我们就看到了我们已经制定好的那个chenchenchen策略，点击这个chenchenchen之后，就要给这个依赖chenchenchen策略的任务起名字以及需要扫描的网络段，由于我这个测试机的内网ip段是10.132.27.0，于是我就写了“10.132.27.0/24”，任务名字叫chentest：<br><img src="/images/nessus14.png" alt="paradin"> </p><h2><span id="启动扫描任务">启动扫描任务</span></h2><p>点击save保存之后，就会看到My Scans里多了这个chentest的任务，点击三角播放箭头，那么这个任务就开始执行了！如图：<br><img src="/images/nessus15.png" alt="paradin"> </p><p>从该界面可以看到扫描任务的状态为Running（正在运行），表示chentest扫描任务添加成功。如果想要停止扫描，可以单击方块（停止一下）按钮。如果暂停扫描任务，单击暂停按钮。</p><p>扫描完毕之后，我们就会看到一个结果反馈，如图：<br><img src="/images/nessus16.png" alt="paradin"> </p><p>具体的颜色代表，在旁边有描述，例子里这些蓝色的info代表没有重大漏洞，点击一下蓝色，还会出现更加详细的信息，包括IP地址、操作系统类型、扫描的起始时间和结束时间：<br><img src="/images/nessus17.png" alt="paradin"> </p><p><img src="/images/nessus18.png" alt="paradin"> </p><p>同时，nessus还支持pdf、web、csv等多种方式汇报扫描结果，至此，整个nessus漏洞扫描的全过程就结束了。</p><h2><span id="nessus配置smtp">Nessus配置smtp</span></h2><p>Nessus漏洞扫描是提供邮件服务，可以将扫描的结果发送给指定的邮箱。配置它的方法很简单，先登陆Nessus的界面，点击左上角的<code>settings</code>，然后选择左侧菜单栏里的<code>Smtp server</code>，如图：<br><img src="/images/nessus19.png" alt="paradin"></p><p>再就是填写对应的项目，我这里发送邮件的地址是：<code>chenx3314@sina.com</code>，接受的地址是<code>124208739@qq.com</code>，由于发送邮件使用的是新浪的邮箱，那么host就填写新浪的smtp服务器，即smtp.sina.com，如果是要SSL加密的话，端口写465，同时在Encryption那里选择<code>Force SSL</code>，在Auth Method那里选择<code>login</code>的鉴权方式，然后输入chenx3314@sina.com的账号密码，如图：<br><img src="/images/nessus20.png" alt="paradin"></p><p>点击<code>Send Test Email</code>，然后输入接收的邮箱，如果是多个邮箱那么就用英文逗号隔开。看到成功的提示就是OK了：<br><img src="/images/nessus21.png" alt="paradin"></p><p>然后就可以到邮箱里面看到那个测试的邮件内容：<br><img src="/images/nessus22.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      传说中最流行的漏洞扫描程序...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
-    
-      <category term="nessus" scheme="http://yoursite.com/tags/nessus/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>mysql清除磁盘碎片</title>
-    <link href="http://yoursite.com/2018/01/23/mysql%E6%B8%85%E9%99%A4%E7%A3%81%E7%9B%98%E7%A2%8E%E7%89%87/"/>
-    <id>http://yoursite.com/2018/01/23/mysql清除磁盘碎片/</id>
-    <published>2018-01-23T02:44:23.000Z</published>
-    <updated>2018-01-23T06:47:49.775Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="任务背景">任务背景</span></h2><p>接到金山云报警短信，说某数据库的容量已经达到了90%的水位线，于是登陆控制台查看详细情况。</p><p>在控制台首先发现，每一天的磁盘容量的确有所波动，那么就证明开发人员写的“资源回收”模块是在正常运行的，如图：<br><img src="/images/suipian3.png" alt="paradin"></p><p>那么就说明没有什么数据是可以删的，既然删不掉多余的数据又不想多掏钱扩磁盘容量，只能从“磁盘碎片”下手了。而<code>InnoDB</code>引擎清理磁盘碎片的命令就是<code>OPTIMIZE</code>。</p><h2><span id="具体操作">具体操作</span></h2><p>首先我先查询一下所有的“磁盘碎片情况”，使用语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select CONCAT(TABLE_SCHEMA,<span class="string">'.'</span>,TABLE_NAME) <span class="keyword">as</span> 数据表名,concat(truncate(sum(DATA_LENGTH+DATA_FREE+INDEX_LENGTH)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">' MB'</span>) <span class="keyword">as</span> total_size, concat(truncate(sum(DATA_LENGTH)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">' MB'</span>) <span class="keyword">as</span> data_size,concat(truncate(sum(DATA_FREE)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">' MB'</span>) <span class="keyword">as</span> data_free, concat(truncate(sum(INDEX_LENGTH)/<span class="number">1024</span>/<span class="number">1024</span>,<span class="number">2</span>),<span class="string">'MB'</span>) <span class="keyword">as</span> index_size <span class="keyword">from</span> information_schema.tables group by TABLE_NAME order by data_length desc;</span><br></pre></td></tr></table></figure></p><p>或者使用<code>select table_schema, table_name, data_free, engine from information_schema.tables where table_schema not in (&#39;information_schema&#39;, &#39;mysql&#39;) and data_free &gt; 0;</code>也可以，这个是查询<code>data_free</code>大于0的所有表。</p><p>然后看到我这个叫<code>history_device_flow_day</code>的表里情况如下：<br><img src="/images/suipian1.png" alt="paradin"></p><p>表里的<code>data_free</code>就是磁盘碎片的量，比如我现在要干掉<code>history_device_flow_day</code>里所有的磁盘碎片，是975MB，于是先查询一下这个<code>history_device_flow_day</code>的存储引擎，使用语句如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show table status <span class="keyword">from</span> jsonlinefssrds where name=<span class="string">'history_device_flow_day'</span>;</span><br></pre></td></tr></table></figure></p><p>上面语句里的<code>jsonlinefssrds</code>是对应的数据库，看到的效果如下：<br><img src="/images/suipian4.png" alt="paradin"></p><p>存储引擎是<code>InnoDB</code>，那么就可以启动清除碎片的语句了：<code>OPTIMIZE TABLE 数据表表名;</code>，因为<code>OPTIMIZE TABLE</code>只对<code>MyISAM</code>、<code>BDB</code>和<code>InnoDB</code>表起作用。</p><p>再执行了<code>OPTIMIZE TABLE history_device_flow_day;</code>之后，大约9分钟，就会看到“OK”的字样：<br><img src="/images/suipian5.png" alt="paradin"></p><p>估计有的朋友会问，那上面不是明明写了“Table does not support optimize, doing recreate + analyze instead”吗？这个其实无妨，实际上磁盘碎片已经被清除掉了。我们可以再用一次查询磁盘碎片的命令看一下，如图：<br><img src="/images/suipian2.png" alt="paradin"></p><p>的确释放了900多M。</p><p>或者使用<code>ALTER TABLE 表名 ENGINE = Innodb;</code>（只是<code>InnoDB</code>的表可以这么做，而且据说这么做更友好）来达到清理磁盘碎片的目的，这个命令表面上看什么也不做,实际上是重新整理碎片了。当执行优化操作时,实际执行的是一个空的<code>ALTER</code>命令,但是这个命令也会起到优化的作用,它会重建整个表,删掉未使用的空白空间。</p><h2><span id="补充">补充</span></h2><p>为什么会产生磁盘碎片？那是因为某一个表如果经常插入数据和删除数据，必然会产生很多未使用的空白空间，这些空白空间就是不连续的碎片，这样久而久之，这个表就会占用很大空间，但实际上表里面的记录数却很少，这样不但会浪费空间，并且查询速度也更慢。</p><p><font color="red">注意！<code>OPTIMIZE</code>操作会暂时锁住表,而且数据量越大,耗费的时间也越长,它毕竟不是简单查询操作。</font>所以把<code>OPTIMIZE</code>命令放在程序中是不妥当的,不管设置的命中率多低,当访问量增大的时候,整体命中率也会上升,这样肯定会对程序的运行效率造成很大影响。比较好的方式就是做个shell,定期检查mysql中 <code>information_schema</code>.<code>TABLES</code>字段,查看<code>DATA_FREE</code>字段,大于0的话,就表示有碎片，然后启动脚本。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://pengbotao.cn/mysql-suipian-youhua.html" target="_blank" rel="noopener">http://pengbotao.cn/mysql-suipian-youhua.html</a><br><a href="http://irfen.me/mysql-data-fragmentation-appear-and-optimization/" target="_blank" rel="noopener">http://irfen.me/mysql-data-fragmentation-appear-and-optimization/</a></p>]]></content>
-    
-    <summary type="html">
-    
-      InnoDB使用的Clustered Index,索引和数据绑定在一起,重排序是不现实的。所以不支持MyISAM式的OPTIMIZE,而是绑定到了ALTER TABLE命令上面。可以通过执行以下语句来整理碎片,提高索引速度
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
-    
-      <category term="数据库" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
     
   </entry>
   
