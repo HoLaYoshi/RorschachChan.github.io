@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/images/excel7.png">
 <meta property="og:image" content="http://yoursite.com/images/excel8.png">
 <meta property="og:image" content="http://yoursite.com/images/excel9.png">
-<meta property="og:updated_time" content="2018-02-01T02:47:24.133Z">
+<meta property="og:updated_time" content="2018-02-05T04:24:46.685Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从excel的大单元格里快速提取内容">
 <meta name="twitter:description" content="没想到我的这个博客里还需要写office的操作小技巧，真是太惊喜太意外了。">
@@ -435,7 +435,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  639
+                  642
                 </span>
               
 
@@ -478,16 +478,16 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><p>我公司的服务器信息会保存在一份高加密的excel里，由于历史遗留问题，里面的格式节选一部分出来是这样的：<br><img src="/images/excel1.png" alt="抱光妹"></p>
 <p>注意看，ip地址不分内网外网是放在一个大的单元格里，中间是用空格隔开的，造成了这样的视觉效果。</p>
-<p>现在公司需要把所有的服务器重新更换到新的zookeeper，那么使用ansible在批量处理的时候，就需要提取这些服务器的内网ip地址录入到hosts文件里，但是由于服务器实在太多不可能一个一个手动从excel的单元格挑选出“内网IP地址”复制粘贴，那么就需要进行一下批量挑选内网IP地址的操作。</p>
-<p>首先我们先把整个IP的单元列里的”（公）””（内）”的字样去掉，然后把整列全部拷贝，粘贴到notepad里，看到它们变成了这样的样子：<br><img src="/images/excel2.png" alt="抱光妹"></p>
-<p>在notepad里，双引号之间的内容会被认为同一行，所以这里我们需要使用“替换”功能把所有的双引号去掉，让它变成下面这样：<br><img src="/images/excel3.png" alt="抱光妹"></p>
+<p>现在公司需要把所有的服务器重新更换到新的zookeeper，那么使用ansible在批量处理的时候，就需要提取这些服务器的内网ip地址录入到<code>/etc/hosts</code>文件里，但是由于服务器实在太多不可能一个一个手动从excel的单元格挑选出“内网IP地址”复制粘贴，那么就需要进行一下批量挑选内网IP地址的操作。</p>
+<p>首先我们先把整个IP的单元列里的”（公）””（内）”的字样去掉，然后把整列全部拷贝，粘贴到<code>notepad</code>里，看到它们变成了这样的样子：<br><img src="/images/excel2.png" alt="抱光妹"></p>
+<p>在<code>notepad</code>里，双引号之间的内容会被认为同一行，所以这里我们需要使用“替换”功能把所有的双引号去掉，让它变成下面这样：<br><img src="/images/excel3.png" alt="抱光妹"></p>
 <p>这样就可以把上面的内容复制到一个新的excel去，发现每一个内容对应了一行，即一个小单元格：<br><img src="/images/excel4.png" alt="抱光妹"></p>
 <p>然后我们把第一行染成黄色，第二行染成绿色，当然颜色你可以选择自己的口味，然后使用excel的“格式刷”功能，一拉到底，让他们变成条纹状：<br><img src="/images/excel5.png" alt="抱光妹"></p>
 <p>然后在excel里找到“筛选”功能，先选择住这一条纹块，然后选择“按颜色筛选“，由于我们需要内网IP，那么我们就留下绿色内容即可，如图：<br><img src="/images/excel6.png" alt="抱光妹"></p>
 <p>得到效果如下：<br><img src="/images/excel7.png" alt="抱光妹"></p>
 <p>这样就可以把整个内容拷贝进ansible的hosts文件里，然后搭配ansible批处理这些内网IP，双管齐下，大大的提升了提取数据的效率。</p>
 <p>如果遇到偶尔三行（即中间有空格行）的情况，那么就在notepad那一步的时候，把空格行干掉，不如下图的情况里，第五行和第八行是空格行，可能是当初记录人员复制的时候自带了空格：<br><img src="/images/excel8.png" alt="抱光妹"></p>
-<p>如果空格很多的情况，那么就需要批处理一次性的把所有空格都干掉，干掉的方法，还是使用notepad的“替换功能”，选择“正则表达式”，然后把“\n[\s|]*\r”替换成空值就可以了。<br><img src="/images/excel9.png" alt="抱光妹"></p>
+<p>如果是空格很多的情况，那么就需要批处理一次性的把所有空格都干掉。干掉的方法，还是使用notepad的“替换功能”，选择“正则表达式”，然后把<code>\n[\s|]*\r</code>替换成空值就可以了。<br><img src="/images/excel9.png" alt="抱光妹"></p>
 
       
     </div>
@@ -715,7 +715,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">57</span>
+                  <span class="site-state-item-count">58</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -737,7 +737,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">69</span>
+                  <span class="site-state-item-count">71</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -914,7 +914,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共57.9k字</span>
+  <span class="post-count">博客全站共58.2k字</span>
 </div>
         
 
