@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/zook6.png">
 <meta property="og:image" content="http://yoursite.com/images/zook7.png">
 <meta property="og:image" content="http://yoursite.com/images/zook8.png">
-<meta property="og:updated_time" content="2018-02-05T02:47:03.326Z">
+<meta property="og:updated_time" content="2018-02-05T02:59:42.207Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper集群的搭建与配置">
 <meta name="twitter:description" content="纵然你的身子骨是铁打的，我想你也需要了解一款“实现同步服务，配置维护和命名服务”的东西吧。">
@@ -434,7 +434,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,636
+                  1,634
                 </span>
               
 
@@ -494,10 +494,10 @@
 <p>2）<code>zoo.cfg</code>里的指定日志文件夹没有手动创建；</p>
 <p>3）<code>/etc/hosts</code>下的名字与zoo.cfg里的server字段不相符，注意一下，/etc/hosts里的127.0.0.1的名字不要与本ip后面的名字一模一样，不然zk也无法识别！</p>
 <p>4）<code>/etc/hosts</code>名字使用了中文，java系对中文是很不友好的。</p>
-<h2><span id="配置文件详解">配置文件详解</span></h2><p>1.<code>tickTime</code>：这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。<br>2.<code>dataDir</code>：顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。<br>3.<code>clientPort</code>：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。<br>4.<code>initLimit</code>：这个配置项是用来配置 Zookeeper 接受 客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 5个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5<em>2000=10秒。<br>5.<code>syncLimit</code>：这个配置项标识 Leader 与Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是2</em>2000=4秒。<br>6.<code>server.A=B：C：D</code>：其中 A 是一个数字，表示这个是第几号服务器；B 是这个服务器的 ip 地址；C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。如果是伪集群的配置方式，由于 B 都是一样，所以不同的 Zookeeper 实例通信端口号不能一样，所以要给它们分配不同的端口号。</p>
+<h2><span id="配置文件详解">配置文件详解</span></h2><p>1.<code>tickTime</code>：这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。<br>2.<code>dataDir</code>：顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。<br>3.<code>clientPort</code>：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。<br>4.<code>initLimit</code>：这个配置项是用来配置 Zookeeper 接受 客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 5个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5<em>2000=10秒。<br>5.<code>syncLimit</code>：这个配置项标识 Leader 与 Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是2</em>2000=4秒。<br>6.<code>server.A=B：C：D</code>：其中 A 是一个数字，表示这个是第几号服务器；B 是这个服务器的 ip 地址；C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。如果是伪集群的配置方式，由于 B 都是一样，所以不同的 Zookeeper 实例通信端口号不能一样，所以要给它们分配不同的端口号。</p>
 <h2><span id="验证成果">验证成果</span></h2><p>Zookeeper的配置工具叫<code>Zooinspector</code>，下载地址是：<code>https://issues.apache.org/jira/secure/attachment/12436620/ZooInspector.zip</code>，下载完直接解压缩就可以在windows里使用。</p>
-<p>我们实验的这三台服务器只有内网，但是如果要连接zooinspector，还是需要通过外网权限连接的，这里可以配一个iptables转发规则，配iptables的步骤在这里：<a href="http://chenx1242.blog.51cto.com/10430133/1875950，照葫芦画瓢即可，但是要注意，zk的端口是`2181`。" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1875950，照葫芦画瓢即可，但是要注意，zk的端口是`2181`。</a></p>
-<p>当然，如果不想费事的话，就直接给zkserver 配一个外网IP，直接连接。</p>
+<p>我们实验的这三台服务器只有内网，但是如果要连接zooinspector，还是需要通过外网权限连接的，这里可以配一个iptables转发规则，配iptables的步骤在这里：<a href="http://chenx1242.blog.51cto.com/10430133/1875950" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1875950</a> ，照葫芦画瓢即可，但是要注意，zk的端口是<code>2181</code>。</p>
+<p>当然，如果不想费事的话，就直接给zkserver配一个外网IP，直接连接。</p>
 <p>成功连接到<code>zooinspector</code>，就会看到这样的内容，这里的lcconfig是手动添加的，右击鼠标，选择<code>add node</code>，然后直接写上<code>lcconfig</code>就行，这个名字是根据实际需要填写的：</p>
 <p><img src="/images/zook5.png" alt="paradin"></p>
 <p>上面我们已经配置了zkserver集群而且还启动zkserver进程，现在还需要zkclient，zkclient就是请求发起的一方，然后我们可以在各个的模块服务器上部署zkclient服务，通过启动zkclient服务，来让这些模块统一从zooinspector里取值，这样就达到了批量配置，同时保证一致性的效果。</p>
