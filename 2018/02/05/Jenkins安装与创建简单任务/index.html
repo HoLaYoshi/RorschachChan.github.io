@@ -107,7 +107,11 @@
 <meta property="og:image" content="http://yoursite.com/images/jenkins9.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkins10.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkins11.png">
-<meta property="og:updated_time" content="2018-02-05T07:49:53.621Z">
+<meta property="og:image" content="http://yoursite.com/images/jenkins12.png">
+<meta property="og:image" content="http://yoursite.com/images/jenkins13.png">
+<meta property="og:image" content="http://yoursite.com/images/jenkins14.png">
+<meta property="og:image" content="http://yoursite.com/images/jenkins15.png">
+<meta property="og:updated_time" content="2018-02-05T08:10:03.970Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins的安装与创建简单任务">
 <meta name="twitter:description" content="为了自动化部署和持续集成">
@@ -437,7 +441,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  784
+                  881
                 </span>
               
 
@@ -494,6 +498,10 @@
 <p>配置完毕之后，点击左下角<code>保存</code>即可。</p>
 <h2><span id="查看任务效果">查看任务效果</span></h2><p>返回到Jenkins的首页，我们看到多了那个刚才新建的任务，然后点击任务名旁边的小三角，选择<code>立即构建</code>，如图：<br><img src="/images/jenkins9.png" alt="paradin"></p>
 <p>然后就会看到构建的历史，点击任意历史记录的<code>控制台输出</code>，就会看到效果，的确是操作了<code>ifconfig</code>命令的效果：<br><img src="/images/jenkins10.png" alt="paradin"><br><img src="/images/jenkins11.png" alt="paradin"></p>
+<h2><span id="与github组合成持续集合环境">与github组合成持续集合环境</span></h2><p>首先登录github，在首页选择<code>settings</code>，如图：<br><img src="/images/jenkins12.png" alt="paradin"></p>
+<p>然后点击最下面的<code>Developer settings</code>，点击<code>Personal access tokens</code>，最后点击<code>Generate new token</code>，如图：<br><img src="/images/jenkins13.png" alt="paradin"></p>
+<p>输入名称和权限，权限选择<code>repo</code>和<code>admin:repo_hook</code>这俩，如图：<br><img src="/images/jenkins14.png" alt="paradin"></p>
+<p>然后就会生成一个token的密码，这个token密码请妥善保存，丢失或者删除就GG了。<br><img src="/images/jenkins15.png" alt="paradin"></p>
 
       
     </div>
@@ -888,7 +896,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x4E0E;&#x542F;&#x52A8;">&#x5B89;&#x88C5;&#x4E0E;&#x542F;&#x52A8;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x4EFB;&#x52A1;">&#x521B;&#x5EFA;&#x4EFB;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x67E5;&#x770B;&#x4EFB;&#x52A1;&#x6548;&#x679C;">&#x67E5;&#x770B;&#x4EFB;&#x52A1;&#x6548;&#x679C;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x4E0E;&#x542F;&#x52A8;">&#x5B89;&#x88C5;&#x4E0E;&#x542F;&#x52A8;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x4EFB;&#x52A1;">&#x521B;&#x5EFA;&#x4EFB;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x67E5;&#x770B;&#x4EFB;&#x52A1;&#x6548;&#x679C;">&#x67E5;&#x770B;&#x4EFB;&#x52A1;&#x6548;&#x679C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x4E0E;github&#x7EC4;&#x5408;&#x6210;&#x6301;&#x7EED;&#x96C6;&#x5408;&#x73AF;&#x5883;">&#x4E0E;github&#x7EC4;&#x5408;&#x6210;&#x6301;&#x7EED;&#x96C6;&#x5408;&#x73AF;&#x5883;</span></span></a></li></ol></div>
             
 
           </div>
@@ -941,7 +949,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共58.7k字</span>
+  <span class="post-count">博客全站共58.8k字</span>
 </div>
         
 
