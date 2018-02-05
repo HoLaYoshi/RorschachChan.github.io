@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-05T08:10:03.970Z</updated>
+  <updated>2018-02-05T09:15:17.354Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Jenkins与Github组合成持续集合环境</title>
+    <link href="http://yoursite.com/2018/02/05/Jenkins%E4%B8%8EGithub%E7%BB%84%E5%90%88%E6%88%90%E6%8C%81%E7%BB%AD%E9%9B%86%E5%90%88%E7%8E%AF%E5%A2%83/"/>
+    <id>http://yoursite.com/2018/02/05/Jenkins与Github组合成持续集合环境/</id>
+    <published>2018-02-05T09:12:22.000Z</published>
+    <updated>2018-02-05T09:15:17.354Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="生成token码">生成Token码</span></h2><p>首先登录github，在首页选择<code>settings</code>，如图：<br><img src="/images/jenkins12.png" alt="paradin"></p><p>然后点击最下面的<code>Developer settings</code>，点击<code>Personal access tokens</code>，最后点击<code>Generate new token</code>，如图：<br><img src="/images/jenkins13.png" alt="paradin"></p><p>输入名称和权限，权限选择<code>repo</code>和<code>admin:repo_hook</code>这俩，如图：<br><img src="/images/jenkins14.png" alt="paradin"></p><p>然后就会生成一个<code>token密码</code>，这个<code>token密码</code>请妥善保存，丢失或者删除就GG了。<br><img src="/images/jenkins15.png" alt="paradin"></p><h2><span id="将token码配置到jenkins">将Token码配置到Jenkins</span></h2><p>浏览器返回到Jenkins界面，在首页里点击<code>系统管理</code>，然后选择<code>系统配置</code>，在系统配置里面添加一个<code>GitHub Servers</code>：<br><img src="/images/jenkins17.png" alt="paradin"></p><p>保存之后，点击一下test connection，如果出现<code>Credentials verified for user xxx, rate limit: xxx</code>的字样就是成功了，如图：<br><img src="/images/jenkins19.png" alt="paradin"></p><h2><span id="设置webhooks">设置webhooks</span></h2><p>在github里找一个源码库，选择<code>settings</code>，然后点击小菜单栏里的<code>Webhooks</code>，再点击右边的<code>Add Webhook</code>，如图：<br><img src="/images/jenkins16.png" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      这样就与Github紧密相连了
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+      <category term="持续集成" scheme="http://yoursite.com/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/"/>
+    
+  </entry>
   
   <entry>
     <title>Jenkins的安装与创建简单任务</title>
@@ -465,30 +489,6 @@
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
       <category term="阿里云api" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91api/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Crontab里解决脚本时间重叠的问题</title>
-    <link href="http://yoursite.com/2018/01/24/Crontab%E9%87%8C%E8%A7%A3%E5%86%B3%E8%84%9A%E6%9C%AC%E6%97%B6%E9%97%B4%E9%87%8D%E5%8F%A0%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/01/24/Crontab里解决脚本时间重叠的问题/</id>
-    <published>2018-01-24T06:17:32.000Z</published>
-    <updated>2018-01-24T06:26:57.148Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>Linux里的Crontab是一个好东西，但是它的默认最小执行频率是1分钟，但是我们在实际生产环境里有的时候遇到的脚本执行时间是大于1分钟的，这样就会出现一个很尴尬的情况，就是在1分钟过后，系统进程会出现多个脚本，neck and neck式的在后台运行，比如这样：<br><img src="/images/log499.png" alt="akb48"></p><p>从上面的图可以看到，10点36分<code>log499.sh</code>没有执行完毕，10点37又开始了执行了一个新的<code>log499.sh</code>脚本。这种脚本冲突肯定不是我们所希望的，那么如何才能保证后台只是在一段时间里只执行一个脚本呢？</p><p>这个时候我们就要使用文件锁，<code>flock</code>，这种方法要比判断pid高大上的多。</p><p>首先假设我们的脚本名字叫abc.sh，这个脚本文件的执行时间是要大于1分钟的，同时我们再设定一个锁文件，位置就叫<code>/tmp/abc.lock</code>,这个文件可以是空的，然后<code>crontab -e</code>，添加一句命令如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * flock -xn /tmp/abc.lock -c <span class="string">'sh /路径/abc.sh &gt;&gt; /记录日志的路径 2&gt;&amp;1'</span></span><br></pre></td></tr></table></figure></p><p>这个时候静候crontab启动abc.sh，通过<code>ps -ef|grep abc</code>，发现在后台始终只有一个abc进程。</p><p>但是有的时候会有这样的一个问题，就是abc执行一次之后，在下一次该执行的时候却没有执行，好像crontab失效了一样，对于这样的情况，就需要添加下面的语句到abc.sh末尾：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rm -rf /tmp/abc.lock      #删除掉原有的锁文件</span><br><span class="line">sleep n                      #睡n秒</span><br><span class="line">touch /tmp/abc.lock     #再新建一个锁文件</span><br></pre></td></tr></table></figure></p><p>这样不断地更新lock锁文件，就会保证crontab每次都会按期执行。</p><p>这里要注意一下，里面我加了一句<code>sleep n</code>，这里的n是为了跨分钟的存在，这是为了防止没有走到下一个分钟又会生成一个新的lock锁文件，这样还是会出现重复启动脚本的情况。</p><p>这里就涉及到flock的一个原理：<strong>在每一次执行任务的时候都会先去尝试取到锁文件，如果取到了锁文件，那么就会下一步，反之就会放弃执行</strong>。A任务在运行的时候已经占据了lock文件，那么B任务来了，发现没有lock了，就不会执行任务。</p><p>这里我们使用了flock的三个参数：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-x, --exclusive: 获得一个独占锁</span><br><span class="line">-n, --nonblock:  如果没有立即获得锁，直接失败而不是等待</span><br><span class="line">-c, --command:   在shell中运行一个单独的命令</span><br></pre></td></tr></table></figure></p><p>当然，flock还是有很多丰富的参数可以供各位使用，大家就各自去google一下吧。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.csdn.net/fdipzone/article/details/38284009" target="_blank" rel="noopener">http://blog.csdn.net/fdipzone/article/details/38284009</a><br><a href="http://chuansong.me/n/285635151949" target="_blank" rel="noopener">http://chuansong.me/n/285635151949</a><br><a href="https://segmentfault.com/q/1010000008039907" target="_blank" rel="noopener">https://segmentfault.com/q/1010000008039907</a></p>]]></content>
-    
-    <summary type="html">
-    
-      话说那是一个年久失修的模块，现在只能靠这种每分钟监控的脚本来残喘续命了...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
-    
-      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   
