@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Jenkins与Github组合成持续集合环境]]></title>
     <url>%2F2018%2F02%2F05%2FJenkins%E4%B8%8EGithub%E7%BB%84%E5%90%88%E6%88%90%E6%8C%81%E7%BB%AD%E9%9B%86%E5%90%88%E7%8E%AF%E5%A2%83%2F</url>
-    <content type="text"><![CDATA[生成Token码首先登录github，在首页选择settings，如图： 然后点击最下面的Developer settings，点击Personal access tokens，最后点击Generate new token，如图： 输入名称和权限，权限选择repo和admin:repo_hook这俩，如图： 然后就会生成一个token密码，这个token密码请妥善保存，丢失或者删除就GG了。 将Token码配置到Jenkins浏览器返回到Jenkins界面，在首页里点击系统管理，然后选择系统配置，在系统配置里面添加一个GitHub Servers： 保存之后，点击一下test connection，如果出现Credentials verified for user xxx, rate limit: xxx的字样就是成功了，如图： 设置webhooks在github里找一个源码库，选择settings，然后点击小菜单栏里的Webhooks，再点击右边的Add Webhook，如图：]]></content>
+    <content type="text"><![CDATA[生成Token码首先登录github，在首页选择settings，如图： 然后点击最下面的Developer settings，点击Personal access tokens，最后点击Generate new token，如图： 输入名称和权限，权限选择repo和admin:repo_hook这俩，如图： 然后就会生成一个token密码，这个token密码请妥善保存，丢失或者删除就GG了。 将Token码配置到Jenkins浏览器返回到Jenkins界面，在首页里点击系统管理，然后选择系统配置，在系统配置里面添加一个GitHub Servers，在Add Credentials这一步的时候，要把kind改成Secret text，如图： 这里Secret的地方就是填写刚刚生成的Token码。 保存之后，点击一下test connection，如果出现Credentials verified for user xxx, rate limit: xxx的字样就是成功了，如图： 设置webhooks在github里找一个源码库，选择settings，然后点击小菜单栏里的Webhooks，再点击右边的Add Webhook，如图：]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
