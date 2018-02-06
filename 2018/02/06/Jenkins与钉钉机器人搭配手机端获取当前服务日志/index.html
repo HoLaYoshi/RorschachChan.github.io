@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="jenkins,钉钉机器人," />
+  <meta name="keywords" content="jenkins,钉钉," />
 
 
 
@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="钉钉机器人要是能发送参数然后执行脚本就太好了！">
-<meta name="keywords" content="jenkins,钉钉机器人">
+<meta name="description" content="钉钉机器人要是能发送参数到服务器里然后执行脚本就太好了！">
+<meta name="keywords" content="jenkins,钉钉">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jenkins与钉钉机器人搭配手机端获取当前服务日志">
 <meta property="og:url" content="http://yoursite.com/2018/02/06/Jenkins与钉钉机器人搭配手机端获取当前服务日志/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="钉钉机器人要是能发送参数然后执行脚本就太好了！">
+<meta property="og:description" content="钉钉机器人要是能发送参数到服务器里然后执行脚本就太好了！">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/dingding1.png">
 <meta property="og:image" content="http://yoursite.com/images/dingding2.png">
@@ -107,10 +107,10 @@
 <meta property="og:image" content="http://yoursite.com/images/dingding9.png">
 <meta property="og:image" content="http://yoursite.com/images/dingding10.png">
 <meta property="og:image" content="http://yoursite.com/images/dingding11.png">
-<meta property="og:updated_time" content="2018-02-06T14:44:28.363Z">
+<meta property="og:updated_time" content="2018-02-06T14:48:32.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins与钉钉机器人搭配手机端获取当前服务日志">
-<meta name="twitter:description" content="钉钉机器人要是能发送参数然后执行脚本就太好了！">
+<meta name="twitter:description" content="钉钉机器人要是能发送参数到服务器里然后执行脚本就太好了！">
 <meta name="twitter:image" content="http://yoursite.com/images/dingding1.png">
 
 
@@ -437,7 +437,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,627
+                  1,685
                 </span>
               
 
@@ -453,7 +453,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  7
                 </span>
               
             </div>
@@ -461,7 +461,7 @@
 
           
               <div class="post-description">
-                  钉钉机器人要是能发送参数然后执行脚本就太好了！
+                  钉钉机器人要是能发送参数到服务器里然后执行脚本就太好了！
               </div>
           
 
@@ -492,11 +492,11 @@
 <p>执行这个脚本可以看到机器人发送的信息如下：<br><img src="/images/dingding5.png" alt="paradin"></p>
 <p>然后打开这个网址，就看到完整的网页信息：<br><img src="/images/dingding6.png" alt="paradin"></p>
 <p>到时候把毛主席诗词换成实际的日志文件就好了，不用一口气打印所有的日志出来，<code>tail -n 50 日志文件名</code>，50行足够用了。</p>
-<h2><span id="配置jenkins">配置Jenkins</span></h2><p>脚本写完了，机器人也写完了。这个时候就要添加”启动端”，首先登录Jenkins的网页，添加一个新的Job，比如我这个Job就叫“获取模块日志”，如图：<br><img src="/images/dingding7.png" alt="paradin"></p>
-<p>如果是要在Jenkins上去读取其他机器的日志，那么需要在<code>构建project</code>的时候选择<code>参数化构建过程</code>，然后配置参数ip，到时候把这些ip传递给目标脚本。如果觉得这样hold不住，可以不用jenkins的这个功能，把ip写到脚本里去。<br><img src="/images/dingding8.png" alt="paradin"></p>
+<h2><span id="配置jenkins">配置Jenkins</span></h2><p>脚本写完了，机器人也写完了，这个时候就要添加”启动端”。安装Jenkins的步骤我这里就不写了，直接可以去看<code>https://rorschachchan.github.io/2018/02/05/Jenkins安装与创建简单任务/</code>。现在去登录Jenkins的网页，去添加一个新的Job，比如我这个Job就叫“获取模块日志”，如图：<br><img src="/images/dingding7.png" alt="paradin"></p>
+<p>如果是要在Jenkins上去读取其他服务器的日志，就需要在<code>构建project</code>的时候选择<code>参数化构建过程</code>，然后配置参数ip，到时候把这些ip传递给目标脚本。如果觉得这样hold不住，可以不用jenkins的这个功能，把ip写到脚本里去，一了百了：<br><img src="/images/dingding8.png" alt="paradin"></p>
 <p>在<code>构建</code>那一步，选择<code>Execute Shell</code>，然后里面写上具体的shell命令，如果在上面使用了参数，那么参数就可以在这里使用，我的脚本里是没有ip这个参数的，在图里写<code>$ip</code>就是做一个例子讲解一下用法而已：<br><img src="/images/dingding9.png" alt="paradin"></p>
-<p>在<code>构建后操作</code>这一步可以选择<code>E-mail Notification</code>，这样如果失败了会发送邮件通知。如果用不着就什么都不用选。然后就是保存好这个project，点击左侧菜单栏的<code>立即构建</code>，就会看到下面<code>Build History</code>会多一个<code>#1</code>出来，这个就是构建的记录，这个纪录多了的话，新纪录会覆盖掉老的记录。<br><img src="/images/dingding10.png" alt="paradin"></p>
-<p>点击这个#1，选择控制台输出，就能看到具体的操作结果了，同时钉钉机器人也在群里发消息，可见操作成功，目的已经达到了！<br><img src="/images/dingding11.png" alt="paradin"></p>
+<p>在<code>构建后操作</code>这一步可以选择<code>E-mail Notification</code>，这样如果失败了会发送邮件通知。如果用不着就什么都不用选。然后就是保存好这个project，点击左侧菜单栏的<code>立即构建</code>，就会看到下面<code>Build History</code>会多一个<code>#1</code>出来，同时钉钉机器人也在群里发消息，这个<code>#1</code>就是构建的记录，这个纪录多了的话，新纪录会覆盖掉老的记录。<br><img src="/images/dingding10.png" alt="paradin"></p>
+<p>点击这个<code>#1</code>，选择<code>控制台输出</code>，就能看到具体的操作结果了，跟在shell界面里执行的效果差不多的。可见操作成功，目的已经达到了！<br><img src="/images/dingding11.png" alt="paradin"></p>
 <p>以后需要调用脚本，就在手机端浏览器里登陆jenkins，然后构建一下这个project，再回看到钉钉里机器人有反馈了。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://xu3352.github.io/linux/2017/05/01/jenkins-restart-remote-server-tomcat" target="_blank" rel="noopener">https://xu3352.github.io/linux/2017/05/01/jenkins-restart-remote-server-tomcat</a></p>
 
@@ -583,7 +583,7 @@
           
             <a href="/tags/jenkins/" rel="tag"><i class="fa fa-tag"></i> jenkins</a>
           
-            <a href="/tags/钉钉机器人/" rel="tag"><i class="fa fa-tag"></i> 钉钉机器人</a>
+            <a href="/tags/钉钉/" rel="tag"><i class="fa fa-tag"></i> 钉钉</a>
           
         </div>
       
@@ -753,7 +753,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">74</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
