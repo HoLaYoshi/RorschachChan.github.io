@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-06T02:14:59.815Z</updated>
+  <updated>2018-02-06T06:16:51.232Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一次官网打不开的经历</title>
+    <link href="http://yoursite.com/2018/02/06/%E4%B8%80%E6%AC%A1%E5%AE%98%E7%BD%91%E6%89%93%E4%B8%8D%E5%BC%80%E7%9A%84%E7%BB%8F%E5%8E%86/"/>
+    <id>http://yoursite.com/2018/02/06/一次官网打不开的经历/</id>
+    <published>2018-02-06T06:10:12.000Z</published>
+    <updated>2018-02-06T06:16:51.232Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天有人反映官网在登陆的时候，chrome浏览器不能正常打开页面，反而会出现一个下载框。我使用IE浏览器尝试登录官网，页面也不是正常的页面，而是下面的内容：<br><img src="/images/guanwang1.png" alt="paradin"></p><p>由于官网的域名跳转是在阿里云的域名解析的地方配置的，于是就登陆到阿里云的域名解析地方，查看了一下发现，这里的配置是<code>www.lechange.com</code>会302跳转到<code>home.lechange.com</code>，而ping一下<code>home.lechange.com</code>得到的ip地址是一个负载均衡的地址，然后在阿里云的控制台查询这个负载均衡的情况，发现这个负载均衡后面挂载的是两台服务器A和B。</p><p>于是我在浏览器里面直接输入负载均衡的ip地址，发现还是像上面那样错误的php界面，而浏览器地址栏使用两个服务器的外网ip却是正常可以打开的。这个时候初步怀疑是SLB的问题，而我当时就觉得就凭上面这一点就去跟阿里撕逼不太妥当，但是事实告诉我们事情不是那么简单的。</p><p>我检查一下slb的端口配置情况，分别是<code>http 80转8080</code>和<code>https 443转80</code>，可见这个网站有两个协议，一个是http的而一个是https的，我们刚才虽然在浏览器里直接使用A和B的外网ip访问是可以正常打开页面，只能说明http协议是OK的，我们还要测试一下https协议访问的效果。</p><p>我就在浏览器地址栏里进一步尝试，发现使用<code>A外网ip：8080</code>访问是OK的，而使用<code>B外网ip：8080</code>访问就是PHP的文字界面。于是基本问题定位到B服务器里有文件的配置错误。</p><p>登陆到B服务器里，在nginx的conf文件夹里发现一个多余的文件，打开内容如下：<br>    ```js<br>    server<br>    {<br>        listen       8080;<br>        server_name  www.lechange.com (file://www.lechange.com/) www.lechangebuy.com (file://www.lechangebuy.com/);<br>        index index.html index.htm index.php;<br>        root  /data/www/ecstore;<br>        add_header  pos ‘web2’; </p><pre><code>#       location / { #               rewrite ^/(.*)$ https://www.lechangebuy.com/$1; #       }     location /public {             root  /data/www/ecstore;     }     access_log /data/logs/nginx/access.log; #access_log off; }</code></pre><p>而原来nginx是有正常的conf文件，现在又多余了一个这个文件，可见是因为没有无法正常解析.php的文件，两个文件都在占用8080端口时出现了冲突，所以就导致这样php download界面的情况。删除这个多余的文件后，重启nginx，清除浏览器缓存，再重新尝试就正常打开页面了。</p><p>为什么会多一个这样的文件，后来把各位运维人员严刑拷打一顿才知道，原来有一次某运维小弟在B服务器里面做跳转的测试，测试完毕之后忘记了把这个多余的文件删除，原本这一切是没有问题的，但是可能服务器nginx经历了重启，于是就加载了这两个conf文件，就把这个隐藏的问题暴露了。</p>]]></content>
+    
+    <summary type="html">
+    
+      想要说平时工作千万别留坑，不然害的就是自己啊
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+  </entry>
   
   <entry>
     <title>往github里上传代码</title>
@@ -463,30 +485,6 @@
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
     
       <category term="监控技术" scheme="http://yoursite.com/tags/%E7%9B%91%E6%8E%A7%E6%8A%80%E6%9C%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>阿里云服务器更改时区为utc</title>
-    <link href="http://yoursite.com/2018/01/25/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9B%B4%E6%94%B9%E6%97%B6%E5%8C%BA%E4%B8%BAutc/"/>
-    <id>http://yoursite.com/2018/01/25/阿里云服务器更改时区为utc/</id>
-    <published>2018-01-25T14:31:16.000Z</published>
-    <updated>2018-01-26T06:55:58.895Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>开发提出需求说，某个模块是给洋人使用，于是把服务器里的时间改成UTC时间。我登陆到服务器里使用<code>date</code>查看了一下，发现目前使用的是东八区时间，如图：<br><img src="/images/time1.png" alt="goodbye,Kobe"></p><p>首先先开启UTC，方法就是在<code>/etc/sysconfig/clock</code>的文件里修改这样一处：<code>UTC=true</code>。这样即使机器重启，UTC时间依旧会“<code>BIOS ▶ UTC时区转换 ▶ 系统时间</code>”的顺序正常使用。</p><p>在Centos 6.5里，各时区的时间是在一个叫<code>/usr/share/zoneinfo/</code>的文件夹下，在里面我们发现了我们的目标—-<code>UTC</code>，如图：<br><img src="/images/time2.png" alt="goodbye,Kobe"></p><p>然后就是修改，方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/localtime /etc/localtime-bak</span><br><span class="line">ln -s /usr/share/zoneinfo/UTC /etc/localtime</span><br></pre></td></tr></table></figure></p><p>先把老的时间文件备份，然后把UTC文件做一个软连接过来即可。我们所熟悉的<code>date</code>命令就是<code>/etc/localtime</code>的输出结果。</p><p>现在去<code>date</code>一下，看看结果，果然改成了<code>UTC</code>：<br><img src="/images/time3.png" alt="goodbye,Kobe"></p><p>这个时候，如果你服务器里装的是nginx的话，就会发现nginx日志里的时间也会变成<code>UTC</code>而不会再是<code>CST</code>了。</p>]]></content>
-    
-    <summary type="html">
-    
-      为美国人服务的模块就要改成美国时间
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
   </entry>
   
