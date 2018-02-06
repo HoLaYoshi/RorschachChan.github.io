@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://yoursite.com/images/dingding9.png">
 <meta property="og:image" content="http://yoursite.com/images/dingding10.png">
 <meta property="og:image" content="http://yoursite.com/images/dingding11.png">
-<meta property="og:updated_time" content="2018-02-06T14:56:07.252Z">
+<meta property="og:updated_time" content="2018-02-06T14:58:13.635Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins与钉钉机器人实现手机端获取当前服务日志">
 <meta name="twitter:description" content="钉钉机器人要是能发送参数到服务器里然后执行脚本就太好了！">
@@ -437,7 +437,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,685
+                  1,697
                 </span>
               
 
@@ -478,8 +478,8 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>马上要过年了，各位运维除了因为买不到回家的火车票而嚎嚎大哭之外也开始扩容服务器和提前调整监控值，目的就是为了过一个消停的春节。可是这毕竟十天左右不在公司，要是模块真出了什么意外肯定没法第一找到日志分析问题，毕竟这几天都在串门拜年和醉生梦死中度过，走到哪都要再背一个笔记本实在不方便。</p>
-<p>那么这个时候，我就琢磨使用手机端来启动服务器里脚本，让这个脚本可以去获取当前的日志，然后再把结果返回到手机端。这样就不用到哪里都带一个笔记本电脑了。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>马上要过年了，各位运维们除了因为买不到回家的火车票而嚎嚎大哭之外也开始扩容服务器和提前调整监控值，目的就是为了过一个消停的春节。可是这毕竟十天左右不在公司，要是模块真出了什么意外肯定没法第一找到日志分析问题，毕竟这几天都在串门拜年和醉生梦死中度过，走到哪都要再背一个笔记本实在太不方便了。</p>
+<p>那么这个时候，我就琢磨使用手机端来启动服务器里脚本，让这个脚本可以去获取当前的日志，然后再把结果返回到手机端。这样就不用到哪里都带那个一看就很扫兴的公司笔记本电脑了。</p>
 <p>使用手机端启动服务器里脚本？我又不会开发android和ios，那么肯定就要使用第三方工具，我条件反射的想到了jenkins，因为jenkins是用手机可以登录的，那么在手机端得到结果用什么呢？在微信公众号和钉钉机器人里，我选择了钉钉机器人。</p>
 <h2><span id="创造钉钉机器人">创造钉钉机器人</span></h2><p>我的钉钉版本是4.2.6.37，首先在左上角头像的三角菜单有一个<code>机器人管理</code>，如图：<br><img src="/images/dingding1.png" alt="paradin"></p>
 <p>然后选择自定义机器人，给它起名换一个图标之后，添加到一个群聊里，如图：<br><img src="/images/dingding2.png" alt="paradin"></p>
