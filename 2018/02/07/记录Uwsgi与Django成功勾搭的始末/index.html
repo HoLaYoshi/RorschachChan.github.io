@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/ud3.png">
 <meta property="og:image" content="http://yoursite.com/images/ud4.png">
 <meta property="og:image" content="http://yoursite.com/images/ud5.png">
-<meta property="og:updated_time" content="2018-02-07T02:25:37.745Z">
+<meta property="og:updated_time" content="2018-02-07T02:37:09.169Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录Uwsgi与Django成功勾搭的始末">
 <meta name="twitter:description" content="这一步是搭建框架的import key，在这里面你能感受到python版本的恶心...">
@@ -472,7 +472,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="环境说明">环境说明</span></h2><p>Uwsgi版本：2.0.14(yum install安装）<br>django版本：1.10.6（pip install安装）<br>python版本：2.7.5(阿里云 centos 7自带）<br>nginx版本：1.10.2（yum install安装）</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="环境说明">环境说明</span></h2><p>Uwsgi版本：<code>2.0.14</code>(yum install安装）<br>django版本：<code>1.10.6</code>（pip install安装）<br>python版本：<code>2.7.5</code>(阿里云 centos 7自带）<br>nginx版本：<code>1.10.2</code>（yum install安装）</p>
 <h2><span id="正文">正文</span></h2><p>在<code>https://rorschachchan.github.io/2018/02/02/Uwsgi的安装和简单使用/</code>里面，我们已经实现了网页打开出现”good bye,logan”的效果，可见<code>Web Client &lt;===&gt; uWSGI &lt;===&gt; Python</code>是通畅的，现在我们要调整看看django与uwsgi是否是通畅的。</p>
 <p>首先，我们在/django这个目录下，<code>django-admin.py startproject logan</code>，建立了一个叫logan的project，然后在/django/logan/logan里会有一个自动生成的<code>wsgi.py</code>，打开一看，里面的内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">""</span><span class="string">"</span></span><br><span class="line"><span class="string">WSGI config for logan project.</span></span><br><span class="line"><span class="string">It exposes the WSGI callable as a module-level variable named ``application``.</span></span><br><span class="line"><span class="string">For more information on this file, see</span></span><br><span class="line"><span class="string">https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/</span></span><br><span class="line"><span class="string">"</span><span class="string">""</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> django.core.wsgi <span class="keyword">import</span> get_wsgi_application</span><br><span class="line">os.environ.setdefault(<span class="string">"DJANGO_SETTINGS_MODULE"</span>, <span class="string">"logan.settings"</span>)</span><br><span class="line">application = get_wsgi_application()</span><br></pre></td></tr></table></figure></p>
 <p>我们原来的目标就是测试django跟uwsgi的链接是否正常，那么返回到/django/logan，使用<code>python manage.py runserver 0.0.0.0:8000</code>启动django，然后打开浏览器，在地址栏里输入<code>外网ip:8000</code>，看到了如下的界面：<br><img src="/images/ud1.png" alt="paradin"></p>
