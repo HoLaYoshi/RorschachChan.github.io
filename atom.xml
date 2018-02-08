@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-08T12:59:06.757Z</updated>
+  <updated>2018-02-08T13:52:16.008Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>脚本里添加crontab的方法</title>
+    <link href="http://yoursite.com/2018/02/08/%E8%84%9A%E6%9C%AC%E9%87%8C%E6%B7%BB%E5%8A%A0crontab%E7%9A%84%E6%96%B9%E6%B3%95/"/>
+    <id>http://yoursite.com/2018/02/08/脚本里添加crontab的方法/</id>
+    <published>2018-02-08T13:48:37.000Z</published>
+    <updated>2018-02-08T13:52:16.008Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>一般来说，增加计划任务都是<code>crontab -e</code>，然后在里面添加内容。但是在一些脚本里，需要自动添加，那么这种情况怎么办？</p><h2><span id="第一种方法">第一种方法</span></h2><p>重定向crontab到其他文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">crontab -l &gt; crontab.bak</span><br><span class="line">echo <span class="string">"*/1 * * * * ./yourscript  &gt; /dev/null 2&gt;&amp;1"</span> &gt;&gt; crontab.bak</span><br><span class="line">crontab crontab.bak</span><br></pre></td></tr></table></figure></p><p>如果想删除某个计划任务，就进去<code>crontab -e</code>删除就好，<code>crontab.bak</code>不用管，不用担心内容会自动变成<code>crontab.bak</code>的样子。</p><h2><span id="第二种方法">第二种方法</span></h2><p>如果你觉得使用<code>crontab 文件</code>这种方法心里没有底的话，就选择最妥善的方式，也就是下面这样：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"*/1 * * * * ./yourscript &gt; /dev/null 2&gt;&amp;1"</span> &gt;&gt; <span class="regexp">/var/</span>spool/cron/root</span><br></pre></td></tr></table></figure></p><p>当crontab突然失效时，可以尝试<code>/etc/init.d/crond restart</code>解决问题。或者查看日志看某个job有没有执行/报错<code>tail -f /var/log/cron</code>。<br><img src="/images/vc15.jpg" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      把脚本作的尽善尽美
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="crontab" scheme="http://yoursite.com/tags/crontab/"/>
+    
+  </entry>
   
   <entry>
     <title>在百花之中干掉一个杂草连接...</title>
@@ -455,30 +479,6 @@
     
     
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ssh连接port 22: Connection refused</title>
-    <link href="http://yoursite.com/2018/01/29/Ssh%E8%BF%9E%E6%8E%A5port-22-Connection-refused/"/>
-    <id>http://yoursite.com/2018/01/29/Ssh连接port-22-Connection-refused/</id>
-    <published>2018-01-29T03:30:18.000Z</published>
-    <updated>2018-01-29T03:38:54.116Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>金山云有一个服务器需要连接到数据库但是总是失败，检查之后发现它的VPC配错了，更改VPC之后，这台服务器也会更换一个新的内网IP地址，但是问题来了，更换了内网IP之后，从跳板机连接，提示<code>port 22: Connection refused</code>。</p><p><code>ssh -v 新的ip地址</code>发现根本没有到<code>Connection established</code>。直接就提示<code>port 22: Connection refused</code>。这基本可以断定不是跳板机的问题了，那么就需要在远程机器里看配置。</p><p>但是远程机器是无法连接的啊，怎么办？从金山控制台“连接实例”。<br><img src="/images/ksssh1.png" alt=""></p><p>然后键盘随便按一下，就会看到linux界面，输入账号名和密码，这里密码不支持复制粘贴，需要手动输入。然后就会看到如下界面。<br><img src="/images/ksssh2.png" alt=""></p><p>这样，我们就可以登陆这台机器了，然后<code>vim /etc/ssh/sshd_config</code>，看到最上面有这样的内容。<br><img src="/images/ksssh3.png" alt=""></p><p>这个<code>listenaddress</code>后面就是跳板机ssh的地址，但是这个地址还是老的，而不是更改过后的内网ip地址，所以ssh的连接自然就是<code>refuse</code>。所以我们只需要手动更改成新的内网ip地址就好了。</p><p>更改完之后，重启一下服务器或者<code>/etc/init.d/sshd restart</code>就可以从跳板机上正常连接了。</p><p>如果在<code>/etc/init.d/sshd restart</code>的时候爆出“address family must be specified before ListenAddress”的错误，那么就把<code>AddressFamily</code>移到<code>ListenAddress</code>上面就可以了，如图：<br><img src="/images/ksssh4.png" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      调换了内网IP之后，来了这么一出
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
-      <category term="ssh" scheme="http://yoursite.com/tags/ssh/"/>
     
   </entry>
   
