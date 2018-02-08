@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-08T03:16:27.622Z</updated>
+  <updated>2018-02-08T12:48:47.744Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在百花之中干掉一个杂草连接...</title>
+    <link href="http://yoursite.com/2018/02/08/%E5%9C%A8%E7%99%BE%E8%8A%B1%E4%B9%8B%E4%B8%AD%E5%B9%B2%E6%8E%89%E4%B8%80%E4%B8%AA%E6%9D%82%E8%8D%89%E8%BF%9E%E6%8E%A5/"/>
+    <id>http://yoursite.com/2018/02/08/在百花之中干掉一个杂草连接/</id>
+    <published>2018-02-08T12:43:12.000Z</published>
+    <updated>2018-02-08T12:48:47.744Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>早上接到阿里云的服务器报警，说有一台服务器的流量超标，这个服务器的外网带宽是5M，但是登陆进去使用<code>iftop -i eth1</code>发现里面的流量已经几乎跑满，如图：<br><img src="/images/tcpkill1.png" alt="paradin"></p><p>我这个服务器的名称叫online-mts-001，为啥会有一个mail25.u.tsender.com，这个是什么鬼？莫非是通过我的服务器去连接这个“邮箱”域名？于是我就ping了一下这个mail25.u.tsender.com，结果如图：<br><img src="/images/tcpkill2.png" alt="paradin"></p><p>看到这个域名对应的ip地址是115.29.177.8，嗯，115.29.177.8，哎？这个ip地址好熟悉啊，卧槽，这特么不是这个<code>online-mts-001</code>的外网ip么？<br><img src="/images/tcpkill3.png" alt="paradin"></p><p>也就是说我这个机器在我不知道的情况下被人绑定了一个域名！但是我这个服务器不是网页服务器，上面那个tsender.com的域名打不开，我检查了服务器一番，发现这个机器没有被人入侵的痕迹，只能说是被人有意/无意（无意的可能性更大，比如看错了阿拉伯数字）绑定了域名。</p><p>被人绑定了域名就好比被人起了外号一样，一旦非本人操作就不太好往下摘了，查了很多资料都没有办法，毕竟主动权不在我这里了。</p><p>但是回头过来，我们的重心是要解决那个占据了3M带宽的连接，<code>netstat</code>看了一下，发现这个连接的具体信息如下：<br><img src="/images/tcpkill4.png" alt="paradin"></p><p>仅仅是干掉连接的话，方法有很多，关闭网卡再重开或者关闭相应的服务都可以，但是现在的问题是这台服务器是生产环境的服务器，它主要是给用户提供视频拉流，通过抓包分析得知，这位183.228.128.188的用户合法通过外网连接到了这台视频服务器，而且拉取的是高清视频，所以才占据了这么大的带宽。不过我们还是决定先断开这位用户的连接同时不动其他用户的连接，这位183.228.128.188的用户在客户端虽然会发觉视频断开，但是有缓存和人为刷新的客观因素，实际的体验不会差太多，至少不会投诉400…</p><p>那么如何干掉一个established连接同时保证其他连接呢？请使用<code>tcpkill</code>。</p><p>tcpkill的下载比较有说法，下面是安装步骤：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//rpm.repo.onapp.com/ramdisk-hv/centos6/dsniff/libnids-1.24-1.el6.x86_64.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpm.repo.onapp.com/ramdisk-hv/centos6/dsniff/libnet-1.1.5-1.el6.x86_64.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpm.repo.onapp.com/ramdisk-hv/centos6/dsniff/dsniff-2.4-0.14.b1.el6.x86_64.rpm</span></span><br><span class="line">yum install libICE libSM libXmu -y</span><br><span class="line">rpm -ivh libnet<span class="number">-1.1</span><span class="number">.5</span><span class="number">-1.</span>el6.x86_64.rpm</span><br><span class="line">rpm -ivh libnids<span class="number">-1.24</span><span class="number">-1.</span>el6.x86_64.rpm </span><br><span class="line">rpm -ivh  dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64.rpm</span><br></pre></td></tr></table></figure></p><p>请按顺序操作，不然的话dsniff就会报错：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">warning: dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID <span class="number">0608</span>b895: NOKEY</span><br><span class="line">error: Failed dependencies:</span><br><span class="line">libnet.so<span class="number">.1</span>()(<span class="number">64</span>bit) is needed by dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64</span><br><span class="line">libnids.so<span class="number">.1</span><span class="number">.24</span>()(<span class="number">64</span>bit) is needed by dsniff<span class="number">-2.4</span><span class="number">-0.14</span>.b1.el6.x86_64</span><br></pre></td></tr></table></figure></p><p>安装完毕之后，就会生成<code>tcpkill</code>命令，如图：<br><img src="/images/tcpkill5.png" alt="paradin"></p><p>然后断开上面那个大带宽连接的命令是：<code>./tcpkill -i eth0 src port 9132 and dst port 9595 and src host 115.29.177.8 dst host 183.228.128.188</code>或者<code>./tcpkill -s 115.29.177.8:9132 -d 183.228.128.188:9595</code>。</p><p>但是要注意一下！<font color="red">tcpkill一定要运行在能接收到应答包的主机上在，最好运行在连接或半连接存在的一端主机上，因为tcpkill会发现这个连接里有数据传输进而感知并且干掉</font>。而且tcpkill默认情况下是只能干掉established状态的连接，对于假死连接（连接在，但是数据不传输）或者半连接（由于tcp keeplive没打开而又没有数据向对端发送，导致一直无法感知次连接其实已经断开）是无法断开的。</p><p>如果遇到上述所说的假死连接和半连接就需要手动更改tcpkill的源码，更改原理在<code>https://yq.aliyun.com/articles/59308</code>。</p><p>如果使用的系统是ubuntu or debian，还可以使用cutter命令，<code>apt-get install cutter</code>下载即可。使用方法：<code>http://www.cyberciti.biz/tips/cutting-the-tcpip-network-connection-with-cutter.html</code>。</p><p>至于第一个问题，怎么把这台服务器上的域名撤除，我倒要好好想想了…</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.cyberciti.biz/howto/question/linux/kill-tcp-connection-using-linux-netstat.php" target="_blank" rel="noopener">http://www.cyberciti.biz/howto/question/linux/kill-tcp-connection-using-linux-netstat.php</a><br><a href="http://www.gnutoolbox.com/tcpkill-command/" target="_blank" rel="noopener">http://www.gnutoolbox.com/tcpkill-command/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      记得这篇文章是在《人民的名义》热播的时候写的
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="运维" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4/"/>
+    
+  </entry>
   
   <entry>
     <title>Zabbix里item取值超时怎么办？</title>
@@ -457,30 +479,6 @@
       <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
     
       <category term="ssh" scheme="http://yoursite.com/tags/ssh/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SFTP不能连接服务器怎么办？</title>
-    <link href="http://yoursite.com/2018/01/27/SFTP%E4%B8%8D%E8%83%BD%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F/"/>
-    <id>http://yoursite.com/2018/01/27/SFTP不能连接服务器怎么办？/</id>
-    <published>2018-01-27T08:19:55.000Z</published>
-    <updated>2018-01-29T04:35:52.647Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天在跳板机上传送文件，发现使用<code>SFTP</code>连接的时候，出现了这样的一个拒绝情况：<br><img src="/images/sftp1.png" alt=""></p><p>登陆到这个跳板机里，使用<code>tail /var/log/secure</code>，看到了拒绝的具体信息，如下：<br><img src="/images/sftp2.png" alt=""></p><p>这个时候，我就需要<code>locate sftp-server</code>，用<code>locate</code>定位一下<code>sftp</code>文件，但是发现服务器竟然回答我<code>-bash: locate: command not found</code>。</p><p>于是就<code>yum -y install mlocate</code>，安装<code>mlocate</code>之后执行<code>updatedb</code>，需要等待一小会，然后再次执行<code>locate sftp-server</code>，就可以得到sftp-server的文件路径了，如下图：<br><img src="/images/sftp3.png" alt=""></p><p>打开sshd的配置文件，<code>vi /etc/ssh/sshd_config</code>，把<code>Subsystem</code>这一行前面的<code>#</code>去掉：<br><img src="/images/sftp4.png" alt=""></p><p>然后重启启动ssh服务，语句是<code>/etc/init.d/sshd reload</code>，重新连接一下，发现就恢复正常了。</p>]]></content>
-    
-    <summary type="html">
-    
-      总有意向不到的插曲
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
-      <category term="sftp" scheme="http://yoursite.com/tags/sftp/"/>
     
   </entry>
   
