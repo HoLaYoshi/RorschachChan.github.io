@@ -3,7 +3,14 @@
   <entry>
     <title><![CDATA[Mysql-Atlas从库始终没有建立连接怎么办]]></title>
     <url>%2F2018%2F02%2F09%2FMysql-Atlas%E4%BB%8E%E5%BA%93%E5%A7%8B%E7%BB%88%E6%B2%A1%E6%9C%89%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5%E6%80%8E%E4%B9%88%E5%8A%9E%2F</url>
-    <content type="text"><![CDATA[最近发现阿里云线上环境有一台hls模块的数据库从库一直没有连接，而主库却一直连接不断。在阿里云控制后台看到连接情况如下图： 上图是主库的，下面那个是从库的，两者差距很大，可见这样的配置是错误的，因为读库根本没有使用，也就是说读库的那份钱是在浪费！ 来到对应的atlas服务器查看配置，看到atlas 的配置里规定管理接口的用户名和密码是默认的原始套餐，端口被改成了2346，如下面， 于是我们就在模块服务器（也就是图里的online-hls-001)上登录这个atlas服务器的管理端口，看一下效果： 发现mysql根本没有反应，可当我们telnet去atlas的2346端口的时候，发现端口是通的： 于是我们返回到atlas 的配置文件，把这台hls模块服务器的ip地址添加到clients-ips这个字段里。 然后再用hls服务器去测试一下atlas的管理端口，mysql -hatlas服务器ip地址 -uuser -ppwd，然后使用select * from backends;,发现里面的两个库一个连接成功，另一个是失败的： 两个库都可以ping通，state却有这样的差别。由此可见这台atlas根本没有连接到从库，导致从库的连接数始终为0。这个时候我们就要检查从库配置的账号密码是否正确，而且在阿里云控制后台给从库开启这个atlas的白名单，然后重新启动这个mysql-proxy进程，再登录atlas管理端口查看，发现从库由down转up了： 但是此时的atlas日志里却出现了很多forbidden的warning的提示： 这时候我们返回atlas的配置文件，把之前的修改过的client-ips这个字段注释掉，让所有合法ip都连接，然后重启atlas，这样这种forbidden ip的警告日志就会消失。 稍等一会，就会看到从库上也会出现连接数了，至此一切恢复到正常状态，故障排除！ 本次故障排除感谢https://highdb.com/?s=atlas 这位大神的帮助！ 文末补充数据库访问使用了事务的话，从库也会建立连接，只是连接量要小于“非事务访问”，而不是一点连接都没有。 一般来说，在atlas配置文件里，主库写一个，而从库最好把主库和从库都写进去，如果希望从库承担读的任务多一点的话，可以把权重调高，比如我想从库与主库的读任务比是2：1，那么就可以这么写： 1234#Atlas后端连接的MySQL主库的IP和端口，可设置多项，用逗号分隔proxy-backend-addresses = 主库地址:3306#Atlas后端连接的MySQL从库的IP和端口，@后面的数字代表权重，用来作负载均衡，若省略则默认为1，可设置多项，用逗号分隔proxy-read-only-backend-addresses = 从库地址:3306@2,主库地址:3306@1]]></content>
+    <content type="text"><![CDATA[最近发现阿里云线上环境有一台hls模块的数据库从库一直没有连接，而主库却一直连接不断。在阿里云控制后台看到连接情况如下图： 上图是主库的，下面那个是从库的，两者差距很大，可见这样的配置是错误的，因为读库根本没有使用，也就是说读库的那份钱是在浪费！ 来到对应的atlas服务器查看配置，看到atlas 的配置里规定管理接口的用户名和密码是默认的原始套餐，端口被改成了2346，如下面， 于是我们就在模块服务器（也就是图里的online-hls-001)上登录这个atlas服务器的管理端口，看一下效果： 发现mysql根本没有反应，可当我们telnet去atlas的2346端口的时候，发现端口是通的： 于是我们返回到atlas 的配置文件，把这台hls模块服务器的ip地址添加到clients-ips这个字段里。 然后再用hls服务器去测试一下atlas的管理端口，mysql -hatlas服务器ip地址 -uuser -ppwd，然后使用select * from backends;,发现里面的两个库一个连接成功，另一个是失败的： 两个库都可以ping通，state却有这样的差别。由此可见这台atlas根本没有连接到从库，导致从库的连接数始终为0。这个时候我们就要检查从库配置的账号密码是否正确，而且在阿里云控制后台给从库开启这个atlas的白名单，然后重新启动这个mysql-proxy进程，再登录atlas管理端口查看，发现从库由down转up了： 但是此时的atlas日志里却出现了很多forbidden的warning的提示： 这时候我们返回atlas的配置文件，把之前的修改过的client-ips这个字段注释掉，让所有合法ip都连接，然后重启atlas，这样这种forbidden ip的警告日志就会消失。 稍等一会，就会看到从库上也会出现连接数了，至此一切恢复到正常状态，故障排除！ 本次故障排除感谢https://highdb.com/?s=atlas这位大神的帮助！ 文末补充数据库访问使用了事务的话，从库也会建立连接，只是连接量要小于“非事务访问”，而不是一点连接都没有。 一般来说，在atlas配置文件里，主库写一个，而从库最好把主库和从库都写进去，如果希望从库承担读的任务多一点的话，可以把权重调高，比如我想从库与主库的读任务比是2：1，那么就可以这么写： 1234#Atlas后端连接的MySQL主库的IP和端口，可设置多项，用逗号分隔proxy-backend-addresses = 主库地址:3306#Atlas后端连接的MySQL从库的IP和端口，@后面的数字代表权重，用来作负载均衡，若省略则默认为1，可设置多项，用逗号分隔proxy-read-only-backend-addresses = 从库地址:3306@2,主库地址:3306@1]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+        <tag>读写分离中间件</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[脚本里添加crontab的方法]]></title>
