@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/images/elkredis7.png">
 <meta property="og:image" content="http://yoursite.com/images/elkredis8.png">
 <meta property="og:image" content="http://yoursite.com/images/elkredis9.png">
-<meta property="og:updated_time" content="2018-02-09T09:38:49.787Z">
+<meta property="og:updated_time" content="2018-02-09T09:40:44.505Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="将redis加入到elk日志系统里">
 <meta name="twitter:description" content="整个搭建完毕之后，redis可能key是0，这是正常现象，因为日志量少，直接就消费掉了。">
@@ -485,7 +485,7 @@
 <p>保存之后启动redis即可。</p>
 <p>如果redis是主从配置，若master配置了密码则slave也要配置相应的密码参数否则无法进行正常复制的。需要在slave的<code>redis.conf</code>里找到<code>#masterauth  mstpassword</code>，去掉注释，也改成跟master一样的密码，重启一下即可。 </p>
 <p>nginx的安装这里就不写了，直接看<code>http://www.runoob.com/linux/nginx-install-setup.html</code>这个就行了。</p>
-<h2><span id="安装x-pack">安装x-pack</span></h2><p>x-pack是elk官方提供的认证授权插件，安装方法很简单，分别找到下面三个文件，然后后面加上“install x-pack”即可：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./elasticsearch-plugin install x-pack --batch </span><br><span class="line">./logstash-plugin install x-pack </span><br><span class="line">./kibana-plugin install x-pack</span><br></pre></td></tr></table></figure></p>
+<h2><span id="安装x-pack">安装x-pack</span></h2><p>x-pack是elk官方提供的认证授权插件，安装方法很简单，分别找到下面三个文件，然后后面加上<code>install x-pack</code>即可：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./elasticsearch-plugin install x-pack --batch </span><br><span class="line">./logstash-plugin install x-pack </span><br><span class="line">./kibana-plugin install x-pack</span><br></pre></td></tr></table></figure></p>
 <p>如果要查看已经安装的插件，那就是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-elk-001 bin]# ./elasticsearch-plugin list</span><br><span class="line">x-pack</span><br><span class="line">[root@chen-elk-001 bin]# ./kibana-plugin list</span><br><span class="line">x-pack@<span class="number">5.6</span><span class="number">.4</span></span><br></pre></td></tr></table></figure></p>
 <p>如果kibana-plugin要卸载x-pack，那就是：<code>./kibana-plugin remove x-pack</code>。</p>
 <p>重启服务即可登录，默认的登录用户名: <code>elastic</code>，密码:<code>changeme</code>。<br><img src="/images/elkredis4.png" alt="paradin"><br><img src="/images/elkredis5.png" alt="paradin"></p>
