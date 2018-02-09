@@ -317,6 +317,209 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/将redis加入到elk日志系统里/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/09/将redis加入到elk日志系统里/" itemprop="url">将redis加入到elk日志系统里</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T17:14:18+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/09/将redis加入到elk日志系统里/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/09/将redis加入到elk日志系统里/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/02/09/将redis加入到elk日志系统里/" class="leancloud_visitors" data-flag-title="将redis加入到elk日志系统里">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,387
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script src="\assets\js\APlayer.min.js"> </script><p>之前在<a href="http://blog.51cto.com/chenx1242/2048014" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/2048014</a> 里面，我画的那个架构图里说了整个架构可以加入redis，但是在文章里我没有写到redis怎么加进去。为了让整个系统更好的分层，是非常建议引入Redis的，毕竟Redis服务器是logstash官方推荐的broker选择。Redis作为一个缓存，能够帮助我们在主节点上屏蔽掉多个从节点之间不同日志文件的差异，负责管理日志端（从节点）的人可以专注于向 Redis 里生产数据，而负责数据分析聚合端的人则可以专注于从Redis内消费数据。所以这一次实验要把redis加进去，同时也要部署一个nginx，让elk再去采集nginx的日志。</p>
+<p>整个架构图图下：<br><img src="/images/elkredis1.png" alt="paradin"></p>
+<h2><span id="部署redis">部署redis</span></h2><p>安装redis的方法请去看<code>http://blog.51cto.com/chenx1242/1793895</code>，我这里使用的redis版本是<code>4.0.6</code>，在执行<code>make test</code>的时候可能会有如下的错误：<br><img src="/images/elkredis2.png" alt="paradin"></p>
+<p>那就安装新一点的<code>tcl</code>吧，方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</span></span><br><span class="line">tar xzvf tcl8<span class="number">.6</span><span class="number">.1</span>-src.tar.gz  -C /usr/local/</span><br><span class="line">cd  /usr/local/tcl8<span class="number">.6</span><span class="number">.1</span>/unix/</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
+<p>然后重新去<code>make test</code>就会看到成功的字样，如图：<br><img src="/images/elkredis3.png" alt="paradin"></p>
+<p>现在redis的漏洞比较多，大多数就是因为密码太简单导致的，所以把redis密码改一下，在<code>redis.conf</code>里，改成如下的样子：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">bind 内网IP地址 127.0.0.1              ###仅允许内网和本机访问</span><br><span class="line">protected-mode yes                   ###保护模式开启</span><br><span class="line">port 6379                          ###端口默认为6379，按需修改</span><br><span class="line">daemonize yes                        ###守护模式开启</span><br><span class="line">pidfile /usr/local/redis/redis.pid               ###指定pid文件路径和文件名</span><br><span class="line">logfile "/usr/local/redis/redis.log"             ###指定日志文件路径和文件名</span><br><span class="line">dbfilename redis.rdb                     ###指定数据文件RDB文件名</span><br><span class="line">dir /usr/local/redis/                    ###指定数据文件RDB文件的存放路径</span><br><span class="line">requirepass 『YOURPASSWORD』              ###设置访问密码，提升密码强度</span><br></pre></td></tr></table></figure></p>
+<p>保存之后启动redis即可。</p>
+<p>如果redis是主从配置，若master配置了密码则slave也要配置相应的密码参数否则无法进行正常复制的。需要在slave的<code>redis.conf</code>里找到<code>#masterauth  mstpassword</code>，去掉注释，也改成跟master一样的密码，重启一下即可。 </p>
+<p>nginx的安装这里就不写了，直接看<code>http://www.runoob.com/linux/nginx-install-setup.html</code>这个就行了。</p>
+<h2><span id="安装x-pack">安装x-pack</span></h2><p>x-pack是elk官方提供的认证授权插件，安装方法很简单，分别找到下面三个文件，然后后面加上“install x-pack”即可：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./elasticsearch-plugin install x-pack --batch </span><br><span class="line">./logstash-plugin install x-pack </span><br><span class="line">./kibana-plugin install x-pack</span><br></pre></td></tr></table></figure></p>
+<p>如果要查看已经安装的插件，那就是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-elk-001 bin]# ./elasticsearch-plugin list</span><br><span class="line">x-pack</span><br><span class="line">[root@chen-elk-001 bin]# ./kibana-plugin list</span><br><span class="line">x-pack@<span class="number">5.6</span><span class="number">.4</span></span><br></pre></td></tr></table></figure></p>
+<p>如果kibana-plugin要卸载x-pack，那就是：<code>./kibana-plugin remove x-pack</code>。</p>
+<p>重启服务即可登录，默认的登录用户名: <code>elastic</code>，密码:<code>changeme</code>。<br><img src="/images/elkredis4.png" alt="paradin"><br><img src="/images/elkredis5.png" alt="paradin"></p>
+<p>这里注意一下，<code>./logstash-plugin install x-pack</code>的时候可能是出现ruby源的错误，如图：<br><img src="/images/elkredis6.png" alt="paradin"></p>
+<p>这是因为中国特色社会主义的网络限制访问<code>https://rubygems.org</code>，一般来说，可以把它更改成阿里的ruby源<code>https://ruby.taobao.org/</code>，不过如果你的服务器无法跨越长城的话，那么更改也是不好使的，所以在这一步，我选择离线安装x-pack。也就是先把<code>https://artifacts.elastic.co/downloads/packs/x-pack/x-pack-5.6.4.zip</code>这个文件下载到本地上传到服务器的root文件夹里，然后安装：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@chen-logstash-001 bin]# ./logstash-plugin install file:///root/x-pack-5.6.4.zip</span><br><span class="line">Installing file: <span class="regexp">/root/</span>x-pack<span class="number">-5.6</span><span class="number">.4</span>.zip</span><br><span class="line">Install successful</span><br></pre></td></tr></table></figure></p>
+<h2><span id="配置filebeat">配置filebeat</span></h2><p>由于这个nginx我们需要先让filebeat把<code>nginx.log</code>和<code>error.log</code>先推到redis存储，然后再由redis推到logstash。配置<code>filebeat.yml</code>的具体信息如下:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@iZbp10hw6wezxmrvrcjyhlZ filebeat]# grep -iv '#' /etc/filebeat/filebeat.yml | grep -iv '^$'</span><br><span class="line">filebeat.prospectors:</span><br><span class="line">- input_type: log</span><br><span class="line">  paths:</span><br><span class="line">    - <span class="regexp">/usr/</span>local/nginx/logs<span class="comment">/*.log    #这里是nginx的日志文件夹</span></span><br><span class="line"><span class="comment">     </span></span><br><span class="line"><span class="comment">output.redis:                #以下这部分都是新加的</span></span><br><span class="line"><span class="comment">  enabled: true</span></span><br><span class="line"><span class="comment">  hosts: ["127.0.0.1:6379"]</span></span><br><span class="line"><span class="comment">  key: logindexer_list            #与redis配置文件里的key遥相呼应</span></span><br><span class="line"><span class="comment">  password: 『YOURPASSWORD』    #跟上面的密码遥相呼应</span></span><br></pre></td></tr></table></figure></p>
+<p>配置完毕之后，启动filebeat，命令语句：<code>/etc/init.d/filebeat start -c /etc/filebeat/filebeat.yml</code>。</p>
+<h2><span id="配置logstash">配置logstash</span></h2><p>由于这台logstash已经开启了一个logstash进程，那么再收集nginx的日志需要新开一个logstash进程，也需要新写一个conf文件，假设新的conf文件是<code>nginx-logstash.conf</code>，它的写法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    redis &#123;</span><br><span class="line">        host =&gt; <span class="string">"10.168.173.181"</span></span><br><span class="line">        type =&gt; <span class="string">"redis-input"</span></span><br><span class="line">        data_type =&gt; <span class="string">"list"</span></span><br><span class="line">        key =&gt; <span class="string">"logindexer_list"</span></span><br><span class="line">        port =&gt; <span class="number">6379</span></span><br><span class="line">        password =&gt; <span class="string">"ChenRedi$"</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># filter configration here</span><br><span class="line">output &#123;</span><br><span class="line">     elasticsearch &#123;</span><br><span class="line">        hosts =&gt; [ <span class="string">"10.162.80.192:9200"</span> ]</span><br><span class="line">        user =&gt; elastic</span><br><span class="line">        password =&gt; changeme</span><br><span class="line">        index =&gt; "nginxlogstash-%&#123;+YYYY.MM.dd&#125;"        #这个是新的索引</span><br><span class="line">    &#125;</span><br><span class="line">stdout &#123;</span><br><span class="line">    codec =&gt; rubydebug</span><br><span class="line">       &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>现在logstash不支持多个实例共享一个<code>path.data</code>，所以要在在启动不同实例的时候，命令行里增加<code>--path.data PATH</code>，为不同实例指定不同的路径。启动logstash之后，看到显示如下：<br><img src="/images/elkredis7.png" alt="paradin"></p>
+<p>再到nginx的日志看一下，因为logstash里没有做日志的切割，所以是整个一个类似字符串的形式发送了过来：<br><img src="/images/elkredis8.png" alt="paradin"></p>
+<p>果然有这样的日志，可见logstash与nginx的redis已经正确连接。在elasticsearch里，使用<code>curl -u 账号密码 &#39;localhost:9200/_cat/indices?v&#39;</code>查询索引的时候，就会看到那个<code>nginxlogstash</code>，如图：<br><img src="/images/elkredis9.png" alt="paradin"></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://doc.yonyoucloud.com/doc/logstash-best-practice-cn/input/redis.html" target="_blank" rel="noopener">https://doc.yonyoucloud.com/doc/logstash-best-practice-cn/input/redis.html</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+		</div>
+	
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2176,214 +2379,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/05/Jenkins与Github组合成持续集合环境/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chris Chan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chris Chan's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/05/Jenkins与Github组合成持续集合环境/" itemprop="url">Jenkins与Github组合成持续集合环境</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-05T17:12:22+08:00">
-                2018-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
-                    <span itemprop="name">工作与技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/05/Jenkins与Github组合成持续集合环境/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/05/Jenkins与Github组合成持续集合环境/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2018/02/05/Jenkins与Github组合成持续集合环境/" class="leancloud_visitors" data-flag-title="Jenkins与Github组合成持续集合环境">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">热度&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-				 <span>℃</spam>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  238
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  1
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          这样就与Github紧密相连了
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/05/Jenkins与Github组合成持续集合环境/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-	
-	
-	
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-		   
-		<div>    
-			
-		</div>
-	
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2440,7 +2435,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">68</span>
+                  <span class="site-state-item-count">69</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2639,7 +2634,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共70.3k字</span>
+  <span class="post-count">博客全站共71.7k字</span>
 </div>
         
 
