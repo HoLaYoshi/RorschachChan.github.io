@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/images/elkredis7.png">
 <meta property="og:image" content="http://yoursite.com/images/elkredis8.png">
 <meta property="og:image" content="http://yoursite.com/images/elkredis9.png">
-<meta property="og:updated_time" content="2018-02-09T09:35:53.400Z">
+<meta property="og:updated_time" content="2018-02-09T09:38:49.787Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="将redis加入到elk日志系统里">
 <meta name="twitter:description" content="整个搭建完毕之后，redis可能key是0，这是正常现象，因为日志量少，直接就消费掉了。">
@@ -435,7 +435,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,387
+                  1,403
                 </span>
               
 
@@ -476,7 +476,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>之前在<a href="http://blog.51cto.com/chenx1242/2048014" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/2048014</a> 里面，我画的那个架构图里说了整个架构可以加入redis，但是在文章里我没有写到redis怎么加进去。为了让整个系统更好的分层，是非常建议引入Redis的，毕竟Redis服务器是logstash官方推荐的broker选择。Redis作为一个缓存，能够帮助我们在主节点上屏蔽掉多个从节点之间不同日志文件的差异，负责管理日志端（从节点）的人可以专注于向 Redis 里生产数据，而负责数据分析聚合端的人则可以专注于从Redis内消费数据。所以这一次实验要把redis加进去，同时也要部署一个nginx，让elk再去采集nginx的日志。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>之前在<code>https://rorschachchan.github.io/2018/01/16/记录日志系统ELKB-5-6-4的搭建过程/</code>里面，我画的那个架构图里说了整个架构可以加入redis，但是在文章里我没有写到redis怎么加进去。为了让整个系统更好的分层，是非常建议引入Redis的，毕竟Redis服务器是logstash官方推荐的broker选择。Redis作为一个缓存，能够帮助我们在主节点上屏蔽掉多个从节点之间不同日志文件的差异，负责管理日志端（从节点）的人可以专注于向 Redis 里生产数据，而负责数据分析聚合端的人则可以专注于从Redis内消费数据。所以这一次实验要把redis加进去，同时也要部署一个nginx，让elk再去采集nginx的日志。</p>
 <p>整个架构图图下：<br><img src="/images/elkredis1.png" alt="paradin"></p>
 <h2><span id="部署redis">部署redis</span></h2><p>安装redis的方法请去看<code>http://blog.51cto.com/chenx1242/1793895</code>，我这里使用的redis版本是<code>4.0.6</code>，在执行<code>make test</code>的时候可能会有如下的错误：<br><img src="/images/elkredis2.png" alt="paradin"></p>
 <p>那就安装新一点的<code>tcl</code>吧，方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//downloads.sourceforge.net/tcl/tcl8.6.1-src.tar.gz</span></span><br><span class="line">tar xzvf tcl8<span class="number">.6</span><span class="number">.1</span>-src.tar.gz  -C /usr/local/</span><br><span class="line">cd  /usr/local/tcl8<span class="number">.6</span><span class="number">.1</span>/unix/</span><br><span class="line">./configure</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p>
