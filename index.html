@@ -317,6 +317,201 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Chris Chan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Chris Chan's BLOG">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/" itemprop="url">Mysql-Atlas从库始终没有建立连接怎么办</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T13:45:56+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+            <!--noindex-->
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+              <!--/noindex-->
+            
+          
+
+          
+          
+             <span id="/2018/02/09/Mysql-Atlas从库始终没有建立连接怎么办/" class="leancloud_visitors" data-flag-title="Mysql-Atlas从库始终没有建立连接怎么办">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">热度&#58;</span>
+               
+                 <span class="leancloud-visitors-count"></span>
+				 <span>℃</spam>
+             </span>
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  793
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script src="\assets\js\APlayer.min.js"> </script><p>最近发现阿里云线上环境有一台hls模块的数据库从库一直没有连接，而主库却一直连接不断。在阿里云控制后台看到连接情况如下图：<br><img src="/images/atlas1.png" alt="paradin"></p>
+<p><img src="/images/atlas2.png" alt="paradin"><br>上图是主库的，下面那个是从库的，两者差距很大，可见这样的配置是错误的，因为读库根本没有使用，也就是说读库的那份钱是在浪费！</p>
+<p>来到对应的atlas服务器查看配置，看到atlas 的配置里规定管理接口的用户名和密码是默认的原始套餐，端口被改成了2346，如下面，<br><img src="/images/atlas3.png" alt="paradin"></p>
+<p><img src="/images/atlas4.png" alt="paradin"><br>于是我们就在模块服务器（也就是图里的online-hls-001)上登录这个atlas服务器的管理端口，看一下效果：<br><img src="/images/atlas5.png" alt="paradin"></p>
+<p>发现mysql根本没有反应，可当我们telnet去atlas的2346端口的时候，发现端口是通的：<br><img src="/images/atlas6.png" alt="paradin"></p>
+<p>于是我们返回到atlas 的配置文件，把这台hls模块服务器的ip地址添加到clients-ips这个字段里。<br><img src="/images/atlas7.png" alt="paradin"></p>
+<p>然后再用hls服务器去测试一下atlas的管理端口，<code>mysql -hatlas服务器ip地址 -uuser -ppwd</code>，然后使用<code>select * from backends;</code>,发现里面的两个库一个连接成功，另一个是失败的：<br><img src="/images/atlas8.png" alt="paradin"></p>
+<p>两个库都可以ping通，state却有这样的差别。由此可见这台atlas根本没有连接到从库，导致从库的连接数始终为0。这个时候我们就要检查从库配置的账号密码是否正确，而且在阿里云控制后台给从库开启这个atlas的白名单，然后重新启动这个mysql-proxy进程，再登录atlas管理端口查看，发现从库由down转up了：<br><img src="/images/atlas9.png" alt="paradin"></p>
+<p>但是此时的atlas日志里却出现了很多forbidden的warning的提示：<br><img src="/images/atlas10.png" alt="paradin"></p>
+<p>这时候我们返回atlas的配置文件，把之前的修改过的client-ips这个字段注释掉，让所有合法ip都连接，然后重启atlas，这样这种forbidden ip的警告日志就会消失。</p>
+<p>稍等一会，就会看到从库上也会出现连接数了，至此一切恢复到正常状态，故障排除！<br><img src="/images/atlas11.png" alt="paradin"></p>
+<p>本次故障排除感谢<a href="https://highdb.com/?s=atlas" target="_blank" rel="noopener">https://highdb.com/?s=atlas</a> 这位大神的帮助！</p>
+<h2><span id="文末补充">文末补充</span></h2><p>数据库访问使用了事务的话，从库也会建立连接，只是连接量要小于“非事务访问”，而不是一点连接都没有。</p>
+<p>一般来说，在atlas配置文件里，主库写一个，而从库最好把主库和从库都写进去，如果希望从库承担读的任务多一点的话，可以把权重调高，比如我想从库与主库的读任务比是2：1，那么就可以这么写：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#Atlas后端连接的MySQL主库的IP和端口，可设置多项，用逗号分隔</span><br><span class="line">proxy-backend-addresses = 主库地址:<span class="number">3306</span></span><br><span class="line">#Atlas后端连接的MySQL从库的IP和端口，@后面的数字代表权重，用来作负载均衡，若省略则默认为1，可设置多项，用逗号分隔</span><br><span class="line">proxy-read-only-backend-addresses = 从库地址:<span class="number">3306</span>@<span class="number">2</span>,主库地址:<span class="number">3306</span>@<span class="number">1</span></span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+	
+	
+	
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+		   
+		<div>    
+			
+		</div>
+	
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/08/脚本里添加crontab的方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2176,214 +2371,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/05/Jenkins安装与创建简单任务/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Chris Chan">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Chris Chan's BLOG">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/05/Jenkins安装与创建简单任务/" itemprop="url">Jenkins的安装与创建简单任务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-05T11:23:04+08:00">
-                2018-02-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
-                    <span itemprop="name">工作与技术</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            <!--noindex-->
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2018/02/05/Jenkins安装与创建简单任务/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count hc-comment-count" data-xid="2018/02/05/Jenkins安装与创建简单任务/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-              <!--/noindex-->
-            
-          
-
-          
-          
-             <span id="/2018/02/05/Jenkins安装与创建简单任务/" class="leancloud_visitors" data-flag-title="Jenkins的安装与创建简单任务">
-               <span class="post-meta-divider">|</span>
-               <span class="post-meta-item-icon">
-                 <i class="fa fa-eye"></i>
-               </span>
-               
-                 <span class="post-meta-item-text">热度&#58;</span>
-               
-                 <span class="leancloud-visitors-count"></span>
-				 <span>℃</spam>
-             </span>
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  812
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  3
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          为了自动化部署和持续集成
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/02/05/Jenkins安装与创建简单任务/">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-	
-	
-	
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-		   
-		<div>    
-			
-		</div>
-	
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2440,7 +2427,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">67</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -2639,7 +2626,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共69.5k字</span>
+  <span class="post-count">博客全站共70.3k字</span>
 </div>
         
 
