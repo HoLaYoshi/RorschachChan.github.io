@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://yoursite.com/images/atlas10.png">
 <meta property="og:image" content="http://yoursite.com/images/atlas11.png">
 <meta property="og:image" content="http://yoursite.com/images/atlas12.png">
-<meta property="og:updated_time" content="2018-02-09T07:31:30.133Z">
+<meta property="og:updated_time" content="2018-02-09T09:29:50.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql-Atlas从库始终没有建立连接怎么办">
 <meta name="twitter:description" content="心已经向家里飞去">
@@ -483,11 +483,11 @@
 <p>来到对应的atlas服务器查看配置，看到atlas 的配置里规定管理接口的用户名和密码是默认的原始套餐，端口被改成了2346，如下面，<br><img src="/images/atlas3.png" alt="paradin"></p>
 <p><img src="/images/atlas4.png" alt="paradin"><br>于是我们就在模块服务器（也就是图里的online-hls-001)上登录这个atlas服务器的管理端口，看一下效果：<br><img src="/images/atlas6.png" alt="paradin"></p>
 <p>发现mysql根本没有反应，可当我们telnet去atlas的2346端口的时候，发现端口是通的：<br><img src="/images/atlas7.png" alt="paradin"></p>
-<p>于是我们返回到atlas 的配置文件，把这台hls模块服务器的ip地址添加到clients-ips这个字段里。<br><img src="/images/atlas8.png" alt="paradin"></p>
+<p>于是我们返回到atlas 的配置文件，把这台hls模块服务器的ip地址添加到<code>clients-ips</code>这个字段里。<br><img src="/images/atlas8.png" alt="paradin"></p>
 <p>然后再用hls服务器去测试一下atlas的管理端口，<code>mysql -hatlas服务器ip地址 -uuser -ppwd</code>，然后使用<code>select * from backends;</code>,发现里面的两个库一个连接成功，另一个是失败的：<br><img src="/images/atlas9.png" alt="paradin"></p>
 <p>两个库都可以ping通，state却有这样的差别。由此可见这台atlas根本没有连接到从库，导致从库的连接数始终为0。这个时候我们就要检查从库配置的账号密码是否正确，而且在阿里云控制后台给从库开启这个atlas的白名单，然后重新启动这个mysql-proxy进程，再登录atlas管理端口查看，发现从库由down转up了：<br><img src="/images/atlas10.png" alt="paradin"></p>
 <p>但是此时的atlas日志里却出现了很多forbidden的warning的提示：<br><img src="/images/atlas11.png" alt="paradin"></p>
-<p>这时候我们返回atlas的配置文件，把之前的修改过的client-ips这个字段注释掉，让所有合法ip都连接，然后重启atlas，这样这种forbidden ip的警告日志就会消失。</p>
+<p>这时候我们返回atlas的配置文件，把之前的修改过的<code>client-ips</code>这个字段注释掉，让所有合法ip都连接，然后重启atlas，这样这种forbidden ip的警告日志就会消失。</p>
 <p>稍等一会，就会看到从库上也会出现连接数了，至此一切恢复到正常状态，故障排除！<br><img src="/images/atlas12.png" alt="paradin"></p>
 <p>本次故障排除感谢<code>https://highdb.com/?s=atlas</code>这位大神的帮助！</p>
 <h2><span id="文末补充">文末补充</span></h2><p>数据库访问使用了事务的话，从库也会建立连接，只是连接量要小于“非事务访问”，而不是一点连接都没有。</p>
