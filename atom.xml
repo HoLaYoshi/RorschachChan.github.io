@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-02-09T09:40:44.505Z</updated>
+  <updated>2018-02-11T02:08:46.611Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>http返回码是000...</title>
+    <link href="http://yoursite.com/2018/02/11/http%E8%BF%94%E5%9B%9E%E7%A0%81%E6%98%AF000/"/>
+    <id>http://yoursite.com/2018/02/11/http返回码是000/</id>
+    <published>2018-02-11T01:51:39.000Z</published>
+    <updated>2018-02-11T02:08:46.611Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>今天开发童鞋在测试往一个网站发请求的时候，发现返回码是000，如图：<br><img src="/images/http0001.png" alt="paradin"></p><p>众所周知，常见的返回码是以下四种：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span>XX 成功；</span><br><span class="line"><span class="number">3</span>XX 重定向；</span><br><span class="line"><span class="number">4</span>XX 客户端错误；</span><br><span class="line"><span class="number">5</span>XX 服务器端错误；</span><br></pre></td></tr></table></figure></p><p>但是000是啥玩意？简单的说就是没有有效的http状态码，比如连接被拒绝，连接超时等。</p><p>使用<code>curl -w &quot;%{http_code}\n&quot; -m 5 https://60.191.94.115:38303/cloudSignalling/events/deviceState ; echo &quot;Exit code: $?</code>看一下详细的code，显示如图：<br><img src="/images/http0002.png" alt="paradin"></p><p>可以看到提示：<code>curl: (60) Peer certificate cannot be authenticated with known CA certificates</code>，翻译过来就是<code>对方的证书不能用已知的CA证书验证</code>。但是下面也说了可以用<code>-k</code>或者<code>--insecure</code>来跳过这一步。</p><p>于是我又使用<code>curl -I -k https://60.191.94.115:38303/cloudSignalling/events/deviceState</code>这个命令，效果如图：<br><img src="/images/http0003.png" alt="paradin"></p><p>里面这一下说的就很明白了，405，方法不正确，再搭配一下<code>curl -k -w &quot;%{http_code}\n&quot; -m 5 https://60.191.94.115:38303/cloudSignalling/events/deviceState</code>，看一下：<br><img src="/images/http0004.png" alt="paradin"></p><p>这么上下一结合，明白了GET是不准许的，准许POST。于是反馈给60.191.94.115告诉他们把前后台接口请求方式、参数传递方式都拿回去整改。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.1987.name/365.html" target="_blank" rel="noopener">http://www.1987.name/365.html</a><br><a href="https://superuser.com/questions/501690/curl-http-code-of-000" target="_blank" rel="noopener">https://superuser.com/questions/501690/curl-http-code-of-000</a></p>]]></content>
+    
+    <summary type="html">
+    
+      站好春节前的最后两班岗...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="http" scheme="http://yoursite.com/tags/http/"/>
+    
+  </entry>
   
   <entry>
     <title>将redis加入到elk日志系统里</title>
@@ -459,30 +481,6 @@
     
     
       <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Goaccess---良心nginx日志分析工具</title>
-    <link href="http://yoursite.com/2018/01/30/Goaccess-%E8%89%AF%E5%BF%83nginx%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/"/>
-    <id>http://yoursite.com/2018/01/30/Goaccess-良心nginx日志分析工具/</id>
-    <published>2018-01-30T07:42:33.000Z</published>
-    <updated>2018-01-30T07:53:27.531Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Goaccess是一个非常良心的开源软件，它的良心之处体现在如下方面：</p><ul><li>安装简单；</li><li>操作容易；</li><li>界面酷炫；</li></ul><h2><span id="安装">安装</span></h2><p>安装<code>Goaccess</code>十分的简单，在centos里直接<code>yum install goaccess</code>，如果yum源里没有<code>goaccess</code>，可以先安装<code>epel</code>。安装<code>epel</code>的方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm</span></span><br><span class="line">wget http:<span class="comment">//rpms.famillecollet.com/enterprise/remi-release-6.rpm</span></span><br><span class="line">rpm -Uvh remi-release<span class="number">-6</span>*.rpm epel-release<span class="number">-6</span>*.rpm</span><br></pre></td></tr></table></figure></p><h2><span id="配置和使用">配置和使用</span></h2><p>安装完<code>goaccess</code>之后，我们需要在<code>/etc/goaccess.conf</code>里添加如下几句话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">time-format %T</span><br><span class="line">date-format %d/%b/%Y</span><br><span class="line">log-format %h %^[%d:%t %^] “%r” %s %b “%R” “%u”</span><br></pre></td></tr></table></figure></p><p>保存退出之后，我们就可以通过<code>goaccess</code>来分析<code>nginx</code>日志了，语句格式也很简单：<code>goaccess -f nginx日志的绝对路径</code>。比如我的nginx日志是<code>access-chen.log</code>，查看一下里面的内容：<br><img src="/images/goaccess1.png" alt="goaccess"></p><p>虽然有规律，但是看上去很乱，需要在分析日志之前喝两瓶静心口服液。</p><p>然后我就<code>goaccess -f access-chen.log</code>，就会看到如下的界面：<br><img src="/images/goaccess2.png" alt="goaccess"></p><p>这一下，整个日志看起来更加友好，更加直白，更加高大上。足以吸引周围人的羡慕目光。</p><p>但是这里面还是有一个注意点：<code>goaccess</code>默认支持的日志格式是<code>nginx</code>默认的日志格式，也就是nginx.conf里的如下格式：<br><img src="/images/goaccess3.png" alt="goaccess"></p><p>如果你的日志格式是有过更改的，而且还不想改回来，那么就需要去<code>/etc/goaccess.conf</code>里对应的<code>log-format</code>进行更改。</p><p>这还没有完，goaccess还可以生成html，这里<code>goaccess -f access-chen.log  -a &gt; /nginx安装路径/html/chen.html</code>。然后在浏览器里登陆到这个服务器的chen.html，就会看到整个日志情况的网页排版，如图：<br><img src="/images/goaccess4.png" alt="goaccess"></p><p>这样的话，我们可以每一天都发一份当天的日志html去运维人员的信箱里，这样更加方便我们分析日志。</p><h2><span id="缺点">缺点</span></h2><p>虽然前面说了那么多goaccess的优点，但是缺点也是有的，比如<code>goaccess</code>的粒度太粗，只能按天分割，如果要按小时分割，需要先<code>grep</code>出来，这个做法比较挫我懂…</p><p>还有一个缺点，就是访问人的来源只能定位到国家，无法具体定位到省市县村屯…<br><img src="/images/goaccess5.png" alt="goaccess"></p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond" target="_blank" rel="noopener">http://blog.maxhemby.se/determine-the-apache-traffic-load/#respond</a></p>]]></content>
-    
-    <summary type="html">
-    
-      面试的时候一定会被面到的问题是：给出web服务器的访问日志，请写一个脚本来统计访问前10的IP有哪些？访问前10的请求有哪些？当你领略过goaccess之后，你就明白，这些问题，除了考验你的脚本背诵记忆能力以外，唯一的作用只有装A或者装C了。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="日志统计" scheme="http://yoursite.com/tags/%E6%97%A5%E5%BF%97%E7%BB%9F%E8%AE%A1/"/>
     
   </entry>
   
