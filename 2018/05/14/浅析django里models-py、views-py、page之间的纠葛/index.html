@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/type_name1.png">
 <meta property="og:image" content="http://yoursite.com/images/type_name2.png">
-<meta property="og:updated_time" content="2018-05-14T14:36:40.506Z">
+<meta property="og:updated_time" content="2018-05-15T02:29:10.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析django里models.py、views.py与网页之间的爱恨纠葛">
 <meta name="twitter:description" content="搞明白这个，就算明白django之间几个核心文件的关系了。">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  585
+                  613
                 </span>
               
 
@@ -444,7 +444,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -485,20 +485,8 @@
 <p>那么现在就可以在<code>blog_list.html</code>里使用<code>blog_types</code>这个key了，如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 前面略 --&gt;     </span><br><span class="line">&lt;h4&gt;博客分类&lt;/h4&gt;     </span><br><span class="line">&lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt;     </span><br><span class="line">&lt;!-- 后面略 --&gt;</span><br></pre></td></tr></table></figure></p>
 <p>这样的效果如下：<br><img src="/images/type_name2.png" alt="paradin">  </p>
 <p>返回的是<code>QuerySet</code>类型，<code>QuerySet</code>是Django的查询集，可以通过<code>QuerySet</code>条件查询得到对应模型的对象集合。由此看出<code>blog_types</code>已经成功的引入到了<code>blog_list.html</code>里。</p>
-<p>至于拆成每一个“博客类型”就很简单了，html部分如下：    </p>
-<pre><code>```     
-&lt;h4&gt;博客分类&lt;/h4&gt;                 
-&lt;!-- ul是无项目的标签 --&gt;                 
-&lt;ul&gt;                     
-    {% for blog_type in blog_types%}    #开始一个for循环                         
-			<li><a href="{% url 'blogs_with_type' blog_type.pk %}">{{ blog_type.type_name }} </a></li>        #对每一个类型加上一个a链接                     
-		{% empty %}        #如果唯空就说“暂无分类”                         
-			<!--  li是具体的项目 -->                         
-			<li> 暂无分类 </li>                     
-		{% endfor %}                     
-&lt;/ul&gt;     
-```
-</code></pre>
+<p>至于拆成每一个“博客类型”就很简单了，html部分如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;h4&gt;博客分类&lt;/h4&gt;                 </span><br><span class="line">&lt;!-- ul是无项目的标签 --&gt;                 </span><br><span class="line">&lt;ul&gt;                     </span><br><span class="line">	&#123;% for blog_type in blog_types%&#125;    #开始一个for循环                         </span><br><span class="line">		&lt;li&gt;&lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog_type.pk %&#125;&quot;&gt;&#123;&#123; blog_type.type_name &#125;&#125; &lt;/a&gt;&lt;/li&gt;        #对每一个类型加上一个a链接                     </span><br><span class="line">	&#123;% empty %&#125;        #如果唯空就说“暂无分类”                         </span><br><span class="line">		&lt;!--  li是具体的项目 --&gt;                         </span><br><span class="line">		&lt;li&gt; 暂无分类 &lt;/li&gt;                     </span><br><span class="line">	&#123;% endfor %&#125;                     </span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure></p>
+
       
     </div>
     
@@ -616,6 +604,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/05/15/Gitlab的汉化过程/" rel="prev" title="Gitlab的汉化过程">
+                Gitlab的汉化过程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -719,7 +711,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">125</span>
+                  <span class="site-state-item-count">126</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -918,7 +910,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共121.3k字</span>
+  <span class="post-count">博客全站共121.4k字</span>
 </div>
         
 

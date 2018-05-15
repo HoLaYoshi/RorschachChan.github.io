@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Gitlab的汉化过程]]></title>
+    <url>%2F2018%2F05%2F15%2FGitlab%E7%9A%84%E6%B1%89%E5%8C%96%E8%BF%87%E7%A8%8B%2F</url>
+    <content type="text"><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title><![CDATA[浅析django里models.py、views.py与网页之间的爱恨纠葛]]></title>
     <url>%2F2018%2F05%2F14%2F%E6%B5%85%E6%9E%90django%E9%87%8Cmodels-py%E3%80%81views-py%E3%80%81page%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BA%A0%E8%91%9B%2F</url>
-    <content type="text"><![CDATA[环境：django 2.0 + python 3.6 + pycharm 2018 django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; admin.py是用来设置在/admin/后台里面的显示样式; views.py是用来设置在前台网页里的显示样式； urls.py是用来编辑域名规则； admin.py是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：models.py、views.py和对应的网页。 举个例子，假设有一个models.py，内容如下： 1234567from django.db import models from django.contrib.auth.models import User class BlogType(models.Model): type_name = models.CharField(max_length=15) #规定type_name是一个最大为15字节的charfield def __str__(self): return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name 然后随便加入一些内容，如图： 而在views.py里，要求在前端网页里如此的显示： 1234567from django.shortcuts import render_to_response,get_object_or_404 from .models import Blog,BlogType #这里引用了models.py里的那两个class def blog_list(request): context = &#123;&#125; context[&apos;blog_types&apos;] = BlogType.objects.all() return render_to_response(&apos;pageblog/blog_list.html&apos;,context) 在views.py里规定，如果有访问域名是/blog_list/的网页，就返回pageblog/blog_list.html这个页面，而这个blog_list.html只是一个框架，里面的内容是context。context本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，objects.all()就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。 那么现在就可以在blog_list.html里使用blog_types这个key了，如下： 1234&lt;!-- 前面略 --&gt; &lt;h4&gt;博客分类&lt;/h4&gt; &lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt; &lt;!-- 后面略 --&gt; 这样的效果如下： 返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出blog_types已经成功的引入到了blog_list.html里。 至于拆成每一个“博客类型”就很简单了，html部分如下： ``` &lt;h4&gt;博客分类&lt;/h4&gt; &lt;!-- ul是无项目的标签 --&gt; &lt;ul&gt; {% for blog_type in blog_types%} #开始一个for循环 {{ blog_type.type_name }} #对每一个类型加上一个a链接 {% empty %} #如果唯空就说“暂无分类” 暂无分类 {% endfor %} &lt;/ul&gt; ```]]></content>
+    <content type="text"><![CDATA[环境：django 2.0 + python 3.6 + pycharm 2018 django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; admin.py是用来设置在/admin/后台里面的显示样式; views.py是用来设置在前台网页里的显示样式； urls.py是用来编辑域名规则； admin.py是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：models.py、views.py和对应的网页。 举个例子，假设有一个models.py，内容如下： 1234567from django.db import models from django.contrib.auth.models import User class BlogType(models.Model): type_name = models.CharField(max_length=15) #规定type_name是一个最大为15字节的charfield def __str__(self): return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name 然后随便加入一些内容，如图： 而在views.py里，要求在前端网页里如此的显示： 1234567from django.shortcuts import render_to_response,get_object_or_404 from .models import Blog,BlogType #这里引用了models.py里的那两个class def blog_list(request): context = &#123;&#125; context[&apos;blog_types&apos;] = BlogType.objects.all() return render_to_response(&apos;pageblog/blog_list.html&apos;,context) 在views.py里规定，如果有访问域名是/blog_list/的网页，就返回pageblog/blog_list.html这个页面，而这个blog_list.html只是一个框架，里面的内容是context。context本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，objects.all()就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。 那么现在就可以在blog_list.html里使用blog_types这个key了，如下： 1234&lt;!-- 前面略 --&gt; &lt;h4&gt;博客分类&lt;/h4&gt; &lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt; &lt;!-- 后面略 --&gt; 这样的效果如下： 返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出blog_types已经成功的引入到了blog_list.html里。 至于拆成每一个“博客类型”就很简单了，html部分如下： 12345678910&lt;h4&gt;博客分类&lt;/h4&gt; &lt;!-- ul是无项目的标签 --&gt; &lt;ul&gt; &#123;% for blog_type in blog_types%&#125; #开始一个for循环 &lt;li&gt;&lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog_type.pk %&#125;&quot;&gt;&#123;&#123; blog_type.type_name &#125;&#125; &lt;/a&gt;&lt;/li&gt; #对每一个类型加上一个a链接 &#123;% empty %&#125; #如果唯空就说“暂无分类” &lt;!-- li是具体的项目 --&gt; &lt;li&gt; 暂无分类 &lt;/li&gt; &#123;% endfor %&#125; &lt;/ul&gt;]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -164,8 +169,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>redis</tag>
+        <tag>docker</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -624,8 +629,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -684,8 +689,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
