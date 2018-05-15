@@ -97,7 +97,7 @@
 <meta property="og:description" content="据说mysql的容器坑很多...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/rondopass1.gif">
-<meta property="og:updated_time" content="2018-05-12T02:47:42.128Z">
+<meta property="og:updated_time" content="2018-05-15T03:28:57.952Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="创建Mysql容器过程">
 <meta name="twitter:description" content="据说mysql的容器坑很多...">
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  311
+                  454
                 </span>
               
 
@@ -443,7 +443,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -470,11 +470,12 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="过程记录">过程记录</span></h2><p>先<code>docker pull mysql</code>，当前最近的版本是8.0，然后<code>docker images</code>查看一下效果。</p>
 <p>然后就是启动一个容器，命令是：<code>docker run --name test-mysql -p 3306:3306 -e MYSQL\_ROOT\_PASSWORD=123456 -d mysql</code>,这句话的意思是：启动一个叫test-mysql的容器， 端口影射是3306到宿主机的3306，同时设置root的密码是123456，然后以守护进程的形式启动。</p>
-<p>但是如果在宿主机上使用<code>mysql -h127.0.0.1 -uroot -p123456</code>可能会报错，报错内容是：“Authentication plugin ‘caching_sha2_password’ cannot be loaded:”</p>
+<p>但是如果在宿主机上使用<code>mysql -h127.0.0.1 -uroot -p123456</code>可能会报错，报错内容是：<code>Authentication plugin ‘caching_sha2_password’ cannot be loaded:</code></p>
 <p>那么就<code>docker exec -it 容器ID号 env LANG=C.UTF-8 /bin/bash</code>进入到容器里，使用<code>mysql -uroot -p123456</code>，看一下在容器里是否可以正常登录，如果可以的话，那么就在mysql的命令行里执行<code>ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;123456&#39;;</code>。  </p>
 <p>退出容器在宿主机上重新连接，这样就OK了。至于原因就是，mysql的客户端是yum安装的，虽然是centos 7，但是安装的版本也是5.5版本的，所以8.0的客户端有一个新的密码加密方式：<code>caching_sha2_password</code>，客户端不支持，所以需要手动到命令行里更改一下。</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://binary-space.iteye.com/blog/2412769" target="_blank" rel="noopener">http://binary-space.iteye.com/blog/2412769</a></p>
-<p><img src="/images/rondopass1.gif" alt="paradin"></p>
+<h2><span id="mysql存储的坑">mysql存储的坑</span></h2><p>先思考一个问题：假如某mysql容器里存储了100G的数据，那么这个容器关闭了，这100G的数据还在么？从宿主机是可以找到这100G的数据么？</p>
+<p><code>docker inspect mysql-container-id</code>，找到里面的volume字段，这里也显示挂载的host路径，可以通过这个路径来备份数据。或者使用<code>docker cp mysql-container-id:/path/to/db-backup-file ./</code>，把容器内数据放到当前目录下。如果是生产环境，必须使用Volume或数据容器。</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://binary-space.iteye.com/blog/2412769" target="_blank" rel="noopener">http://binary-space.iteye.com/blog/2412769</a><br><a href="http://dockone.io/question/108" target="_blank" rel="noopener">http://dockone.io/question/108</a><br><img src="/images/rondopass1.gif" alt="paradin"></p>
 
       
     </div>
@@ -873,7 +874,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x8FC7;&#x7A0B;&#x8BB0;&#x5F55;">&#x8FC7;&#x7A0B;&#x8BB0;&#x5F55;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x8FC7;&#x7A0B;&#x8BB0;&#x5F55;">&#x8FC7;&#x7A0B;&#x8BB0;&#x5F55;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="mysql&#x5B58;&#x50A8;&#x7684;&#x5751;">mysql&#x5B58;&#x50A8;&#x7684;&#x5751;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -926,7 +927,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共121.8k字</span>
+  <span class="post-count">博客全站共122.0k字</span>
 </div>
         
 
