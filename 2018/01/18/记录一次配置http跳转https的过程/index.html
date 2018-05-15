@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="有了https，不用白不用">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-01-22T02:35:54.038Z">
+<meta property="og:updated_time" content="2018-03-06T14:06:45.028Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记录一次配置http跳转https的过程">
 <meta name="twitter:description" content="有了https，不用白不用">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  685
+                  706
                 </span>
               
 
@@ -470,22 +470,11 @@
 <p>但是我们的霸气经理说这样不行，说要更多要求更高标准更好体验，于是乎提出一个需求就是：<font color="blue">在输入<code>alkaid.lechange.com</code>的时候会自动跳转到<code>https://alkaid.lechange.com</code>。</font></p>
 <p>既然如此，我们就在nginx上原有的<code>nginx.conf</code>里补充几个配置文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include upstream</span><br><span class="line">include upstream.conf;</span><br><span class="line"># include servers</span><br><span class="line">include alkaid.conf;</span><br><span class="line">include alkaid-https.conf;</span><br></pre></td></tr></table></figure></p>
 <p>这样在执行<code>nginx.conf</code>的时候，就会调用<code>upstream.conf</code>、<code>alkaid.conf</code>和<code>alkaid-https.conf</code>，我们主要看一下这三个文件。</p>
-<p>alkaid.conf文件如下：<br>    ```js<br>    server {<br>        listen 80;<br>        server_name *.lechange.com;<br>        proxy_buffering off;<br>        location / {<br>                rewrite ^/ <a href="https://alkaid.lechange.com" target="_blank" rel="noopener">https://alkaid.lechange.com</a> permanent;<br>                client_max_body_size 100m;<br>            }<br>    }</p>
+<p><code>alkaid.conf</code>文件如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">       listen <span class="number">80</span>;</span><br><span class="line">       server_name *.lechange.com;</span><br><span class="line">       proxy_buffering off;</span><br><span class="line">       location / &#123;</span><br><span class="line">               rewrite ^<span class="regexp">/ https:/</span><span class="regexp">/alkaid.lechange.com permanent;</span></span><br><span class="line"><span class="regexp">               client_max_body_size 100m;</span></span><br><span class="line"><span class="regexp">   	    &#125;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p>
 <p>这里我们监听了80端口，下面那个<code>client_max_body_size 100m</code>是用来设定<code>nginx+php</code>上传文件的大小，这里规定是100m，这个可以写进<code>nginx.conf</code>里，如果有对上传文件方面感兴趣，可以看<a href="http://www.cnblogs.com/zhwl/archive/2012/09/18/2690714.html" target="_blank" rel="noopener">http://www.cnblogs.com/zhwl/archive/2012/09/18/2690714.html</a> 。</p>
-<p>再来看看<code>alkaid-https.conf</code>，如下：<br>    <code>``js
-    server {
-        listen 10000;
-        server_name *.lechange.com;
-        proxy_buffering off;
-        location / {
-                proxy_pass http://alkaid_backend;
-                proxy_set_header   X-Real-IP        $remote_addr;
-                proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-                proxy_redirect     off;
-            }
-    }
-这里监听了10000端口，location写的是</code><a href="http://alkaid_backend`,这个`alkaid_backend`是啥东西?" target="_blank" rel="noopener">http://alkaid_backend`,这个`alkaid_backend`是啥东西?</a></p>
-<p>这个时候我们就需要看一下<code>upstream.conf</code>，里面内容是:<br>    ```js<br>    upstream alkaid_backend {<br>        server   X.X.X.X:JQK;<br>        check interval=5000 rise=2 fall=5 timeout=1000 type=tcp default_down=false;<br>    }</p>
+<p>再来看看<code>alkaid-https.conf</code>，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">       listen <span class="number">10000</span>;</span><br><span class="line">       server_name *.lechange.com;</span><br><span class="line">       proxy_buffering off;</span><br><span class="line">       location / &#123;</span><br><span class="line">               proxy_pass http:<span class="comment">//alkaid_backend;</span></span><br><span class="line">               proxy_set_header   X-Real-IP        $remote_addr;</span><br><span class="line">               proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;</span><br><span class="line">               proxy_redirect     off;</span><br><span class="line">   	    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里监听了10000端口，<code>location</code>写的是<code>http://alkaid_backend</code>,这个<code>alkaid_backend</code>是啥东西?</p>
+<p>这个时候我们就需要看一下<code>upstream.conf</code>，里面内容是:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">upstream alkaid_backend &#123;</span><br><span class="line">       server   X.X.X.X:JQK;</span><br><span class="line">       check interval=<span class="number">5000</span> rise=<span class="number">2</span> fall=<span class="number">5</span> timeout=<span class="number">1000</span> type=tcp default_down=<span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>X.X.X.X是模块服务器的内网IP地址，而JQK是模块服务器的模块端口，这里要根据实际的情况来写。可见<code>alkaid_backend</code>对应的就是模块服务器和它的端口，下面是检查间隔等等数值。</p>
 <p>现在我们启动<code>nginx</code>，然后把nginx的外网地址绑定去<code>alkaid.lechange.com</code>这个域名，在浏览器里输入<code>alkaid.lechange.com</code>，就会达到自动跳转的目的了！</p>
 <p>这里要额外多说一下，我们这里设定了80的配置文件也设置了443的文件，但是这俩文件的转发过程却不同：<code>alkaid-https.conf</code>文件把443的请求转向了平台模块服务器的服务，而<code>alkaid.conf</code>文件把凡是从80端口进来的请求直接全部永久重定向到<code>https://alkaid.lechange.com</code> ，但是这个<code>alkaid.lechange.com</code>还是会去访问平台模块服务器的服务，也就是说<code>alkaid.conf</code>文件多了一步重定向。</p>
@@ -716,7 +705,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">125</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -727,7 +716,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -738,7 +727,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">84</span>
+                  <span class="site-state-item-count">110</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -915,7 +904,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共87.5k字</span>
+  <span class="post-count">博客全站共121.3k字</span>
 </div>
         
 
