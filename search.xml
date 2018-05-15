@@ -3,7 +3,7 @@
   <entry>
     <title><![CDATA[Gitlab的汉化过程]]></title>
     <url>%2F2018%2F05%2F15%2FGitlab%E7%9A%84%E6%B1%89%E5%8C%96%E8%BF%87%E7%A8%8B%2F</url>
-    <content type="text"><![CDATA[gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gitlab/gitlab-ce:latest建立一个容器，如图： 然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，设定密码之后，就可以通过root账号登陆gitlab了，如图： gitlab的汉化方法]]></content>
+    <content type="text"><![CDATA[gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gitlab/gitlab-ce:latest建立一个容器，如图： 然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，设定密码之后，就可以通过root账号登陆gitlab了，如图： 至于“使用ldsp方式登录”、“配置域名”和“关闭注册功能”请移步去看：https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/ 。 gitlab的汉化方法汉化之前，要确定gitlab的版本，先docker exec -it bf65bc03ed12 env LANG=C.UTF-8 /bin/bash登陆到容器里，执行cat /opt/gitlab/embedded/service/gitlab-rails/VERSION，由于当时镜像是最新的，所以gitlab的版本是10.7.3。 那么就要寻找这个版本的汉化包，]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>

@@ -88,20 +88,20 @@
 
 
 
-<meta name="description" content="gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gi">
+<meta name="description" content="为了考虑众多用户尤其是各位领导的英文水平...">
 <meta name="keywords" content="gitlab">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gitlab的汉化过程">
 <meta property="og:url" content="http://yoursite.com/2018/05/15/Gitlab的汉化过程/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gi">
+<meta property="og:description" content="为了考虑众多用户尤其是各位领导的英文水平...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/gitlab10.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab11.png">
-<meta property="og:updated_time" content="2018-05-15T03:00:27.850Z">
+<meta property="og:updated_time" content="2018-05-15T03:05:41.221Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的汉化过程">
-<meta name="twitter:description" content="gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gi">
+<meta name="twitter:description" content="为了考虑众多用户尤其是各位领导的英文水平...">
 <meta name="twitter:image" content="http://yoursite.com/images/gitlab10.png">
 
 
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  138
+                  257
                 </span>
               
 
@@ -451,6 +451,10 @@
           
 
           
+              <div class="post-description">
+                  为了考虑众多用户尤其是各位领导的英文水平...
+              </div>
+          
 
         </div>
       </header>
@@ -467,7 +471,10 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="gitlab的容器安装方法">gitlab的容器安装方法</span></h2><p>gitlab用容器部署的话非常的简单，首先<code>docker pull gitlab/gitlab-ce:latest</code>下载镜像，然后<code>docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gitlab/gitlab-ce:latest</code>建立一个容器，如图：<br><img src="/images/gitlab10.png" alt="paradin"></p>
 <p>然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，设定密码之后，就可以通过root账号登陆gitlab了，如图：<br><img src="/images/gitlab11.png" alt="paradin"></p>
-<h2><span id="gitlab的汉化方法">gitlab的汉化方法</span></h2>
+<p>至于“使用ldsp方式登录”、“配置域名”和“关闭注册功能”请移步去看：<a href="https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/</a> 。</p>
+<h2><span id="gitlab的汉化方法">gitlab的汉化方法</span></h2><p>汉化之前，要确定gitlab的版本，先<code>docker exec -it bf65bc03ed12  env LANG=C.UTF-8 /bin/bash</code>登陆到容器里，执行<code>cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</code>，由于当时镜像是最新的，所以gitlab的版本是<code>10.7.3</code>。</p>
+<p>那么就要寻找这个版本的汉化包，</p>
+
       
     </div>
     
@@ -912,7 +919,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共121.5k字</span>
+  <span class="post-count">博客全站共121.6k字</span>
 </div>
         
 
