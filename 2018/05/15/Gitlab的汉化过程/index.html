@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="gitlab," />
 
 
 
@@ -88,14 +88,21 @@
 
 
 
+<meta name="description" content="gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gi">
+<meta name="keywords" content="gitlab">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gitlab的汉化过程">
 <meta property="og:url" content="http://yoursite.com/2018/05/15/Gitlab的汉化过程/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
+<meta property="og:description" content="gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gi">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-15T02:17:51.079Z">
+<meta property="og:image" content="http://yoursite.com/images/gitlab10.png">
+<meta property="og:image" content="http://yoursite.com/images/gitlab11.png">
+<meta property="og:updated_time" content="2018-05-15T03:00:27.850Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的汉化过程">
+<meta name="twitter:description" content="gitlab的容器安装方法gitlab用容器部署的话非常的简单，首先docker pull gitlab/gitlab-ce:latest下载镜像，然后docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gi">
+<meta name="twitter:image" content="http://yoursite.com/images/gitlab10.png">
 
 
 
@@ -354,6 +361,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -399,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  0
+                  138
                 </span>
               
 
@@ -436,7 +465,9 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="gitlab的容器安装方法">gitlab的容器安装方法</span></h2><p>gitlab用容器部署的话非常的简单，首先<code>docker pull gitlab/gitlab-ce:latest</code>下载镜像，然后<code>docker run --detach --hostname 本机外网IP --publish 443:443 --publish 80:80 --publish 2222:22 --name gitlab --restart always gitlab/gitlab-ce:latest</code>建立一个容器，如图：<br><img src="/images/gitlab10.png" alt="paradin"></p>
+<p>然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，设定密码之后，就可以通过root账号登陆gitlab了，如图：<br><img src="/images/gitlab11.png" alt="paradin"></p>
+<h2><span id="gitlab的汉化方法">gitlab的汉化方法</span></h2>
       
     </div>
     
@@ -515,6 +546,12 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gitlab/" rel="tag"><i class="fa fa-tag"></i> gitlab</a>
+          
+        </div>
       
 
       
@@ -629,8 +666,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -673,7 +719,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-count">111</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -804,6 +850,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="gitlab&#x7684;&#x5BB9;&#x5668;&#x5B89;&#x88C5;&#x65B9;&#x6CD5;">gitlab&#x7684;&#x5BB9;&#x5668;&#x5B89;&#x88C5;&#x65B9;&#x6CD5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="gitlab&#x7684;&#x6C49;&#x5316;&#x65B9;&#x6CD5;">gitlab&#x7684;&#x6C49;&#x5316;&#x65B9;&#x6CD5;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -850,7 +912,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共121.4k字</span>
+  <span class="post-count">博客全站共121.5k字</span>
 </div>
         
 

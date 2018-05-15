@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/type_name1.png">
 <meta property="og:image" content="http://yoursite.com/images/type_name2.png">
-<meta property="og:updated_time" content="2018-05-15T02:29:10.014Z">
+<meta property="og:updated_time" content="2018-05-15T02:53:10.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="浅析django里models.py、views.py与网页之间的爱恨纠葛">
 <meta name="twitter:description" content="搞明白这个，就算明白django之间几个核心文件的关系了。">
@@ -479,7 +479,7 @@
 </ol>
 <p><code>admin.py</code>是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：<code>models.py</code>、<code>views.py</code>和对应的网页。  </p>
 <p>举个例子，假设有一个<code>models.py</code>，内容如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models     </span><br><span class="line">from django.contrib.auth.models import User   </span><br><span class="line">   </span><br><span class="line">class BlogType(models.Model):         </span><br><span class="line">type_name = models.CharField(max_length=15)    #规定type_name是一个最大为15字节的charfield          </span><br><span class="line">def __str__(self):             </span><br><span class="line">	return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name</span><br></pre></td></tr></table></figure></p>
-<p>然后随便加入一些内容，如图： <img src="/images/type_name1.png" alt="paradin">   </p>
+<p>然后随便加入一些内容，如图：<br><img src="/images/type_name1.png" alt="paradin">   </p>
 <p>而在<code>views.py</code>里，要求在前端网页里如此的显示：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.shortcuts import render_to_response,get_object_or_404     </span><br><span class="line">from .models import Blog,BlogType    #这里引用了models.py里的那两个class </span><br><span class="line">    </span><br><span class="line">def blog_list(request):         </span><br><span class="line">	context = &#123;&#125;         </span><br><span class="line">	context[&apos;blog_types&apos;] = BlogType.objects.all()         </span><br><span class="line">	return render_to_response(&apos;pageblog/blog_list.html&apos;,context)</span><br></pre></td></tr></table></figure></p>
 <p>在<code>views.py</code>里规定，如果有访问域名是<code>/blog_list/</code>的网页，就返回<code>pageblog/blog_list.html</code>这个页面，而这个<code>blog_list.html</code>只是一个框架，里面的内容是<code>context</code>。<code>context</code>本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，<code>objects.all()</code>就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。</p>
 <p>那么现在就可以在<code>blog_list.html</code>里使用<code>blog_types</code>这个key了，如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 前面略 --&gt;     </span><br><span class="line">&lt;h4&gt;博客分类&lt;/h4&gt;     </span><br><span class="line">&lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt;     </span><br><span class="line">&lt;!-- 后面略 --&gt;</span><br></pre></td></tr></table></figure></p>
@@ -733,7 +733,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">110</span>
+                  <span class="site-state-item-count">111</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -910,7 +910,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共121.4k字</span>
+  <span class="post-count">博客全站共121.5k字</span>
 </div>
         
 
