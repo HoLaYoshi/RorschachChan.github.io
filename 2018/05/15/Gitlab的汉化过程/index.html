@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/gitlab10.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab11.png">
-<meta property="og:updated_time" content="2018-05-15T03:05:41.221Z">
+<meta property="og:updated_time" content="2018-05-15T03:15:53.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的汉化过程">
 <meta name="twitter:description" content="为了考虑众多用户尤其是各位领导的英文水平...">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  257
+                  461
                 </span>
               
 
@@ -444,7 +444,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -473,7 +473,10 @@
 <p>然后在浏览器的地址栏里输入服务器的外网IP地址，就到了一个更换密码的页面，这个密码就是root的密码，设定密码之后，就可以通过root账号登陆gitlab了，如图：<br><img src="/images/gitlab11.png" alt="paradin"></p>
 <p>至于“使用ldsp方式登录”、“配置域名”和“关闭注册功能”请移步去看：<a href="https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/05/10/在已经运行的docker容器里面使用中文/</a> 。</p>
 <h2><span id="gitlab的汉化方法">gitlab的汉化方法</span></h2><p>汉化之前，要确定gitlab的版本，先<code>docker exec -it bf65bc03ed12  env LANG=C.UTF-8 /bin/bash</code>登陆到容器里，执行<code>cat /opt/gitlab/embedded/service/gitlab-rails/VERSION</code>，由于当时镜像是最新的，所以gitlab的版本是<code>10.7.3</code>。</p>
-<p>那么就要寻找这个版本的汉化包，</p>
+<p>还是在容器里，执行<code>git clone https://gitlab.com/xhang/gitlab.git</code>，克隆获取汉化版本库，默认是获取最新的。如果需要下载老版本的汉化包，则要加上老版本的分支，如：<code>git clone https://gitlab.com/xhang/gitlab.git -b v10.2.5-zh</code>。</p>
+<p>然后<code>gitlab-ctl stop</code>先停止gitlab服务，<code>cd gitlab/</code>进入到刚刚下载的那个git包里，执行如下代码：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">root@10 gitlab]# git fetch</span><br><span class="line">root@10 gitlab]# git diff v10.3.2 v10.3.2-zh &gt; ../10.3.2-zh.diff</span><br><span class="line">root@10 gitlab]# cd ..</span><br><span class="line">root@10 ~]# patch -d /opt/gitlab/embedded/service/gitlab-rails -p1 &lt; 10.3.2-zh.diff</span><br><span class="line">root@10 ~]# gitlab-ctl start</span><br></pre></td></tr></table></figure></p>
+<p>重新返回到浏览器里，就能看到汉化后的gitlab了，大功告成！</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://xuanwo.org/2016/04/13/gitlab-install-intro/" target="_blank" rel="noopener">https://xuanwo.org/2016/04/13/gitlab-install-intro/</a><br><a href="https://www.jianshu.com/p/6606aed59a56" target="_blank" rel="noopener">https://www.jianshu.com/p/6606aed59a56</a><br><a href="http://adairjun.github.io/2016/12/20/gitlab/" target="_blank" rel="noopener">http://adairjun.github.io/2016/12/20/gitlab/</a><br><a href="https://github.com/marbleqi/gitlab-ce-zh/blob/v10.5.1-zh-patch/Nginx.md" target="_blank" rel="noopener">https://github.com/marbleqi/gitlab-ce-zh/blob/v10.5.1-zh-patch/Nginx.md</a></p>
 
       
     </div>
@@ -866,7 +869,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="gitlab&#x7684;&#x5BB9;&#x5668;&#x5B89;&#x88C5;&#x65B9;&#x6CD5;">gitlab&#x7684;&#x5BB9;&#x5668;&#x5B89;&#x88C5;&#x65B9;&#x6CD5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="gitlab&#x7684;&#x6C49;&#x5316;&#x65B9;&#x6CD5;">gitlab&#x7684;&#x6C49;&#x5316;&#x65B9;&#x6CD5;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="gitlab&#x7684;&#x5BB9;&#x5668;&#x5B89;&#x88C5;&#x65B9;&#x6CD5;">gitlab&#x7684;&#x5BB9;&#x5668;&#x5B89;&#x88C5;&#x65B9;&#x6CD5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="gitlab&#x7684;&#x6C49;&#x5316;&#x65B9;&#x6CD5;">gitlab&#x7684;&#x6C49;&#x5316;&#x65B9;&#x6CD5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -919,7 +922,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共121.6k字</span>
+  <span class="post-count">博客全站共121.8k字</span>
 </div>
         
 
