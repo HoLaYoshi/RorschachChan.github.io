@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="docker,安全," />
 
 
 
@@ -88,19 +88,20 @@
 
 
 
-<meta name="description" content="使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用">
+<meta name="description" content="root尽可能的不要出现在服务器里">
+<meta name="keywords" content="docker,安全">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用非root启动进程以及启动docker">
 <meta property="og:url" content="http://yoursite.com/2018/04/18/用非root启动进程以及启动docker/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用">
+<meta property="og:description" content="root尽可能的不要出现在服务器里">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/noroot2.png">
 <meta property="og:image" content="http://yoursite.com/images/noroot.png">
-<meta property="og:updated_time" content="2018-04-18T15:05:28.037Z">
+<meta property="og:updated_time" content="2018-05-15T06:21:41.615Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用非root启动进程以及启动docker">
-<meta name="twitter:description" content="使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用">
+<meta name="twitter:description" content="root尽可能的不要出现在服务器里">
 <meta name="twitter:image" content="http://yoursite.com/images/noroot2.png">
 
 
@@ -360,6 +361,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -405,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  434
+                  439
                 </span>
               
 
@@ -428,6 +451,10 @@
           
 
           
+              <div class="post-description">
+                  root尽可能的不要出现在服务器里
+              </div>
+          
 
         </div>
       </header>
@@ -443,8 +470,8 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="使用非root用户启动普通进程">使用非root用户启动普通进程</span></h2><p>使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。</p>
-<p>很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch  ，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。比如我这个机器里有一个redis，它是用root启动的：<br><img src="/images/noroot2.png" alt="paradin"></p>
-<h2><span id="当普通用户要使用1024以下的端口">当普通用户要使用1024以下的端口</span></h2><p>众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法</p>
+<p>很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch ，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。比如我这个机器里有一个redis，它是用root启动的：<br><img src="/images/noroot2.png" alt="paradin"></p>
+<h2><span id="当普通用户要使用1024以下的端口">当普通用户要使用1024以下的端口</span></h2><p>众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法就是iptables转发，</p>
 <h2><span id="docker不应该使用root启动">docker不应该使用root启动</span></h2><p>1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。</p>
 <p>但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在<a href="http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---不要用root用户去启动docker!!!" target="_blank" rel="noopener">http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---不要用root用户去启动docker!!!</a><br><img src="/images/noroot.png" alt="paradin"></p>
 <h2><span id="使用非root用户启动docker">使用非root用户启动docker</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.zhihu.com/question/25580965" target="_blank" rel="noopener">https://www.zhihu.com/question/25580965</a></p>
@@ -527,6 +554,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/docker/" rel="tag"><i class="fa fa-tag"></i> docker</a>
+          
+            <a href="/tags/安全/" rel="tag"><i class="fa fa-tag"></i> 安全</a>
+          
+        </div>
       
 
       
@@ -698,7 +733,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">111</span>
+                  <span class="site-state-item-count">112</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
