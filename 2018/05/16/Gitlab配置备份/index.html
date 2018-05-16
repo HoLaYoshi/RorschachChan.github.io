@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="gitlab," />
 
 
 
@@ -88,18 +88,19 @@
 
 
 
-<meta name="description" content="我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3，要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_ba">
+<meta name="description" content="不备份，要是数据丢了就死翘翘了...">
+<meta name="keywords" content="gitlab">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gitlab的配置备份">
 <meta property="og:url" content="http://yoursite.com/2018/05/16/Gitlab配置备份/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3，要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_ba">
+<meta property="og:description" content="不备份，要是数据丢了就死翘翘了...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/gitlab19.png">
-<meta property="og:updated_time" content="2018-05-16T07:27:57.512Z">
+<meta property="og:updated_time" content="2018-05-16T07:31:04.339Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的配置备份">
-<meta name="twitter:description" content="我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3，要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_ba">
+<meta name="twitter:description" content="不备份，要是数据丢了就死翘翘了...">
 <meta name="twitter:image" content="http://yoursite.com/images/gitlab19.png">
 
 
@@ -359,6 +360,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -404,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  233
+                  361
                 </span>
               
 
@@ -427,6 +450,10 @@
           
 
           
+              <div class="post-description">
+                  不备份，要是数据丢了就死翘翘了...
+              </div>
+          
 
         </div>
       </header>
@@ -442,7 +469,9 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3，要备份数据的话，就要进入容器里，执行<code>gitlab-rake gitlab:backup:create</code>，效果如下：<br><img src="/images/gitlab19.png" alt="paradin"></p>
-<p>执行完毕之后，在<code>/var/opt/gitlab/backups</code>文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。如果要还原的话，命令是<code>docker-compose run –rm gitlab app:rake gitlab:backup:restore BACKUP=1526454102</code>，BACKUP后面的是备份文件开头的那串数字。</p>
+<p>执行完毕之后，在<code>/var/opt/gitlab/backups</code>文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。</p>
+<p>如果要还原的话，命令是<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 先关闭连接数据库的进程</span><br><span class="line">sudo gitlab-ctl stop</span><br><span class="line"></span><br><span class="line"># 通过指定时间戳来执行restore操作，这个操作会复写gitlab的数据库</span><br><span class="line">sudo gitlab-rake gitlab:backup:restore BACKUP=1526454102 	#BACKUP后面的是备份文件开头的那串数字</span><br><span class="line"></span><br><span class="line"># 再次启动gitlab</span><br><span class="line">sudo gitlab-ctl start</span><br><span class="line"></span><br><span class="line"># 通过下面命令检查gitlab</span><br><span class="line">sudo gitlab-rake gitlab:check SANITIZE=true</span><br></pre></td></tr></table></figure></p>
+<p>注意！利用backup机制进行备份的话，对gitlab的版本是要求严格一致的。例如用8.6版的gitlab生成的备份文件，拿到8.7版的gitlab上进行恢复，是会报错的。</p>
 <p>如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑<code>/etc/gitlab/gitlab.rb</code>，修改如下的地方：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot;		#这里改新路径</span><br><span class="line">gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644			#这里可以设定文件的权限</span><br><span class="line"># limit backup lifetime to 7 days - 604800 seconds</span><br><span class="line">gitlab_rails[&apos;backup_keep_time&apos;] = 604800		#文件存储时间一周</span><br></pre></td></tr></table></figure></p>
 <p>然后重启一下gitlab即可。</p>
 
@@ -524,6 +553,12 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/gitlab/" rel="tag"><i class="fa fa-tag"></i> gitlab</a>
+          
+        </div>
       
 
       
@@ -859,7 +894,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共123.0k字</span>
+  <span class="post-count">博客全站共123.1k字</span>
 </div>
         
 

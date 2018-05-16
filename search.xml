@@ -3,7 +3,13 @@
   <entry>
     <title><![CDATA[Gitlab的配置备份]]></title>
     <url>%2F2018%2F05%2F16%2FGitlab%E9%85%8D%E7%BD%AE%E5%A4%87%E4%BB%BD%2F</url>
-    <content type="text"><![CDATA[我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3，要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。如果要还原的话，命令是docker-compose run –rm gitlab app:rake gitlab:backup:restore BACKUP=1526454102，BACKUP后面的是备份文件开头的那串数字。 如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑/etc/gitlab/gitlab.rb，修改如下的地方： 1234gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot; #这里改新路径gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644 #这里可以设定文件的权限# limit backup lifetime to 7 days - 604800 secondsgitlab_rails[&apos;backup_keep_time&apos;] = 604800 #文件存储时间一周 然后重启一下gitlab即可。]]></content>
+    <content type="text"><![CDATA[我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3，要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。 如果要还原的话，命令是 1234567891011# 先关闭连接数据库的进程sudo gitlab-ctl stop# 通过指定时间戳来执行restore操作，这个操作会复写gitlab的数据库sudo gitlab-rake gitlab:backup:restore BACKUP=1526454102 #BACKUP后面的是备份文件开头的那串数字# 再次启动gitlabsudo gitlab-ctl start# 通过下面命令检查gitlabsudo gitlab-rake gitlab:check SANITIZE=true 注意！利用backup机制进行备份的话，对gitlab的版本是要求严格一致的。例如用8.6版的gitlab生成的备份文件，拿到8.7版的gitlab上进行恢复，是会报错的。 如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑/etc/gitlab/gitlab.rb，修改如下的地方： 1234gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot; #这里改新路径gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644 #这里可以设定文件的权限# limit backup lifetime to 7 days - 604800 secondsgitlab_rails[&apos;backup_keep_time&apos;] = 604800 #文件存储时间一周 然后重启一下gitlab即可。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[Gitlab的简单应用]]></title>
