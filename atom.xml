@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-15T12:29:16.804Z</updated>
+  <updated>2018-05-16T02:27:46.394Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Gitlab的简单实用</title>
+    <link href="http://yoursite.com/2018/05/16/Gitlab%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9E%E7%94%A8/"/>
+    <id>http://yoursite.com/2018/05/16/Gitlab的简单实用/</id>
+    <published>2018-05-16T01:30:52.000Z</published>
+    <updated>2018-05-16T02:27:46.394Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>gitlab跟svn的区别我就不多说了，这里直接说具体应用。</p><h2><span id="建立一个project">建立一个project</span></h2><p>先登陆到gitlab的网页，我这里使用了root用户，选择<code>create a project</code>，然后就是填写project的名称以及它所属的用户，这里由于只有root用户，所以这个叫<code>jjfjj</code>的project就是root自己的，如果建立了一个组的话，那么这里就填写那个组，如下：<br><img src="/images/gitlab14.png" alt="paradin"></p><p>下面这个<code>Visibility Level</code> ，就是权限等级，它分三种：</p><ol><li>Private：私有的，只有你自己或者组内的成员能访问</li><li>Internal：所有登录的用户</li><li>Public：公开的，所有人都可以访问</li></ol><p>然后就是<code>create project</code>，就创建了这个jjfjj。如图:<br><img src="/images/gitlab15.png" alt="paradin"></p><h2><span id="将本地代码上传">将本地代码上传</span></h2><p>建立好了gitlab，就要把开发的代码传进去，我在另外一个机器里，创建一个目录code，这个目录就是专门用来放置代码的，假设现在里面有一个文件叫<code>testcode.py</code>，如图：<br><img src="/images/gitlab16.png" alt="paradin"></p><p>具体操作如下：<br><img src="/images/gitlab17.png" alt="paradin"></p><p>说明一下上面几个命令的意思：<br>初始化git仓库 <code>git init</code><br>添加文件到仓库 <code>git add .</code><br>提交代码到仓库 <code>git commit -m &#39;这里是要写的注释&#39;</code><br>链接到<code>git server git remote add origin gitlab的地址，也就是上上图里红色框的内容</code><br>push代码到服务器 <code>git push origin master</code></p><p>此时刷新一下gitlab的project页面，就看到刚刚的那个<code>testcode.py</code>已经传上来了。如图：<br><img src="/images/gitlab18.png" alt="paradin"></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      docker + gitlab，这才是未来部署的方向
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
+    
+  </entry>
   
   <entry>
     <title>Gitlab的汉化过程</title>
@@ -461,30 +483,6 @@
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
     
       <category term="php-fpm" scheme="http://yoursite.com/tags/php-fpm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用zabbix去监控nginx</title>
-    <link href="http://yoursite.com/2018/04/02/%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7nginx/"/>
-    <id>http://yoursite.com/2018/04/02/使用zabbix去监控nginx/</id>
-    <published>2018-04-02T01:42:24.000Z</published>
-    <updated>2018-04-03T11:58:00.111Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="准备工作">准备工作</span></h2><p>zabbix监控nginx，首先要确认nginx里是否有<code>http_stub_status_module</code>这个模块，一般来说，这个模块是自动安装的，<code>nginx -V</code>如下图：<br><img src="/images/checknginx1.png" alt="paradin"></p><p>如果你的nginx没有这个模块，请去看<a href="https://rorschachchan.github.io/2018/01/03/Nginx动态编译新的模块/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/01/03/Nginx动态编译新的模块/</a> 。</p><p>然后在<code>nginx.conf</code>里添加一段话：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> location = <span class="regexp">/nginx-status  &#123;</span></span><br><span class="line"><span class="regexp">    stub_status   on;</span></span><br><span class="line"><span class="regexp">    access_log   off;</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure></p><p><code>nginx -s reload</code>一下，然后在命令行输入<code>curl http://127.0.0.1/nginx-status</code>，就会看到如下的界面：<br><img src="/images/checknginx2.png" alt="paradin"></p><p>这样就可以通过<code>http_stub_status_module</code>检查nginx情况了！</p><h2><span id="nginx-status详解">nginx status详解</span></h2><p>以上图的<code>nginx status</code>来做例子说明一下各个数字的意思：<br><code>active connections</code> – 活跃的连接数量<br><code>accepts</code> — 总共处理了3832000个连接<br><code>handled</code> — 成功创建3832000次握手<br><code>requests</code> —  总共处理了3295877个请求<br><code>reading</code> — 读取客户端的连接数<br><code>writing</code> — 响应数据到客户端的数量<br><code>waiting</code> — 开启<code>keep-alive</code>的情况下,这个值等于<code>active – (reading+writing)</code>, 意思就是 Nginx 已经处理完正在等候下一次请求指令的驻留连接</p><h2><span id="配置监控">配置监控</span></h2><p>有了模块，还需要添加一个脚本，然后就可以获取上面的数值了，脚本如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"># Method of use</span><br><span class="line"></span><br><span class="line">HOST=<span class="string">"127.0.0.1"</span></span><br><span class="line">PORT="80"#这个根据实际情况填写</span><br><span class="line">URL=<span class="string">"http://$&#123;HOST&#125;:$&#123;PORT&#125;/nginx-status"</span></span><br><span class="line"></span><br><span class="line">active() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep  <span class="string">"Active"</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">reading() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep <span class="string">"Reading"</span> | awk <span class="string">'&#123;print $2&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">writing() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep <span class="string">"Writing"</span> | awk <span class="string">'&#123;print $4&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">waiting() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | grep <span class="string">"Waiting"</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">accepts() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $1&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">handled() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $2&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">requests() &#123;</span><br><span class="line">       curl <span class="string">"$&#123;URL&#125;"</span> <span class="number">2</span>&gt;<span class="regexp">/dev/</span><span class="literal">null</span> | awk NR==<span class="number">3</span> | awk <span class="string">'&#123;print $NF&#125;'</span></span><br><span class="line">&#125;</span><br><span class="line">ping() &#123;</span><br><span class="line">       ps -ef | grep nginx | grep -v grep -c</span><br><span class="line">&#125;</span><br><span class="line">$<span class="number">1</span></span><br></pre></td></tr></table></figure></p><p>然后再去<code>zabbix_agentd.conf</code>里添加一句话:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=nginx.status[*],/usr/local/zabbix/script/nginx_status.sh $<span class="number">1</span></span><br></pre></td></tr></table></figure></p><p>然后<code>service zabbix-agent restart</code>，自定义项就搞定了。</p><p>如果要导入模板，<a href="https://gitee.com/careyjike_173/zabbix" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix</a> 这个朋友的模板已经非常全面了，根据实际情况修改之后再导入他的xml就好，感谢前人付出！</p><p><img src="/images/埃里克森落叶球.gif" alt="paradin" title="埃尔克森远射破蓝军"></p>]]></content>
-    
-    <summary type="html">
-    
-      这一周又要把zabbix重新搭建并且搞起来了！
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
     
   </entry>
   
