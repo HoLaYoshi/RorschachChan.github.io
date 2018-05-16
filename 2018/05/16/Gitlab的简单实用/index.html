@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlab16.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab17.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab18.png">
-<meta property="og:updated_time" content="2018-05-16T03:32:19.878Z">
+<meta property="og:updated_time" content="2018-05-16T06:08:59.768Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的简单应用">
 <meta name="twitter:description" content="docker + gitlab，这才是未来部署的方向">
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  522
+                  659
                 </span>
               
 
@@ -447,7 +447,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -483,13 +483,14 @@
 <p>然后就是<code>create project</code>，就创建了这个jjfjj。如图:<br><img src="/images/gitlab15.png" alt="paradin"></p>
 <h2><span id="将本地代码上传">将本地代码上传</span></h2><p>建立好了gitlab，就要把开发的代码传进去，我在另外一个机器里，创建一个目录code，这个目录就是专门用来放置代码的，假设现在里面有一个文件叫<code>testcode.py</code>，如图：<br><img src="/images/gitlab16.png" alt="paradin"></p>
 <p>具体操作如下：<br><img src="/images/gitlab17.png" alt="paradin"></p>
-<p>说明一下上面几个命令的意思：<br><code>git init</code>：初始化git仓库<br><code>git add .</code>：添加文件到仓库<br><code>git commit -m &#39;这里是要写的注释&#39;</code>：提交代码到仓库<br><code>git server git remote add origin gitlab的地址，也就是上上图里红色框的内容</code>：链接到gitlab服务器<br><code>git push origin master</code>：push代码到服务器 </p>
+<p>说明一下上面几个命令的意思：<br><code>git init</code>：初始化git仓库<br><code>git add .</code>：添加整个目录里的所有文件到仓库<br><code>git rm --cached 某个文件名</code>：将某个文件从gitlab上撤除，如果想当前文件夹恢复成一个普通的文件夹，那就把文件夹路径下的.git文件删除掉即可<br><code>git commit -m &#39;这里是要写的注释&#39;</code>：提交代码到仓库<br><code>git server git remote add origin gitlab的地址，也就是上上图里红色框的内容</code>：链接到gitlab服务器<br><code>git push origin master</code>：push代码到服务器</p>
 <p>此时刷新一下gitlab的project页面，就看到刚刚的那个<code>testcode.py</code>已经传上来了。如图：<br><img src="/images/gitlab18.png" alt="paradin"></p>
-<p>如果代码有所更改或者出现<code>Everything up-to-date</code>，那么就重复<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>即可。</p>
-<h2><span id="免密码push代码">免密码push代码</span></h2><p>在上面的<code>git push origin master</code>的时候需要输入gitlab的用户密码，如要需要免密码push，有两种方法方法。</p>
+<p>如果代码有所更改或者出现<code>Everything up-to-date</code>，那么就按顺序执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>即可。</p>
+<h2><span id="免密码push代码">免密码push代码</span></h2><p>在上面的<code>git push origin master</code>的时候需要输入gitlab的用户密码，如要需要免密码push，有两种方法。</p>
 <p>第一种方法是ssh：</p>
-<p>第二种方法是将密码写进配置文件里：</p>
-<h2><span id="tortoisegit的使用">TortoiseGit的使用</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a><br><a href="https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/" target="_blank" rel="noopener">https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/</a><br><a href="https://www.restran.net/2016/02/23/git-and-gitlab-guide/" target="_blank" rel="noopener">https://www.restran.net/2016/02/23/git-and-gitlab-guide/</a></p>
+<p>第二种方法是将密码写进配置文件里：<br>执行<code>git config --global credential.helper store</code>，然后<code>cat ~/.gitconfig</code>，就会看到如下结果：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">	email = chen_shuo@dahuatech.com</span><br><span class="line">	name = root</span><br><span class="line">[credential]</span><br><span class="line">	helper = store</span><br></pre></td></tr></table></figure></p>
+<p>重新去执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>，就不再需要输入密码了。</p>
+<h2><span id="tortoisegit的使用">TortoiseGit的使用</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a><br><a href="https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/" target="_blank" rel="noopener">https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/</a><br><a href="https://www.restran.net/2016/02/23/git-and-gitlab-guide/" target="_blank" rel="noopener">https://www.restran.net/2016/02/23/git-and-gitlab-guide/</a><br><a href="https://www.jianshu.com/p/f54053afecf2" target="_blank" rel="noopener">https://www.jianshu.com/p/f54053afecf2</a></p>
 
       
     </div>
@@ -935,7 +936,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共122.5k字</span>
+  <span class="post-count">博客全站共122.7k字</span>
 </div>
         
 
