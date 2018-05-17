@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用zabbix去监控docker容器]]></title>
+    <url>%2F2018%2F05%2F17%2F%E4%BD%BF%E7%94%A8zabbix%E5%8E%BB%E7%9B%91%E6%8E%A7docker%E5%AE%B9%E5%99%A8%2F</url>
+    <content type="text"><![CDATA[前言现在容器技术越来越普遍，那么搭建了容器肯定要监控起来，监控方法有两种，一种是做一个zabbix-agent容器去监控容器，还有一个是升级原有的zabbix-agent，这里说第一种。 这里先交代一下环境：zabbix-server的ip是10.244.48.42，要监控的机器ip是10.244.34.79，这个机器里面装了一个容器在运行gitlab，如图： 事前检查两台服务器是否互通，而且10050和10051端口是否standby。还要在zabbix-server端做好auto-discovery，等等等等准备工作。 使用Zabbix Agent Docker进行监控在10.244.34.79这个机器上先安装zabbix-agent容器： 12345678910docker run \ --name=dockbix \ #这个是容器的名称 --net=host \ --privileged \ -v /:/rootfs \ #这个是对应宿主机的映射盘 -v /var/run:/var/run \ --restart unless-stopped \ #不管退出状态码是什么始终重启容器，不过当daemon启动时，如果容器之前已经为停止状态，不要尝试启动它。 -e &quot;ZA_Server=10.244.48.42&quot; \ #这里就填写zabbix-server的ip地址 -e &quot;ZA_ServerActive=10.244.48.42&quot; \ -d hub.c.163.com/canghai809/dockbix-agent-xxl-limited:latest #这里使用了网易蜂巢镜像 但是反馈给我docker: invalid restart policy unless-stopped.这样的错误信息，原来这个gitlab这台服务器的docker版本较老，而unless-stopped这个是在1.9.0版本才加入的，所以对于旧版的docker环境需要改成always。 更改docker run的命令之后重新执行效果如下： 可见容器启动成功，docker logs -f 容器ID号看一下日志是否正常。如果正常的话，应该在zabbix-server端是可以看到这个10.244.34.79已经被添加到控制台里了，如图： 导入监控docker的模版在zabbix server上导入监控docker的模版，一共2个模版,下载后解压。模版下载地址: https://dl.cactifans.com/zabbix/Zabbix-Template-App-Docker.tar.gz 。 我使用主动模式，因此导入Zabbix-Template-App-Docker-active.xml这个模版，如图： 此时可以去zabbix-server这个机器上验证一下是否监控成功，在zabbix-server上执行zabbix_get -s 10.244.34.79 -k docker.discovery，效果如下： 可见已经成功获取到了那两个容器的名称，这就代表zabbix-server已经监控到位了。 验证数据首先现在10.244.34.79里执行docker status 容器1的ID 容器2的ID...，看一下当前运行的所有容器的状态，如下： 然后在zabbix-server的latest data做一下对比，嗯，两值相同，OK！ 剩下的就是慢慢添加trggiers了… 补充一句，zabbix-agent 3.2的rpm安装方法： 1234rpm -ivh http://repo.zabbix.com/zabbix/3.2/rhel/7/x86_64/zabbix-release-3.2-1.el7.noarch.rpm yum -y install zabbix-agent zabbix-senderservice zabbix-agent startchkconfig zabbix-agent on 参考资料https://github.com/monitoringartist/zabbix-docker-monitoring （墙裂推荐！）https://blog.codeship.com/ensuring-containers-are-always-running-with-dockers-restart-policy/]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+        <tag>zabbix</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Gitlab的配置备份]]></title>
     <url>%2F2018%2F05%2F16%2FGitlab%E9%85%8D%E7%BD%AE%E5%A4%87%E4%BB%BD%2F</url>
     <content type="text"><![CDATA[我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是10.7.3。 要备份数据的话，就要进入容器里，执行gitlab-rake gitlab:backup:create，效果如下： 执行完毕之后，在/var/opt/gitlab/backups文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。 如果要还原的话，命令如下： 1234567891011# 先关闭连接数据库的进程sudo gitlab-ctl stop# 通过指定时间戳来执行restore操作，这个操作会复写gitlab的数据库sudo gitlab-rake gitlab:backup:restore BACKUP=1526454102 #BACKUP后面的是备份文件开头的那串数字# 再次启动gitlabsudo gitlab-ctl start# 通过下面命令检查gitlabsudo gitlab-rake gitlab:check SANITIZE=true 注意！利用backup机制进行备份的话，对gitlab的版本是要求严格一致的。例如用8.6版的gitlab生成的备份文件，拿到8.7版的gitlab上进行恢复，是会报错的。 如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑/etc/gitlab/gitlab.rb，修改如下的地方： 1234gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot; #这里改新路径gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644 #这里可以设定文件的权限# limit backup lifetime to 7 days - 604800 secondsgitlab_rails[&apos;backup_keep_time&apos;] = 604800 #文件存储时间一周 然后重启一下gitlab即可。]]></content>
@@ -173,18 +185,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root用户启动tomcat进程]]></title>
-    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>运维安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root启动进程以及启动docker]]></title>
     <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
     <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
@@ -194,6 +194,18 @@
       <tags>
         <tag>docker</tag>
         <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root用户启动tomcat进程]]></title>
+    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>运维安全</tag>
       </tags>
   </entry>
   <entry>
@@ -409,8 +421,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>运维技术</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -1354,8 +1366,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nginx</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
