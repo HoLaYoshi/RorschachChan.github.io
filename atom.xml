@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-17T08:16:26.636Z</updated>
+  <updated>2018-05-17T10:55:48.113Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用yum安装软件爆No such file or directory</title>
+    <link href="http://yoursite.com/2018/05/17/%E4%BD%BF%E7%94%A8yum%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E7%88%86No-such-file-or-directory/"/>
+    <id>http://yoursite.com/2018/05/17/使用yum安装软件爆No-such-file-or-directory/</id>
+    <published>2018-05-17T09:25:09.000Z</published>
+    <updated>2018-05-17T10:55:48.113Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天开发反馈说<code>yum install redis</code>报错<code>-bash: /usr/bin/yum: /usr/bin/python: bad interpreter: No such file or directory</code>，于是我就登上服务器，使用python一看，反馈<code>-bash: python: command not found</code>，原来这个机器的python被人改动了，用<code>whereis python</code>查了一下，原来python的地址被人改成了<code>/usr/bin/python2.7</code>，于是就手动更改了一下<code>/usr/bin/yum</code>，把<code>#!/usr/bin/python</code>改成了<code>#!/usr/bin/python2.7</code>。但是使用<code>yum install -y redis</code>发现虽然可以连接到库但是会报<code>No such file or directory</code>，如图：<br><img src="/images/nofile.png" alt="paradin"></p><p>原来光改了<code>/usr/bin/yum</code>还没用，还要改<code>/usr/libexec/urlgrabber-ext-down</code>这个文件，同样也是把python改成<code>/usr/bin/python2.7</code>说明python的路径才可以。</p><p>改了上面两个文件之后，又加上了<code>yum clean all</code>和<code>yum makecache</code>，清除一下缓存，一切恢复了正常。</p><p><img src="/images/slamdunk.jpg" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      yum
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="yum" scheme="http://yoursite.com/tags/yum/"/>
+    
+  </entry>
   
   <entry>
     <title>使用zabbix去监控docker容器</title>
@@ -455,30 +479,6 @@
       <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
     
       <category term="主从同步" scheme="http://yoursite.com/tags/%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用zabbix监控memcache</title>
-    <link href="http://yoursite.com/2018/04/03/%E4%BD%BF%E7%94%A8zabbix%E7%9B%91%E6%8E%A7memcache/"/>
-    <id>http://yoursite.com/2018/04/03/使用zabbix监控memcache/</id>
-    <published>2018-04-03T11:00:58.000Z</published>
-    <updated>2018-04-03T11:05:46.074Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>监控memcache的原理跟监控redis差不多，都是通过一个类似info的东西可以查询到memcache的状态值，然后通过脚本去获取这些值给zabbix，当发现某值不正常就发出告警。</p><p>查询当年memcache状态的命令是<code>echo stats |nc 127.0.0.1  11211</code>，如果没有<code>nc</code>命令，那就<code>yum install -y nc</code>。</p><p>获得到的结果是这个样子的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">[root@lconline-ec2 ~]# echo stats |nc 127.0.0.1  11211</span><br><span class="line">STAT pid <span class="number">1859</span>        memcache服务进程ID</span><br><span class="line">STAT uptime <span class="number">491093</span>    服务器已运行秒数</span><br><span class="line">STAT time <span class="number">1522740969</span>    服务器当前Unix时间戳</span><br><span class="line">STAT version <span class="number">1.4</span><span class="number">.25</span>        memcache版本</span><br><span class="line">STAT libevent <span class="number">1.4</span><span class="number">.13</span>-stable</span><br><span class="line">STAT pointer_size <span class="number">64</span>        操作系统指针大小</span><br><span class="line">STAT rusage_user <span class="number">14.321822</span>        进程累计用户时间</span><br><span class="line">STAT rusage_system <span class="number">14.095857</span>        进程累计系统时间</span><br><span class="line">STAT curr_connections <span class="number">5</span>        当前连接数量</span><br><span class="line">STAT total_connections <span class="number">51010</span>    Memcached运行以来连接总数</span><br><span class="line">STAT connection_structures <span class="number">8</span>    Memcached分配的连接结构数量</span><br><span class="line">STAT reserved_fds <span class="number">20</span></span><br><span class="line">STAT cmd_get <span class="number">0</span>        get命令请求次数</span><br><span class="line">STAT cmd_set <span class="number">0</span>        set命令请求次数</span><br><span class="line">STAT cmd_flush <span class="number">0</span>    flush命令请求次数</span><br><span class="line">STAT cmd_touch <span class="number">0</span>    touch命令请求次数</span><br><span class="line">STAT get_hits <span class="number">0</span>        get命令命中次数</span><br><span class="line">STAT get_misses <span class="number">0</span>    get命令未命中次数</span><br><span class="line">STAT delete_misses <span class="number">0</span>    <span class="keyword">delete</span>命令未命中次数</span><br><span class="line">STAT delete_hits <span class="number">0</span>        <span class="keyword">delete</span>命令命中次数</span><br><span class="line">STAT incr_misses <span class="number">0</span>        incr命令未命中次数</span><br><span class="line">STAT incr_hits <span class="number">0</span>        incr命令命中次数</span><br><span class="line">STAT decr_misses <span class="number">0</span>        decr命令未命中次数</span><br><span class="line">STAT decr_hits <span class="number">0</span>        decr命令命中次数</span><br><span class="line">STAT cas_misses <span class="number">0</span>        cas命令未命中次数</span><br><span class="line">STAT cas_hits <span class="number">0</span>            cas命令命中次数</span><br><span class="line">STAT cas_badval <span class="number">0</span>        使用擦拭次数</span><br><span class="line">STAT touch_hits <span class="number">0</span></span><br><span class="line">STAT touch_misses <span class="number">0</span></span><br><span class="line">STAT auth_cmds <span class="number">0</span>        认证命令处理的次数    </span><br><span class="line">STAT auth_errors <span class="number">0</span>        认证失败数目</span><br><span class="line">STAT bytes_read <span class="number">357040</span>        读取总字节数    </span><br><span class="line">STAT bytes_written <span class="number">60197691</span>        发送总字节数</span><br><span class="line">STAT limit_maxbytes <span class="number">1073741824</span>        分配的内存总大小（字节）</span><br><span class="line">STAT accepting_conns <span class="number">1</span>        服务器是否达到过最大连接（<span class="number">0</span>/<span class="number">1</span>）</span><br><span class="line">STAT listen_disabled_num <span class="number">0</span>        失效的监听数</span><br><span class="line">STAT time_in_listen_disabled_us <span class="number">0</span></span><br><span class="line">STAT threads <span class="number">4</span>        当前线程数</span><br><span class="line">STAT conn_yields <span class="number">0</span>        连接操作主动放弃数目</span><br><span class="line">STAT hash_power_level <span class="number">16</span></span><br><span class="line">STAT hash_bytes <span class="number">524288</span>        当前存储占用的字节数</span><br><span class="line">STAT hash_is_expanding <span class="number">0</span></span><br><span class="line">STAT malloc_fails <span class="number">0</span>    </span><br><span class="line">STAT bytes <span class="number">0</span>        当前存储占用的字节数</span><br><span class="line">STAT curr_items <span class="number">0</span>        当前存储的数据总数</span><br><span class="line">STAT total_items <span class="number">0</span>        启动以来存储的数据总数</span><br><span class="line">STAT expired_unfetched <span class="number">0</span>    </span><br><span class="line">STAT evicted_unfetched <span class="number">0</span></span><br><span class="line">STAT evictions <span class="number">0</span>        LRU释放的对象数目</span><br><span class="line">STAT reclaimed <span class="number">0</span>        已过期的数据条目来存储新数据的数目</span><br><span class="line">STAT crawler_reclaimed <span class="number">0</span></span><br><span class="line">STAT crawler_items_checked <span class="number">0</span></span><br><span class="line">STAT lrutail_reflocked <span class="number">0</span>    </span><br><span class="line">END</span><br></pre></td></tr></table></figure></p><p>修改<code>zabbix_agentd.conf</code>，添加一个新的自定义项：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=memcached.stat[*],(echo stats; sleep <span class="number">1</span>) | telnet <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> <span class="number">11211</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span> | awk <span class="string">'/STAT $1 / &#123;print $NF&#125;'</span></span><br></pre></td></tr></table></figure></p><p>然后重启<code>zabbix-agent</code>，模板就用github里的就好，看到的效果如下：<br><img src="/images/check-memcached.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      上帝抛弃了吃不饱饭的人民
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-      <category term="memcached" scheme="http://yoursite.com/tags/memcached/"/>
     
   </entry>
   
