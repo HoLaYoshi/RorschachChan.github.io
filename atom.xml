@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-17T10:55:48.113Z</updated>
+  <updated>2018-05-17T11:03:29.837Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,13 +21,13 @@
     <link href="http://yoursite.com/2018/05/17/%E4%BD%BF%E7%94%A8yum%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6%E7%88%86No-such-file-or-directory/"/>
     <id>http://yoursite.com/2018/05/17/使用yum安装软件爆No-such-file-or-directory/</id>
     <published>2018-05-17T09:25:09.000Z</published>
-    <updated>2018-05-17T10:55:48.113Z</updated>
+    <updated>2018-05-17T11:03:29.837Z</updated>
     
     <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天开发反馈说<code>yum install redis</code>报错<code>-bash: /usr/bin/yum: /usr/bin/python: bad interpreter: No such file or directory</code>，于是我就登上服务器，使用python一看，反馈<code>-bash: python: command not found</code>，原来这个机器的python被人改动了，用<code>whereis python</code>查了一下，原来python的地址被人改成了<code>/usr/bin/python2.7</code>，于是就手动更改了一下<code>/usr/bin/yum</code>，把<code>#!/usr/bin/python</code>改成了<code>#!/usr/bin/python2.7</code>。但是使用<code>yum install -y redis</code>发现虽然可以连接到库但是会报<code>No such file or directory</code>，如图：<br><img src="/images/nofile.png" alt="paradin"></p><p>原来光改了<code>/usr/bin/yum</code>还没用，还要改<code>/usr/libexec/urlgrabber-ext-down</code>这个文件，同样也是把python改成<code>/usr/bin/python2.7</code>说明python的路径才可以。</p><p>改了上面两个文件之后，又加上了<code>yum clean all</code>和<code>yum makecache</code>，清除一下缓存，一切恢复了正常。</p><p><img src="/images/slamdunk.jpg" alt="paradin"></p>]]></content>
     
     <summary type="html">
     
-      yum
+      去日本旅游期间，我要电话不接、微信装死...
     
     </summary>
     
