@@ -426,7 +426,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,507
+                  2,635
                 </span>
               
 
@@ -442,7 +442,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  8
+                  9
                 </span>
               
             </div>
@@ -567,6 +567,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -612,7 +634,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  551
+                  552
                 </span>
               
 
@@ -650,22 +672,14 @@
 
       
         
-          
-            <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—gitlab cli，但是这个工具不如jenkins那么好用。所以这次要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。</p>
-<p>说一下实验环境：<br>Jenkins所在服务器IP：121.41.37.251（10.168.173.181），版本是<code>2.124</code>(查看jenkins的版本语句<code>java -jar /usr/lib/jenkins/jenkins.war --version</code>);<br>Gitlab所在服务器IP：114.55.224.158（10.25.85.175），使用容器安装，版本是<code>10.7.3</code>;</p>
-<h2><span id="jenkins添加gitlab插件">jenkins添加gitlab插件</span></h2><p>通过浏览器登陆jenkins界面，然后在<code>系统管理</code>里面选择<code>管理插件</code>，如图：<br><img src="/images/gitlabjenkins1.png" alt="akb48"></p>
-<p>然后在<code>可选择插件</code>里搜索<code>gitlab hook</code>插件，但是没想到我这个版本提示，目前的1.4.2版本的<code>gitlab hook</code>目前存在安全隐患，如图：<br><img src="/images/gitlabjenkins2.png" alt="akb48"></p>
-<p>具体的安全隐患细节是这样的：<br><img src="/images/gitlabjenkins3.png" alt="akb48"></p>
-<p>这个风险请自己把握，然后我选择了继续安装，如图：<br><img src="/images/gitlabjenkins4.png" alt="akb48"></p>
-<p>安装完了<code>gitlab hook</code>插件后，还要安装<code>GitLab Plugin</code>和<code>Gitlab Authentication plugin</code>这两个插件，方法跟上面的一样。</p>
-<h2><span id="创建测试工程">创建测试工程</span></h2><p>在jenkins上建立一个新的任务，比如叫”jicheng-test”，这是一个<code>自由风格的软件项目</code>：<br><img src="/images/gitlabjenkins6.png" alt="akb48"></p>
-<p>然后在源码管理里面选择git，然后输入gitlab里面仓库的地址，比如我在gitlab上新建了一个仓库叫jenkinstest，那么就复制这个仓库的地址填到jenkins的<code>Repositories</code>里，如图：<br><img src="/images/gitlabjenkins8.png" alt="akb48"></p>
-<p>还要在<code>Credentials</code>这里面写上gitlab的用户和密码，然后保存即可：<br><img src="/images/gitlabjenkins9.png" alt="akb48"></p>
-<h2><span id="配置-gitlab-用户">配置 GitLab 用户</span></h2><p>浏览器切换到gitlab界面，在用户头像点击，<code>User settings</code> —&gt; <code>Access Tokens</code>，这里的<code>Personal Access Tokens</code>写入一个账号，这个账号是用来让Jenkins和GitLab API交互。这个用户将需要是全局的管理员或添加进每个组／工程，并作为成员。需要开发者权限来报告构建状态。如图：<br><img src="/images/gitlabjenkins5.png" alt="akb48"></p>
-<p>输入账号和账号有效时期之后，会生成一个Private token，如图：<br><img src="/images/gitlabjenkins7.png" alt="akb48"></p>
-<p>拷贝它，稍后在配置Jenkins服务器时会用到。</p>
-
-          
+          尚未完成...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/05/25/Gitlab-Jenkins搭建持续集成系统/">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2625,7 +2639,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共127.2k字</span>
+  <span class="post-count">博客全站共127.3k字</span>
 </div>
         
 

@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="jenkins,git," />
 
 
 
@@ -88,12 +88,13 @@
 
 
 
-<meta name="description" content="前言gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—gitlab cli，但是这个工具不如jenkins那么好用。所以这次要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。 说一下实验环境：Jenkins所在服务器IP：121.41.">
+<meta name="description" content="尚未完成...">
+<meta name="keywords" content="jenkins,git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Gitlab+Jenkins搭建持续集成系统">
 <meta property="og:url" content="http://yoursite.com/2018/05/25/Gitlab-Jenkins搭建持续集成系统/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="前言gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—gitlab cli，但是这个工具不如jenkins那么好用。所以这次要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。 说一下实验环境：Jenkins所在服务器IP：121.41.">
+<meta property="og:description" content="尚未完成...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins1.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins2.png">
@@ -104,10 +105,10 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins9.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins5.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins7.png">
-<meta property="og:updated_time" content="2018-05-25T09:25:26.703Z">
+<meta property="og:updated_time" content="2018-05-26T02:07:19.218Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab+Jenkins搭建持续集成系统">
-<meta name="twitter:description" content="前言gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—gitlab cli，但是这个工具不如jenkins那么好用。所以这次要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。 说一下实验环境：Jenkins所在服务器IP：121.41.">
+<meta name="twitter:description" content="尚未完成...">
 <meta name="twitter:image" content="http://yoursite.com/images/gitlabjenkins1.png">
 
 
@@ -367,6 +368,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作与技术/" itemprop="url" rel="index">
+                    <span itemprop="name">工作与技术</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -412,7 +435,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  551
+                  552
                 </span>
               
 
@@ -435,6 +458,10 @@
           
 
           
+              <div class="post-description">
+                  尚未完成...
+              </div>
+          
 
         </div>
       </header>
@@ -449,7 +476,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—gitlab cli，但是这个工具不如jenkins那么好用。所以这次要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—<code>gitlab cli</code>，但是这个工具不如jenkins那么好用。本文的目的要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。</p>
 <p>说一下实验环境：<br>Jenkins所在服务器IP：121.41.37.251（10.168.173.181），版本是<code>2.124</code>(查看jenkins的版本语句<code>java -jar /usr/lib/jenkins/jenkins.war --version</code>);<br>Gitlab所在服务器IP：114.55.224.158（10.25.85.175），使用容器安装，版本是<code>10.7.3</code>;</p>
 <h2><span id="jenkins添加gitlab插件">jenkins添加gitlab插件</span></h2><p>通过浏览器登陆jenkins界面，然后在<code>系统管理</code>里面选择<code>管理插件</code>，如图：<br><img src="/images/gitlabjenkins1.png" alt="akb48"></p>
 <p>然后在<code>可选择插件</code>里搜索<code>gitlab hook</code>插件，但是没想到我这个版本提示，目前的1.4.2版本的<code>gitlab hook</code>目前存在安全隐患，如图：<br><img src="/images/gitlabjenkins2.png" alt="akb48"></p>
@@ -541,6 +568,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jenkins/" rel="tag"><i class="fa fa-tag"></i> jenkins</a>
+          
+            <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+          
+        </div>
       
 
       
@@ -905,7 +940,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共127.2k字</span>
+  <span class="post-count">博客全站共127.3k字</span>
 </div>
         
 
