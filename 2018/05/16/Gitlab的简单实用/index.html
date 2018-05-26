@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlab16.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab17.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab18.png">
-<meta property="og:updated_time" content="2018-05-16T06:43:50.805Z">
+<meta property="og:updated_time" content="2018-05-26T03:35:35.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的简单应用">
 <meta name="twitter:description" content="docker + gitlab，这才是未来部署的方向">
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  736
+                  949
                 </span>
               
 
@@ -447,7 +447,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -491,6 +491,8 @@
 <p>第一种方法是ssh，请看 <a href="https://blog.whsir.com/post-1749.html/comment-page-1#comment-3425" target="_blank" rel="noopener">https://blog.whsir.com/post-1749.html/comment-page-1#comment-3425</a> 。</p>
 <p>第二种方法还是用http的方式传送，但是将密码写进配置文件里：<br>执行<code>git config --global credential.helper store</code>，然后<code>cat ~/.gitconfig</code>，就会看到如下结果：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[user]</span><br><span class="line">	email = chen_shuo@dahuatech.com</span><br><span class="line">	name = root</span><br><span class="line">[credential]</span><br><span class="line">	helper = store</span><br></pre></td></tr></table></figure></p>
 <p>重新去执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin master</code>，就不再需要输入密码了。</p>
+<h2><span id="从gitlab上垃取代码">从gitlab上垃取代码</span></h2><p>在要部署的机器上找到要部署的文件夹，我这里用/gitlab为例，操作如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@pass-mixnumbus-001 /GITLAB] # git init        	#将这个文件夹进行初始化                                             </span><br><span class="line">Initialized empty Git repository in /GITLAB/.git/	#提示现在已经安装了.git文件</span><br><span class="line">[root@pass-mixnumbus-001 /GITLAB(master)] # git remote add origin http://114.55.224.158/root/JJFJJ.git		#确定库</span><br><span class="line">[root@pass-mixnumbus-001 /GITLAB(master)] # git pull origin master 	#制定要把master分支的代码全拉取到这个文件夹里</span><br><span class="line">Username for 'http://114.55.224.158': root		#输入账号和密码</span><br><span class="line">Password <span class="keyword">for</span> <span class="string">'http://root@114.55.224.158'</span>: </span><br><span class="line">From http:<span class="comment">//114.55.224.158/root/JJFJJ</span></span><br><span class="line"> * branch            master     -&gt; FETCH_HEAD</span><br><span class="line">[root@pass-mixnumbus-001 /GITLAB(master)] # ls		#看一下效果</span><br><span class="line">admin.py  looksql.py  models.py  syncECS.py  testsyncECS.py</span><br></pre></td></tr></table></figure></p>
+<p>再与gitlab界面的代码比较一下，果然都过来了！如图：<br>![paradin](/images/gitlab18.png</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a><br><a href="https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/" target="_blank" rel="noopener">https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/</a><br><a href="https://www.restran.net/2016/02/23/git-and-gitlab-guide/" target="_blank" rel="noopener">https://www.restran.net/2016/02/23/git-and-gitlab-guide/</a><br><a href="https://www.jianshu.com/p/f54053afecf2" target="_blank" rel="noopener">https://www.jianshu.com/p/f54053afecf2</a></p>
 
       
@@ -888,7 +890,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project">&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;">&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;">&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project">&#x5EFA;&#x7ACB;&#x4E00;&#x4E2A;project</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;">&#x5C06;&#x672C;&#x5730;&#x4EE3;&#x7801;&#x4E0A;&#x4F20;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;">&#x514D;&#x5BC6;&#x7801;push&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x4ECE;gitlab&#x4E0A;&#x5783;&#x53D6;&#x4EE3;&#x7801;">&#x4ECE;gitlab&#x4E0A;&#x5783;&#x53D6;&#x4EE3;&#x7801;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -941,7 +943,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共127.5k字</span>
+  <span class="post-count">博客全站共127.7k字</span>
 </div>
         
 
