@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlab17.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab18.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab30.png">
-<meta property="og:updated_time" content="2018-05-26T06:47:05.526Z">
+<meta property="og:updated_time" content="2018-05-26T06:49:50.306Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的简单应用">
 <meta name="twitter:description" content="docker + gitlab，这才是未来部署的方向">
@@ -432,7 +432,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,324
+                  1,362
                 </span>
               
 
@@ -498,6 +498,7 @@
 <p>分支相关的语句如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git branch	#查看本地分支</span><br><span class="line">git branch -r	#查看远程分支</span><br><span class="line">git branch -a 	#查看所有分支</span><br><span class="line">git branch develop	#本地创建新的分支，此时刷新gitlab的页面的话就会有这个叫develop的分支建立了</span><br><span class="line">git checkout develop	#切换到新的develop分支</span><br><span class="line">git checkout -b 	develop		#上面两步可以合成一个命令，这个的意思就是：创建+切换分支</span><br></pre></td></tr></table></figure></p>
 <p>这个时候在代码机上新增或者改变文件，然后执行<code>git add .</code>，<code>git commit -m &#39;这里是要写的注释&#39;</code>，<code>git push origin develop</code>，就把新增的变化上传到了develop分支，如图：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root@iZ23pg8sy5bZ ~<span class="regexp">/GITLAB(develop)] # git push origin develop</span></span><br><span class="line"><span class="regexp">Counting objects: 4, done.</span></span><br><span class="line"><span class="regexp">Compressing objects: 100% (2/</span><span class="number">2</span>), done.</span><br><span class="line">Writing objects: <span class="number">100</span>% (<span class="number">3</span>/<span class="number">3</span>), <span class="number">325</span> bytes | <span class="number">0</span> bytes/s, done.</span><br><span class="line">Total <span class="number">3</span> (delta <span class="number">1</span>), reused <span class="number">0</span> (delta <span class="number">0</span>)</span><br><span class="line">remote: </span><br><span class="line">remote: To create a merge request <span class="keyword">for</span> develop, <span class="attr">visit</span>:</span><br><span class="line">remote:   http:<span class="comment">//114.55.224.158/root/JJFJJ/merge_requests/new?merge_request%5Bsource_branch%5D=develop</span></span><br><span class="line">remote: </span><br><span class="line">To http:<span class="comment">//114.55.224.158/root/JJFJJ.git</span></span><br><span class="line">   fc8d456.<span class="number">.8</span>a97b58  develop -&gt; develop</span><br></pre></td></tr></table></figure></p>
 <p>而在部署的机器上，直接执行<code>git pull origin develop</code>，输入账号密码之后，就会把develop分支的内容全部垃取下来了。</p>
+<p>如果不想要这个develop分支了，就<code>git branch -d develop</code>，如果要删除远程的分支，就是<code>git push origin :develop</code>，注意这个冒号。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/" target="_blank" rel="noopener">https://blog.cnbluebox.com/blog/2014/04/15/gitlabde-shi-yong/</a><br><a href="https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/" target="_blank" rel="noopener">https://zhang759740844.github.io/2016/08/27/git%E6%8A%80%E5%B7%A7/</a><br><a href="https://www.restran.net/2016/02/23/git-and-gitlab-guide/" target="_blank" rel="noopener">https://www.restran.net/2016/02/23/git-and-gitlab-guide/</a><br><a href="https://www.jianshu.com/p/f54053afecf2" target="_blank" rel="noopener">https://www.jianshu.com/p/f54053afecf2</a></p>
 
       
