@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-30T20:21:54.720Z</updated>
+  <updated>2018-05-30T20:28:45.142Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2018/05/31/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AB%AF%E5%8F%A3%E7%9B%91%E5%90%AC%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
     <id>http://yoursite.com/2018/05/31/记录一次阿里云负载均衡端口监听不正确的过程/</id>
     <published>2018-05-30T19:49:06.000Z</published>
-    <updated>2018-05-30T20:21:54.720Z</updated>
+    <updated>2018-05-30T20:28:45.142Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在阿里云上新配置了一个负载均衡，后面挂载的服务器上安装了一个nginx，分别开启了80端口和8080端口，其中80端口是给http访问的，8080端口是给https访问的，同时在8080端口上做了http跳转https的配置。</p><p>但是在负载均衡配置完毕之后，发现tcp的80转8080是OK的，但是https的443转80却始终不OK，网页也自然打不开，但是在nginx上看80端口的确是在stand by：<br><img src="/images/alislb1.png" alt="paradin"></p><p>而且安全组都做了配置，telnet端口也是完全没有问题的，如图：<br><img src="/images/alislb2.png" alt="paradin"></p><p>执行了一下<code>time curl -I -X HEAD SLB的域名  -x http://本机IP地址:80</code>看一下效果，如图：<br><img src="/images/alislb3.png" alt="paradin"></p><p>可见命令执行OK，但是耗时需要7秒，而默认的阿里云SLB在https监听的超时时间设定是5秒，怀疑是后端ECS上对head头响应慢导致的健康检查失败。然后在网页上使用“检查”功能，发现有几个js、css文件耗时很长，于是就叫前端的码农们配合查一下，在几位前端吭哧吭哧解决了这个问题之后，https访问恢复正常。<br><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在阿里云上新配置了一个负载均衡，后面挂载的服务器上安装了一个nginx，分别开启了80端口和8080端口，其中80端口是给http访问的，8080端口是给https访问的，同时在8080端口上做了http跳转https的配置。</p><p>但是在负载均衡配置完毕之后，发现tcp的80转8080是OK的，但是https的443转80却始终不OK，网页也自然打不开，但是在nginx上看80端口的确是在stand by：<br><img src="/images/alislb1.png" alt="paradin"></p><p>而且安全组都做了配置，telnet端口也是完全没有问题的，如图：<br><img src="/images/alislb2.png" alt="paradin"></p><p>执行了一下<code>time curl -I -X HEAD SLB的域名  -x http://本机IP地址:80</code>看一下效果，如图：<br><img src="/images/alislb3.png" alt="paradin"></p><p>可见命令执行OK，但是耗时需要7秒，而默认的阿里云SLB在https监听的超时时间设定是5秒，怀疑是后端ECS上对head头响应慢导致的健康检查失败。然后在网页上使用“检查”功能，发现有几个js、css文件耗时很长，于是就叫前端的码农们配合查一下，在几位前端吭哧吭哧解决了这个问题之后，https访问恢复正常。</p><p><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
     
     <summary type="html">
     
