@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-30T12:43:13.470Z</updated>
+  <updated>2018-05-30T13:08:52.367Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2018/05/30/%E8%8B%B9%E6%9E%9C%E6%89%8B%E6%9C%BA%E6%97%A0%E4%BF%A1%E7%94%A8%E5%8D%A1%E6%B3%A8%E5%86%8C%E5%8C%BA%E7%BE%8E%E5%9B%BDapple-store%E7%9A%84%E5%8A%9E%E6%B3%95/"/>
     <id>http://yoursite.com/2018/05/30/苹果手机无信用卡注册区美国apple-store的办法/</id>
     <published>2018-05-30T12:14:46.000Z</published>
-    <updated>2018-05-30T12:43:13.470Z</updated>
+    <updated>2018-05-30T13:08:52.367Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。</p><p>首先先登录<code>https://www.apple.com/</code> ，在网页最下面先确定国家是<code>United State</code>s，然后点击<code>Manage Your Apple ID</code>，如图：<br><img src="/images/apple1.png" alt="paradin"></p><p>在<code>https://appleid.apple.com/#!&amp;page=signi</code>n 页面里，点击<code>Create your Apple ID</code>建立一个新的apple账号，名称正常写，国家还是<code>United States</code>不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。</p><p>账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在<code>Payment &amp; Shipping</code>的地方点击<code>Add Payment Method…</code>，如图：<br><img src="/images/apple2.png" alt="paradin"></p><p>这里有一个<code>PAYMENT METHOD</code>的地方，要填写<code>none</code>，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是<code>Dr.</code>还是<code>Mr.</code>都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在<code>http://www.haoweichi.com/Index/random</code>里生成一个身份信息填写。如图：<br><img src="/images/apple3.png" alt="paradin"></p><p>下面那个<code>SHIPPING ADDRESS</code>就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：<code>该账号没有被使用过，请填写细节</code>。</p><p>这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有<code>none</code>，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。</p><p>在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！<br><img src="/images/apple4.jpg" alt="paradin"></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。</p><p>首先先登录<code>https://www.apple.com/</code> ，在网页最下面先确定国家是<code>United States</code>，然后点击<code>Manage Your Apple ID</code>，如图：<br><img src="/images/apple1.png" alt="paradin"></p><p>在<code>https://appleid.apple.com/#!&amp;page=signin</code>页面里，点击<code>Create your Apple ID</code>建立一个新的apple账号，名称正常写，国家还是<code>United States</code>不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。</p><p>账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在<code>Payment &amp; Shipping</code>的地方点击<code>Add Payment Method…</code>，如图：<br><img src="/images/apple2.png" alt="paradin"></p><p>这里有一个<code>PAYMENT METHOD</code>的地方，要填写<code>none</code>，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是<code>Dr.</code>还是<code>Mr.</code>都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在<code>http://www.haoweichi.com/Index/random</code>里生成一个身份信息填写。如图：<br><img src="/images/apple3.png" alt="paradin"></p><p>下面那个<code>SHIPPING ADDRESS</code>就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：<code>该账号没有被使用过，请填写细节</code>。</p><p>这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有<code>none</code>，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。</p><p>在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！<br><img src="/images/apple4.jpg" alt="paradin"></p><p><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
     
     <summary type="html">
     
