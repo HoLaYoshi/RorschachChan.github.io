@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-30T13:08:52.367Z</updated>
+  <updated>2018-05-30T20:21:54.720Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,13 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>记录一次阿里云负载均衡端口监听不正确的过程</title>
+    <link href="http://yoursite.com/2018/05/31/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AB%AF%E5%8F%A3%E7%9B%91%E5%90%AC%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/05/31/记录一次阿里云负载均衡端口监听不正确的过程/</id>
+    <published>2018-05-30T19:49:06.000Z</published>
+    <updated>2018-05-30T20:21:54.720Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在阿里云上新配置了一个负载均衡，后面挂载的服务器上安装了一个nginx，分别开启了80端口和8080端口，其中80端口是给http访问的，8080端口是给https访问的，同时在8080端口上做了http跳转https的配置。</p><p>但是在负载均衡配置完毕之后，发现tcp的80转8080是OK的，但是https的443转80却始终不OK，网页也自然打不开，但是在nginx上看80端口的确是在stand by：<br><img src="/images/alislb1.png" alt="paradin"></p><p>而且安全组都做了配置，telnet端口也是完全没有问题的，如图：<br><img src="/images/alislb2.png" alt="paradin"></p><p>执行了一下<code>time curl -I -X HEAD SLB的域名  -x http://本机IP地址:80</code>看一下效果，如图：<br><img src="/images/alislb3.png" alt="paradin"></p><p>可见命令执行OK，但是耗时需要7秒，而默认的阿里云SLB在https监听的超时时间设定是5秒，怀疑是后端ECS上对head头响应慢导致的健康检查失败。然后在网页上使用“检查”功能，发现有几个js、css文件耗时很长，于是就叫前端的码农们配合查一下，在几位前端吭哧吭哧解决了这个问题之后，https访问恢复正常。<br><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
+    
+    <summary type="html">
+    
+      插播一句题外话，阿里云的SLB不用特别配置WS/WSS，但是必须要将实例升级为性能保障型实例，不然的话就GG
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
+    
+      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
+    
+  </entry>
+  
+  <entry>
     <title>苹果手机无信用卡注册区美国apple store的办法</title>
     <link href="http://yoursite.com/2018/05/30/%E8%8B%B9%E6%9E%9C%E6%89%8B%E6%9C%BA%E6%97%A0%E4%BF%A1%E7%94%A8%E5%8D%A1%E6%B3%A8%E5%86%8C%E5%8C%BA%E7%BE%8E%E5%9B%BDapple-store%E7%9A%84%E5%8A%9E%E6%B3%95/"/>
     <id>http://yoursite.com/2018/05/30/苹果手机无信用卡注册区美国apple-store的办法/</id>
     <published>2018-05-30T12:14:46.000Z</published>
-    <updated>2018-05-30T13:08:52.367Z</updated>
+    <updated>2018-05-30T20:11:25.876Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。</p><p>首先先登录<code>https://www.apple.com/</code> ，在网页最下面先确定国家是<code>United States</code>，然后点击<code>Manage Your Apple ID</code>，如图：<br><img src="/images/apple1.png" alt="paradin"></p><p>在<code>https://appleid.apple.com/#!&amp;page=signin</code>页面里，点击<code>Create your Apple ID</code>建立一个新的apple账号，名称正常写，国家还是<code>United States</code>不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。</p><p>账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在<code>Payment &amp; Shipping</code>的地方点击<code>Add Payment Method…</code>，如图：<br><img src="/images/apple2.png" alt="paradin"></p><p>这里有一个<code>PAYMENT METHOD</code>的地方，要填写<code>none</code>，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是<code>Dr.</code>还是<code>Mr.</code>都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在<code>http://www.haoweichi.com/Index/random</code>里生成一个身份信息填写。如图：<br><img src="/images/apple3.png" alt="paradin"></p><p>下面那个<code>SHIPPING ADDRESS</code>就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：<code>该账号没有被使用过，请填写细节</code>。</p><p>这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有<code>none</code>，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。</p><p>在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！<br><img src="/images/apple4.jpg" alt="paradin"></p><p><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。</p><p>首先先登录<code>https://www.apple.com/</code> ，在网页最下面先确定国家是<code>United States</code>，然后点击<code>Manage Your Apple ID</code>，如图：<br><img src="/images/apple1.png" alt="paradin"></p><p>在<code>https://appleid.apple.com/#!&amp;page=signin</code>页面里，点击<code>Create your Apple ID</code>建立一个新的apple账号，名称正常写，国家还是<code>United States</code>不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。</p><p>账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在<code>Payment &amp; Shipping</code>的地方点击<code>Add Payment Method…</code>，如图：<br><img src="/images/apple2.png" alt="paradin"></p><p>这里有一个<code>PAYMENT METHOD</code>的地方，要填写<code>none</code>，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是<code>Dr.</code>还是<code>Mr.</code>都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在<code>http://www.haoweichi.com/Index/random</code>里生成一个身份信息填写。如图：<br><img src="/images/apple3.png" alt="paradin"></p><p>下面那个<code>SHIPPING ADDRESS</code>就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：<code>该账号没有被使用过，请填写细节</code>。</p><p>这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有<code>none</code>，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。</p><p>在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！<br><img src="/images/apple4.jpg" alt="paradin"></p>]]></content>
     
     <summary type="html">
     
@@ -451,30 +475,6 @@
     
     
       <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在Grafana里添加worldping插件</title>
-    <link href="http://yoursite.com/2018/04/19/%E5%9C%A8Grafana%E9%87%8C%E6%B7%BB%E5%8A%A0worldping%E6%8F%92%E4%BB%B6/"/>
-    <id>http://yoursite.com/2018/04/19/在Grafana里添加worldping插件/</id>
-    <published>2018-04-19T02:41:18.000Z</published>
-    <updated>2018-04-19T03:53:34.284Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装插件">安装插件</span></h2><p>worldping是一个监控网站的dns、ping、http响应、https响应的插件，要安装它很简单，在granafa服务器里执行如下命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">grafana-cli plugins install raintank-worldping-app</span><br><span class="line">systemctl restart grafana-server.service</span><br></pre></td></tr></table></figure></p><p>执行完毕之后在grafana的界面里选择<code>Plugins</code>，然后在<code>APP</code>里找到<code>worldping</code>，启动它，但是此时发现需要一个api，如图：<br><img src="/images/worldping.png" alt="paradin"></p><p>此时你需要登录grafana的官网，然后点击<code>api keys</code>和<code>ADD API KEY</code>，就可以生成一个<code>API KEY</code>，名字可以随便起，如下：<br><img src="/images/worldping2.png" alt="paradin"></p><p>将生成的api key保存好，并且填回到grafana的api key里，这样worldping插件就可以使用了，如图：<br><img src="/images/worldping3.png" alt="paradin"></p><h2><span id="监控网站节点">监控网站节点</span></h2><p>此时点击黄色旋涡，发现多了worldping的选项，点击<code>worldping Home</code>，如图：<br><img src="/images/worldping4.png" alt="paradin"></p><p>然后点击<code>+ New Endpoint</code>，这里我输入我公司的官网域名，然后<code>begin auto-discovery</code>，如图：<br><img src="/images/worldping5.png" alt="paradin"></p><p>生成了结果之后，点击add，此时开始检查几个大城市，如芝加哥、东京、纽约、巴黎等大城市连接到刚刚输入的域名的情况，如图：<br><img src="/images/worldping6.png" alt="paradin"></p><p>大约需要1~2分钟后，数据检查完成，可以点击<code>GO to Summary Dashboard</code>，就会看到图像了：<br><img src="/images/worldping7.png" alt="paradin"></p><p>为什么我这个图里没有http?因为在nginx里我们做了http强制rewrite跳转到https，所以是读不到值的。</p><h2><span id="删除网站节点">删除网站节点</span></h2><p>如果要删除网站节点，还是在worldping里点击要删除网站后面的齿轮图标，如图：<br><img src="/images/worldping8.png" alt="paradin"></p><p>然后选择<code>configuration</code>，这里可以修改网站域名，要删除的话，选择最下面的<code>destory</code>，输入DELETE确认，然后就可以点击<code>DELETE</code>删除了，如图：<br><img src="/images/worldping9.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      这个搭配zabbix的网站监控，双重check!
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="grafana" scheme="http://yoursite.com/tags/grafana/"/>
-    
-      <category term="图像监控" scheme="http://yoursite.com/tags/%E5%9B%BE%E5%83%8F%E7%9B%91%E6%8E%A7/"/>
     
   </entry>
   
