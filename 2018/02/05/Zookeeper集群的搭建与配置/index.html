@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/zook6.png">
 <meta property="og:image" content="http://yoursite.com/images/zook7.png">
 <meta property="og:image" content="http://yoursite.com/images/zook8.png">
-<meta property="og:updated_time" content="2018-02-05T02:59:42.207Z">
+<meta property="og:updated_time" content="2018-05-30T19:10:33.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper集群的搭建与配置">
 <meta name="twitter:description" content="纵然你的身子骨是铁打的，我想你也需要了解一款“实现同步服务，配置维护和命名服务”的东西吧。">
@@ -434,7 +434,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,634
+                  1,675
                 </span>
               
 
@@ -486,14 +486,9 @@
 <p>5)再来<code>/usr/zookeeper/bin</code>文件夹，<code>./zkServer.sh start</code>启动zk，然后再<code>./zkServer.sh status</code>查看进程情况，如图看见第一台和第三台zkserver的身份是<code>follower</code>，第二台是<code>leader</code>：<br><img src="/images/zook2.png" alt="paradin"></p>
 <p><img src="/images/zook3.png" alt="paradin"></p>
 <p><img src="/images/zook4.png" alt="paradin"></p>
-<p>至此整个zk集群就搭建并且启动完成了。</p>
-<font color="red">注意：zookeeper集群时，zookeeper要求半数以上的机器可用，zookeeper才能提供服务。</font>
-
-<p>如果这里有启动失败的情况，比如<code>Error contacting service. It is probably not running.</code>这样的字样，那么有这么几种可能：</p>
-<p>1）data文件夹下的<code>myid</code>有数字重复或者是数字漏写的情况；</p>
-<p>2）<code>zoo.cfg</code>里的指定日志文件夹没有手动创建；</p>
-<p>3）<code>/etc/hosts</code>下的名字与zoo.cfg里的server字段不相符，注意一下，/etc/hosts里的127.0.0.1的名字不要与本ip后面的名字一模一样，不然zk也无法识别！</p>
-<p>4）<code>/etc/hosts</code>名字使用了中文，java系对中文是很不友好的。</p>
+<p>至此整个zk集群就搭建并且启动完成了。<font color="red">注意：zookeeper集群时，zookeeper要求半数以上的机器可用，zookeeper才能提供服务。</font></p>
+<h2><span id="故障排除">故障排除</span></h2><p>如果这里有启动失败的情况，比如<code>Error contacting service. It is probably not running.</code>这样的字样，那么有这么几种可能：<br>1）data文件夹下的<code>myid</code>有数字重复或者是数字漏写的情况；<br>2）<code>zoo.cfg</code>里的指定日志文件夹没有手动创建；<br>3）<code>/etc/hosts</code>下的名字与zoo.cfg里的server字段不相符，注意一下，/etc/hosts里的127.0.0.1的名字不要与本ip后面的名字一模一样，不然zk也无法识别！<br>4）<code>/etc/hosts</code>名字使用了中文，java系对中文是很不友好的。</p>
+<p>如果出现的<code>Cannot open channel to X at election address /A.B.C.D:3888</code>的日志报错，检查一下<code>zoo.cfg</code>里的123与<code>myid</code>的123是否一致。</p>
 <h2><span id="配置文件详解">配置文件详解</span></h2><p>1.<code>tickTime</code>：这个时间是作为 Zookeeper 服务器之间或客户端与服务器之间维持心跳的时间间隔，也就是每个 tickTime 时间就会发送一个心跳。<br>2.<code>dataDir</code>：顾名思义就是 Zookeeper 保存数据的目录，默认情况下，Zookeeper 将写数据的日志文件也保存在这个目录里。<br>3.<code>clientPort</code>：这个端口就是客户端连接 Zookeeper 服务器的端口，Zookeeper 会监听这个端口，接受客户端的访问请求。<br>4.<code>initLimit</code>：这个配置项是用来配置 Zookeeper 接受 客户端（这里所说的客户端不是用户连接 Zookeeper 服务器的客户端，而是 Zookeeper 服务器集群中连接到 Leader 的 Follower 服务器）初始化连接时最长能忍受多少个心跳时间间隔数。当已经超过 5个心跳的时间（也就是 tickTime）长度后 Zookeeper 服务器还没有收到客户端的返回信息，那么表明这个客户端连接失败。总的时间长度就是 5<em>2000=10秒。<br>5.<code>syncLimit</code>：这个配置项标识 Leader 与 Follower 之间发送消息，请求和应答时间长度，最长不能超过多少个 tickTime 的时间长度，总的时间长度就是2</em>2000=4秒。<br>6.<code>server.A=B：C：D</code>：其中 A 是一个数字，表示这个是第几号服务器；B 是这个服务器的 ip 地址；C 表示的是这个服务器与集群中的 Leader 服务器交换信息的端口；D 表示的是万一集群中的 Leader 服务器挂了，需要一个端口来重新进行选举，选出一个新的 Leader，而这个端口就是用来执行选举时服务器相互通信的端口。如果是伪集群的配置方式，由于 B 都是一样，所以不同的 Zookeeper 实例通信端口号不能一样，所以要给它们分配不同的端口号。</p>
 <h2><span id="验证成果">验证成果</span></h2><p>Zookeeper的配置工具叫<code>Zooinspector</code>，下载地址是：<code>https://issues.apache.org/jira/secure/attachment/12436620/ZooInspector.zip</code>，下载完直接解压缩就可以在windows里使用。</p>
 <p>我们实验的这三台服务器只有内网，但是如果要连接zooinspector，还是需要通过外网权限连接的，这里可以配一个iptables转发规则，配iptables的步骤在这里：<a href="http://chenx1242.blog.51cto.com/10430133/1875950" target="_blank" rel="noopener">http://chenx1242.blog.51cto.com/10430133/1875950</a> ，照葫芦画瓢即可，但是要注意，zk的端口是<code>2181</code>。</p>
@@ -907,7 +902,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x642D;&#x5EFA;&#x96C6;&#x7FA4;">&#x642D;&#x5EFA;&#x96C6;&#x7FA4;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x8BE6;&#x89E3;">&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x8BE6;&#x89E3;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x9A8C;&#x8BC1;&#x6210;&#x679C;">&#x9A8C;&#x8BC1;&#x6210;&#x679C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x62D3;&#x5C55;&#x9605;&#x8BFB;">&#x62D3;&#x5C55;&#x9605;&#x8BFB;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x642D;&#x5EFA;&#x96C6;&#x7FA4;">&#x642D;&#x5EFA;&#x96C6;&#x7FA4;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x6545;&#x969C;&#x6392;&#x9664;">&#x6545;&#x969C;&#x6392;&#x9664;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x8BE6;&#x89E3;">&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x8BE6;&#x89E3;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x9A8C;&#x8BC1;&#x6210;&#x679C;">&#x9A8C;&#x8BC1;&#x6210;&#x679C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x62D3;&#x5C55;&#x9605;&#x8BFB;">&#x62D3;&#x5C55;&#x9605;&#x8BFB;</span></span></a></li></ol></div>
             
 
           </div>
