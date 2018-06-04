@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/TTFB1.png">
 <meta property="og:image" content="http://yoursite.com/images/TTFB.jpg">
-<meta property="og:updated_time" content="2018-06-04T10:13:12.850Z">
+<meta property="og:updated_time" content="2018-06-04T10:22:57.314Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解决Waiting(TTFB)过长的问题">
 <meta name="twitter:description" content="当你遇到一堆不听话的开发，就是这么辛苦">
@@ -428,7 +428,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  361
+                  393
                 </span>
               
 
@@ -469,11 +469,12 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>电商平台整套系统是从上海商派公司（ecshop）那里购买的，3.0在上周几经波折终於部署上去了，经过了一个周末之后，今天市场运营的人在微信群里叫：“官方网站打开速度好慢。”果然整个官网首页要5~6秒钟才打得开，这个显然是不能忍受的，使用F12查看细节，发现<code>Waiting(TTFB)</code>的时间非常长，如图：<br><img src="/images/TTFB1.png" alt="akb48"></p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="正文">正文</span></h2><p>电商平台整套系统是从上海商派公司（ecshop）那里购买的整套代码，结合我们公司自己的二开功能的3.0版本在上周几经波折终於部署上去了，经过了一个周末之后，今天市场运营的人在微信群里叫：“官方网站打开速度好慢。”果然整个官网首页要5~6秒钟才打得开，这个显然是不能忍受的，使用F12查看细节，发现<code>Waiting(TTFB)</code>的时间非常长，如图：<br><img src="/images/TTFB1.png" alt="akb48"></p>
 <p>正常来说TFFB时间通常建议在200ms以下，如果超过推荐值，会引起队列中其他资源下载都跟着变慢。TFFB高主要有两个原因：一是客户端和服务器之前网络情况比较差；二是服务器应用响应比较慢；第三：重定向太多，重定向跟TFFB时间成正比。</p>
 <p>于是乎检查网络情况以及各应用负载情况，都是OK的，重定向也很少。那么就减少DNS查询，把所有能用IP的地方都替换了域名，比如nginx的<code>localhost</code>里使用对应服务器的域名而不是127.0.0.1，比如在配置文件里的阿里云的数据库和redis都用IP地址替代。然而收效甚微，该慢依旧是慢。</p>
 <p>这个时候就返回到后台去查看，左翻翻右翻翻，最后找到了这个地方，如图：<br><img src="/images/TTFB.jpg" alt="akb48"></p>
 <p>启动全页缓存，一切就都好了…</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.oschina.net/question/244077_221319" target="_blank" rel="noopener">https://www.oschina.net/question/244077_221319</a></p>
 
       
     </div>
@@ -673,8 +674,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -847,6 +857,22 @@ show_date_time();
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x6B63;&#x6587;">&#x6B63;&#x6587;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
