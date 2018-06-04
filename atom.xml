@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-05-30T20:28:45.142Z</updated>
+  <updated>2018-06-04T09:39:38.180Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,49 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决Waiting(TTFB)过长的问题</title>
+    <link href="http://yoursite.com/2018/06/04/%E8%A7%A3%E5%86%B3Waiting-TTFB-%E8%BF%87%E9%95%BF%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/06/04/解决Waiting-TTFB-过长的问题/</id>
+    <published>2018-06-04T08:51:13.000Z</published>
+    <updated>2018-06-04T09:39:38.180Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>电商平台整套系统是从上海商派公司（ecshop）那里购买的，3.0在上周几经波折终於部署上去了，经过了一个周末之后，今天市场运营的人在微信群里叫：“官方网站打开速度好慢。”果然整个官网首页要5~6秒钟才打得开，这个显然是不能忍受的，使用F12查看细节，发现Waiting(TTFB)的时间非常长，如图：<br><img src="/images/TTFB1.png" alt="akb48"></p><p>正常来说TFFB时间通常建议在200ms以下，如果超过推荐值，会引起队列中其他资源下载都跟着变慢。TFFB高主要有两个原因：一是客户端和服务器之前网络情况比较差；二是服务器应用响应比较慢；第三：重定向太多，重定向跟TFFB时间成正比。</p><p>于是乎检查网络情况以及各应用负载情况，都是OK的，重定向也很少。那么就减少DNS查询，把所有能用IP的地方都替换了域名，比如nginx的localhost里使用对应服务器的域名而不是127.0.0.1，比如在配置文件里的阿里云的数据库和redis都用IP地址替代。然后收效甚微，该慢依旧是慢。</p><p>这个时候就返回到后台去查看，左翻翻右翻翻，最后找到了这个地方，如图：<br><img src="/images/TTFB.jpg" alt="akb48"></p><p>启动全页缓存，一切就都好了…</p>]]></content>
+    
+    <summary type="html">
+    
+      当你遇到一堆不听话的开发，就是这么辛苦
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="运维技术" scheme="http://yoursite.com/tags/%E8%BF%90%E7%BB%B4%E6%8A%80%E6%9C%AF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Centos7安装zabbix3.4全过程</title>
+    <link href="http://yoursite.com/2018/06/04/Centos7%E5%AE%89%E8%A3%85zabbix3-4%E5%85%A8%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2018/06/04/Centos7安装zabbix3-4全过程/</id>
+    <published>2018-06-04T03:15:14.000Z</published>
+    <updated>2018-06-04T03:15:14.281Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>记录一次阿里云负载均衡端口监听不正确的过程</title>
@@ -429,52 +472,6 @@
       <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
     
       <category term="容器技术" scheme="http://yoursite.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在国王杯前夕评巴萨</title>
-    <link href="http://yoursite.com/2018/04/21/%E5%9C%A8%E5%9B%BD%E7%8E%8B%E6%9D%AF%E5%89%8D%E5%A4%95%E8%AF%84%E5%B7%B4%E8%90%A8/"/>
-    <id>http://yoursite.com/2018/04/21/在国王杯前夕评巴萨/</id>
-    <published>2018-04-20T16:44:17.000Z</published>
-    <updated>2018-04-20T17:40:54.008Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天凌晨的马竞在西甲意外输给了皇家社会，巴萨的积分优势扩大到了12分。这个周末巴萨要跟塞维利亚打国王杯决赛，4月30号对拉科鲁尼亚的西甲联赛巴萨只要获胜，就会拿到今年的西甲联赛冠军，从而以冠军姿态在诺坎普迎接本赛季第二场国家德比。</p><h2><span id="巴尔韦德的困境">巴尔韦德的困境</span></h2><p>巴萨今年可以说是低姿态开始：从内马尔突然的离开到西超杯被皇马灌了5个，不可为说不惨。但是巴尔韦德在联赛却目前保持不败，这个成绩单可以说是相当不错的，这中间还有在伯纳乌的三球胜利。</p><p>赛季中前段，巴萨三线顺风顺水，前有塞梅多惊艳开场，后有大祭司维尔马伦扎实顶上，主教练巴尔韦德也给了阿奈斯这样小将出场机会，哪怕登贝莱那时候养伤，报纸媒体一片其乐融融。如果保利尼奥再有进球，更是一片狂欢。</p><p>然后巴尔韦德的保守开始慢慢让人所诟病，他是一个重视防守的教练，这很好，但是他有了库迪尼奥也有了归来的登贝莱，结果反而不敢搞轮换，甚至坚持让布教授打封闭出场，虽然不少人抱怨，但是由于球队整体战绩还算平稳，所以没有大规模的重视。可是巴萨欧冠的结果跟恩里克的第二个赛季一样，倒在了与罗马的第二回合比赛里，连续三年没有闯入欧冠四强。</p><p>其实对战罗马的第一回合，巴萨的4：1已经是靠意志拼下来的比赛，球员难免在第二回合的心态上有所轻敌，这种心态上的轻敌难免会影响到身体，但是巴尔韦德的临场指挥也让人严重不满。落下这耻辱一战，媒体和球迷之前的“忍气吞声”一并爆发，狂轰滥炸，直到现在依旧有人说“哪怕真的赛季双冠，也会因为欧冠的失利而让那两冠索然无味”。<br><img src="/images/fcb4.png" alt="paradin"></p><p>所以，巴尔韦德要在这个周日的国王杯决赛和对阵拉科鲁尼亚的西甲联赛里稳扎稳打，把国王杯和西甲冠军彻底拿到手里，这样整个人也能轻松一些。可是说来说去罗马一役这一个跟头摔得太疼了，在那么重大的比赛里失败，肯定需要在一个同样重大的比赛里胜利以挽回颜面，第二回合的国家德比无疑就是一个好的机会，如果巴尔韦德成功捍卫了诺坎普，“联赛双杀皇马+国内双冠”也能成为一个功劳。但是如果那场比赛，一心要打破巴萨不败金身的皇马真的成功了，那巴尔韦德势必在巴萨主帅的位置上也是飘摇。</p><p>所以巴帅，请务必要拿下国王杯冠军+西甲冠军！在第二个国家德比里也请拼尽全力！这样才能多少挽回一点“罗马之耻”的颜面。<br><img src="/images/fcb1.png" alt="paradin"></p><h2><span id="夏季转会展望">夏季转会展望</span></h2><p>我个人认为，巴萨很有可能在今年夏天卖掉如下几个人：西莱森、戈麦斯、小苏亚雷斯、艾尔卡塞尔、比达尔，自由走人的可能会是小白。这些人能套现7000万应该就满足了。</p><p>巴萨后卫现在四个人皮克和维尔马伦属于潜藏的伤员病号，米纳技术还是太糙，稍微让人放心的就是乌姆蒂蒂，他的续约问题肯定是休赛期的一个大事。不过我觉得米纳其实可以再留一年看看，他身体素质很好，而且人还年轻没伤病，只要心态练得沉稳，当一个合格的中后卫不难。</p><p>至于中场，个人希望小白再踢一年，现在我也觉得一个满血的小白应付普通的联赛、欧冠小组赛和杯赛都不是什么难事。但是目前的媒体趋势是小白赛季结束会来中超重庆队，即使这样巴萨也需要一个山寨的坎特和一个山寨的埃里克森，而罗贝托集这两个属性于一身，所以他就是一个“奉献的砖”，但是这样如果比达尔真的不留下来的话，巴萨还需要补进一个右后卫跟塞梅多良性竞争，这个右后卫的人选就比较挠头了。贝莱林？或许是一个选择，但是这个选择跟当年小法一样—要是双输就不好了。</p><p>前场如果能拿下格里兹曼肯定是好的，艾尔卡塞尔这种“躲着后卫”的踢法，虽然进球效率可以，但是没有真正起到轮换苏亚雷斯的作用。这样巴萨还需要在板凳上补充一个中锋（不用多能进球，哪怕搅屎棍也可以），同时也做好登贝莱/苏亚雷斯/梅西/格里兹曼（假设他真的来）的轮换。</p><p>总而言之，现在巴萨还是回归433比较好，配合442和4312的变化。那么休赛期最重要的补强就是格里兹曼+能抗中卫的前锋+一个中场+一个优秀的边后卫。</p><p>我个人希望的引援名单如下：<br>中场是魏格尔和B队的阿莱尼亚，埃里克森、博格巴和维拉蒂这三个不算是好的选择，要么太贵，要么节奏太慢。至于伊斯科、大卫席尔瓦、皮亚尼奇，那想都别想了，母队不会放人的。至于格雷茨卡，拜仁不是善茬；<br>边后卫可以考虑贝莱林，这个要看一下阿森纳的新教练是谁，摩纳哥的法比尼奥也可以，我知道他现在改中场了，也不耽误来一下跟罗贝托交叉换位…<br>前锋的话，我个人推荐B队阿奈斯试试看，其他的人选估计就是在西甲联赛内部找了；<br>这几个位置，最重要就是中场！梅西当初在哈白布的配合下威力无穷，一旦巴萨的中场重新掌握了控制力，不用频繁回撤的梅西依旧会进球如麻，这一点毋庸置疑。<br><img src="/images/fcb3.png" alt="paradin"></p><h2><span id="温格会来">温格会来？</span></h2><p>我个人首先不希望巴尔韦德下课，毕竟现在巴萨联赛冠军十拿九稳，国王杯如果也揽入怀中，这样一个成绩单也是一个80分，如果这个分数都炒掉主教练，那么继任者的压力势必很大，所以我个人倾向巴尔韦德留任，好好想一下，等阿图尔以及可能会来的格里兹曼到位了，巴萨应该怎么打。</p><p>不过如果温格真的来了，我个人也是赞成的，因为阿森纳的球风本来跟巴萨相似，相信温格跟梅西等人也会无缝接入，到时候教授或许真的可以在巴萨圆了欧冠梦想，不过这个想法成真的可能性低于5%，想想就得了。</p><h2><span id="下赛季的任务">下赛季的任务</span></h2><p>1.进攻体系依旧围绕梅西建队，让梅西继续火力全开的同时保证休息，欧冠要他有大用；<br>2.新球员（包括库蒂尼奥和登贝莱）适应巴萨的风格和体系，让皮克和布教授也能轮换得到休息；<br>3.欧冠一定要进入四强；<br>4.欧冠四强的基础上，西甲联赛冠军和国王杯能拿还是要拿，同时最好也能阻击皇马；<br><img src="/images/fcb2.png" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      这几天的巴萨真是风雨飘摇，操碎我的心
-    
-    </summary>
-    
-      <category term="追乱花天" scheme="http://yoursite.com/categories/%E8%BF%BD%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="国际足坛" scheme="http://yoursite.com/tags/%E5%9B%BD%E9%99%85%E8%B6%B3%E5%9D%9B/"/>
-    
-      <category term="巴塞罗那" scheme="http://yoursite.com/tags/%E5%B7%B4%E5%A1%9E%E7%BD%97%E9%82%A3/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>国内Docker的加速方法</title>
-    <link href="http://yoursite.com/2018/04/20/%E5%9B%BD%E5%86%85Docker%E7%9A%84%E5%8A%A0%E9%80%9F%E6%96%B9%E6%B3%95/"/>
-    <id>http://yoursite.com/2018/04/20/国内Docker的加速方法/</id>
-    <published>2018-04-19T16:00:04.000Z</published>
-    <updated>2018-04-19T16:17:09.102Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>由于大陆政府的特殊政策，国内想访问一些国外的资源是非常的曲折和痛苦，比较有代表性的就是亚马逊的云存储以及docker，尤其在<code>docker pull</code>一些镜像的时候，更是心惊胆战，祈求不要出现timout，然而现实往往很骨感。如下图：<br><img src="/images/jiasu.png" alt="paradin"></p><p>那么应该如何达到加速的效果呢？</p><p>在<code>CentOS 7</code>里，对于使用<code>systemd</code>的系统，请在<code>/etc/docker/daemon.json</code>中写入如下内容：（如果文件不存在请新建该文件）<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [</span><br><span class="line">    <span class="string">"https://registry.docker-cn.com"</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>注意，一定要保证该文件符合 json 规范，否则 Docker 将不能启动。</p><p>之后重新启动服务。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl daemon-reload</span><br><span class="line">$ sudo systemctl restart docker</span><br></pre></td></tr></table></figure></p><p>注意：如果您之前查看旧教程，修改了<code>docker.service</code>文件内容，请去掉您添加的内容（–registry-mirror=<a href="https://registry.docker-cn.com）。" target="_blank" rel="noopener">https://registry.docker-cn.com）。</a></p><p>配置加速之后，如果拉取镜像仍然十分缓慢，请手动检查加速器配置是否生效，在命令行执行<code>docker info |grep &#39;Registry Mirrors&#39; -A</code>，如果从结果中看到了如下内容，说明配置成功。<br><img src="/images/jiasu2.png" alt="paradin"></p><p>现在再重新尝试一下<code>docker pull training/webapp</code>，看看效果：<br><img src="/images/jiasu3.png" alt="paradin"></p><p>仅用17秒就pull了几乎400MB的镜像，高下立判！</p>]]></content>
-    
-    <summary type="html">
-    
-      墙内想干点事的确挺费劲
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
     
   </entry>
   
