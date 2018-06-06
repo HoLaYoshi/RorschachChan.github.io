@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-04T10:22:57.314Z</updated>
+  <updated>2018-06-06T07:49:25.208Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Gitlab给分支设定权限</title>
+    <link href="http://yoursite.com/2018/06/06/Gitlab%E7%BB%99%E5%88%86%E6%94%AF%E8%AE%BE%E5%AE%9A%E6%9D%83%E9%99%90/"/>
+    <id>http://yoursite.com/2018/06/06/Gitlab给分支设定权限/</id>
+    <published>2018-06-06T06:41:09.000Z</published>
+    <updated>2018-06-06T07:49:25.208Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>给gitlab的各位开发设置权限是很重要的，不然他们就可能会偷偷的把执行分支合并甚至<code>git pull</code>来破坏线上环境。</p><p>首先先确定在project下各位人员的身份，在<code>设置（setting）</code>–<code>成员(members)</code>里面，可以看到projects现有的用户和用户组，如图：<br><img src="/images/gitlab29.png" alt="akb48"></p><p>由于我这个gitlab已经是汉化版的了，这里做一个简单的中英对比：<code>Master</code>是“主程序员”、<code>Developer</code>是“开发人员”、<code>Reporter</code>是“报告者”，这个身份只有读权限可以创建代码片段，一般来说都给测试人员，而<code>Guest</code>就是“访客”了，它只能提交问题和评论。</p><p>然后再到<code>版本库（Repository）</code>里选择<code>保护分支（Protected Branches）</code>，如图：<br><img src="/images/gitlab31.png" alt="akb48"></p><p><code>Allowed to merge</code>就是分支合并权限，<code>Allowed to push</code>就是推送权限，这两个可以根据不同人的身份进行控制。如果受保护，除了master权限的人员，其余人都不可以push、delete等操作。默认情况下<code>master</code>分支是处于被保护状态下的，<code>developer</code>角色的人是无法提交到<code>master</code>分支的。</p><p>如果是docker的话，那么gitlab权限问题修复会用到如下命令：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it gitlab update-permissions</span><br><span class="line">docker restart gitlab容器的ID</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      这几天边吃瓜边关注崔永元和冯小刚、刘震云的爱恨情仇
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="git" scheme="http://yoursite.com/tags/git/"/>
+    
+  </entry>
   
   <entry>
     <title>解决Waiting(TTFB)过长的问题</title>
@@ -43,9 +65,9 @@
     <link href="http://yoursite.com/2018/06/04/Centos7%E5%AE%89%E8%A3%85zabbix3-4%E5%85%A8%E8%BF%87%E7%A8%8B/"/>
     <id>http://yoursite.com/2018/06/04/Centos7安装zabbix3-4全过程/</id>
     <published>2018-06-04T03:15:14.000Z</published>
-    <updated>2018-06-04T10:48:56.269Z</updated>
+    <updated>2018-06-04T11:13:47.933Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装zabbix-server-34">安装zabbix-server 3.4</span></h2><p>本文以<code>centos 7</code>为例。<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service#关闭防火墙</span><br><span class="line">systemctl disable firewalld.service #开机不启动防火墙</span><br><span class="line">setenforce 0 #清空selinux的配置</span><br><span class="line">yum install mariadb-server mariadb –y</span><br><span class="line">systemctl enable mariadb#设置开机启动</span><br><span class="line">systemctl start mariadb#启动MariaDB</span><br><span class="line">rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span><br><span class="line">yum install zabbix-server-mysql zabbix-web-mysql -y</span><br><span class="line">zcat /usr/share/doc/zabbix-server-mysql-3.4.9/create.sql.gz  |mysql -uzabbix -pzabbix zabbix#这里是设定zabbix数据库账号密码和database的地方，create.sql.gz这个文件位置要根据实际情况来</span><br><span class="line">vim /etc/httpd/conf.d/zabbix.conf#这里要修改文件里的时区，改成Asia/Shanghai</span><br><span class="line">systemctl start zabbix-server</span><br><span class="line">systemctl enable zabbix-server</span><br><span class="line">setsebool -P httpd_can_connect_zabbix on</span><br><span class="line">setsebool -P httpd_can_cetwork_connect_db on</span><br><span class="line">systemctl start httpd </span><br><span class="line">systemctl enable httpd</span><br><span class="line">chkconfig zabbix_agent on</span><br><span class="line">systemctl start zabbix-agent</span><br></pre></td></tr></table></figure></p><p>然后就是在浏览器输入<code>外网IP/zabbix/</code>进行页面安装了，剩下的就不多写了。</p><h2><span id="安装zabbix-agent-34">安装zabbix-agent 3.4</span></h2><p>如果是centos 6:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p><p>如果是centos 7:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span></span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p><p><img src="/images/curry3p3.gif" alt="akb48" title="天气妹儿"></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装zabbix-server-34">安装zabbix-server 3.4</span></h2><p>本文以<code>centos 7</code>为例。<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service#关闭防火墙</span><br><span class="line">systemctl disable firewalld.service #开机不启动防火墙</span><br><span class="line">setenforce 0 #清空selinux的配置</span><br><span class="line">yum install mariadb-server mariadb –y</span><br><span class="line">systemctl enable mariadb#设置开机启动</span><br><span class="line">systemctl start mariadb#启动MariaDB</span><br><span class="line">rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span><br><span class="line">yum install zabbix-server-mysql zabbix-web-mysql -y</span><br><span class="line">zcat /usr/share/doc/zabbix-server-mysql-3.4.9/create.sql.gz  |mysql -uzabbix -pzabbix zabbix#这里是设定zabbix数据库账号密码和database的地方，create.sql.gz这个文件位置要根据实际情况来</span><br><span class="line">vim /etc/httpd/conf.d/zabbix.conf#这里要修改文件里的时区，改成Asia/Shanghai</span><br><span class="line">systemctl start zabbix-server</span><br><span class="line">systemctl enable zabbix-server</span><br><span class="line">setsebool -P httpd_can_connect_zabbix on</span><br><span class="line">setsebool -P httpd_can_cetwork_connect_db on</span><br><span class="line">systemctl start httpd </span><br><span class="line">systemctl enable httpd</span><br><span class="line">chkconfig zabbix_agent on</span><br><span class="line">systemctl start zabbix-agent</span><br></pre></td></tr></table></figure></p><p>然后就是在浏览器输入<code>外网IP/zabbix/</code>进行页面安装了，剩下的就不多写了。</p><h2><span id="安装zabbix-agent-34">安装zabbix-agent 3.4</span></h2><p>如果是<code>centos 6</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p><p>如果是<code>centos 7</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span></span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p><h2><span id="其他资料">其他资料</span></h2><p><a href="https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/" target="_blank" rel="noopener">https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/</a></p><p><img src="/images/curry3p3.gif" alt="akb48" title="天气妹儿"></p>]]></content>
     
     <summary type="html">
     
@@ -449,30 +471,6 @@
     
     
       <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>在安装docker私有仓库的时候遇到的openssl问题</title>
-    <link href="http://yoursite.com/2018/04/21/%E5%9C%A8%E5%AE%89%E8%A3%85docker%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93%E7%9A%84%E6%97%B6%E5%80%99%E9%81%87%E5%88%B0%E7%9A%84openssl%E9%97%AE%E9%A2%98/"/>
-    <id>http://yoursite.com/2018/04/21/在安装docker私有仓库的时候遇到的openssl问题/</id>
-    <published>2018-04-20T16:45:39.000Z</published>
-    <updated>2018-04-26T15:30:53.852Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>按照<a href="http://wiki.jikexueyuan.com/project/docker-technology-and-combat/local_repo.html" target="_blank" rel="noopener">http://wiki.jikexueyuan.com/project/docker-technology-and-combat/local_repo.html</a> 的方法本地安装一个私有仓库，在执行<code>sudo pip install docker-registry</code>这一步的时候，出现了这样的一个错误：<br><img src="/images/openssl1.png" alt="paradin"></p><p>既然说我没有swig，于是我<code>yum install swig -y</code>，安装的是<code>2.0.10-5.el7</code>版本。然后再次<code>pip install docker-registry</code>，一顿噼里啪啦之后，这次成了这样：<br><img src="/images/openssl2.png" alt="paradin"></p><p>又说没有openssl的文件，那执行<code>yum install openssl-devel</code>，OK了之后再次<code>pip install docker-registry</code>，再一次噼里啪啦，如下：<br><img src="/images/openssl3.png" alt="paradin"></p><p>反馈我：<code>/usr/include/openssl/opensslconf.h:44: Error: CPP #error &quot;&quot;This openssl-devel package does not work your architecture?&quot;&quot;. Use the -cpperraswarn option to continue swig processing.</code>,这个提示大意是说openssl-devel版本不适合你的系统架构，也就是x86的去找x86的头文件，x86_64的去找x86_64文件，但现在是互相找不到对方。</p><p>既然说<code>/usr/include/openssl/opensslconf.h</code>这个第44行有错误，那我们就打开这个文件去看看第44行写的是啥：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">41 #elif defined(__x86_64__)</span><br><span class="line">42 #include "opensslconf-x86_64.h"</span><br><span class="line">43 #else</span><br><span class="line">44 #error "This openssl-devel package does not work your architecture?"</span><br><span class="line">45 #endif</span><br><span class="line"><span class="number">46</span> </span><br><span class="line">47 #undef openssl_opensslconf_multilib_redirection_h</span><br></pre></td></tr></table></figure></p><p>这里我把第44行改成了这样：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">41 #elif defined(__x86_64__)</span><br><span class="line">42 #include &quot;opensslconf-x86_64.h&quot;</span><br><span class="line">43 #else</span><br><span class="line">44 #include &quot;opensslconf.h&quot;    #去掉了原来的error提示，改成了安装opensslconf.h文件。</span><br><span class="line">45 #endif</span><br><span class="line">46 </span><br><span class="line">47 #undef openssl_opensslconf_multilib_redirection_h</span><br></pre></td></tr></table></figure></p><p>这一次重新执行<code>sudo pip install docker-registry</code>，终于成功…<br><img src="/images/openssl4.png" alt="paradin"></p><p><img src="/images/agirl.gif" alt="akb48"></p>]]></content>
-    
-    <summary type="html">
-    
-      这破玩意查了半天...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
-    
-      <category term="容器技术" scheme="http://yoursite.com/tags/%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/"/>
     
   </entry>
   

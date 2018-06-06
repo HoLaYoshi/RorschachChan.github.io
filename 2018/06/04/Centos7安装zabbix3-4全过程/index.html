@@ -97,7 +97,7 @@
 <meta property="og:description" content="这一次好好记录。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/curry3p3.gif">
-<meta property="og:updated_time" content="2018-06-04T10:48:56.269Z">
+<meta property="og:updated_time" content="2018-06-04T11:13:47.933Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos7安装zabbix3.4全过程">
 <meta name="twitter:description" content="这一次好好记录。">
@@ -427,7 +427,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  339
+                  362
                 </span>
               
 
@@ -470,8 +470,9 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装zabbix-server-34">安装zabbix-server 3.4</span></h2><p>本文以<code>centos 7</code>为例。<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service	#关闭防火墙</span><br><span class="line">systemctl disable firewalld.service #开机不启动防火墙</span><br><span class="line">setenforce 0 #清空selinux的配置	</span><br><span class="line">yum install mariadb-server mariadb –y</span><br><span class="line">systemctl enable mariadb	#设置开机启动</span><br><span class="line">systemctl start mariadb		#启动MariaDB</span><br><span class="line">rpm -Uvh http://repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span><br><span class="line">yum install zabbix-server-mysql zabbix-web-mysql -y</span><br><span class="line">zcat /usr/share/doc/zabbix-server-mysql-3.4.9/create.sql.gz  |mysql -uzabbix -pzabbix zabbix		#这里是设定zabbix数据库账号密码和database的地方，create.sql.gz这个文件位置要根据实际情况来</span><br><span class="line">vim /etc/httpd/conf.d/zabbix.conf	#这里要修改文件里的时区，改成Asia/Shanghai</span><br><span class="line">systemctl start zabbix-server</span><br><span class="line">systemctl enable zabbix-server	</span><br><span class="line">setsebool -P httpd_can_connect_zabbix on</span><br><span class="line">setsebool -P httpd_can_cetwork_connect_db on</span><br><span class="line">systemctl start httpd </span><br><span class="line">systemctl enable httpd</span><br><span class="line">chkconfig zabbix_agent on</span><br><span class="line">systemctl start zabbix-agent</span><br></pre></td></tr></table></figure></p>
 <p>然后就是在浏览器输入<code>外网IP/zabbix/</code>进行页面安装了，剩下的就不多写了。</p>
-<h2><span id="安装zabbix-agent-34">安装zabbix-agent 3.4</span></h2><p>如果是centos 6:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start	#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p>
-<p>如果是centos 7:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span></span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start	#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p>
+<h2><span id="安装zabbix-agent-34">安装zabbix-agent 3.4</span></h2><p>如果是<code>centos 6</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/6/x86_64/zabbix-release-3.4-1.el6.noarch.rpm</span></span><br><span class="line">yum install -y zabbix-agent</span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start	#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p>
+<p>如果是<code>centos 7</code>:<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh http:<span class="comment">//repo.zabbix.com/zabbix/3.4/rhel/7/x86_64/zabbix-agent-3.4.5-1.el7.x86_64.rpm</span></span><br><span class="line">chkconfig zabbix_agent on;service zabbix_agent start	#如果不对就使使zabbix-agent</span><br></pre></td></tr></table></figure></p>
+<h2><span id="其他资料">其他资料</span></h2><p><a href="https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/" target="_blank" rel="noopener">https://www.kaijia.me/2014/11/zabbix-report-lack-of-free-swap-space-issue-on-server-without-swap-solved/</a></p>
 <p><img src="/images/curry3p3.gif" alt="akb48" title="天气妹儿"></p>
 
       
@@ -707,7 +708,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">136</span>
+                  <span class="site-state-item-count">137</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -869,7 +870,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-server-34">&#x5B89;&#x88C5;zabbix-server 3.4</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-agent-34">&#x5B89;&#x88C5;zabbix-agent 3.4</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-server-34">&#x5B89;&#x88C5;zabbix-server 3.4</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;zabbix-agent-34">&#x5B89;&#x88C5;zabbix-agent 3.4</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5176;&#x4ED6;&#x8D44;&#x6599;">&#x5176;&#x4ED6;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -922,7 +923,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共130.0k字</span>
+  <span class="post-count">博客全站共130.3k字</span>
 </div>
         
 
