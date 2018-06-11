@@ -110,7 +110,9 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins12.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins13.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins14.png">
-<meta property="og:updated_time" content="2018-06-11T07:12:03.836Z">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins16.png">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins15.png">
+<meta property="og:updated_time" content="2018-06-11T08:40:22.274Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab+Jenkins搭建持续集成系统">
 <meta name="twitter:description" content="尚未完成...">
@@ -440,7 +442,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  898
+                  949
                 </span>
               
 
@@ -456,7 +458,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -484,7 +486,7 @@
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—<code>gitlab cli</code>，但是这个工具不如jenkins那么好用。本文的目的要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。</p>
 <p>说一下实验环境：<br>Jenkins所在服务器IP：121.41.37.251(10.168.173.181)，版本是<code>2.124</code>(查看jenkins的版本语句<code>java -jar /usr/lib/jenkins/jenkins.war --version</code>);<br>Gitlab所在服务器IP：114.55.224.158(10.25.85.175)，使用容器安装，版本是<code>10.7.3</code>;</p>
 <h2><span id="jenkins添加gitlab插件">jenkins添加gitlab插件</span></h2><p>通过浏览器登陆jenkins界面，然后在<code>系统管理</code>里面选择<code>管理插件</code>，如图：<br><img src="/images/gitlabjenkins1.png" alt="akb48"></p>
-<p>然后在<code>可选择插件</code>里搜索<code>gitlab hook</code>插件，但是没想到我这个版本提示，目前的1.4.2版本的<code>gitlab hook</code>目前存在安全隐患，如图：<br><img src="/images/gitlabjenkins2.png" alt="akb48"></p>
+<p>然后在<code>可选择插件</code>里搜索<code>gitlab hook</code>插件，但是没想到我这个版本提示”目前的1.4.2版本的<code>gitlab hook</code>目前存在安全隐患”，如图：<br><img src="/images/gitlabjenkins2.png" alt="akb48"></p>
 <p>具体的安全隐患细节是这样的：<br><img src="/images/gitlabjenkins3.png" alt="akb48"></p>
 <p>这个风险请自己把握，然后我选择了继续安装，如图：<br><img src="/images/gitlabjenkins4.png" alt="akb48"></p>
 <p>安装完了<code>gitlab hook</code>插件后，还要安装<code>GitLab Plugin</code>和<code>Gitlab Authentication plugin</code>这两个插件，方法跟上面的一样。</p>
@@ -502,6 +504,8 @@
 <p>点击左下角的<code>保存</code>按钮，保存前面所做的配置。这个时候要记录两个东西，一个是<code>Build when a change is pushed to GitLab</code>那一行中，GitLab CI Service URL: 后面的 URL；还有一个就是刚刚生成的<code>Secret Token</code>，这俩在后面配置GitLab工程时需要用到。</p>
 <h2><span id="配置-gitlab-工程">配置 GitLab 工程</span></h2><p>在gitlab进入那个叫<code>jenkinstest</code>的project，然后在<code>settings---&gt;Integrations</code>，在<code>URL</code>里填写刚刚记下来的<code>URL</code>，在<code>Secret Token</code>里填写刚刚记下来的<code>Secret Token</code>，如图：<br><img src="/images/gitlabjenkins13.png" alt="akb48"></p>
 <p>然后点击下面绿色的<code>add webhook</code>，就会生成一个<code>Webhooks</code>，如图：<br><img src="/images/gitlabjenkins14.png" alt="akb48"></p>
+<p>去代码服务器上提交一个commit，然后push到gitlab里，再返回到<code>Integrations</code>，对刚刚生成的<code>webhooks</code>点击<code>test</code>，选择<code>push events</code>，如图：<br><img src="/images/gitlabjenkins16.png" alt="akb48"></p>
+<p>然后就会出现200的成功字样，如图：<br><img src="/images/gitlabjenkins15.png" alt="akb48"></p>
 
       
     </div>
@@ -953,7 +957,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共131.7k字</span>
+  <span class="post-count">博客全站共131.8k字</span>
 </div>
         
 
