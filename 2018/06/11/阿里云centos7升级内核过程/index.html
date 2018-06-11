@@ -97,7 +97,8 @@
 <meta property="og:description" content="操作之前一定要先打镜像，不然出现其他问题，本人概不负责...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/neihe1.png">
-<meta property="og:updated_time" content="2018-06-11T04:35:35.923Z">
+<meta property="og:image" content="http://yoursite.com/images/ronaldogoal1.gif">
+<meta property="og:updated_time" content="2018-06-11T04:39:33.288Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里云centos7升级内核到4.17过程">
 <meta name="twitter:description" content="操作之前一定要先打镜像，不然出现其他问题，本人概不负责...">
@@ -475,6 +476,7 @@
 <p>centos7内核升级完毕后，还需要我们修改内核的启动顺序，<code>vim /etc/default/grub</code>，修改一处地方：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">GRUB_TIMEOUT=5</span><br><span class="line">GRUB_DISTRIBUTOR=&quot;$(sed &apos;s, release .*$,,g&apos; /etc/system-release)&quot;</span><br><span class="line">GRUB_DEFAULT=saved		#把这里的saved改成0</span><br><span class="line">GRUB_DISABLE_SUBMENU=true</span><br><span class="line">GRUB_TERMINAL_OUTPUT=&quot;console&quot;</span><br><span class="line">GRUB_CMDLINE_LINUX=&quot;crashkernel=auto rhgb quiet net.ifnames=0&quot;</span><br><span class="line">GRUB_DISABLE_RECOVERY=&quot;true&quot;</span><br><span class="line">~</span><br></pre></td></tr></table></figure></p>
 <p>接下来还需要运行grub2-mkconfig 命令来重新创建内核配置，命令是<code>grub2-mkconfig -o /boot/grub2/grub.cfg</code>，如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Generating grub configuration file ...</span><br><span class="line">Found linux image: /boot/vmlinuz-4.17.0-1.el7.elrepo.x86_64</span><br><span class="line">Found initrd image: /boot/initramfs-4.17.0-1.el7.elrepo.x86_64.img</span><br><span class="line">Found linux image: /boot/vmlinuz-3.10.0-693.2.2.el7.x86_64</span><br><span class="line">Found initrd image: /boot/initramfs-3.10.0-693.2.2.el7.x86_64.img</span><br><span class="line">Found linux image: /boot/vmlinuz-3.10.0-693.el7.x86_64</span><br><span class="line">Found initrd image: /boot/initramfs-3.10.0-693.el7.x86_64.img</span><br><span class="line">Found linux image: /boot/vmlinuz-0-rescue-f0f31005fb5a436d88e3c6cbf54e25aa</span><br><span class="line">Found initrd image: /boot/initramfs-0-rescue-f0f31005fb5a436d88e3c6cbf54e25aa.img</span><br><span class="line">done</span><br></pre></td></tr></table></figure></p>
 <p>执行完毕之后，回到阿里云控制台重启一下这个机器，然后查看一下内核情况：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">uname -r</span><br><span class="line"><span class="number">4.17</span><span class="number">.0</span><span class="number">-1.</span>el7.elrepo.x86_64</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/ronaldogoal1.gif" alt="akb48" title="罗纳尔多在98年世界杯半决赛对荷兰的"></p>
 
       
     </div>
