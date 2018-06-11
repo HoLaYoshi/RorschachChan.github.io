@@ -105,7 +105,12 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins9.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins5.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins7.png">
-<meta property="og:updated_time" content="2018-05-26T02:07:19.218Z">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins10.png">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins11.png">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins12.png">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins13.png">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins14.png">
+<meta property="og:updated_time" content="2018-06-11T07:12:03.836Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab+Jenkins搭建持续集成系统">
 <meta name="twitter:description" content="尚未完成...">
@@ -435,7 +440,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  552
+                  898
                 </span>
               
 
@@ -451,7 +456,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -477,18 +482,26 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>gitlab是一个应用很广泛的版本控制工具，他也有自带的持续集成工具—<code>gitlab cli</code>，但是这个工具不如jenkins那么好用。本文的目的要把gitlab和jenkins进行结合，当我们更新了代码并且把代码push到gitlab的时候，gitlab会把代码的变化通知到jenkins，然后jenkins就会自动构建project。</p>
-<p>说一下实验环境：<br>Jenkins所在服务器IP：121.41.37.251（10.168.173.181），版本是<code>2.124</code>(查看jenkins的版本语句<code>java -jar /usr/lib/jenkins/jenkins.war --version</code>);<br>Gitlab所在服务器IP：114.55.224.158（10.25.85.175），使用容器安装，版本是<code>10.7.3</code>;</p>
+<p>说一下实验环境：<br>Jenkins所在服务器IP：121.41.37.251(10.168.173.181)，版本是<code>2.124</code>(查看jenkins的版本语句<code>java -jar /usr/lib/jenkins/jenkins.war --version</code>);<br>Gitlab所在服务器IP：114.55.224.158(10.25.85.175)，使用容器安装，版本是<code>10.7.3</code>;</p>
 <h2><span id="jenkins添加gitlab插件">jenkins添加gitlab插件</span></h2><p>通过浏览器登陆jenkins界面，然后在<code>系统管理</code>里面选择<code>管理插件</code>，如图：<br><img src="/images/gitlabjenkins1.png" alt="akb48"></p>
 <p>然后在<code>可选择插件</code>里搜索<code>gitlab hook</code>插件，但是没想到我这个版本提示，目前的1.4.2版本的<code>gitlab hook</code>目前存在安全隐患，如图：<br><img src="/images/gitlabjenkins2.png" alt="akb48"></p>
 <p>具体的安全隐患细节是这样的：<br><img src="/images/gitlabjenkins3.png" alt="akb48"></p>
 <p>这个风险请自己把握，然后我选择了继续安装，如图：<br><img src="/images/gitlabjenkins4.png" alt="akb48"></p>
 <p>安装完了<code>gitlab hook</code>插件后，还要安装<code>GitLab Plugin</code>和<code>Gitlab Authentication plugin</code>这两个插件，方法跟上面的一样。</p>
-<h2><span id="创建测试工程">创建测试工程</span></h2><p>在jenkins上建立一个新的任务，比如叫”jicheng-test”，这是一个<code>自由风格的软件项目</code>：<br><img src="/images/gitlabjenkins6.png" alt="akb48"></p>
-<p>然后在源码管理里面选择git，然后输入gitlab里面仓库的地址，比如我在gitlab上新建了一个仓库叫jenkinstest，那么就复制这个仓库的地址填到jenkins的<code>Repositories</code>里，如图：<br><img src="/images/gitlabjenkins8.png" alt="akb48"></p>
+<h2><span id="创建测试工程">创建测试工程</span></h2><p>在jenkins上建立一个新的任务，比如叫<code>jicheng-test</code>，这是一个<code>自由风格的软件项目</code>：<br><img src="/images/gitlabjenkins6.png" alt="akb48"></p>
+<p>然后在源码管理里面选择git，然后输入gitlab里面仓库的地址，比如我在gitlab上新建了一个project叫<code>jenkinstest</code>，那么就复制这个仓库的地址填到jenkins的<code>Repositories</code>里，如图：<br><img src="/images/gitlabjenkins8.png" alt="akb48"></p>
 <p>还要在<code>Credentials</code>这里面写上gitlab的用户和密码，然后保存即可：<br><img src="/images/gitlabjenkins9.png" alt="akb48"></p>
 <h2><span id="配置-gitlab-用户">配置 GitLab 用户</span></h2><p>浏览器切换到gitlab界面，在用户头像点击，<code>User settings</code> —&gt; <code>Access Tokens</code>，这里的<code>Personal Access Tokens</code>写入一个账号，这个账号是用来让Jenkins和GitLab API交互。这个用户将需要是全局的管理员或添加进每个组／工程，并作为成员。需要开发者权限来报告构建状态。如图：<br><img src="/images/gitlabjenkins5.png" alt="akb48"></p>
 <p>输入账号和账号有效时期之后，会生成一个Private token，如图：<br><img src="/images/gitlabjenkins7.png" alt="akb48"></p>
 <p>拷贝它，稍后在配置Jenkins服务器时会用到。</p>
+<h2><span id="配置-jenkins-服务器">配置 Jenkins 服务器</span></h2><p>需要配置 Jenkins 服务器来与 GitLab 服务器通信。</p>
+<p>在 Jenkins 中，选择 系统管理 -&gt; 系统设置，在系统设置中找到 GitLab 的部分：<br><img src="/images/gitlabjenkins10.png" alt="akb48"></p>
+<p>在<code>Connection name</code>后的输入框中输入连接名称，在<code>Gitlab host URL</code>后的输入框中输入GitLab服务器的URL地址。点击<code>Credentials</code>行最后面的<code>Add -&gt; Jenkins</code>按钮，弹出如下对话框，在Kind 后的下拉列表中选择<code>GitLab API token</code>，并把上一步拷贝的<code>Private token</code>粘贴到<code>API token</code>后面的输入框中。<br><img src="/images/gitlabjenkins11.png" alt="akb48"></p>
+<p>随后在<code>Credentials</code>的下拉框中选择<code>GitLab API token</code>。</p>
+<h2><span id="配置-jenkins-工程">配置 Jenkins 工程</span></h2><p>来到刚刚建立的那个工程<code>jicheng-test</code>，点击<code>构建触发器</code>，先勾选<code>Build when a change is pushed to GitLab</code>，点击<code>高级</code>，然后再点击一下<code>Generate</code>就会生成一个<code>Secret Token</code>，如下：<br><img src="/images/gitlabjenkins12.png" alt="akb48"></p>
+<p>点击左下角的<code>保存</code>按钮，保存前面所做的配置。这个时候要记录两个东西，一个是<code>Build when a change is pushed to GitLab</code>那一行中，GitLab CI Service URL: 后面的 URL；还有一个就是刚刚生成的<code>Secret Token</code>，这俩在后面配置GitLab工程时需要用到。</p>
+<h2><span id="配置-gitlab-工程">配置 GitLab 工程</span></h2><p>在gitlab进入那个叫<code>jenkinstest</code>的project，然后在<code>settings---&gt;Integrations</code>，在<code>URL</code>里填写刚刚记下来的<code>URL</code>，在<code>Secret Token</code>里填写刚刚记下来的<code>Secret Token</code>，如图：<br><img src="/images/gitlabjenkins13.png" alt="akb48"></p>
+<p>然后点击下面绿色的<code>add webhook</code>，就会生成一个<code>Webhooks</code>，如图：<br><img src="/images/gitlabjenkins14.png" alt="akb48"></p>
 
       
     </div>
@@ -887,7 +900,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;">&#x524D;&#x8A00;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;">jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;">&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x7528;&#x6237;">&#x914D;&#x7F6E; GitLab &#x7528;&#x6237;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;">&#x524D;&#x8A00;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;">jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;">&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x7528;&#x6237;">&#x914D;&#x7F6E; GitLab &#x7528;&#x6237;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-jenkins-&#x670D;&#x52A1;&#x5668;">&#x914D;&#x7F6E; Jenkins &#x670D;&#x52A1;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-jenkins-&#x5DE5;&#x7A0B;">&#x914D;&#x7F6E; Jenkins &#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x5DE5;&#x7A0B;">&#x914D;&#x7F6E; GitLab &#x5DE5;&#x7A0B;</span></span></a></li></ol></div>
             
 
           </div>
@@ -940,7 +953,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共131.4k字</span>
+  <span class="post-count">博客全站共131.7k字</span>
 </div>
         
 
