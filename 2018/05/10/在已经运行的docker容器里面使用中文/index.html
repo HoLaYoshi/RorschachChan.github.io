@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlab5.jpg">
 <meta property="og:image" content="http://yoursite.com/images/gitlab7.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlab6.jpg">
-<meta property="og:updated_time" content="2018-05-14T14:27:43.370Z">
+<meta property="og:updated_time" content="2018-06-11T12:55:45.534Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在已经运行的docker容器里面使用中文">
 <meta name="twitter:description" content="如果要是dockerfile里都直接使用中文就更好了">
@@ -435,7 +435,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  631
+                  630
                 </span>
               
 
@@ -477,7 +477,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="配置ldap">配置ldap</span></h2><p>公司搭建的gitlab现在需要开启ldap服务，也就是这样就可以用公司的域账号登陆gitlab，而不用开发一个一个去注册账号了。</p>
-<p>开启ldap登陆的任务光荣了落到了我的身上，于是我就登陆到gitlab服务器一看，嚯，这还是在容器下启动的，如图：<br><img src="/images/gitlab2.png" alt="paradin"></p>
+<p>开启ldap登陆的任务光荣的落到了我身上，于是我就登陆到gitlab服务器一看，嚯，这还是在容器下启动的，如图：<br><img src="/images/gitlab2.png" alt="paradin"></p>
 <p>于是我就<code>docker exec -it 容器ID号 /bin/bash</code>登陆到这个容器里，编辑<code>/opt/gitlab/embedded/service/gitlab-rails/config/gitlab.yml</code>，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ldap:    </span><br><span class="line">  enabled: <span class="literal">true</span></span><br><span class="line">  sync_time:</span><br><span class="line">  host: <span class="string">'公司域账号服务器IP地址'</span></span><br><span class="line">  port: <span class="number">389</span></span><br><span class="line">  uid: <span class="string">'sAMAccountName'</span></span><br><span class="line">  method: 'plain' # "tls" or "ssl" or "plain"</span><br><span class="line">  bind_dn: <span class="string">'dahuatech\Ldap_System'</span></span><br><span class="line">  password: <span class="string">'对应的密码'</span></span><br><span class="line">  active_directory:</span><br><span class="line">  allow_username_or_email_login:    </span><br><span class="line">  lowercase_usernames:</span><br><span class="line">  base: </span><br><span class="line">  user_filter:</span><br></pre></td></tr></table></figure></p>
 <p>但是在填写到base的时候发现了一个问题，公司的base是中文的，是<code>&#39;OU=大数据研究院,OU=研发中心,OU=大华技术,DC=dahuatech,DC=com&#39;</code>，但是在文件里输入中文却是乱码，如图：<br><img src="/images/gitlab3.png" alt="paradin"></p>
 <p>容器默认是不支持中文的，在容器里的命令行输入中文也是空白。那么面对一个已经运行的容器，如何正常的输入中文呢？</p>
@@ -487,7 +487,7 @@
 <p>首先用root账号登陆到<code>gitlab</code>里，在网页里进入到<code>admin area</code>，如图：<br><img src="/images/gitlab8.png" alt="paradin"></p>
 <p>然后再点击最下面的<code>settings</code>，选择<code>Sign-up restrictions</code>，然后把<code>Sign-up enabled</code>前面的勾点掉，如图：<br><img src="/images/gitlab9.png" alt="paradin"></p>
 <p>保存改变之后，退出root账号，重新看一下，gitlab的注册功能就暂时被取消了，需要的时候再开即可。</p>
-<h2><span id="配置域名">配置域名</span></h2><p>为了方便记忆，给gitlab服务配置一个域名，在阿里云的域名解析控制台给gitlab配置了域名之后，还要在<code>gitlab.yml</code>手动更改hostanme，把hostname改成域名的样子，如图：<br><img src="/images/gitlab5.jpg" alt="paradin"></p>
+<h2><span id="配置域名">配置域名</span></h2><p>为了方便记忆，给gitlab服务配置一个域名，在阿里云的域名解析控制台给gitlab配置了域名之后，还要在<code>gitlab.yml</code>手动更改hostname，把hostname改成域名的样子，如图：<br><img src="/images/gitlab5.jpg" alt="paradin"></p>
 <p>这样没有结束，因为网页里的url还是显示外网IP而非域名,如下：<br><img src="/images/gitlab7.png" alt="paradin"></p>
 <p>此时需要重启，重启的命令是<code>gitlab-ctl restart</code>，重启完了之后url也会发生变化。这样才算完整的配置了域名：<br><img src="/images/gitlab6.jpg" alt="paradin"></p>
 
@@ -724,7 +724,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">139</span>
+                  <span class="site-state-item-count">140</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -939,7 +939,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共132.0k字</span>
+  <span class="post-count">博客全站共132.3k字</span>
 </div>
         
 
