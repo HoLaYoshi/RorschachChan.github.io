@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一">
+<meta name="description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一，滚也好滚">
 <meta name="keywords" content="ansible,jenkins">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Jenkins搭配ansible部署">
 <meta property="og:url" content="http://yoursite.com/2018/06/12/Jenkins搭配ansible部署/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一">
+<meta property="og:description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一，滚也好滚">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible2.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible1.png">
@@ -104,10 +104,10 @@
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible6.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible7.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible8.png">
-<meta property="og:updated_time" content="2018-06-12T09:44:07.512Z">
+<meta property="og:updated_time" content="2018-06-12T09:50:57.588Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins搭配ansible部署">
-<meta name="twitter:description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一">
+<meta name="twitter:description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一，滚也好滚">
 <meta name="twitter:image" content="http://yoursite.com/images/jenkinsansible2.png">
 
 
@@ -434,7 +434,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,211
+                  1,225
                 </span>
               
 
@@ -458,7 +458,7 @@
 
           
               <div class="post-description">
-                  gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一
+                  gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一，滚也好滚
               </div>
           
 
@@ -475,7 +475,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="架构流程">架构流程</span></h2><p>现在运维组工具里加入了gitlab，再加上原有的jenkins和ansible，整个流程如下：<br>1.push代码到gitlab<br>2.gitlab通过webhook推送事件到jenkins,触发构建任务<br>3.jenkins从gitlab将最新代码拉取下来<br>4.jenkins通过ansible将最新的代码部署到应用服务器<br>5.推送构建状态到gitlab</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="架构流程">架构流程</span></h2><p>现在运维组工具里加入了gitlab这个版本控制工具，再加上原有的jenkins和ansible，整个代码模块部署流程如下：<br>1.push代码到gitlab<br>2.gitlab通过webhook推送事件到jenkins,触发构建任务<br>3.jenkins从gitlab将最新代码拉取下来<br>4.jenkins通过ansible将最新的代码部署到应用服务器<br>5.推送构建状态到gitlab</p>
 <h2><span id="安装ansible">安装ansible</span></h2><p>jenkins虽然支持ansible，但是前提是jenkins所在的主机上要有ansible程序，安装ansible的方法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip</span><br><span class="line">pip install paramiko PyYAML Jinja2 httplib2 six</span><br><span class="line">pip install ansible		#安装的是2.5.4版本</span><br></pre></td></tr></table></figure></p>
 <p>然后需要jenkins服务器与代码服务器之间建立ssh免密码登陆的关系，这里就不说细节了，可以去看一下<a href="http://blog.51cto.com/chenx1242/1763978" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1763978</a> 这个文章。</p>
 <p>再去<code>/etc/ansible/hosts</code>手动输入一下授信服务器的IP地址，启动一下ansible看效果：<br><img src="/images/jenkinsansible2.png" alt="akb48"></p>
