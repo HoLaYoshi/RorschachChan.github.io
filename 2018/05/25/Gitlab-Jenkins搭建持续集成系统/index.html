@@ -115,7 +115,8 @@
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins17.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins18.png">
 <meta property="og:image" content="http://yoursite.com/images/gitlabjenkins19.png">
-<meta property="og:updated_time" content="2018-06-11T11:45:18.323Z">
+<meta property="og:image" content="http://yoursite.com/images/gitlabjenkins20.png">
+<meta property="og:updated_time" content="2018-06-13T08:06:58.942Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab+Jenkins搭建持续集成系统">
 <meta name="twitter:description" content="公司由于安全政策不让开发代码接触外网，只能用本地的gitlab去搭配jenkins部署">
@@ -445,7 +446,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,098
+                  1,205
                 </span>
               
 
@@ -461,7 +462,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  5
                 </span>
               
             </div>
@@ -504,7 +505,7 @@
 <p>在<code>Connection name</code>后的输入框中输入连接名称，在<code>Gitlab host URL</code>后的输入框中输入GitLab服务器的URL地址。点击<code>Credentials</code>行最后面的<code>Add -&gt; Jenkins</code>按钮，弹出如下对话框，在Kind 后的下拉列表中选择<code>GitLab API token</code>，并把上一步拷贝的<code>Private token</code>粘贴到<code>API token</code>后面的输入框中。<br><img src="/images/gitlabjenkins11.png" alt="akb48"></p>
 <p>随后在<code>Credentials</code>的下拉框中选择<code>GitLab API token</code>。</p>
 <h2><span id="配置-jenkins-工程">配置 Jenkins 工程</span></h2><p>来到刚刚建立的那个工程<code>jicheng-test</code>，点击<code>构建触发器</code>，先勾选<code>Build when a change is pushed to GitLab</code>，点击<code>高级</code>，然后再点击一下<code>Generate</code>就会生成一个<code>Secret Token</code>，如下：<br><img src="/images/gitlabjenkins12.png" alt="akb48"></p>
-<p>点击左下角的<code>保存</code>按钮，保存前面所做的配置。这个时候要记录两个东西，一个是<code>Build when a change is pushed to GitLab</code>那一行中，GitLab CI Service URL: 后面的 URL；还有一个就是刚刚生成的<code>Secret Token</code>，这俩在后面配置GitLab工程时需要用到。</p>
+<p>点击左下角的<code>保存</code>按钮，保存前面所做的配置。这个时候要记录两个东西，一个是<code>Build when a change is pushed to GitLab</code>那一行中，<code>GitLab CI Service URL:</code>后面的 URL；还有一个就是刚刚生成的<code>Secret Token</code>，这俩在后面配置GitLab工程时需要用到。</p>
 <h2><span id="配置-gitlab-工程">配置 GitLab 工程</span></h2><p>在gitlab进入那个叫<code>jenkinstest</code>的project，然后在<code>settings---&gt;Integrations</code>，在<code>URL</code>里填写刚刚记下来的<code>URL</code>，在<code>Secret Token</code>里填写刚刚记下来的<code>Secret Token</code>，如图：<br><img src="/images/gitlabjenkins13.png" alt="akb48"></p>
 <p>然后点击下面绿色的<code>add webhook</code>，就会生成一个<code>Webhooks</code>，如图：<br><img src="/images/gitlabjenkins14.png" alt="akb48"></p>
 <p>去代码服务器上提交一个commit，然后push到gitlab里，再返回到<code>Integrations</code>，对刚刚生成的<code>webhooks</code>点击<code>test</code>，选择<code>push events</code>，如图：<br><img src="/images/gitlabjenkins16.png" alt="akb48"></p>
@@ -512,6 +513,9 @@
 <p>如果你再点击一下test上面的edit，就会看到webhook最近调用情况，再点击view details的话，就会看到具体的调用细节，如图：<br><img src="/images/gitlabjenkins17.png" alt="akb48"></p>
 <h2><span id="验证测试">验证测试</span></h2><p>此时我在代码服务器上做了一些简单的改动，然后重新把代码push到gitlab服务器上，在jenkins里的相关project里，就会看到已经自动开始build了，如图：<br><img src="/images/gitlabjenkins18.png" alt="akb48"></p>
 <p>再在具体的某次build里选择<code>控制台输出</code>，就会看到构建的详细过程，如图：<br><img src="/images/gitlabjenkins19.png" alt="akb48"></p>
+<h2><span id="横向扩展">横向扩展</span></h2><p>如果是多个gitlab的project去对应同一个jenkins，那么需要在jenkins的project的<code>配置</code>的<code>源码管理</code>里添加一个新的<code>Repositories</code>，如图：<br><img src="/images/gitlabjenkins20.png" alt="akb48"></p>
+<p>如果想要限制分支的话，就要更改<code>Branches to build</code>，现在默认是“只要master分支有push就会触发jenkins构建”。</p>
+<p>然后再回到gitlab的新project里，进入<code>Integrations</code>，重新输入<code>配置 Jenkins 工程</code>那个环节里的<code>URL</code>和<code>Secret Token</code>就OK了！</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.cnblogs.com/bugsbunny/p/7919993.html" target="_blank" rel="noopener">http://www.cnblogs.com/bugsbunny/p/7919993.html</a><br><a href="https://www.wolfcstech.com/2018/03/26/gitlab_trigger_jenkins_build/" target="_blank" rel="noopener">https://www.wolfcstech.com/2018/03/26/gitlab_trigger_jenkins_build/</a></p>
 
       
@@ -911,7 +915,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;">&#x524D;&#x8A00;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;">jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;">&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x7528;&#x6237;">&#x914D;&#x7F6E; GitLab &#x7528;&#x6237;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-jenkins-&#x670D;&#x52A1;&#x5668;">&#x914D;&#x7F6E; Jenkins &#x670D;&#x52A1;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-jenkins-&#x5DE5;&#x7A0B;">&#x914D;&#x7F6E; Jenkins &#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x5DE5;&#x7A0B;">&#x914D;&#x7F6E; GitLab &#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text"><span id="&#x9A8C;&#x8BC1;&#x6D4B;&#x8BD5;">&#x9A8C;&#x8BC1;&#x6D4B;&#x8BD5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x524D;&#x8A00;">&#x524D;&#x8A00;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;">jenkins&#x6DFB;&#x52A0;gitlab&#x63D2;&#x4EF6;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;">&#x521B;&#x5EFA;&#x6D4B;&#x8BD5;&#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x7528;&#x6237;">&#x914D;&#x7F6E; GitLab &#x7528;&#x6237;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-jenkins-&#x670D;&#x52A1;&#x5668;">&#x914D;&#x7F6E; Jenkins &#x670D;&#x52A1;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-jenkins-&#x5DE5;&#x7A0B;">&#x914D;&#x7F6E; Jenkins &#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;-gitlab-&#x5DE5;&#x7A0B;">&#x914D;&#x7F6E; GitLab &#x5DE5;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text"><span id="&#x9A8C;&#x8BC1;&#x6D4B;&#x8BD5;">&#x9A8C;&#x8BC1;&#x6D4B;&#x8BD5;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text"><span id="&#x6A2A;&#x5411;&#x6269;&#x5C55;">&#x6A2A;&#x5411;&#x6269;&#x5C55;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -964,7 +968,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共133.2k字</span>
+  <span class="post-count">博客全站共133.3k字</span>
 </div>
         
 
