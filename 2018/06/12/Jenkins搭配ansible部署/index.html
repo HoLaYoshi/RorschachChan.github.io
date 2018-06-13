@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible6.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible7.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsansible8.png">
-<meta property="og:updated_time" content="2018-06-12T11:03:31.243Z">
+<meta property="og:updated_time" content="2018-06-13T01:28:26.567Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins搭配ansible部署">
 <meta name="twitter:description" content="gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一，滚也好滚">
@@ -480,7 +480,7 @@
 <p>然后需要jenkins服务器与代码服务器之间建立ssh免密码登陆的关系，这里就不说细节了，可以去看一下<a href="http://blog.51cto.com/chenx1242/1763978" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1763978</a> 这个文章。</p>
 <p>再去<code>/etc/ansible/hosts</code>手动输入一下授信服务器的IP地址，启动一下ansible看效果：<br><img src="/images/jenkinsansible2.png" alt="akb48"></p>
 <p>如果在启动ansible的时候出现了如下的错误：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/lib/python2.7/site-packages/requests/__init__.py:80: RequestsDependencyWarning: urllib3 (1.21.1) or chardet (2.2.1) doesn&apos;t match a supported version!</span><br><span class="line">  RequestsDependencyWarning)</span><br></pre></td></tr></table></figure></p>
-<p>那就是python库中urllib3 (1.21.1) or chardet (2.2.1) 的版本不兼容，解决办法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall urllib3</span><br><span class="line">pip uninstall chardet</span><br><span class="line">pip install requests</span><br></pre></td></tr></table></figure></p>
+<p>那就是python库中<code>urllib3 (1.21.1)</code> or <code>chardet (2.2.1)</code>的版本不兼容，解决办法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall urllib3</span><br><span class="line">pip uninstall chardet</span><br><span class="line">pip install requests</span><br></pre></td></tr></table></figure></p>
 <h2><span id="安装插件">安装插件</span></h2><p>登陆jenkins的web页面，选择<code>系统管理</code>—&gt;<code>管理插件</code>，安装如下三个插件：<code>Ansible plugin</code>、<code>Ansible Tower Plugin</code>、<code>AnsiColor</code>。如图：<br><img src="/images/jenkinsansible1.png" alt="akb48"></p>
 <p>安装插件并且重启了ansible之后，还是<code>系统管理-</code>–&gt;<code>全局工具配置</code>，找到<code>ansible安装</code>，分别把ansible的路径根据实际情况填写进去，如图：<br><img src="/images/jenkinsansible3.png" alt="akb48"></p>
 <p>填写完毕之后保存即可。</p>
