@@ -96,10 +96,12 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="1.7版本的git就是一个坑">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-06-13T12:11:47.311Z">
+<meta property="og:image" content="http://yoursite.com/images/gakki1.gif">
+<meta property="og:updated_time" content="2018-06-13T12:16:50.461Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos6安装git1.9安装过程">
 <meta name="twitter:description" content="1.7版本的git就是一个坑">
+<meta name="twitter:image" content="http://yoursite.com/images/gakki1.gif">
 
 
 
@@ -468,6 +470,7 @@
       
         <script src="\assets\js\APlayer.min.js"> </script><p>Centos 6.x用yum安装git的话，默认是<code>1.7.1</code>。它在执行<code>git push</code>的时候会报错:<code>error: The requested URL returned error: 401 Unauthorized while accessing</code>。这种情况升级git可破。</p>
 <p>具体的升级方法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel		#先准备一下环境</span><br><span class="line">cd /root</span><br><span class="line">wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/git-core/git-1.9.0.tar.gz		#下载1.9的包</span><br><span class="line">tar -zvxf git-1.9.0.tar.gz</span><br><span class="line">cd git-1.9.0</span><br><span class="line">make prefix=/usr/local/git all		#安装到/usr/local里</span><br><span class="line">make prefix=/usr/local/git install</span><br><span class="line">ln -s /usr/local/git/bin/* /usr/bin/		#建立软连接</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure></p>
+<p><img src="/images/gakki1.gif" alt="akb48" title="刚巴得~~~"></p>
 
       
     </div>
