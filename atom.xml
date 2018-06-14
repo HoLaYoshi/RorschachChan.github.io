@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-14T05:55:17.350Z</updated>
+  <updated>2018-06-14T06:55:53.485Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,30 +15,6 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Linux运维工程师笔试题第十六套</title>
-    <link href="http://yoursite.com/2018/06/14/Linux%E8%BF%90%E7%BB%B4%E5%B7%A5%E7%A8%8B%E5%B8%88%E7%AC%94%E8%AF%95%E9%A2%98%E7%AC%AC%E5%8D%81%E5%85%AD%E5%A5%97/"/>
-    <id>http://yoursite.com/2018/06/14/Linux运维工程师笔试题第十六套/</id>
-    <published>2018-06-14T05:51:53.000Z</published>
-    <updated>2018-06-14T05:55:17.350Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>1.下面这个脚本执行出来的结果是什么？</p><pre><code>#!/usr/bin/env python#coding=utf-8import randomrandom_bits = 0for i in range(64):    if random.randint(0,1):         random_bits |=1 &lt;&lt; i         print random_bits</code></pre><p><img src="/images/马夏尔2.gif" alt="akb48"></p>]]></content>
-    
-    <summary type="html">
-    
-      这里面所有的题都是跟python相关的
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="面试经验" scheme="http://yoursite.com/tags/%E9%9D%A2%E8%AF%95%E7%BB%8F%E9%AA%8C/"/>
-    
-      <category term="大牛之路" scheme="http://yoursite.com/tags/%E5%A4%A7%E7%89%9B%E4%B9%8B%E8%B7%AF/"/>
-    
-  </entry>
   
   <entry>
     <title>Centos6安装git1.9安装过程</title>
@@ -473,6 +449,28 @@
       <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
     
       <category term="docker容器" scheme="http://yoursite.com/tags/docker%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>python报错：importError: No module named bz2</title>
+    <link href="http://yoursite.com/2018/05/12/python%E6%8A%A5%E9%94%99%EF%BC%9A&#39;importError-No-module-named-bz2&#39;/"/>
+    <id>http://yoursite.com/2018/05/12/python报错：&#39;importError-No-module-named-bz2&#39;/</id>
+    <published>2018-05-12T02:08:07.000Z</published>
+    <updated>2018-05-12T04:19:32.054Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>每日统计阿里云同步延迟的邮件早就编写完毕了，现在要放到专门跑脚本的服务器里，进去到这个服务器里发现这个机器已经被人装了两个python，分别是python 2.7.5（默认路径）和python 2.7.13（路径是<code>/usr/local/python/bin/python</code>），说实话我个人不太明白这么做的原因何在。</p><p>但是既然已经被人搞成这样了，那就适应环境吧，把脚本拷贝过来，把依赖库都安装好，但是在执行<code>matplotlib</code>的库的时候，爆了一个错误：<code>ImportError: No module named bz2</code>。</p><p>这就是因为两个python，但是启动的那个python文件夹里面是没有<code>bz2.so</code>这个文件的，于是就需要把系统里默认的2.7.5的<code>bz2.so</code>拷贝到2.7.13的lib路径里。</p><p>首先<code>find / -name bz2.so</code>找一下文件，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@dvl-stun-002 GETDTS]# find / -name bz2.so</span><br><span class="line">/usr/local/aegis/PythonLoader/lib/python2<span class="number">.7</span>/lib-dynload/bz2.so</span><br><span class="line">/usr/local/aegis/SecureCheck/lib/python2<span class="number">.7</span>/lib-dynload/bz2.so</span><br><span class="line">/usr/lib64/python2<span class="number">.7</span>/lib-dynload/bz2.so</span><br></pre></td></tr></table></figure></p><p>然后<code>cd /usr/local/python/lib/python2.7/</code>，把<code>/usr/lib64/python2.7/lib-dynload/bz2.so</code>复制到这个文件夹里即可。<br><img src="/images/rubio3kill.gif" alt="paradin"></p>]]></content>
+    
+    <summary type="html">
+    
+      双python的蛋疼...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
   </entry>
   
