@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/aliCDN3.png">
 <meta property="og:image" content="http://yoursite.com/images/aliCDN1.png">
 <meta property="og:image" content="http://yoursite.com/images/aliCDN5.png">
-<meta property="og:updated_time" content="2018-04-28T14:00:42.648Z">
+<meta property="og:updated_time" content="2018-06-21T01:53:38.471Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次nginx负载均衡配置问题">
 <meta name="twitter:description" content="真正站在运维的层面讲nginx的书不多的...">
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  682
+                  725
                 </span>
               
 
@@ -477,10 +477,11 @@
 <p>但是现在很奇怪的是，所有节点启动之后，外网用户通过负载后访问均指向了<code>10.1.82.84</code>这一台服务器，<code>nginx.conf</code>配置是<code>最小连接数</code>的配置，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">upstream eln.dahuatech.com &#123;</span><br><span class="line">      #ip_hash;</span><br><span class="line">      #hash $http_x_forwarded_for;</span><br><span class="line">      #sticky;</span><br><span class="line">      least_conn;</span><br><span class="line">      server  <span class="number">10.1</span><span class="number">.82</span><span class="number">.83</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">      server  <span class="number">10.1</span><span class="number">.82</span><span class="number">.84</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">      server  <span class="number">10.1</span><span class="number">.82</span><span class="number">.113</span> max_fails=<span class="number">2</span> fail_timeout=<span class="number">30</span>s;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">        server_name  eln.dahuatech.com;</span><br><span class="line">            listen     <span class="number">80</span>;</span><br><span class="line">            listen     <span class="number">443</span> ssl;</span><br><span class="line"></span><br><span class="line">        access_log logs/eln.dahuatech.com.access.log main;</span><br><span class="line">        error_log  logs/eln.dahuatech.com.error.log;</span><br><span class="line"></span><br><span class="line">        proxy_set_header Host $host:$server_port;</span><br><span class="line">        proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">        proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line"></span><br><span class="line">   location / &#123;</span><br><span class="line">            proxy_pass http:<span class="comment">//eln.dahuatech.com;</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>测试的时候发现，即使绑定美国和香港的节点去<code>curl</code>，是能正常解析到其他机器上的。如下：<br><img src="/images/aliCDN3.png" alt="paradin"></p>
 <p>然而源站过来的请求IP集中到了只有一个，这太奇怪了。</p>
-<h2><span id="故障解决">故障解决</span></h2><p>后来发现ngnix后端会把http1.1转换成1.0变成短连接，这个连接存在的时间非常短，因为后端响应非常快。所以即使配上了<code>least_conn</code>，其实是没有任何效果的。这样负载均衡的nginx看到所有源站其实一直都是没有连接的，所以也就一直在给第一个转。</p>
+<h2><span id="故障解决">故障解决</span></h2><p>后来发现<font color="red">ngnix后端会把http1.1转换成1.0变成短连接</font>，这个连接存在的时间非常短，因为后端响应非常快。所以即使配上了<code>least_conn</code>，其实是没有任何效果的。这样负载均衡的nginx看到所有源站其实一直都是没有连接的，所以也就一直在给第一个转。</p>
 <p>既然这样，就取消了<code>least_conn</code>改用轮询，nginx.conf也改成如下的样子：<br><img src="/images/aliCDN1.png" alt="paradin"></p>
 <p>最后终于均衡了，大功告成！<br><img src="/images/aliCDN5.png" alt="paradin"></p>
 <p>后来琢磨了一下，是用sticky其实也是OK的。</p>
+<p>所以说，有些情景使用域名不通的情况下，可以考虑直接使用IP，这样就绕过nginx了，不会破坏原来的长连接。</p>
 <h2><span id="几个主流负载均衡软件配置cookie的方法">几个主流负载均衡软件配置cookie的方法</span></h2><p>1.Apache的话首先打开<code>httpd.conf</code>配置文件，确保如下配置没有被注释。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LoadModule usertrack_module modules/mod_usertrack.so</span><br></pre></td></tr></table></figure></p>
 <p>再在<code>virtual host</code>中添加以下配置。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CookieName name</span><br><span class="line">CookieExpires <span class="string">"1 days"</span></span><br><span class="line">CookieStyle Cookie</span><br><span class="line">CookieTracking on</span><br></pre></td></tr></table></figure></p>
 <p>2.Nginx参考以下配置，设置Cookie。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen <span class="number">8080</span>;</span><br><span class="line">    server_name wqwq.example.com;</span><br><span class="line">    location / &#123;</span><br><span class="line">      add_header <span class="built_in">Set</span>-Cookie name=xxxx;</span><br><span class="line">        root   html;</span><br><span class="line">        index  index.html index.htm;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -722,7 +723,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">141</span>
+                  <span class="site-state-item-count">142</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -937,7 +938,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共133.9k字</span>
+  <span class="post-count">博客全站共134.0k字</span>
 </div>
         
 

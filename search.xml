@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[给非root开放tcpdump命令权限]]></title>
+    <url>%2F2018%2F06%2F22%2F%E7%BB%99%E9%9D%9Eroot%E5%BC%80%E6%94%BEtcpdump%E5%91%BD%E4%BB%A4%E6%9D%83%E9%99%90%2F</url>
+    <content type="text"><![CDATA[这周给开发们上了堡垒机，使用的是开源的jumpserver，官网是http://www.jumpserver.org/ 。 注册了账号下发给各位开发之后，开发反馈了一个问题：无法用tcpdump抓包。因为tcpdump默认是只能被root调用的，如果是非root用户使用就会报错：You don&#39;t have permission to capture on that device。 如果要让普通用户也能顺利用上tcpdump，方法很简单，就是对tcpdump这个文件修改成u+s即可。整个过程如下图： 在堡垒机的web界面试一下：]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Centos6安装git1.9安装过程]]></title>
     <url>%2F2018%2F06%2F13%2FCentos6%E5%AE%89%E8%A3%85git1-9%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%2F</url>
     <content type="text"><![CDATA[安装过程Centos 6.x用yum安装git的话，默认是1.7.1。它在执行git push的时候会报错:error: The requested URL returned error: 401 Unauthorized while accessing。这种情况升级git可破。 具体的升级方法如下： 123456789yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel #先准备一下环境cd /rootwget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/git-core/git-1.9.0.tar.gz #下载1.9的包tar -zvxf git-1.9.0.tar.gzcd git-1.9.0make prefix=/usr/local/git all #安装到/usr/local里make prefix=/usr/local/git installln -s /usr/local/git/bin/* /usr/bin/ #建立软连接git --version 常用命令随便列举几个常用命令： 123456789git remote add origin http://xxxxxxx #将后面那个网址作为remote的源站git remote rm origin #将刚刚建立的那个源站删了 git pull origin master #把remote的master分支的内容down到本地git reset --hard HEAD #撤销未提交的文件git fetch -p #更新最新的远程分支，如果远程分支已删除，则删除本地对应标记的远程分支git branch -a #查看所有分支git checkout -b feature/test origin/feature/test #在本地新增对应的远程分支并切换到 新增的分支上git branch -D feature/test #删除本地feature/test分支 这个命令慎用，生产环境后期一般留个4,5个版本的release开头的分支,可以通过此命令删除一些早期版本的分支git branch checkout feature/test #通过此命令可以来回切换本地分支，当存在线上代码需要回滚的时候，可以进行次命令切换到之前的release分支]]></content>
@@ -255,7 +267,7 @@
   <entry>
     <title><![CDATA[记一次nginx负载均衡配置问题]]></title>
     <url>%2F2018%2F04%2F28%2F%E8%AE%B0%E4%B8%80%E6%AC%A1nginx%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98%2F</url>
-    <content type="text"><![CDATA[故障背景公司有三个实体服务器，内网IP分别是10.1.82.83、10.1.82.84、10.1.82.113，这三个作为源站使用专线连接到了阿里云的一台nginx服务器上，并且通过这个nginx做负载均衡展示这三个服务器里面的网页。负载均衡使用的是nginx 1.12版本，最外面在上一个CDN起到静态页面加速的作用。整个架构如图： CDN的配置界面如下： 但是现在很奇怪的是，所有节点启动之后，外网用户通过负载后访问均指向了10.1.82.84这一台服务器，nginx.conf配置是最小连接数的配置，如下： 123456789101112131415161718192021222324252627upstream eln.dahuatech.com &#123; #ip_hash; #hash $http_x_forwarded_for; #sticky; least_conn; server 10.1.82.83 max_fails=2 fail_timeout=30s; server 10.1.82.84 max_fails=2 fail_timeout=30s; server 10.1.82.113 max_fails=2 fail_timeout=30s;&#125;server &#123; server_name eln.dahuatech.com; listen 80; listen 443 ssl; access_log logs/eln.dahuatech.com.access.log main; error_log logs/eln.dahuatech.com.error.log; proxy_set_header Host $host:$server_port; proxy_set_header X-Real-IP $remote_addr; proxy_set_header REMOTE-HOST $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; location / &#123; proxy_pass http://eln.dahuatech.com; &#125;&#125; 测试的时候发现，即使绑定美国和香港的节点去curl，是能正常解析到其他机器上的。如下： 然而源站过来的请求IP集中到了只有一个，这太奇怪了。 故障解决后来发现ngnix后端会把http1.1转换成1.0变成短连接，这个连接存在的时间非常短，因为后端响应非常快。所以即使配上了least_conn，其实是没有任何效果的。这样负载均衡的nginx看到所有源站其实一直都是没有连接的，所以也就一直在给第一个转。 既然这样，就取消了least_conn改用轮询，nginx.conf也改成如下的样子： 最后终于均衡了，大功告成！ 后来琢磨了一下，是用sticky其实也是OK的。 几个主流负载均衡软件配置cookie的方法1.Apache的话首先打开httpd.conf配置文件，确保如下配置没有被注释。 1LoadModule usertrack_module modules/mod_usertrack.so 再在virtual host中添加以下配置。 1234CookieName nameCookieExpires "1 days"CookieStyle CookieCookieTracking on 2.Nginx参考以下配置，设置Cookie。 123456789server &#123; listen 8080; server_name wqwq.example.com; location / &#123; add_header Set-Cookie name=xxxx; root html; index index.html index.htm; &#125;&#125; 3.Lighttpd参考以下配置，设置Cookie。 12345server.modules = ( "mod_setenv" )$HTTP["host"] == "test.example.com" &#123; server.document-root = "/var/www/html/" setenv.add-response-header = ( "Set-Cookie" =&gt; "name=XXXXXX" &#125;&#125; 扩展阅读https://cloud.tencent.com/document/product/214/2736http://blog.text.wiki/2015/08/01/nginx-sticky-problem.htmlhttps://cloud.tencent.com/developer/article/1004547]]></content>
+    <content type="text"><![CDATA[故障背景公司有三个实体服务器，内网IP分别是10.1.82.83、10.1.82.84、10.1.82.113，这三个作为源站使用专线连接到了阿里云的一台nginx服务器上，并且通过这个nginx做负载均衡展示这三个服务器里面的网页。负载均衡使用的是nginx 1.12版本，最外面在上一个CDN起到静态页面加速的作用。整个架构如图： CDN的配置界面如下： 但是现在很奇怪的是，所有节点启动之后，外网用户通过负载后访问均指向了10.1.82.84这一台服务器，nginx.conf配置是最小连接数的配置，如下： 123456789101112131415161718192021222324252627upstream eln.dahuatech.com &#123; #ip_hash; #hash $http_x_forwarded_for; #sticky; least_conn; server 10.1.82.83 max_fails=2 fail_timeout=30s; server 10.1.82.84 max_fails=2 fail_timeout=30s; server 10.1.82.113 max_fails=2 fail_timeout=30s;&#125;server &#123; server_name eln.dahuatech.com; listen 80; listen 443 ssl; access_log logs/eln.dahuatech.com.access.log main; error_log logs/eln.dahuatech.com.error.log; proxy_set_header Host $host:$server_port; proxy_set_header X-Real-IP $remote_addr; proxy_set_header REMOTE-HOST $remote_addr; proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; location / &#123; proxy_pass http://eln.dahuatech.com; &#125;&#125; 测试的时候发现，即使绑定美国和香港的节点去curl，是能正常解析到其他机器上的。如下： 然而源站过来的请求IP集中到了只有一个，这太奇怪了。 故障解决后来发现ngnix后端会把http1.1转换成1.0变成短连接，这个连接存在的时间非常短，因为后端响应非常快。所以即使配上了least_conn，其实是没有任何效果的。这样负载均衡的nginx看到所有源站其实一直都是没有连接的，所以也就一直在给第一个转。 既然这样，就取消了least_conn改用轮询，nginx.conf也改成如下的样子： 最后终于均衡了，大功告成！ 后来琢磨了一下，是用sticky其实也是OK的。 所以说，有些情景使用域名不通的情况下，可以考虑直接使用IP，这样就绕过nginx了，不会破坏原来的长连接。 几个主流负载均衡软件配置cookie的方法1.Apache的话首先打开httpd.conf配置文件，确保如下配置没有被注释。 1LoadModule usertrack_module modules/mod_usertrack.so 再在virtual host中添加以下配置。 1234CookieName nameCookieExpires "1 days"CookieStyle CookieCookieTracking on 2.Nginx参考以下配置，设置Cookie。 123456789server &#123; listen 8080; server_name wqwq.example.com; location / &#123; add_header Set-Cookie name=xxxx; root html; index index.html index.htm; &#125;&#125; 3.Lighttpd参考以下配置，设置Cookie。 12345server.modules = ( "mod_setenv" )$HTTP["host"] == "test.example.com" &#123; server.document-root = "/var/www/html/" setenv.add-response-header = ( "Set-Cookie" =&gt; "name=XXXXXX" &#125;&#125; 扩展阅读https://cloud.tencent.com/document/product/214/2736http://blog.text.wiki/2015/08/01/nginx-sticky-problem.htmlhttps://cloud.tencent.com/developer/article/1004547]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -323,18 +335,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root用户启动tomcat进程]]></title>
-    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>运维安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root启动进程以及启动docker]]></title>
     <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
     <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
@@ -344,6 +344,18 @@
       <tags>
         <tag>docker</tag>
         <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root用户启动tomcat进程]]></title>
+    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>运维安全</tag>
       </tags>
   </entry>
   <entry>
@@ -559,8 +571,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>运维技术</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -1419,8 +1431,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1431,8 +1443,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1613,8 +1625,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
