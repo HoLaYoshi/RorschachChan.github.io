@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/fangdaolian1.jpg">
 <meta property="og:image" content="http://yoursite.com/images/fangdaolian2.jpg">
 <meta property="og:image" content="http://yoursite.com/images/fangdaolian3.jpg">
-<meta property="og:updated_time" content="2018-06-27T06:20:06.976Z">
+<meta property="og:updated_time" content="2018-06-27T06:43:49.662Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx配置防盗链">
 <meta name="twitter:description" content="要是阿里云的服务，直接可以通过OSS里的“防盗链”配置即可">
@@ -473,7 +473,7 @@
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="为什么网站们都要限制流量">为什么网站们都要限制流量？</span></h2><p>无论是网站服务器亦或是游戏服务器还是邮件服务器，说穿了也是一台电脑，也有CPU和内存。只不过服务器的CPU功能比个人电脑的CPU功能强大，比如个人电脑的CPU一秒钟能算1亿个数，那么服务器的CPU一秒钟就能算十亿个数。毕竟个人电脑只针对个人，但是服务器是要“接客”的，有了强大的硬件做后盾，网页/游戏/邮箱才不会那么轻易的Down掉。</p>
 <p>但是CPU不是人类大脑，人脑是越用越聪明，CPU是越用越磨损，毕竟始终在连电的环境下。于是乎，没有必要的运算能省就省，一个人省一次，十万个人就省十万次，一千万个人就省一千万次，这样达到积少成多的目的。</p>
 <p>CPU计算的是各种数据，而这些数据也叫作流量。有用的流量、有价值的流量通过CPU计算无可厚非，但是出现了没有用的流量或者是别人盗用我们的资源，那么这种情况能避免都要避免。什么叫盗用我们的资源，比如自己网站（网站A）上的图片或者视频，被其他人直接复制网站然后粘贴到他们的主页（网站B）上，其他用户登录了B网站，然后点击了那个图片和视频，由于是网址重链接，里外里提供数据的还是我们的服务器。也就是说B网站就是一个中介，而真正提供服务的是网站A，但是广告费和点击率都要网站B赚走了，这事儿实在是叔可忍婶不可忍。</p>
-<p>##什么是盗链？如何发现被盗链？ ##<br>什么叫盗链，上面已经说的差不多了，如果上面的文字没有看懂的话，举个例子，如果您看到了这两个图片，证明这个网站就是在盗链。<br><img src="/images/fangdaolian1.jpg" alt="paradin"></p>
+<h2><span id="什么是盗链如何发现被盗链">什么是盗链？如何发现被盗链？</span></h2><p>什么叫盗链，上面已经说的差不多了，如果上面的文字没有看懂的话，举个例子，如果您看到了这两个图片，证明这个网站就是在盗链。<br><img src="/images/fangdaolian1.jpg" alt="paradin"></p>
 <p><img src="/images/fangdaolian2.jpg" alt="paradin"></p>
 <p>这两个就是一个盗取的是QQ空间的图片，另一个就是百度的图片。用其他网站的图片这事儿本身是无所谓的，只要不涉及版权问题，都希望自己的作品能广泛传播，但是请不要直接通过网址重定向，厚道一点的行为应该是：“图片另存为”，然后到目标网站上去重新上传一下。</p>
 <p>这里再多说一点网站的基础知识。</p>
@@ -905,7 +905,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x4E3A;&#x4EC0;&#x4E48;&#x7F51;&#x7AD9;&#x4EEC;&#x90FD;&#x8981;&#x9650;&#x5236;&#x6D41;&#x91CF;">&#x4E3A;&#x4EC0;&#x4E48;&#x7F51;&#x7AD9;&#x4EEC;&#x90FD;&#x8981;&#x9650;&#x5236;&#x6D41;&#x91CF;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x670D;&#x52A1;&#x5668;&#x662F;&#x5982;&#x4F55;&#x77E5;&#x9053;&#x56FE;&#x7247;&#x662F;&#x4ECE;&#x7AD9;&#x5916;&#x800C;&#x6765;&#x7684;&#x5462;">&#x670D;&#x52A1;&#x5668;&#x662F;&#x5982;&#x4F55;&#x77E5;&#x9053;&#x56FE;&#x7247;&#x662F;&#x4ECE;&#x7AD9;&#x5916;&#x800C;&#x6765;&#x7684;&#x5462;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5982;&#x4F55;&#x4F7F;&#x7528;nginx&#x53CD;&#x76D7;&#x94FE;">&#x5982;&#x4F55;&#x4F7F;&#x7528;Nginx&#x53CD;&#x76D7;&#x94FE;&#xFF1F;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x4E3A;&#x4EC0;&#x4E48;&#x7F51;&#x7AD9;&#x4EEC;&#x90FD;&#x8981;&#x9650;&#x5236;&#x6D41;&#x91CF;">&#x4E3A;&#x4EC0;&#x4E48;&#x7F51;&#x7AD9;&#x4EEC;&#x90FD;&#x8981;&#x9650;&#x5236;&#x6D41;&#x91CF;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x4EC0;&#x4E48;&#x662F;&#x76D7;&#x94FE;&#x5982;&#x4F55;&#x53D1;&#x73B0;&#x88AB;&#x76D7;&#x94FE;">&#x4EC0;&#x4E48;&#x662F;&#x76D7;&#x94FE;&#xFF1F;&#x5982;&#x4F55;&#x53D1;&#x73B0;&#x88AB;&#x76D7;&#x94FE;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x670D;&#x52A1;&#x5668;&#x662F;&#x5982;&#x4F55;&#x77E5;&#x9053;&#x56FE;&#x7247;&#x662F;&#x4ECE;&#x7AD9;&#x5916;&#x800C;&#x6765;&#x7684;&#x5462;">&#x670D;&#x52A1;&#x5668;&#x662F;&#x5982;&#x4F55;&#x77E5;&#x9053;&#x56FE;&#x7247;&#x662F;&#x4ECE;&#x7AD9;&#x5916;&#x800C;&#x6765;&#x7684;&#x5462;&#xFF1F;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x5982;&#x4F55;&#x4F7F;&#x7528;nginx&#x53CD;&#x76D7;&#x94FE;">&#x5982;&#x4F55;&#x4F7F;&#x7528;Nginx&#x53CD;&#x76D7;&#x94FE;&#xFF1F;</span></span></a></li></ol></div>
             
 
           </div>
