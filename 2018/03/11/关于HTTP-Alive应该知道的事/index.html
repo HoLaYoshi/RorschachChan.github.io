@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="HTTP是一个无状态协议，这意味着每个请求都是独立的，Keep-Alive 没能改变这个结果。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-12T14:44:15.387Z">
+<meta property="og:updated_time" content="2018-06-27T02:47:17.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于HTTP-Alive应该知道的事">
 <meta name="twitter:description" content="HTTP是一个无状态协议，这意味着每个请求都是独立的，Keep-Alive 没能改变这个结果。">
@@ -484,7 +484,7 @@
 <p><code>keepalive</code>是TCP保鲜定时器，当网络两端建立了tcp连接之后，闲置idle（双方没有任何数据流发送往来）了<code>tcp_keepalive_time</code>后，服务器内核就会尝试向客户端发送侦测包，来判断TCP连接状况(有可能客户端崩溃、强制关闭了应用、主机不可达等等)。如果没有收到对方的回答(ack包)，则会在<code>tcp_keepalive_intvl</code>后再次尝试发送侦测包，直到收到对对方的<code>ack</code>,如果一直没有收到对方的<code>ack</code>,一共会尝试<code>tcp_keepalive_probes</code>次，每次的间隔时间在这里分别是<code>15s、30s、45s、60s、75s</code>。如果尝试<code>tcp_keepalive_probe</code>s,依然没有收到对方的ack包，则会丢弃该TCP连接。TCP连接默认闲置时间是2小时，一般设置为30分钟足够了。</p>
 <p>也就是说，仅当<code>nginx</code>的<code>keepalive_timeout</code>值设置高于<code>tcp_keepalive_time</code>，并且距此tcp连接传输的最后一个<code>http</code>响应，经过了<code>tcp_keepalive_time</code>时间之后，操作系统才会发送侦测包来决定是否要丢弃这个TCP连接。一般不会出现这种情况，除非你需要这样做。</p>
 <h2><span id="keep-alive与time_wait">keep-alive与TIME_WAIT</span></h2><p>使用http的<code>keep-alive</code>，可以减少服务端<code>TIME_WAIT</code>数量(因为由服务端<code>httpd</code>守护进程主动关闭连接)。道理很简单，相较而言，启用<code>keep-alive</code>，建立的<code>tcp</code>连接更少了，自然要被关闭的<code>tcp</code>连接也相应更少了。</p>
-<h2><span id="补充">补充</span></h2><p>建议在服务器提供Web站点服务时(一个页面除了动态内容，还包含非常多的JS、图片、css文件等)开启keep-alive。在“服务器提供的是一个接口服务，除了动态内容，几乎没有引用任何静态内容”这样的场景，不建议开启<code>keep-alive</code>。</p>
+<h2><span id="补充">补充</span></h2><p>建议在服务器提供Web站点服务时(一个页面除了动态内容，还包含非常多的JS、图片、css文件等)开启<code>keep-alive</code>。在“服务器提供的是一个接口服务，除了动态内容，几乎没有引用任何静态内容”这样的场景，不建议开启<code>keep-alive</code>。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.cnblogs.com/skynet/archive/2010/12/11/1903347.html" target="_blank" rel="noopener">http://www.cnblogs.com/skynet/archive/2010/12/11/1903347.html</a><br><a href="https://hit-alibaba.github.io/interview/basic/network/HTTP.html" target="_blank" rel="noopener">https://hit-alibaba.github.io/interview/basic/network/HTTP.html</a><br><a href="http://51write.github.io/2014/04/09/keepalive/" target="_blank" rel="noopener">http://51write.github.io/2014/04/09/keepalive/</a><br><a href="http://www.nowamagic.net/academy/detail/23350305" target="_blank" rel="noopener">http://www.nowamagic.net/academy/detail/23350305</a></p>
 
       
@@ -722,7 +722,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">142</span>
+                  <span class="site-state-item-count">143</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -744,7 +744,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">116</span>
+                  <span class="site-state-item-count">117</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -937,7 +937,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共134.0k字</span>
+  <span class="post-count">博客全站共136.5k字</span>
 </div>
         
 
