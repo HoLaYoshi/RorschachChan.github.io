@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-06-30T11:05:44.366Z</updated>
+  <updated>2018-07-02T02:17:55.474Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2018/06/30/%E4%BD%BF%E7%94%A8xshell%E5%81%9A%E4%BB%A3%E7%90%86%E6%9F%A5%E7%9C%8B%E6%97%A0%E5%85%AC%E7%BD%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84WEB%E7%95%8C%E9%9D%A2/"/>
     <id>http://yoursite.com/2018/06/30/使用xshell做代理查看无公网服务器的WEB界面/</id>
     <published>2018-06-30T09:28:56.000Z</published>
-    <updated>2018-06-30T11:05:44.366Z</updated>
+    <updated>2018-07-02T02:17:55.474Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>没有公网的服务器如果也没有连入到局域网的话，按常理来说是无法打开web界面的。这里则分享一个黑科技—使用xshell做代理然后用浏览器去查看WEB界面。</p><p>首先要在xshell顶端菜单栏选择<code>查看</code>—<code>隧道窗格</code>。如图：<br><img src="/images/xshell1.png" alt="paradin"></p><p>此时xshell的底端就出来一个窗口，然后选择<code>转移规则</code>，如图：<br><img src="/images/xshell2.png" alt="paradin"></p><p>在<code>转移规则</code>右键，选择<code>添加</code>，在添加的窗口里，<code>类型(方向）</code>选择<code>Dynamic(SOCKS4/5)</code>，端口就用默认的1080，备注爱写不写，如图：<br><img src="/images/xshell3.png" alt="paradin"></p><p>来到windows桌面，点击<code>我的电脑</code>—<code>控制面板</code>—<code>Internet选项</code>，打开<code>连接</code>这个标签页，选择下面的<code>局域网设置</code>。如图：<br><img src="/images/xshell4.png" alt="paradin"></p><p>在<code>局域网（LAN）设置</code>里，先在<code>为LAN使用代理服务器</code>前面打勾，然后点击<code>高级</code>，在套接字那里输入<code>127.0.0.1</code>，端口就是刚刚默认的1080，点击确定保存，如图：<br><img src="/images/xshell5.png" alt="paradin"></p><p>此时在浏览器里输入内网的IP地址就能打开这个服务器里WEB界面了，如图：<br><img src="/images/xshell6.png" alt="paradin"></p><p>不过此时你是完全属于LAN环境，公网是无法访问的。如果要恢复访问公网，那么就要返回到<code>局域网（LAN）设置</code>里，把<code>为LAN使用代理服务器</code>前面的勾点掉就OK。<br><img src="/images/大岛优子.gif" alt="paradin" title="优叔赛高！！！"></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在工作中经常有一些服务器是高机密的，那么这样的服务器就要与外网隔离。但是没有公网的服务器如果也没有连入到局域网的话，按常理来说是无法打开程序的Web界面。这里则分享一个黑科技—使用xshell做代理然后用浏览器去查看Web界面。</p><p>首先要在Xshell顶端菜单栏选择<code>查看</code>—<code>隧道窗格</code>。如图：<br><img src="/images/xshell1.png" alt="paradin"></p><p>此时Xshell的底端就出来一个窗口，然后选择<code>转移规则</code>，如图：<br><img src="/images/xshell2.png" alt="paradin"></p><p>在<code>转移规则</code>右键，选择<code>添加</code>，在添加的窗口里，<code>类型(方向）</code>选择<code>Dynamic(SOCKS4/5)</code>，端口就用默认的1080，备注爱写不写，如图：<br><img src="/images/xshell3.png" alt="paradin"></p><p>来到windows桌面，点击<code>我的电脑</code>—<code>控制面板</code>—<code>Internet选项</code>，打开<code>连接</code>这个标签页，选择下面的<code>局域网设置</code>。如图：<br><img src="/images/xshell4.png" alt="paradin"></p><p>在<code>局域网（LAN）设置</code>里，先在<code>为LAN使用代理服务器</code>前面打勾，然后点击<code>高级</code>，在套接字那里输入<code>127.0.0.1</code>，端口就是刚刚默认的1080，点击确定保存，如图：<br><img src="/images/xshell5.png" alt="paradin"></p><p>此时在浏览器里输入内网的IP地址就能打开这个服务器里Web界面了，比如我公司内部的云存储界面：<br><img src="/images/xshell6.png" alt="paradin"></p><p>不过此时你是完全属于LAN环境，公网是无法访问的。如果要恢复访问公网，那么就要返回到<code>局域网（LAN）设置</code>里，把<code>为LAN使用代理服务器</code>前面的勾点掉就OK。<br><img src="/images/大岛优子.gif" alt="paradin" title="优叔赛高！！！"></p>]]></content>
     
     <summary type="html">
     
