@@ -1222,9 +1222,9 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[阿里云服务器更改时区为utc]]></title>
+    <title><![CDATA[centos服务器更改系统时间]]></title>
     <url>%2F2018%2F01%2F25%2F%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%9B%B4%E6%94%B9%E6%97%B6%E5%8C%BA%E4%B8%BAutc%2F</url>
-    <content type="text"><![CDATA[开发提出需求说，某个模块是给洋人使用，于是把服务器里的时间改成UTC时间。我登陆到服务器里使用date查看了一下，发现目前使用的是东八区时间，如图： 首先先开启UTC，方法就是在/etc/sysconfig/clock的文件里修改这样一处：UTC=true。这样即使机器重启，UTC时间依旧会“BIOS ▶ UTC时区转换 ▶ 系统时间”的顺序正常使用。 在Centos 6.5里，各时区的时间是在一个叫/usr/share/zoneinfo/的文件夹下，在里面我们发现了我们的目标—-UTC，如图： 然后就是修改，方法如下： 12mv /etc/localtime /etc/localtime-bakln -s /usr/share/zoneinfo/UTC /etc/localtime 先把老的时间文件备份，然后把UTC文件做一个软连接过来即可。我们所熟悉的date命令就是/etc/localtime的输出结果。 现在去date一下，看看结果，果然改成了UTC： 这个时候，如果你服务器里装的是nginx的话，就会发现nginx日志里的时间也会变成UTC而不会再是CST了。]]></content>
+    <content type="text"><![CDATA[将时区改为utc开发提出需求说，某个模块是给洋人使用，于是把阿里云服务器里的时间改成UTC时间。我登陆到服务器里使用date查看了一下，发现目前使用的是东八区时间，如图： 首先先开启UTC，方法就是在/etc/sysconfig/clock的文件里修改这样一处：UTC=true。这样即使机器重启，UTC时间依旧会“BIOS ▶ UTC时区转换 ▶ 系统时间”的顺序正常使用。 在Centos 6.5里，各时区的时间是在一个叫/usr/share/zoneinfo/的文件夹下，在里面我们发现了我们的目标—-UTC，如图： 然后就是修改，方法如下： 12mv /etc/localtime /etc/localtime-bakln -s /usr/share/zoneinfo/UTC /etc/localtime 先把老的时间文件备份，然后把UTC文件做一个软连接过来即可。我们所熟悉的date命令就是/etc/localtime的输出结果。 现在去date一下，看看结果，果然改成了UTC： 这个时候，如果你服务器里装的是nginx的话，就会发现nginx日志里的时间也会变成UTC而不会再是CST了。 更改系统时间云服务器一般来说系统时间都是正确的，但是自己的服务器可能在安装系统之后的时间是不统一的，这样可能在集群里就会出问题。时间同步的步骤如下： 1234yum install -y ntpdate #下载ntp同步工具mv /etc/localtime /etc/localtime-bak #备份原有文件cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime #时区调整为上海ntpdate us.pool.ntp.org #与时区服务器同步时间 然后在crontab里添加一个每10分钟同步时间的命令：*/10 * * * * /usr/sbin/ntpdate us.pool.ntp.org | logger -t NTP。 如果服务器是没有公网的，那么也就无法下载ntpdate，此时只能用date -s命令手动更改时间，比如：date -s 23:40:00、date -s 20180703。]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>

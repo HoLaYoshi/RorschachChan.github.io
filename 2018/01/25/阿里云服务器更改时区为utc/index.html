@@ -91,7 +91,7 @@
 <meta name="description" content="为美国人服务的模块就要改成美国时间">
 <meta name="keywords" content="linux,阿里云">
 <meta property="og:type" content="article">
-<meta property="og:title" content="阿里云服务器更改时区为utc">
+<meta property="og:title" content="centos服务器更改系统时间">
 <meta property="og:url" content="http://yoursite.com/2018/01/25/阿里云服务器更改时区为utc/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="为美国人服务的模块就要改成美国时间">
@@ -99,9 +99,9 @@
 <meta property="og:image" content="http://yoursite.com/images/time1.png">
 <meta property="og:image" content="http://yoursite.com/images/time2.png">
 <meta property="og:image" content="http://yoursite.com/images/time3.png">
-<meta property="og:updated_time" content="2018-01-26T06:55:58.895Z">
+<meta property="og:updated_time" content="2018-07-03T03:01:46.447Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="阿里云服务器更改时区为utc">
+<meta name="twitter:title" content="centos服务器更改系统时间">
 <meta name="twitter:description" content="为美国人服务的模块就要改成美国时间">
 <meta name="twitter:image" content="http://yoursite.com/images/time1.png">
 
@@ -139,7 +139,7 @@
 
 
 
-  <title>阿里云服务器更改时区为utc | Chris Chan's BLOG</title>
+  <title>centos服务器更改系统时间 | Chris Chan's BLOG</title>
   
 
 
@@ -339,7 +339,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">阿里云服务器更改时区为utc</h1>
+          <h1 class="post-title" itemprop="name headline">centos服务器更改系统时间</h1>
         
 
         <div class="post-meta">
@@ -403,7 +403,7 @@
 
           
           
-             <span id="/2018/01/25/阿里云服务器更改时区为utc/" class="leancloud_visitors" data-flag-title="阿里云服务器更改时区为utc">
+             <span id="/2018/01/25/阿里云服务器更改时区为utc/" class="leancloud_visitors" data-flag-title="centos服务器更改系统时间">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  284
+                  495
                 </span>
               
 
@@ -445,7 +445,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -470,13 +470,16 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>开发提出需求说，某个模块是给洋人使用，于是把服务器里的时间改成UTC时间。我登陆到服务器里使用<code>date</code>查看了一下，发现目前使用的是东八区时间，如图：<br><img src="/images/time1.png" alt="goodbye,Kobe"></p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="将时区改为utc">将时区改为utc</span></h2><p>开发提出需求说，某个模块是给洋人使用，于是把阿里云服务器里的时间改成UTC时间。我登陆到服务器里使用<code>date</code>查看了一下，发现目前使用的是东八区时间，如图：<br><img src="/images/time1.png" alt="goodbye,Kobe"></p>
 <p>首先先开启UTC，方法就是在<code>/etc/sysconfig/clock</code>的文件里修改这样一处：<code>UTC=true</code>。这样即使机器重启，UTC时间依旧会“<code>BIOS ▶ UTC时区转换 ▶ 系统时间</code>”的顺序正常使用。</p>
 <p>在Centos 6.5里，各时区的时间是在一个叫<code>/usr/share/zoneinfo/</code>的文件夹下，在里面我们发现了我们的目标—-<code>UTC</code>，如图：<br><img src="/images/time2.png" alt="goodbye,Kobe"></p>
 <p>然后就是修改，方法如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv /etc/localtime /etc/localtime-bak</span><br><span class="line">ln -s /usr/share/zoneinfo/UTC /etc/localtime</span><br></pre></td></tr></table></figure></p>
 <p>先把老的时间文件备份，然后把UTC文件做一个软连接过来即可。我们所熟悉的<code>date</code>命令就是<code>/etc/localtime</code>的输出结果。</p>
 <p>现在去<code>date</code>一下，看看结果，果然改成了<code>UTC</code>：<br><img src="/images/time3.png" alt="goodbye,Kobe"></p>
 <p>这个时候，如果你服务器里装的是nginx的话，就会发现nginx日志里的时间也会变成<code>UTC</code>而不会再是<code>CST</code>了。</p>
+<h2><span id="更改系统时间">更改系统时间</span></h2><p>云服务器一般来说系统时间都是正确的，但是自己的服务器可能在安装系统之后的时间是不统一的，这样可能在集群里就会出问题。时间同步的步骤如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">yum install -y ntpdate		#下载ntp同步工具</span><br><span class="line">mv /etc/localtime /etc/localtime-bak		#备份原有文件</span><br><span class="line">cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime		#时区调整为上海</span><br><span class="line">ntpdate us.pool.ntp.org		#与时区服务器同步时间</span><br></pre></td></tr></table></figure></p>
+<p>然后在crontab里添加一个每10分钟同步时间的命令：<code>*/10 * * * * /usr/sbin/ntpdate us.pool.ntp.org | logger -t NTP</code>。</p>
+<p>如果服务器是没有公网的，那么也就无法下载ntpdate，此时只能用<code>date -s</code>命令手动更改时间，比如：<code>date -s 23:40:00</code>、<code>date -s 20180703</code>。</p>
 
       
     </div>
@@ -541,7 +544,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/01/25/阿里云服务器更改时区为utc/" title="阿里云服务器更改时区为utc">阿里云服务器更改时区为utc</a>
+					<a href="http://yoursite.com/2018/01/25/阿里云服务器更改时区为utc/" title="centos服务器更改系统时间">centos服务器更改系统时间</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -682,8 +685,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -857,6 +869,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5C06;&#x65F6;&#x533A;&#x6539;&#x4E3A;utc">&#x5C06;&#x65F6;&#x533A;&#x6539;&#x4E3A;utc</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x66F4;&#x6539;&#x7CFB;&#x7EDF;&#x65F6;&#x95F4;">&#x66F4;&#x6539;&#x7CFB;&#x7EDF;&#x65F6;&#x95F4;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -903,7 +931,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共138.1k字</span>
+  <span class="post-count">博客全站共138.4k字</span>
 </div>
         
 
