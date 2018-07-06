@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat1.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat2.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat3.png">
-<meta property="og:updated_time" content="2018-07-06T07:57:37.590Z">
+<meta property="og:updated_time" content="2018-07-06T10:09:43.680Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat 1.6.5的部署与启动">
 <meta name="twitter:description" content="给atlas做一个备用">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,151
+                  1,202
                 </span>
               
 
@@ -493,22 +493,26 @@
 <li><code>rule.xml</code>是分片规则的配置文件，分片规则的具体一些参数信息单独存放为文件；<br>注意！在这个目录下，配置文件修改，需要重启Mycat或者通过9066端口reload才会生效。</li>
 </ol>
 <p>首先在打开<code>server.xml</code>，在如下的地方做修改:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;user name=<span class="string">"root"</span> defaultAccount=<span class="string">"true"</span>&gt;			&lt;!-- 这里是给虚拟库设定一个账号叫root，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;chenx1242&lt;/property&gt;		&lt;!-- 账号root的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;		&lt;!-- 账号root对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br><span class="line">&lt;user name=<span class="string">"test"</span>&gt;									&lt;!-- 这里是给虚拟库设定一个账号叫test，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;26e9p69r&lt;/property&gt;	&lt;!-- 账号test的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;	&lt;!-- 账号test对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">        &lt;property name="readOnly"&gt;true&lt;/property&gt;	&lt;!-- 说明这个账号是只读账号 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br></pre></td></tr></table></figure></p>
-<p>然后打开<code>schema.xml</code>，编辑如下地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"localhost1"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"0"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">               &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">               &lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;writeHost host="hostM1" url="阿里云RDS:3306" user="账号"   password="对应密码"&gt;</span></span><br><span class="line"><span class="regexp">                       &lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;readHost host="hostS2" url="阿里云只读RDS:3306" user="账号"   password="对应密码"/</span>&gt;</span><br><span class="line">               &lt;<span class="regexp">/writeHost&gt;</span></span><br><span class="line"><span class="regexp">   &lt;/</span>dataHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后打开<code>schema.xml</code>，编辑如下地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"localhost1"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"0"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">               &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">               &lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;writeHost host="hostM1" url="阿里云RDS:3306" user="账号"   password="对应密码"&gt;</span></span><br><span class="line"><span class="regexp">                       &lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;readHost host="hostS2" url="阿里云只读RDS:3306" user="账号"   password="对应密码"/</span>&gt;</span><br><span class="line">               &lt;<span class="regexp">/writeHost&gt;</span></span><br><span class="line"><span class="regexp">			&lt;!-- &lt;writeHost host="hostS1" url="localhost:3316" user="root" password="123456"/</span>&gt; --&gt;</span><br><span class="line">               &lt;!-- &lt;writeHost host="hostM2" url="localhost:3316" user="root" password="123456"/&gt; --&gt;</span><br><span class="line">   &lt;/dataHost&gt;</span><br></pre></td></tr></table></figure></p>
 <p>检查好格式并保存之后，就到mycat目录下的/bin/里<code>./mycat start</code>就启动mycat了。启动成功之后，8066和9066都是被监听的，如图：<br><img src="/images/mycat2.png" alt="akb48"></p>
 <p><img src="/images/mycat3.png" alt="akb48"></p>
-<h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看<code>wrapper.log</code>，这里举例几个有代表性的错误：</p>
+<h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看日志，这里举例几个有代表性的错误：</p>
 <ol>
-<li><p>Caused by: io.mycat.config.util.ConfigException: SelfCheck###  schema mycat refered by user test is not exist!<br><code>server.xml</code>里schema最好选择默认的TESTDB，而不是错误里的自己起名的mycat。</p>
+<li><p><code>wrapper.log</code>日志：Caused by: io.mycat.config.util.ConfigException: SelfCheck###  schema mycat refered by user test is not exist!<br><code>server.xml</code>里schema最好选择默认的TESTDB，而不是错误里的自己起名的mycat。</p>
 </li>
-<li><p>org.xml.sax.SAXParseException; lineNumber: 23; columnNumber: 3; The content of elements must consist of well-formed character data or markup<br>去检查一下<code>server.xml</code>的第23行，看一下是不是多了一个’&lt;’或者’&gt;’。</p>
+<li><p><code>wrapper.log</code>日志：org.xml.sax.SAXParseException; lineNumber: 23; columnNumber: 3; The content of elements must consist of well-formed character data or markup<br>去检查一下<code>server.xml</code>的第23行，看一下是不是多了一个’&lt;’或者’&gt;’。</p>
 </li>
-<li><p>Caused by: io.mycat.config.util.ConfigException: user root duplicated!<br><code>server.xml</code>里普通账号root，只读账号也叫root，冲突了。</p>
+<li><p><code>wrapper.log</code>日志：Caused by: io.mycat.config.util.ConfigException: user root duplicated!<br><code>server.xml</code>里普通账号root，只读账号也叫root，冲突了。</p>
 </li>
-<li><p>Caused by: org.xml.sax.SAXParseException; lineNumber: 16; columnNumber: 101; Element type “WriteHost” must be declared.<br><code>schema.xml</code>配置中writeHost写成了WriteHost导致报错。</p>
+<li><p><code>wrapper.log</code>日志：Caused by: org.xml.sax.SAXParseException; lineNumber: 16; columnNumber: 101; Element type “WriteHost” must be declared.<br><code>schema.xml</code>配置中writeHost写成了WriteHost导致报错。</p>
 </li>
-<li><p><code>schema.xml</code>里把真实库的配置写错，mycat也是依旧可以启动的，但是在mycat.log里会显示无法连接到真实服务器，如下：</p>
+<li><p><code>mycat.log</code>日志如下：</p>
  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span><span class="number">-07</span><span class="number">-06</span> <span class="number">15</span>:<span class="number">53</span>:<span class="number">22.894</span>  WARN [$_NIOREACTOR<span class="number">-8</span>-RW] (io.mycat.backend.mysql.nio.MySQLConnectionAuthenticator.handle(MySQLConnectionAuthenticator.java:<span class="number">91</span>)) - can<span class="string">'t connect to mysql server ,errmsg:Access denied for user '</span>数据库账号<span class="string">'@'</span>本地IP<span class="string">' (using password: YES) MySQLConnection [id=8, lastTime=1530863602566, user=数据库账号, schema=db3, old shema=db3, borrowed=false, fromSlaveDB=false, threadId=4555911, charset=utf8, txIsolation=3, autocommit=true, attachment=null, respHandler=null, host=阿里云写库地址, port=3306, statusSync=null, writeQueue=0, modifiedSQLExecuted=false]</span></span><br></pre></td></tr></table></figure>
 </li>
+</ol>
+<p><code>schema.xml</code>里把真实库的配置写错了。</p>
+<ol>
+<li><code>mycat.log</code>日志：<code>(io.mycat.net.NIOConnector.finishConnect(NIOConnector.java:155)) - error: java.net.ConnectException: Connection refused</code><br><code>schema.xml</code>的<code>&lt;dataHost&gt;</code>字段是否写入了多余的数据库。</li>
 </ol>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://valleylord.github.io/post/201601-mycat-install/" target="_blank" rel="noopener">http://valleylord.github.io/post/201601-mycat-install/</a><br><a href="https://www.jianshu.com/p/f15d64fcb2f3" target="_blank" rel="noopener">https://www.jianshu.com/p/f15d64fcb2f3</a></p>
 
@@ -960,7 +964,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共139.5k字</span>
+  <span class="post-count">博客全站共139.6k字</span>
 </div>
         
 
