@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat1.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat2.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat3.png">
-<meta property="og:updated_time" content="2018-07-06T07:45:19.538Z">
+<meta property="og:updated_time" content="2018-07-06T07:57:37.590Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat 1.6.5的部署与启动">
 <meta name="twitter:description" content="给atlas做一个备用">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,011
+                  1,151
                 </span>
               
 
@@ -445,7 +445,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  5
                 </span>
               
             </div>
@@ -477,7 +477,7 @@
 <li>数据库读库:阿里云RDS只读实例</li>
 </ol>
 <p>登陆阿里云ECS之后，首先先进行如下操作：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum install java-1.8.0-openjdk* -y 	#安装java 1.8</span><br><span class="line">yum install -y mysql #安装mysql客户端</span><br><span class="line">useradd mycat	#创建mycat用户</span><br><span class="line">passwd mycat	#更改这个用户的密码</span><br><span class="line">tar -zxvf Mycat-server-1.6.5-release-20180122220033-linux.tar.gz -C /usr/local	#解压缩/usr/local</span><br><span class="line">cd /usr/local/</span><br><span class="line">chown -R mycat.mycat /usr/local/mycat/	#设置mycat目录的属主和属组</span><br></pre></td></tr></table></figure></p>
-<p>然后登陆到读库和写库，看一下大小写是否是“不敏感”,否则可能会发生表找不到的问题，阿里云的RDS默认是不敏感的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show global variables like <span class="string">'%lower_case%'</span>;</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| lower_case_file_system | OFF   |				#这个是“当前系统文件是否大小写敏感”，只读参数，无法修改</span><br><span class="line">| lower_case_table_names | 1     |				#这个是“表名是否大小写敏感”，可以修改，改完了重启生效</span><br><span class="line">+------------------------+-------+</span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
+<p>然后登陆到阿里云RDS读库和写库，看一下大小写是否是“不敏感”,否则可能会发生表找不到的问题，阿里云的RDS默认是不敏感的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show global variables like <span class="string">'%lower_case%'</span>;</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| lower_case_file_system | OFF   |				#这个是“当前系统文件是否大小写敏感”，只读参数，无法修改</span><br><span class="line">| lower_case_table_names | 1     |				#这个是“表名是否大小写敏感”，可以修改，改完了重启生效</span><br><span class="line">+------------------------+-------+</span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
 <h2><span id="mycat原理和文件结构">Mycat原理和文件结构</span></h2><p>Mycat的原理跟Atlas查不多，都是用一个虚拟的数据库作为前端，后面是挂上真实的写库和读库。如图：<br><img src="/images/mycat1.png" alt="akb48"></p>
 <p>mycat文件夹的文件结构很简单：</p>
 <ol>
@@ -496,7 +496,7 @@
 <p>然后打开<code>schema.xml</code>，编辑如下地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"localhost1"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"0"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">               &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">               &lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;writeHost host="hostM1" url="阿里云RDS:3306" user="账号"   password="对应密码"&gt;</span></span><br><span class="line"><span class="regexp">                       &lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;readHost host="hostS2" url="阿里云只读RDS:3306" user="账号"   password="对应密码"/</span>&gt;</span><br><span class="line">               &lt;<span class="regexp">/writeHost&gt;</span></span><br><span class="line"><span class="regexp">   &lt;/</span>dataHost&gt;</span><br></pre></td></tr></table></figure></p>
 <p>检查好格式并保存之后，就到mycat目录下的/bin/里<code>./mycat start</code>就启动mycat了。启动成功之后，8066和9066都是被监听的，如图：<br><img src="/images/mycat2.png" alt="akb48"></p>
 <p><img src="/images/mycat3.png" alt="akb48"></p>
-<h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看wrapper.log，这里举例几个有代表性的错误：</p>
+<h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看<code>wrapper.log</code>，这里举例几个有代表性的错误：</p>
 <ol>
 <li><p>Caused by: io.mycat.config.util.ConfigException: SelfCheck###  schema mycat refered by user test is not exist!<br><code>server.xml</code>里schema最好选择默认的TESTDB，而不是错误里的自己起名的mycat。</p>
 </li>
@@ -505,6 +505,9 @@
 <li><p>Caused by: io.mycat.config.util.ConfigException: user root duplicated!<br><code>server.xml</code>里普通账号root，只读账号也叫root，冲突了。</p>
 </li>
 <li><p>Caused by: org.xml.sax.SAXParseException; lineNumber: 16; columnNumber: 101; Element type “WriteHost” must be declared.<br><code>schema.xml</code>配置中writeHost写成了WriteHost导致报错。</p>
+</li>
+<li><p><code>schema.xml</code>里把真实库的配置写错，mycat也是依旧可以启动的，但是在mycat.log里会显示无法连接到真实服务器，如下：</p>
+ <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span><span class="number">-07</span><span class="number">-06</span> <span class="number">15</span>:<span class="number">53</span>:<span class="number">22.894</span>  WARN [$_NIOREACTOR<span class="number">-8</span>-RW] (io.mycat.backend.mysql.nio.MySQLConnectionAuthenticator.handle(MySQLConnectionAuthenticator.java:<span class="number">91</span>)) - can<span class="string">'t connect to mysql server ,errmsg:Access denied for user '</span>数据库账号<span class="string">'@'</span>本地IP<span class="string">' (using password: YES) MySQLConnection [id=8, lastTime=1530863602566, user=数据库账号, schema=db3, old shema=db3, borrowed=false, fromSlaveDB=false, threadId=4555911, charset=utf8, txIsolation=3, autocommit=true, attachment=null, respHandler=null, host=阿里云写库地址, port=3306, statusSync=null, writeQueue=0, modifiedSQLExecuted=false]</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://valleylord.github.io/post/201601-mycat-install/" target="_blank" rel="noopener">http://valleylord.github.io/post/201601-mycat-install/</a><br><a href="https://www.jianshu.com/p/f15d64fcb2f3" target="_blank" rel="noopener">https://www.jianshu.com/p/f15d64fcb2f3</a></p>
@@ -957,7 +960,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共139.4k字</span>
+  <span class="post-count">博客全站共139.5k字</span>
 </div>
         
 
