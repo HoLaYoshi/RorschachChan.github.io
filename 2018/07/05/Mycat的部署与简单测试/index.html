@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat1.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat2.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat3.png">
-<meta property="og:updated_time" content="2018-07-06T07:29:49.397Z">
+<meta property="og:updated_time" content="2018-07-06T07:44:15.295Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat 1.6.5的部署与简单测试">
 <meta name="twitter:description" content="给atlas做一个备用">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  861
+                  1,011
                 </span>
               
 
@@ -498,8 +498,16 @@
 <p><img src="/images/mycat3.png" alt="akb48"></p>
 <h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看wrapper.log，这里举例几个有代表性的错误：</p>
 <ol>
-<li>WrapperSimpleApp: Encountered an error running main: java.lang.ExceptionInInitializerError</li>
+<li><p>Caused by: io.mycat.config.util.ConfigException: SelfCheck###  schema mycat refered by user test is not exist!<br><code>server.xml</code>里schema最好选择默认的TESTDB，而不是错误里的自己起名的mycat。</p>
+</li>
+<li><p>org.xml.sax.SAXParseException; lineNumber: 23; columnNumber: 3; The content of elements must consist of well-formed character data or markup<br>去检查一下<code>server.xml</code>的第23行，看一下是不是多了一个’&lt;’或者’&gt;’。</p>
+</li>
+<li><p>Caused by: io.mycat.config.util.ConfigException: user root duplicated!<br><code>server.xml</code>里普通账号root，只读账号也叫root，冲突了。</p>
+</li>
+<li><p>Caused by: org.xml.sax.SAXParseException; lineNumber: 16; columnNumber: 101; Element type “WriteHost” must be declared.<br><code>schema.xml</code>配置中writeHost写成了WriteHost导致报错。</p>
+</li>
 </ol>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://valleylord.github.io/post/201601-mycat-install/" target="_blank" rel="noopener">http://valleylord.github.io/post/201601-mycat-install/</a><br><a href="https://www.jianshu.com/p/f15d64fcb2f3" target="_blank" rel="noopener">https://www.jianshu.com/p/f15d64fcb2f3</a></p>
 
       
     </div>
@@ -896,7 +904,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x51C6;&#x5907;&#x5DE5;&#x4F5C;">&#x51C6;&#x5907;&#x5DE5;&#x4F5C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="mycat&#x539F;&#x7406;&#x548C;&#x6587;&#x4EF6;&#x7ED3;&#x6784;">Mycat&#x539F;&#x7406;&#x548C;&#x6587;&#x4EF6;&#x7ED3;&#x6784;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x542F;&#x52A8;&#x6545;&#x969C;&#x6392;&#x9519;">&#x542F;&#x52A8;&#x6545;&#x969C;&#x6392;&#x9519;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x51C6;&#x5907;&#x5DE5;&#x4F5C;">&#x51C6;&#x5907;&#x5DE5;&#x4F5C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="mycat&#x539F;&#x7406;&#x548C;&#x6587;&#x4EF6;&#x7ED3;&#x6784;">Mycat&#x539F;&#x7406;&#x548C;&#x6587;&#x4EF6;&#x7ED3;&#x6784;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x542F;&#x52A8;&#x6545;&#x969C;&#x6392;&#x9519;">&#x542F;&#x52A8;&#x6545;&#x969C;&#x6392;&#x9519;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -949,7 +957,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共139.2k字</span>
+  <span class="post-count">博客全站共139.4k字</span>
 </div>
         
 
