@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat9.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat10.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat11.png">
-<meta property="og:updated_time" content="2018-07-09T08:59:24.408Z">
+<meta property="og:updated_time" content="2018-07-09T09:11:09.143Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat配置文件解析与分表存储测试">
 <meta name="twitter:description" content="mycat是通过分库而达到的分表的目的">
@@ -434,7 +434,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,278
+                  2,296
                 </span>
               
 
@@ -499,19 +499,19 @@
 <li>maxCon:指定每个读写实例连接池的最大连接。也就是说，标签内嵌套的<code>writeHost</code>、<code>readHost</code>标签都会使用这个属性的值来实例化出连接池的最大连接数;</li>
 <li>minCon:指定每个读写实例连接池的最小连接，初始化连接池的大小;</li>
 <li>balance:负载均衡类型，目前的取值有4种：<br> balance=“0”, 所有读操作都发送到当前可用的writeHost上。<br> balance=“1”，所有读操作都随机的发送到readHost。<br> balance=“2”，所有读操作都随机的在writeHost、readhost上分发。<br> balance=”3”，所有读请求随机的分发到wiriterHost对应的readhost执行，writerHost不负担读压力</li>
-<li>writeType:负载均衡类型，目前的取值有3种：<br> writeType=“0”, 所有写操作轮询的发送到可用的writeHost上。<br> writeType=“1”，所有写操作随机的发送到readHost。<br> writeType=“2”，所有写操作随机的在writeHost、readhost分发。（这一点我很怀疑，写操作怎么在readhost上进行）</li>
+<li>writeType:负载均衡类型，目前的取值有3种：<br> writeType=“0”, 所有满足规则的写操作轮询的发送到可用的writeHost上。<br> writeType=“1”，所有满足规则的写操作随机的发送到readHost。<br> writeType=“2”，所有满足规则的写操作随机的在writeHost、readhost分发。（这一点我很怀疑，写操作怎么在readhost上进行）</li>
 <li>dbType:指定后端连接的数据库类型，目前支持二进制的mysql协议，还有其他使用JDBC连接的数据库。例如：mongodb、oracle、 spark等;</li>
 <li>dbDriver:指定连接后端数据库使用的Driver，目前可选的值有native和JDBC，当使用JDBC时则可以这么写：<code>jdbc:mysql://mycatTEST:3306/</code>;</li>
 <li>switchType:主库切换算法，目前的取值有3种：<br> switchType=”-1”,表示不自动切换<br> switchType=”1”, 默认值，自动切换<br> switchType=”2”, 基于MySQL主从同步的状态决定是否切换,心跳语句为show slave status<br> switchType=”3”,基于MySQL galary cluster的切换机制（适合集群）（1.4.1），心跳语句为show status like ‘wsrep%’</li>
 <li>heartbeat:这个标签内指明用于和后端数据库进行心跳检查的语句;</li>
 <li>writeHost &amp; readHost:这两个标签都指定后端数据库的相关配置给mycat，用于实例化后端连接池。唯一不同的是，writeHost指定写实例、readHost指定读实例，组着这些读写实例来满足系统的要求。在一个dataHost内可以定义多个writeHost和readHost(我这里就配了一对，其实可以配很多对)。但是，如果writeHost指定的后端数据库宕机，那么这个writeHost绑定的所有readHost都将不可用。</li>
 </ol>
-<h2><span id="举个例子">举个例子</span></h2><p>修改了配置文件之后，重启一波mycat，登陆mycat的9066管理端口，使用<code>show @@datanode;</code>和<code>show @@datasource;</code>可以查看到数据库源和datanode已经成功建立了，如图：<br><img src="/images/mycat7.png" alt="akb48"></p>
+<h2><span id="举个例子">举个例子</span></h2><p>按照上面修改了配置文件之后，重启一波mycat，登陆mycat的9066管理端口，使用<code>show @@datanode;</code>和<code>show @@datasource;</code>可以查看到数据库源和datanode已经成功建立了，如图：<br><img src="/images/mycat7.png" alt="akb48"></p>
 <p>手动在阿里云的RDS的读库上创建db1、db2、db3这三个databases，如图：<br><img src="/images/mycat6.png" alt="akb48"></p>
 <p>由于阿里云读写同步，所以只读实例上也有了db1、db2、db3这三个databases。</p>
 <p>此时再开一个窗口，登陆mycat的8066端口，看到里面有了TESTDB这个逻辑库以及里面的逻辑表，但是这些逻辑表实际是不存在的，如图：<br><img src="/images/mycat8.png" alt="akb48"></p>
 <p>这时创建employee表，插入数据：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">create table employee (id int not <span class="literal">null</span> primary key,name varchar(<span class="number">100</span>),sharding_id int not <span class="literal">null</span>);</span><br><span class="line">insert into employee(id,name,sharding_id) values(<span class="number">1</span>,<span class="string">'leader us'</span>,<span class="number">10000</span>);</span><br><span class="line">insert into employee(id,name,sharding_id) values(<span class="number">2</span>, <span class="string">'me'</span>,<span class="number">10010</span>);</span><br><span class="line">insert into employee(id,name,sharding_id) values(<span class="number">3</span>, <span class="string">'mycat'</span>,<span class="number">10000</span>);</span><br><span class="line">insert into employee(id,name,sharding_id) values(<span class="number">4</span>, <span class="string">'mydog'</span>,<span class="number">10010</span>);</span><br></pre></td></tr></table></figure></p>
-<p>检查一下数据已经被成功插入，并且如果使用<code>select * from</code>查看的话，会从两个datanode上去查，而且都自动加上了<code>limit 100</code>的字样，这一点符合我们在<code>schema.xml</code>里配置的<code>&lt;table name=&quot;employee&quot; primaryKey=&quot;ID&quot; dataNode=&quot;dn1,dn2&quot; rule=&quot;sharding-by-intfile&quot; /&gt;</code>，如图：<br><img src="/images/mycat9.png" alt="akb48"></p>
+<p>检查一下数据已经被成功插入，并且如果使用<code>select * from</code>查看的话，会从两个datanode上去查，而且都自动加上了<code>limit 100</code>的字样，这一点符合我们在<code>schema.xml</code>里配置的<code>&lt;table name=&quot;employee&quot; primaryKey=&quot;ID&quot; dataNode=&quot;dn1,dn2&quot;/&gt;</code>和<code>sqlMaxLimit=&quot;100&quot;</code>，如图：<br><img src="/images/mycat9.png" alt="akb48"></p>
 <p>再来到阿里云只读RDS数据库里，检查一下刚刚在虚拟数据库里操作的动作是否被正确映射过来。如图:<br><img src="/images/mycat10.png" alt="akb48" title="插入4条数据，这里轮询插入了1和3"><br><img src="/images/mycat11.png" alt="akb48" title="插入4条数据，这里轮询插入了2和4"></p>
 <p>可见<code>writeType=“0”</code>已经成功，这就是分表存储。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.csdn.net/wangshuang1631/article/details/62898469" target="_blank" rel="noopener">https://blog.csdn.net/wangshuang1631/article/details/62898469</a><br><a href="https://sylvanassun.github.io/2016/07/09/2016-07-09-MyCat/" target="_blank" rel="noopener">https://sylvanassun.github.io/2016/07/09/2016-07-09-MyCat/</a><br><a href="http://codingo.xyz/index.php/2018/02/27/mycat1/" target="_blank" rel="noopener">http://codingo.xyz/index.php/2018/02/27/mycat1/</a></p>
