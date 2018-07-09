@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-07-09T02:26:42.659Z</updated>
+  <updated>2018-07-09T02:40:50.374Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2018/07/06/Mycat%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E4%B8%8E%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E6%B5%8B%E8%AF%95/"/>
     <id>http://yoursite.com/2018/07/06/Mycat配置文件解析与读写分离测试/</id>
     <published>2018-07-06T11:51:18.000Z</published>
-    <updated>2018-07-09T02:26:42.659Z</updated>
+    <updated>2018-07-09T02:40:50.374Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Mycat的一些常见问题请看这里：<a href="https://blog.csdn.net/wangshuang1631/article/details/62898469" target="_blank" rel="noopener">https://blog.csdn.net/wangshuang1631/article/details/62898469</a> 。</p><p>现在登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图：<br><img src="/images/mycat5.png" alt="akb48"></p><p>前文说了，mycat主要有两个配置文件，分别是<code>schema.xml</code>和<code>server.xml</code>，<code>server.xml</code>就是配置虚拟数据库的账号密码的地方，很简单没什么好说的，主要说说<code>schema.xml</code>。</p><p>去除掉注释的<code>schema.xml</code>文件是这样的：<br><img src="/images/mycat4.png" alt="akb48"></p><p>可以看到整个配置文件分为三大块，第一块是schema，这里面有tables和childtables，</p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>前文已经部署了mycat并且启动，现在登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图：<br><img src="/images/mycat5.png" alt="akb48"></p><p>这些库和表根本不是我数据库里的啊，那它是从哪里来的呢？前文说了，mycat有一个虚拟库（逻辑库），它会把逻辑库上的操作映射到真实库里。而mycat主要有两个配置文件，分别是<code>schema.xml</code>和<code>server.xml</code>，<code>server.xml</code>就是配置虚拟数据库的账号密码的地方，很简单没什么好说的，而<code>schema.xml</code>里是主要配置逻辑库和逻辑表的配置文件。</p><p>去除掉注释的<code>schema.xml</code>文件是这样的：<br><img src="/images/mycat4.png" alt="akb48"></p><p>可以看到整个配置文件分为三大块，第一块是schema，这里面有tables和childtables，</p><p>Mycat的一些常见问题请看这里：<a href="https://blog.csdn.net/wangshuang1631/article/details/62898469" target="_blank" rel="noopener">https://blog.csdn.net/wangshuang1631/article/details/62898469</a> 。</p>]]></content>
     
     <summary type="html">
     
