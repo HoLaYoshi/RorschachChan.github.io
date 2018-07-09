@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-07-09T11:21:22.411Z</updated>
+  <updated>2018-07-09T11:27:22.966Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,19 +21,22 @@
     <link href="http://yoursite.com/2018/07/09/%E5%8D%9A%E5%AE%A2%E8%AF%84%E8%AE%BA%E6%94%B9%E7%94%A8%E6%9D%A5%E5%BF%85%E5%8A%9B/"/>
     <id>http://yoursite.com/2018/07/09/博客评论改用来必力/</id>
     <published>2018-07-09T11:01:09.000Z</published>
-    <updated>2018-07-09T11:21:22.411Z</updated>
+    <updated>2018-07-09T11:27:22.966Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>原来我的博客评论用的是<code>hypercomments</code>，但是这几天发现评论已经不能用了，变成了<code>Close discussion</code>，如图：<br><img src="/images/punglun1.png" alt="akb48"></p><p>去<a href="https://www.hypercomments.com/en/pricing" target="_blank" rel="noopener">https://www.hypercomments.com/en/pricing</a> 发现已经没有免费版了，或者是我这个google邮箱里的免费版<code>hypercomments</code>到期了，于是就琢磨换成来必力吧。</p><p>首先先去<code>https://livere.com</code> 注册一个账号，这个来必力是韩国的软件，但是用google翻译就不用怕了，注册很简单，找回密码也很简单。</p><p>再去<a href="https://livere.com/insight/communite" target="_blank" rel="noopener">https://livere.com/insight/communite</a> 里选择免费版，然后填写博客的地址和名称，选择<code>个人网站</code>。这个时候会得到一个<code>data-uid</code>，如图：<br><img src="/images/punglun2.png" alt="akb48"></p><p>打开NexT主题的配置文件<code>_config.yml</code>中，搜索<code>livere_uid</code>，将<code>livere_uid</code>前面的<code>#</code>号去掉，将id填写到<code>livere_uid：</code>后面。再找到<code>Hypercomments</code>，把<code>hypercomments_id</code>这一行注释掉即可。</p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>原来我的博客评论用的是<code>hypercomments</code>，但是这几天发现评论已经不能用了，变成了<code>Close discussion</code>，如图：<br><img src="/images/pinglun1.png" alt="akb48"></p><p>去<a href="https://www.hypercomments.com/en/pricing" target="_blank" rel="noopener">https://www.hypercomments.com/en/pricing</a> 发现已经没有免费版了，或者是我这个google邮箱里的免费版<code>hypercomments</code>到期了，于是就琢磨换成来必力吧。</p><p>首先先去<code>https://livere.com</code> 注册一个账号，这个来必力是韩国的软件，但是用google翻译就不用怕了，注册很简单，找回密码也很简单。</p><p>再去<a href="https://livere.com/insight/communite" target="_blank" rel="noopener">https://livere.com/insight/communite</a> 里选择免费版，然后填写博客的地址和名称，选择<code>个人网站</code>。这个时候会得到一个<code>data-uid</code>，如图：<br><img src="/images/pinglun2.png" alt="akb48"></p><p>打开NexT主题的配置文件<code>_config.yml</code>中，搜索<code>livere_uid</code>，将<code>livere_uid</code>前面的<code>#</code>号去掉，将id填写到<code>livere_uid：</code>后面。再找到<code>Hypercomments</code>，把<code>hypercomments_id</code>这一行注释掉即可。</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;p&gt;原来我的博客评论用的是&lt;code&gt;hypercomments&lt;/code&gt;，但是这几天发现评论已经不能用了，变成了&lt;code&gt;Close discussion&lt;/code&gt;，
-      
+      生命在于折腾
     
     </summary>
     
+      <category term="博客搭建" scheme="http://yoursite.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
+    
+    
+      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
+    
+      <category term="博客搭建" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   

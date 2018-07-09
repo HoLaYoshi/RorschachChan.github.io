@@ -4,6 +4,13 @@
     <title><![CDATA[博客评论改用来必力]]></title>
     <url>%2F2018%2F07%2F09%2F%E5%8D%9A%E5%AE%A2%E8%AF%84%E8%AE%BA%E6%94%B9%E7%94%A8%E6%9D%A5%E5%BF%85%E5%8A%9B%2F</url>
     <content type="text"><![CDATA[原来我的博客评论用的是hypercomments，但是这几天发现评论已经不能用了，变成了Close discussion，如图： 去https://www.hypercomments.com/en/pricing 发现已经没有免费版了，或者是我这个google邮箱里的免费版hypercomments到期了，于是就琢磨换成来必力吧。 首先先去https://livere.com 注册一个账号，这个来必力是韩国的软件，但是用google翻译就不用怕了，注册很简单，找回密码也很简单。 再去https://livere.com/insight/communite 里选择免费版，然后填写博客的地址和名称，选择个人网站。这个时候会得到一个data-uid，如图： 打开NexT主题的配置文件_config.yml中，搜索livere_uid，将livere_uid前面的#号去掉，将id填写到livere_uid：后面。再找到Hypercomments，把hypercomments_id这一行注释掉即可。]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>博客搭建</tag>
+      </tags>
   </entry>
   <entry>
     <title><![CDATA[Mycat配置文件解析与分表存储测试]]></title>

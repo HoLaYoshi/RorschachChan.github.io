@@ -75,7 +75,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="hexo,博客搭建," />
 
 
 
@@ -88,20 +88,21 @@
 
 
 
-<meta name="description" content="原来我的博客评论用的是hypercomments，但是这几天发现评论已经不能用了，变成了Close discussion，如图： 去https://www.hypercomments.com/en/pricing 发现已经没有免费版了，或者是我这个google邮箱里的免费版hypercomments到期了，于是就琢磨换成来必力吧。 首先先去https://livere.com 注册一个账号，这个">
+<meta name="description" content="生命在于折腾">
+<meta name="keywords" content="hexo,博客搭建">
 <meta property="og:type" content="article">
 <meta property="og:title" content="博客评论改用来必力">
 <meta property="og:url" content="http://yoursite.com/2018/07/09/博客评论改用来必力/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="原来我的博客评论用的是hypercomments，但是这几天发现评论已经不能用了，变成了Close discussion，如图： 去https://www.hypercomments.com/en/pricing 发现已经没有免费版了，或者是我这个google邮箱里的免费版hypercomments到期了，于是就琢磨换成来必力吧。 首先先去https://livere.com 注册一个账号，这个">
+<meta property="og:description" content="生命在于折腾">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://yoursite.com/images/punglun1.png">
-<meta property="og:image" content="http://yoursite.com/images/punglun2.png">
-<meta property="og:updated_time" content="2018-07-09T11:21:22.411Z">
+<meta property="og:image" content="http://yoursite.com/images/pinglun1.png">
+<meta property="og:image" content="http://yoursite.com/images/pinglun2.png">
+<meta property="og:updated_time" content="2018-07-09T11:27:22.966Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="博客评论改用来必力">
-<meta name="twitter:description" content="原来我的博客评论用的是hypercomments，但是这几天发现评论已经不能用了，变成了Close discussion，如图： 去https://www.hypercomments.com/en/pricing 发现已经没有免费版了，或者是我这个google邮箱里的免费版hypercomments到期了，于是就琢磨换成来必力吧。 首先先去https://livere.com 注册一个账号，这个">
-<meta name="twitter:image" content="http://yoursite.com/images/punglun1.png">
+<meta name="twitter:description" content="生命在于折腾">
+<meta name="twitter:image" content="http://yoursite.com/images/pinglun1.png">
 
 
 
@@ -360,6 +361,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/博客搭建/" itemprop="url" rel="index">
+                    <span itemprop="name">博客搭建</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -428,6 +451,10 @@
           
 
           
+              <div class="post-description">
+                  生命在于折腾
+              </div>
+          
 
         </div>
       </header>
@@ -442,10 +469,10 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>原来我的博客评论用的是<code>hypercomments</code>，但是这几天发现评论已经不能用了，变成了<code>Close discussion</code>，如图：<br><img src="/images/punglun1.png" alt="akb48"></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>原来我的博客评论用的是<code>hypercomments</code>，但是这几天发现评论已经不能用了，变成了<code>Close discussion</code>，如图：<br><img src="/images/pinglun1.png" alt="akb48"></p>
 <p>去<a href="https://www.hypercomments.com/en/pricing" target="_blank" rel="noopener">https://www.hypercomments.com/en/pricing</a> 发现已经没有免费版了，或者是我这个google邮箱里的免费版<code>hypercomments</code>到期了，于是就琢磨换成来必力吧。</p>
 <p>首先先去<code>https://livere.com</code> 注册一个账号，这个来必力是韩国的软件，但是用google翻译就不用怕了，注册很简单，找回密码也很简单。</p>
-<p>再去<a href="https://livere.com/insight/communite" target="_blank" rel="noopener">https://livere.com/insight/communite</a> 里选择免费版，然后填写博客的地址和名称，选择<code>个人网站</code>。这个时候会得到一个<code>data-uid</code>，如图：<br><img src="/images/punglun2.png" alt="akb48"></p>
+<p>再去<a href="https://livere.com/insight/communite" target="_blank" rel="noopener">https://livere.com/insight/communite</a> 里选择免费版，然后填写博客的地址和名称，选择<code>个人网站</code>。这个时候会得到一个<code>data-uid</code>，如图：<br><img src="/images/pinglun2.png" alt="akb48"></p>
 <p>打开NexT主题的配置文件<code>_config.yml</code>中，搜索<code>livere_uid</code>，将<code>livere_uid</code>前面的<code>#</code>号去掉，将id填写到<code>livere_uid：</code>后面。再找到<code>Hypercomments</code>，把<code>hypercomments_id</code>这一行注释掉即可。</p>
 
       
@@ -526,6 +553,14 @@
 			
 		</div>
 	
+      
+        <div class="post-tags">
+          
+            <a href="/tags/hexo/" rel="tag"><i class="fa fa-tag"></i> hexo</a>
+          
+            <a href="/tags/博客搭建/" rel="tag"><i class="fa fa-tag"></i> 博客搭建</a>
+          
+        </div>
       
 
       
