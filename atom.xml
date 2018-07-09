@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-07-06T12:04:50.168Z</updated>
+  <updated>2018-07-09T02:26:42.659Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,19 +21,24 @@
     <link href="http://yoursite.com/2018/07/06/Mycat%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90%E4%B8%8E%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E6%B5%8B%E8%AF%95/"/>
     <id>http://yoursite.com/2018/07/06/Mycat配置文件解析与读写分离测试/</id>
     <published>2018-07-06T11:51:18.000Z</published>
-    <updated>2018-07-06T12:04:50.168Z</updated>
+    <updated>2018-07-09T02:26:42.659Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Mycat的一些常见问题请看这里：<a href="https://blog.csdn.net/wangshuang1631/article/details/62898469" target="_blank" rel="noopener">https://blog.csdn.net/wangshuang1631/article/details/62898469</a> 。</p><p>前文说了，mycat主要有两个配置文件，分别是<code>schema.xml</code>和<code>server.xml</code>，<code>server.xml</code>就是配置虚拟数据库的账号密码的地方，很简单没什么好说的，主要说说<code>schema.xml</code>。</p><p>去除掉注释的<code>schema.xml</code>文件是这样的：<br><img src="/images/mycat4.png" alt="akb48"></p><p>可以看到整个配置文件分为三大块，第一块是schema，这里面有tables和childtables，</p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>Mycat的一些常见问题请看这里：<a href="https://blog.csdn.net/wangshuang1631/article/details/62898469" target="_blank" rel="noopener">https://blog.csdn.net/wangshuang1631/article/details/62898469</a> 。</p><p>现在登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图：<br><img src="/images/mycat5.png" alt="akb48"></p><p>前文说了，mycat主要有两个配置文件，分别是<code>schema.xml</code>和<code>server.xml</code>，<code>server.xml</code>就是配置虚拟数据库的账号密码的地方，很简单没什么好说的，主要说说<code>schema.xml</code>。</p><p>去除掉注释的<code>schema.xml</code>文件是这样的：<br><img src="/images/mycat4.png" alt="akb48"></p><p>可以看到整个配置文件分为三大块，第一块是schema，这里面有tables和childtables，</p>]]></content>
     
     <summary type="html">
     
-      
-      
-        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;p&gt;Mycat的一些常见问题请看这里：&lt;a href=&quot;https://blog.csdn.net/wangshuang1631/article/details/62898469
-      
+      未完待续...
     
     </summary>
     
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
