@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat1.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat2.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat3.png">
-<meta property="og:updated_time" content="2018-07-06T11:18:43.702Z">
+<meta property="og:updated_time" content="2018-07-09T01:58:23.805Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat 1.6.5的部署与启动">
 <meta name="twitter:description" content="MyCAT模拟了一个虚拟Mysql数据库，并通过简单的配置文件配置，将虚拟数据库中的表映射到实际数据库中">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,204
+                  1,230
                 </span>
               
 
@@ -445,7 +445,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  5
+                  6
                 </span>
               
             </div>
@@ -476,7 +476,7 @@
 <li>数据库主库:阿里云RDS;</li>
 <li>数据库读库:阿里云RDS只读实例;</li>
 </ol>
-<p>登陆阿里云ECS之后，首先先进行如下操作：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">yum install java-1.8.0-openjdk* -y 	#安装java 1.8</span><br><span class="line">yum install -y mysql #安装mysql客户端</span><br><span class="line">useradd mycat	#创建mycat用户</span><br><span class="line">passwd mycat	#更改这个用户的密码</span><br><span class="line">tar -zxvf Mycat-server-1.6.5-release-20180122220033-linux.tar.gz -C /usr/local	#解压缩/usr/local</span><br><span class="line">cd /usr/local/</span><br><span class="line">chown -R mycat.mycat /usr/local/mycat/	#设置mycat目录的属主和属组</span><br></pre></td></tr></table></figure></p>
+<p>登陆阿里云ECS之后，首先先进行如下操作：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dl.mycat.io/1.6.5/Mycat-server-1.6.5-release-20180122220033-linux.tar.gz #下载1.6.5版本</span></span><br><span class="line">yum install java-1.8.0-openjdk* -y 	#安装java 1.8</span><br><span class="line">yum install -y mysql #安装mysql客户端</span><br><span class="line">useradd mycat	#创建mycat用户</span><br><span class="line">passwd mycat	#更改这个用户的密码</span><br><span class="line">tar -zxvf Mycat-server-1.6.5-release-20180122220033-linux.tar.gz -C /usr/local	#解压缩/usr/local</span><br><span class="line">cd /usr/local/</span><br><span class="line">chown -R mycat.mycat /usr/local/mycat/	#设置mycat目录的属主和属组</span><br></pre></td></tr></table></figure></p>
 <p>然后登陆到阿里云RDS读库和写库，看一下大小写是否是“不敏感”,否则可能会发生表找不到的问题，阿里云的RDS默认是不敏感的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show global variables like <span class="string">'%lower_case%'</span>;</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| lower_case_file_system | OFF   |			#这个是“当前系统文件是否大小写敏感”，只读参数，无法修改</span><br><span class="line">| lower_case_table_names | 1     |			#这个是“表名是否大小写敏感”，可以修改，改完了重启生效</span><br><span class="line">+------------------------+-------+</span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p>
 <h2><span id="mycat原理和文件结构">Mycat原理和文件结构</span></h2><p>Mycat的原理跟Atlas查不多，都是用一个虚拟的数据库作为前端，后面是挂上真实的写库和读库。如图：<br><img src="/images/mycat1.png" alt="akb48"></p>
 <p>mycat文件夹的文件结构很简单：</p>
@@ -492,8 +492,8 @@
 <li><code>schema.xml</code>用来配置真实读库写库的信息；</li>
 <li><code>rule.xml</code>是分片规则的配置文件，分片规则的具体一些参数信息单独存放为文件；<br>注意！在这个目录下，配置文件修改，需要重启Mycat或者通过9066端口reload才会生效。</li>
 </ol>
-<p>首先在打开<code>server.xml</code>，在如下的地方做修改:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;user name=<span class="string">"root"</span> defaultAccount=<span class="string">"true"</span>&gt;			&lt;!-- 这里是给虚拟库设定一个账号叫root，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;chenx1242&lt;/property&gt;		&lt;!-- 账号root的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;		&lt;!-- 账号root对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br><span class="line">&lt;user name=<span class="string">"test"</span>&gt;									&lt;!-- 这里是给虚拟库设定一个账号叫test，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;26e9p69r&lt;/property&gt;	&lt;!-- 账号test的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;	&lt;!-- 账号test对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">        &lt;property name="readOnly"&gt;true&lt;/property&gt;	&lt;!-- 说明这个账号是只读账号 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br></pre></td></tr></table></figure></p>
-<p>然后打开<code>schema.xml</code>，编辑如下地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"localhost1"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"0"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">               &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">               &lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;writeHost host="hostM1" url="阿里云RDS:3306" user="账号"   password="对应密码"&gt;</span></span><br><span class="line"><span class="regexp">                       &lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;readHost host="hostS2" url="阿里云只读RDS:3306" user="账号"   password="对应密码"/</span>&gt;</span><br><span class="line">               &lt;<span class="regexp">/writeHost&gt;</span></span><br><span class="line"><span class="regexp">			&lt;!-- &lt;writeHost host="hostS1" url="localhost:3316" user="root" password="123456"/</span>&gt; --&gt;</span><br><span class="line">               &lt;!-- &lt;writeHost host="hostM2" url="localhost:3316" user="root" password="123456"/&gt; --&gt;</span><br><span class="line">   &lt;/dataHost&gt;</span><br></pre></td></tr></table></figure></p>
+<p>首先在打开<code>server.xml</code>，在如下的地方做修改:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;user name=<span class="string">"root"</span> defaultAccount=<span class="string">"true"</span>&gt;	&lt;!-- 这里是给虚拟库设定一个账号叫root，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;chenx1242&lt;/property&gt;	&lt;!-- 账号root的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;	&lt;!-- 账号root对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br><span class="line">&lt;user name=<span class="string">"test"</span>&gt;									&lt;!-- 这里是给虚拟库设定一个账号叫test，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;26e9p69r&lt;/property&gt;	&lt;!-- 账号test的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;	&lt;!-- 账号test对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">        &lt;property name="readOnly"&gt;true&lt;/property&gt;	&lt;!-- 说明这个账号是只读账号 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然后打开<code>schema.xml</code>，编辑如下地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"localhost1"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"0"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">               &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">               &lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;writeHost host="hostM1" url="阿里云RDS:3306" user="账号"   password="对应密码"&gt;</span></span><br><span class="line"><span class="regexp">                       &lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;readHost host="hostS1" url="阿里云只读RDS:3306" user="账号"   password="对应密码"/</span>&gt;</span><br><span class="line">               &lt;<span class="regexp">/writeHost&gt;</span></span><br><span class="line"><span class="regexp">			&lt;!-- &lt;writeHost host="hostS2" url="localhost:3316" user="root" password="123456"/</span>&gt; --&gt;</span><br><span class="line">               &lt;!-- &lt;writeHost host="hostM2" url="localhost:3316" user="root" password="123456"/&gt; --&gt;</span><br><span class="line">   &lt;/dataHost&gt;</span><br></pre></td></tr></table></figure></p>
 <p>检查好格式并保存之后，就到mycat目录下的/bin/里<code>./mycat start</code>就启动mycat了。启动成功之后，8066和9066都是被监听的，如图：<br><img src="/images/mycat2.png" alt="akb48"></p>
 <p><img src="/images/mycat3.png" alt="akb48"></p>
 <h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看日志，这里举例几个有代表性的错误：</p>
@@ -637,6 +637,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/07/06/Mycat配置文件解析与读写分离测试/" rel="prev" title="Mycat配置文件解析与读写分离测试">
+                Mycat配置文件解析与读写分离测试 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -749,7 +753,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">146</span>
+                  <span class="site-state-item-count">147</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -964,7 +968,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共139.6k字</span>
+  <span class="post-count">博客全站共139.7k字</span>
 </div>
         
 
