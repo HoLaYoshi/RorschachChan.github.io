@@ -88,20 +88,20 @@
 
 
 
-<meta name="description" content="前文已经部署了mycat并且启动，现在登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图： 这些库和表根本不是我数据库里的啊，那它是从哪里来的呢？前文说了，mycat有一个虚拟库（逻辑库），它会把逻辑库上的操作映射到真实库里，现在8066这个端口就是这个虚拟库，里面有这几个逻辑表，但是这些表其实不是真正存在的。而mycat主要有三个配置">
+<meta name="description" content="mycat是通过分库而达到的分表的目的">
 <meta name="keywords" content="数据库中间件,读写分离,mycat">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mycat配置文件解析与分表存储测试">
 <meta property="og:url" content="http://yoursite.com/2018/07/06/Mycat配置文件解析与读写分离测试/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="前文已经部署了mycat并且启动，现在登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图： 这些库和表根本不是我数据库里的啊，那它是从哪里来的呢？前文说了，mycat有一个虚拟库（逻辑库），它会把逻辑库上的操作映射到真实库里，现在8066这个端口就是这个虚拟库，里面有这几个逻辑表，但是这些表其实不是真正存在的。而mycat主要有三个配置">
+<meta property="og:description" content="mycat是通过分库而达到的分表的目的">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/mycat5.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat4.png">
-<meta property="og:updated_time" content="2018-07-09T04:00:44.970Z">
+<meta property="og:updated_time" content="2018-07-09T05:53:21.281Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat配置文件解析与分表存储测试">
-<meta name="twitter:description" content="前文已经部署了mycat并且启动，现在登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图： 这些库和表根本不是我数据库里的啊，那它是从哪里来的呢？前文说了，mycat有一个虚拟库（逻辑库），它会把逻辑库上的操作映射到真实库里，现在8066这个端口就是这个虚拟库，里面有这几个逻辑表，但是这些表其实不是真正存在的。而mycat主要有三个配置">
+<meta name="twitter:description" content="mycat是通过分库而达到的分表的目的">
 <meta name="twitter:image" content="http://yoursite.com/images/mycat5.png">
 
 
@@ -450,6 +450,10 @@
             </div>
           
 
+          
+              <div class="post-description">
+                  mycat是通过分库而达到的分表的目的
+              </div>
           
 
         </div>
