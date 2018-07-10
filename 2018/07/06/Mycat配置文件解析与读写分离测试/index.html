@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat9.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat10.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat11.png">
-<meta property="og:updated_time" content="2018-07-10T06:14:14.497Z">
+<meta property="og:updated_time" content="2018-07-10T07:42:27.353Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat配置文件解析与分表存储测试">
 <meta name="twitter:description" content="mycat是通过分库而达到的分表的目的">
@@ -422,7 +422,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  2,296
+                  1,613
                 </span>
               
 
@@ -438,7 +438,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  9
+                  7
                 </span>
               
             </div>
@@ -466,7 +466,7 @@
         <script src="\assets\js\APlayer.min.js"> </script><p>前文已经部署了mycat并且启动，此时登陆到mycat的8066端口，可以看到有一个database，这个database里有几个tables，如图：<br><img src="/images/mycat5.png" alt="akb48"></p>
 <p>这些库和表根本不是我数据库里的啊，那它是从哪里来的呢？前文说了，mycat有一个虚拟库（逻辑库），它会把逻辑库上的操作映射到真实库里，现在8066这个端口就是虚拟库，里面有几个逻辑表，但是这些表其实不是真正存在的。而mycat主要有三个配置文件，分别是<code>schema.xml</code>、<code>rule.xml</code>和<code>server.xml</code>，<code>server.xml</code>就是配置虚拟数据库的账号密码的地方，很简单没什么好说的，<code>rule.xml</code>是分片规则的配置文件，没事别动它。而<code>schema.xml</code>里是主要配置逻辑库和逻辑表的配置文件。</p>
 <h2><span id="配置文件解析">配置文件解析</span></h2><p>去除掉注释的<code>schema.xml</code>文件是这样的：<br><img src="/images/mycat4.png" alt="akb48"></p>
-<p>可以看到整个配置文件分为三大块，第一块是<code>schema</code>，第二块是<code>dataNode</code>，第三块是<code>dataHost</code>。一块一块的说，先说第二块<code>dataNode</code>：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataNode name=<span class="string">"dn1"</span> dataHost=<span class="string">"mycatTEST"</span> database=<span class="string">"db1"</span> /&gt;</span><br><span class="line">&lt;dataNode name=<span class="string">"dn2"</span> dataHost=<span class="string">"mycatTEST"</span> database=<span class="string">"db2"</span> /&gt;</span><br><span class="line">&lt;dataNode name=<span class="string">"dn3"</span> dataHost=<span class="string">"mycatTEST"</span> database=<span class="string">"db3"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到整个配置文件分为三大块，第一块是<code>schema</code>，第二块是<code>dataNode</code>，第三块是<code>dataHost</code>，其中第三块是跟读写分离相关的，所以这里就说前两个部分，先说第二块<code>dataNode</code>：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataNode name=<span class="string">"dn1"</span> dataHost=<span class="string">"mycatTEST"</span> database=<span class="string">"db1"</span> /&gt;</span><br><span class="line">&lt;dataNode name=<span class="string">"dn2"</span> dataHost=<span class="string">"mycatTEST"</span> database=<span class="string">"db2"</span> /&gt;</span><br><span class="line">&lt;dataNode name=<span class="string">"dn3"</span> dataHost=<span class="string">"mycatTEST"</span> database=<span class="string">"db3"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
 <p>这一段表示该数据库有哪些数据节点，以及这些数据节点实际对应的数据服务器（这个节点跟<code>dataHost</code>的块有关）和数据库名，这里配置了3个节点dn1,dn2,dn3，都是在mycatTEST服务器上，也就是说我们需要在mycatTEST那个服务器，也就是下面writeHost的机器里先创建三个database，分别叫db1,db2,db3。我们在逻辑库上的操作都会分别下发到这三个db里，具体的下发算法在上面<code>schema</code>里有写。</p>
 <p>再看第一块<code>schema</code>的内容：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;schema name=<span class="string">"TESTDB"</span> checkSQLschema=<span class="string">"false"</span> sqlMaxLimit=<span class="string">"100"</span>&gt;</span><br><span class="line">        &lt;table name=<span class="string">"travelrecord"</span> dataNode=<span class="string">"dn1,dn2,dn3"</span> rule=<span class="string">"auto-sharding-long"</span> /&gt;	</span><br><span class="line">        &lt;table name=<span class="string">"company"</span> primaryKey=<span class="string">"ID"</span> type=<span class="string">"global"</span> dataNode=<span class="string">"dn1,dn2,dn3"</span> /&gt;</span><br><span class="line">        &lt;table name=<span class="string">"goods"</span> primaryKey=<span class="string">"ID"</span> type=<span class="string">"global"</span> dataNode=<span class="string">"dn1,dn2"</span> /&gt;</span><br><span class="line">        &lt;table name=<span class="string">"hotnews"</span> primaryKey=<span class="string">"ID"</span> autoIncrement=<span class="string">"true"</span> dataNode=<span class="string">"dn1,dn2,dn3"</span> rule=<span class="string">"mod-long"</span> /&gt;</span><br><span class="line">        &lt;table name=<span class="string">"employee"</span> primaryKey=<span class="string">"ID"</span> dataNode=<span class="string">"dn1,dn2"</span> rule=<span class="string">"sharding-by-intfile"</span> /&gt;</span><br><span class="line">        &lt;table name=<span class="string">"customer"</span> primaryKey=<span class="string">"ID"</span> dataNode=<span class="string">"dn1,dn2"</span> rule=<span class="string">"sharding-by-intfile"</span>&gt;</span><br><span class="line">        &lt;childTable name=<span class="string">"orders"</span> primaryKey=<span class="string">"ID"</span> joinKey=<span class="string">"customer_id"</span> parentKey=<span class="string">"id"</span>&gt;</span><br><span class="line">        &lt;childTable name=<span class="string">"order_items"</span> joinKey=<span class="string">"order_id"</span> parentKey=<span class="string">"id"</span> /&gt;</span><br><span class="line">                &lt;<span class="regexp">/childTable&gt;</span></span><br><span class="line"><span class="regexp">        &lt;childTable name="customer_addr" primaryKey="ID" joinKey="customer_id"  parentKey="id" /</span>&gt;</span><br><span class="line">        &lt;<span class="regexp">/table&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>schema&gt;</span><br></pre></td></tr></table></figure></p>
 <p>这一段主要描述了虚拟数据库的schema即TESTDB中有哪些表，以及每个表分布在哪些数据节点上、分布的方法采用哪种算法。其他的选项含义如下：</p>
@@ -481,19 +481,6 @@
 <li><font color="red">parentKey</font>: 属性指定的值一般为与父表建立关联关系的列名。程序首先获取joinkey的值，再通过parentKey属性指定的列名产生查询语句，通过执行该语句得到父表存储在哪个分片上。从而确定子表存储的位置；</li>
 </ol>
 <p>举个例子方便理解，<code>&lt;table name=&quot;employee&quot; primaryKey=&quot;ID&quot; dataNode=&quot;dn1,dn2&quot; rule=&quot;sharding-by-intfile&quot; /&gt;</code>，意思就是“这个employee的表，主键是ID，只在dn1和dn2以<code>sharding-by-intfile</code>的规则存储”。</p>
-<p>再看第三块<code>dataHost</code>：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"mycatTEST"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"3"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">           &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">           &lt;writeHost host="hostM1" url="rm-bp1099x0552q92edr.mysql.rds.aliyuncs.com:3306" user="mycat" password="这里是密码"&gt;</span></span><br><span class="line"><span class="regexp">           &lt;readHost host="hostS1" url="rr-bp1x35g0w6r767eu4.mysql.rds.aliyuncs.com:3306" user="mycat" password="这里是密码"&gt;</span></span><br><span class="line"><span class="regexp">           &lt;/</span>writeHost&gt;</span><br><span class="line">   &lt;<span class="regexp">/dataHost&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>这里主要描述的就是逻辑库需要映射的后端真实数据库的情况。某些选项含义如下：</p>
-<ol>
-<li><font color="red">maxCon</font>:指定每个读写实例连接池的最大连接。也就是说，标签内嵌套的<code>writeHost</code>、<code>readHost</code>标签都会使用这个属性的值来实例化出连接池的最大连接数;</li>
-<li><font color="red">minCon</font>:指定每个读写实例连接池的最小连接，初始化连接池的大小;</li>
-<li><font color="red">balance</font>:负载均衡类型，目前的取值有4种：<br> balance=“0”, 所有读操作都发送到当前可用的writeHost上。<br> balance=“1”，所有读操作都随机的发送到readHost。<br> balance=“2”，所有读操作都随机的在writeHost、readhost上分发。<br> balance=”3”，所有读请求随机的分发到wiriterHost对应的readhost执行，writerHost不负担读压力</li>
-<li><font color="red">writeType</font>:负载均衡类型，目前的取值有3种：<br> writeType=“0”, 所有满足规则的写操作轮询的发送到可用的writeHost上。<br> writeType=“1”，所有满足规则的写操作随机的发送到readHost。<br> writeType=“2”，所有满足规则的写操作随机的在writeHost、readhost分发。（这一点我很怀疑，写操作怎么在readhost上进行）</li>
-<li><font color="red">dbType</font>:指定后端连接的数据库类型，目前支持二进制的mysql协议，还有其他使用JDBC连接的数据库。例如：mongodb、oracle、 spark等;</li>
-<li><font color="red">dbDriver</font>:指定连接后端数据库使用的Driver，目前可选的值有native和JDBC，当使用JDBC时则可以这么写：<code>jdbc:mysql://mycatTEST:3306/</code>;</li>
-<li><font color="red">switchType</font>:主库切换算法，目前的取值有3种：<br> switchType=”-1”,表示不自动切换<br> switchType=”1”, 默认值，自动切换<br> switchType=”2”, 基于MySQL主从同步的状态决定是否切换,心跳语句为show slave status<br> switchType=”3”,基于MySQL galary cluster的切换机制（适合集群）（1.4.1），心跳语句为show status like ‘wsrep%’</li>
-<li><font color="red">heartbeat</font>:这个标签内指明用于和后端数据库进行心跳检查的语句;</li>
-<li><font color="red">writeHost &amp; readHost</font>:这两个标签都指定后端数据库的相关配置给mycat，用于实例化后端连接池。唯一不同的是，writeHost指定写实例、readHost指定读实例，组着这些读写实例来满足系统的要求。在一个dataHost内可以定义多个writeHost和readHost(我这里就配了一对，其实可以配很多对)。但是，如果writeHost指定的后端数据库宕机，那么这个writeHost绑定的所有readHost都将不可用。</li>
-</ol>
 <h2><span id="举个例子">举个例子</span></h2><p>按照上面修改了配置文件之后，重启一波mycat，登陆mycat的9066管理端口，使用<code>show @@datanode;</code>和<code>show @@datasource;</code>可以查看到数据库源和datanode已经成功建立了，如图：<br><img src="/images/mycat7.png" alt="akb48"></p>
 <p>手动在阿里云的RDS的读库上创建db1、db2、db3这三个databases，如图：<br><img src="/images/mycat6.png" alt="akb48"></p>
 <p>由于阿里云读写同步，所以只读实例上也有了db1、db2、db3这三个databases。</p>
@@ -741,7 +728,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">148</span>
+                  <span class="site-state-item-count">149</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -956,7 +943,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共142.1k字</span>
+  <span class="post-count">博客全站共142.6k字</span>
 </div>
         
 
