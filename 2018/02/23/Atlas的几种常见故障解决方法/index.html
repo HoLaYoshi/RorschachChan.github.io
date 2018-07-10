@@ -97,7 +97,7 @@
 <meta property="og:description" content="一口气连看17集《大明王朝1566》">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/atlas13.png">
-<meta property="og:updated_time" content="2018-07-10T10:19:05.258Z">
+<meta property="og:updated_time" content="2018-07-10T10:19:36.376Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Atlas的几种常见故障解决方法">
 <meta name="twitter:description" content="一口气连看17集《大明王朝1566》">
@@ -462,9 +462,8 @@
 <p>如果MySQL后端的连接数也满了可能会报以下错误:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2014</span><span class="number">-11</span><span class="number">-13</span> <span class="number">12</span>:<span class="number">21</span>:<span class="number">07</span>: (critical) network_mysqld_proto_password_scramble: assertion <span class="string">`20 == challenge_len' failed</span></span><br><span class="line"><span class="string">2014-11-13 12:21:07: (warning) (libevent) event_del: event has no event_base set.</span></span><br><span class="line"><span class="string">2014-11-13 12:21:07: (critical)</span></span><br></pre></td></tr></table></figure></p>
 <p>可以临时增加MySQL connection数量:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -n “Max processes=SOFT_LIMIT:HARD_LIMIT” &gt; <span class="regexp">/proc/</span><span class="string">`pidof mysqld`</span>/limits</span><br></pre></td></tr></table></figure></p>
 <h2><span id="出现too-many-open-files的错误怎么办gt">出现<code>Too many open files</code>的错误，怎么办？&gt;</span></h2><p>关于<code>Too many open files</code>错误，可能由两种情况引起:<br>一、php长连接连接到atlas后，每个线程占用一个FD,直到超出系统资源限制而出现too many错误;<br>二、php应用端发送到atlas的sql过多，大量并发的情况下,linevent维护的队列过多，每个event吃一个FD，超出系统资源限制引起<code>Too many open files</code>错误;</p>
-<p>避免<code>Too many open files</code>错误,增加用户的ulimit值加大<code>FD</code>的使用量,可增加系统ulimit资源到 <code>~/.bash_profile</code>文件或<code>/etc/security/limits.conf</code>文件:</p>
-<pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cat .bash_profile </span><br><span class="line"># .bash_profile</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"><span class="keyword">export</span> PATH</span><br><span class="line">ulimit -n <span class="number">16384</span></span><br></pre></td></tr></table></figure>
-</code></pre>
+<p>避免<code>Too many open files</code>错误,增加用户的ulimit值加大<code>FD</code>的使用量,可增加系统ulimit资源到 <code>~/.bash_profile</code>文件或<code>/etc/security/limits.conf</code>文件:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># cat .bash_profile </span><br><span class="line"># .bash_profile</span><br><span class="line">...</span><br><span class="line">...</span><br><span class="line"><span class="keyword">export</span> PATH</span><br><span class="line">ulimit -n <span class="number">16384</span></span><br></pre></td></tr></table></figure></p>
+
       
     </div>
     
