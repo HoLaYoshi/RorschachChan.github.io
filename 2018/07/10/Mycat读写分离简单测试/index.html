@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat12.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat14.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat13.png">
-<meta property="og:updated_time" content="2018-07-10T08:24:56.988Z">
+<meta property="og:updated_time" content="2018-07-10T08:47:58.913Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat读写分离测试">
 <meta name="twitter:description" content="Mycat本身不负责任何数据的同步，具体的数据同步还是依赖Mysql数据库自身的功能">
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,198
+                  1,264
                 </span>
               
 
@@ -476,9 +476,9 @@
 <p>确认完之后，再去<code>log4j2.xml</code>文件把日志级别改成<code>debug</code>。如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> &lt;Loggers&gt;</span><br><span class="line">    &lt;asyncRoot level=<span class="string">"debug"</span> includeLocation=<span class="string">"true"</span>&gt;</span><br><span class="line">        &lt;AppenderRef ref=<span class="string">"Console"</span> /&gt;</span><br><span class="line">        &lt;AppenderRef ref=<span class="string">"RollingFile"</span>/&gt;</span><br><span class="line">    &lt;<span class="regexp">/asyncRoot&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>Loggers&gt;</span><br></pre></td></tr></table></figure></p>
 <p>改完之后重启mycat。登陆到8066端口的mycat逻辑库，先创建一个库，再执行一个写的操作：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE <span class="string">`travelrecord`</span> (</span><br><span class="line"> 	<span class="string">`id`</span> int(<span class="number">11</span>) NOT NULL,</span><br><span class="line"> 	<span class="string">`name`</span> varchar(<span class="number">255</span>) NOT NULL</span><br><span class="line">) ENGINE=InnoDB DEFAULT CHARSET=utf8;</span><br><span class="line">insert into travelrecord (id,name) values(<span class="number">5000010</span>,<span class="string">'bengbeng'</span>);</span><br></pre></td></tr></table></figure></p>
 <p>在日志一看，发现这条记录已经被写入了dn2这个datanode里，如下：<br><img src="/images/mycat14.png" alt="akb48"></p>
-<p>日志的意思是：逻辑库收到了insert命令，然后与真实库连接成功并且执行同步命令，<code>con need syn ,total syn cmd 1 commands</code>，之后发送查询sql，因为travelrecord表在 db1、db2、db3 共有3个分片，因此，以上日志在这3个分片上各出现了一次。</p>
+<p>日志的意思是：逻辑库收到了insert命令，然后与真实库连接成功并且执行同步命令，<code>con need syn ,total syn cmd 1 commands</code>，之后发送查询sql，因为插入的那个数据是5000000，按照<code>auto-sharding-long</code>的规则，只会记录到db2的分片里。执行完后，会释放mycat逻辑库与真实Mysql连接也就是<code>release connection MySQLConnection</code>和<code>release channel MySQLConnection</code>。</p>
 <p>再执行一个读的操作，比如<code>SELECT * FROM travelrecord;</code>，日志是这样记录的：<br><img src="/images/mycat13.png" alt="akb48"></p>
-<p>与<code>schema.xml</code>里的<code>readhost</code>字段对比，的确是从hostS1上读取到的，由于balance=”3”，所以只会从读库读取，实验结束。至于其他的更改参数情况，可以去看参考资料里的第二篇文章，说的很详尽了。</p>
+<p>与<code>schema.xml</code>里的<code>readhost</code>字段对比，的确是从hostS1上读取到的，由于balance=”3”，所以只会从读库读取，由于读的操作db1、db2、db3这3个分片都会操作（需要把他们的内容拼接在一起才是完整的内容），于是日志会打印三遍，实验结束。至于其他的更改参数情况，可以去看参考资料里的第二篇文章，说的很详尽了。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://valleylord.github.io/post/201601-mycat-log-analysis/" target="_blank" rel="noopener">http://valleylord.github.io/post/201601-mycat-log-analysis/</a><br><a href="http://codingo.xyz/index.php/2018/03/08/mycat2/" target="_blank" rel="noopener">http://codingo.xyz/index.php/2018/03/08/mycat2/</a></p>
 
       
@@ -929,7 +929,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共142.6k字</span>
+  <span class="post-count">博客全站共142.7k字</span>
 </div>
         
 
