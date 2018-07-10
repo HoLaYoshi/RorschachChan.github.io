@@ -97,7 +97,7 @@
 <meta property="og:description" content="如果你想在后台执行程序...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/kobe.png">
-<meta property="og:updated_time" content="2018-01-22T02:29:00.675Z">
+<meta property="og:updated_time" content="2018-07-10T09:34:26.987Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="screen的用法">
 <meta name="twitter:description" content="如果你想在后台执行程序...">
@@ -415,7 +415,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  164
+                  167
                 </span>
               
 
@@ -459,11 +459,8 @@
         <script src="\assets\js\APlayer.min.js"> </script><p>很多时候在Linux要后台执行程序，都是使用“&amp;”，或者是nohup，不过这两个更多应用于临时的脚本。一个比较高科技的方法就是使用<code>screen</code>。</p>
 <p>安装screen的方法很简单：<code>yum install -y screen</code>。</p>
 <p>如果新建一个screen，就输入<code>screen -S name</code>，这样会新开一个窗口，然后执行命令。比如我要启动django，那么就输入<code>python manage.py runserver 0.0.0.0:9000</code>即可。</p>
-<p>这个重开一个窗口，列出所有screen进程，就这样：</p>
-<pre><code>[root@docker ~]# screen -ls
-There are screens on:
-    3029.xiedi    (Attached)
-</code></pre><p>如果想链接上之前那个django，执行命令<code>screen -r 3029</code>即可。</p>
+<p>这个重开一个窗口，列出所有screen进程，就这样：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@docker ~]# screen -ls</span><br><span class="line">There are screens on:</span><br><span class="line">	<span class="number">3029.</span>xiedi	(Attached)</span><br></pre></td></tr></table></figure></p>
+<p>如果想链接上之前那个django，执行命令<code>screen -r 3029</code>即可。</p>
 <p><img src="/images/kobe.png" alt="goodbye,Kobe" title="kobe vs durant"></p>
 
       
