@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mycat1.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat2.png">
 <meta property="og:image" content="http://yoursite.com/images/mycat3.png">
-<meta property="og:updated_time" content="2018-07-09T01:58:23.805Z">
+<meta property="og:updated_time" content="2018-07-10T06:17:33.392Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mycat 1.6.5的部署与启动">
 <meta name="twitter:description" content="MyCAT模拟了一个虚拟Mysql数据库，并通过简单的配置文件配置，将虚拟数据库中的表映射到实际数据库中">
@@ -469,10 +469,10 @@
 <h2><span id="mycat原理和文件结构">Mycat原理和文件结构</span></h2><p>Mycat的原理跟Atlas查不多，都是用一个虚拟的数据库作为前端，后面是挂上真实的写库和读库。如图：<br><img src="/images/mycat1.png" alt="akb48"></p>
 <p>mycat文件夹的文件结构很简单：</p>
 <ol>
-<li>conf：配置文件；</li>
-<li>lib：服务依赖的一些jar文件.；</li>
-<li>logs：日志存储文件夹；</li>
-<li>bin：可执行命令的地方：</li>
+<li><font color="red">conf</font>：配置文件；</li>
+<li><font color="red">lib</font>：服务依赖的一些jar文件.；</li>
+<li><font color="red">logs</font>：日志存储文件夹；</li>
+<li><font color="red">bin</font>：可执行命令的地方：</li>
 </ol>
 <p>mycat的配置文件主要在<code>/usr/local/mycat/conf</code>文件夹里，里面有很多文件，但是主要的配置文件是如下几个：</p>
 <ol>
