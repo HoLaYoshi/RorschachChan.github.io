@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[世界杯的一些新感悟]]></title>
+    <url>%2F2018%2F07%2F12%2F%E4%B8%96%E7%95%8C%E6%9D%AF%E7%9A%84%E4%B8%80%E4%BA%9B%E6%96%B0%E6%84%9F%E6%82%9F%2F</url>
+    <content type="text"><![CDATA[传控已死？今早英格兰加时赛输给了克罗地亚，至此所有曼城的球员在本届世界杯的旅程已经走到尽头了。再加上之前小组出局的德国和1/8赛输球的西班牙，不得让人怀疑是否传控已死？ 传控被瓜迪奥拉发扬光大已经10年了，2008年的西班牙也是靠着传控和巴萨的班底拿下两次欧洲杯和一次世界杯。但是这几年传控逐渐被各路教练针对，用“高压迫，快速反击，大巴防守”的套路击败传控已经屡见不鲜，而且传控虽然在理论上是一个完美的战术，但是战术需要人来执行，球员水平有高低状态有起伏，裁判的尺度也不一样，这都会影响传控的比赛结果，所以这几年的传控可谓是磕磕绊绊，风光不再。 传控对中场球员要求很高，一旦球员失去了往前传球的机会，那么就成了无效控球，倒脚来倒脚去时间就走光了。而传统打法对球员的要求相对简单但是对球员身体素质和纪律要求很高，再加上今年VAR技术的全面推广，所以传统打法在杯赛成绩更好。 我个人认为，通过今年的世界杯和以往的几次欧冠来看，传控在杯赛的统治力已经大幅下滑，但在联赛还有一定的优势。原因很简单，联赛是三十多场比赛，容错率要远大于杯赛，这就是传控的好处—虐菜相对来说比较稳。但是最近的足坛趋势是世界杯/欧洲杯/欧冠最大，拿不到上面几个锦标，球员就很难得到金球奖。所以在成绩的压力下，足坛也会慢慢将传控降温，改走传统打法。 那么传控有没有死？我觉得即使是442也要有能一脚长传功力的中场做炮台，还是那话，球是教练安排球员踢出来的，合适的球员搭配合适的战术才会得到胜利，而战术本身也要自我修复漏洞，现在的传控队伍也开始讲究定位球破门，但是如何破密集防守还是世界教练共同面对的难题。 是不是一个赌球的人？世界杯开赛一个月了，足彩也跟着热闹起来。我也跟着潮流买了几场比赛，但是我发现凡是“我跟别人说自己没买的”比赛，结果真中了；凡是我“下注买”的比赛，都输了，最标准的就是英格兰打哥伦比亚，常规时间最后一分钟，米纳进了一个头球，我直接损失100块… 由此我坚信了，我就不是一个特别有好运气的人，而且也比较害怕成为赌徒，完全符合毛主席对知识分子和小资产阶级的定义，一辈子就是老婆孩子热炕头的命。 那么决赛怎么看？首先这俩肯定是防守为主的低比分比赛。法国那边进攻肯定还是“吉鲁吸引炮火，格里兹曼见缝插针，有反击找姆巴佩，角球任意球上大个子”的常规进攻路线。而克罗地亚也是慢节奏抓定位球的方法。我觉得克罗地亚中场并不虚法国，但是莫德里奇这几年没有跟坎特交手过，可以通过这场决赛看看双方谁更技高一筹。法国这批球员相对年轻，虽然这场比赛他们输不起，但是他们已经有了2016年欧洲杯亚军的惨痛经验，而克罗地亚虽然有些球员没有决赛经验，但是他们心态更放松，比较明显的隐患就是克罗地亚的体能是否能支持他们再一次顶得住法国的炮火。 从2006年至今，三届世界杯都踢了延长赛，所以我个人推荐，常规时间法国赢或者平。 至于季军赛，我觉得凯恩会进球，但是比利时3：2赢下英超内战。]]></content>
+      <categories>
+        <category>坠乱花天</category>
+      </categories>
+      <tags>
+        <tag>足球</tag>
+        <tag>世界杯</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Mycat读写分离测试]]></title>
     <url>%2F2018%2F07%2F10%2FMycat%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E7%AE%80%E5%8D%95%E6%B5%8B%E8%AF%95%2F</url>
     <content type="text"><![CDATA[配置文件解析前文说了schema.xml文件的前两块内容，真正与读写分离有关的是第三块dataHost内容： 123456&lt;dataHost name="mycatTEST" maxCon="1000" minCon="10" balance="3" writeType="0" dbType="mysql" dbDriver="native" switchType="1" slaveThreshold="100"&gt; &lt;heartbeat&gt;select user()&lt;/heartbeat&gt; &lt;writeHost host="hostM1" url="rm-bp1099x0552q92edr.mysql.rds.aliyuncs.com:3306" user="mycat" password="这里是密码"&gt; &lt;readHost host="hostS1" url="rr-bp1x35g0w6r767eu4.mysql.rds.aliyuncs.com:3306" user="mycat" password="这里是密码"&gt; &lt;/writeHost&gt; &lt;/dataHost&gt; 这里主要描述的就是逻辑库需要映射的后端真实数据库的情况。某些选项含义如下： maxCon:指定每个读写实例连接池的最大连接。也就是说，标签内嵌套的writeHost、readHost标签都会使用这个属性的值来实例化出连接池的最大连接数; minCon:指定每个读写实例连接池的最小连接，初始化连接池的大小; balance:负载均衡类型，目前的取值有4种： balance=“0”, 所有读操作都发送到当前可用的writeHost上。 balance=“1”，所有读操作都随机的发送到readHost。 balance=“2”，所有读操作都随机的在writeHost、readhost上分发。 balance=”3”，所有读请求随机的分发到wiriterHost对应的readhost执行，writerHost不负担读压力 writeType:负载均衡类型，目前的取值有3种： writeType=“0”, 所有满足规则的写操作轮询的发送到可用的writeHost上。 writeType=“1”，所有满足规则的写操作随机的发送到readHost。 writeType=“2”，所有满足规则的写操作随机的在writeHost、readhost分发。（这一点我很怀疑，写操作怎么在readhost上进行） dbType:指定后端连接的数据库类型，目前支持二进制的mysql协议，还有其他使用JDBC连接的数据库。例如：mongodb、oracle、 spark等; dbDriver:指定连接后端数据库使用的Driver，目前可选的值有native和JDBC，当使用JDBC时则可以这么写：jdbc:mysql://mycatTEST:3306/; switchType:主库切换算法，目前的取值有3种： switchType=”-1”,表示不自动切换 switchType=”1”, 默认值，自动切换 switchType=”2”, 基于MySQL主从同步的状态决定是否切换,心跳语句为show slave status switchType=”3”,基于MySQL galary cluster的切换机制（适合集群）（1.4.1），心跳语句为show status like &#39;wsrep%&#39; heartbeat:这个标签内指明用于和后端数据库进行心跳检查的语句; writeHost &amp; readHost:这两个标签都指定后端数据库的相关配置给mycat，用于实例化后端连接池。唯一不同的是，writeHost指定写实例、readHost指定读实例，组着这些读写实例来满足系统的要求。在一个dataHost内可以定义多个writeHost和readHost(我这里就配了一对，其实可以配很多对)。但是，如果writeHost指定的后端数据库宕机，那么这个writeHost绑定的所有readHost都将不可用。 Demo测试先登陆主库，然后show slave status \G;命令看一下状态，重点是Slave_IO_Running、Slave_SQL_Running和Seconds_Behind_Master这三个字段，如图： 关注这三个字段的原因是“Mycat心跳机制通过检测他们来确定当前主从同步的状态”，如果Seconds_Behind_Master的数值大于slaveThreshold，读写分离筛选器会过滤掉此Slave机器，防止读到很久之前的旧数据，而当主节点宕机后，切换逻辑会检查Slave上的Seconds_Behind_Master是否为0，为0时则表示主从同步，可以安全切换，否则不会切换。 确认完之后，再去log4j2.xml文件把日志级别改成debug。如下： 123456 &lt;Loggers&gt; &lt;asyncRoot level="debug" includeLocation="true"&gt; &lt;AppenderRef ref="Console" /&gt; &lt;AppenderRef ref="RollingFile"/&gt; &lt;/asyncRoot&gt;&lt;/Loggers&gt; 改完之后重启mycat。登陆到8066端口的mycat逻辑库，先创建一个库，再执行一个写的操作： 12345CREATE TABLE `travelrecord` ( `id` int(11) NOT NULL, `name` varchar(255) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8;insert into travelrecord (id,name) values(5000010,'bengbeng'); 在日志一看，发现这条记录已经被写入了dn2这个datanode里，如下： 日志的意思是：逻辑库收到了insert命令，然后与真实库连接成功并且执行同步命令，con need syn ,total syn cmd 1 commands，之后发送查询sql，因为插入的那个数据是5000000，按照auto-sharding-long的规则，只会记录到db2的分片里。执行完后，会释放mycat逻辑库与真实Mysql连接也就是release connection MySQLConnection和release channel MySQLConnection。 再执行一个读的操作，比如SELECT * FROM travelrecord;，日志是这样记录的： 与schema.xml里的readhost字段对比，的确是从hostS1上读取到的，由于balance=”3”，所以只会从读库读取，由于读的操作db1、db2、db3这3个分片都会操作（需要把他们的内容拼接在一起才是完整的内容），于是日志会打印三遍，实验结束。至于其他的更改参数情况，可以去看参考资料里的第二篇文章，说的很详尽了。 参考资料http://valleylord.github.io/post/201601-mycat-log-analysis/http://codingo.xyz/index.php/2018/03/08/mycat2/]]></content>
@@ -8,9 +20,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>数据库中间件</tag>
         <tag>读写分离</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -33,9 +45,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>数据库中间件</tag>
         <tag>读写分离</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -46,9 +58,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>数据库中间件</tag>
         <tag>读写分离</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
