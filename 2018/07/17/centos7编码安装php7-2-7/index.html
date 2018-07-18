@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/gcc4.png">
 <meta property="og:image" content="http://yoursite.com/images/gcc5.png">
 <meta property="og:image" content="http://yoursite.com/images/gcc6.png">
-<meta property="og:updated_time" content="2018-07-18T09:52:21.953Z">
+<meta property="og:updated_time" content="2018-07-18T09:58:45.441Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos7编码安装php7.2和node.js8.11">
 <meta name="twitter:description" content="久闻php7的速度以及性能那可是比php5系列的任何一版本都要快，今天来试试">
@@ -420,7 +420,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  968
+                  975
                 </span>
               
 
@@ -477,10 +477,10 @@
 <p>此时在make这一步可能会有这样的错误：<br><img src="/images/gcc5.png" alt="办公室"></p>
 <p>这个原因是“升级gcc时，生成的动态库没有替换老版本gcc动态库”，所以要将gcc最新版本的动态库替换系统中老版本的动态库。</p>
 <p>使用<code>find / -name &quot;libstdc++.so*&quot;</code>查找编译gcc时生成的最新动态库，发现最近的动态库是这个：<br><img src="/images/gcc6.png" alt="办公室"></p>
-<p>于是就进行替换:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cp /root/gcc<span class="number">-8.1</span><span class="number">.0</span>/stage1-x86_64-pc-linux-gnu/libstdc++-v3/src/.libs/libstdc++.so<span class="number">.6</span><span class="number">.0</span><span class="number">.25</span> /usr/lib64</span><br><span class="line">cd /usr/lib64</span><br><span class="line">ll libstdc++.so<span class="number">.6</span></span><br><span class="line">lrwxrwxrwx 1 root root 19 Jul 17 09:59 libstdc++.so.6 -&gt; libstdc++.so.6.0.19		#把原来的记住，防止有回滚的现象</span><br><span class="line">rm -rf  libstdc++.so<span class="number">.6</span></span><br><span class="line">ln -s libstdc++.so<span class="number">.6</span><span class="number">.0</span><span class="number">.25</span> libstdc++.so<span class="number">.6</span></span><br></pre></td></tr></table></figure></p>
+<p>于是就进行替换并作一个软连接:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cp /root/gcc<span class="number">-8.1</span><span class="number">.0</span>/stage1-x86_64-pc-linux-gnu/libstdc++-v3/src/.libs/libstdc++.so<span class="number">.6</span><span class="number">.0</span><span class="number">.25</span> /usr/lib64</span><br><span class="line">cd /usr/lib64</span><br><span class="line">ll libstdc++.so<span class="number">.6</span></span><br><span class="line">lrwxrwxrwx 1 root root 19 Jul 17 09:59 libstdc++.so.6 -&gt; libstdc++.so.6.0.19		#把原来的记住，防止有回滚的现象</span><br><span class="line">rm -rf  libstdc++.so<span class="number">.6</span></span><br><span class="line">ln -s libstdc++.so<span class="number">.6</span><span class="number">.0</span><span class="number">.25</span> libstdc++.so<span class="number">.6</span></span><br></pre></td></tr></table></figure></p>
 <p>然后重新返回到<code>node-v8.11.3</code>文件夹里去<code>make</code>就OK了！</p>
 <p>设定环境变量，<code>vim /etc/profile</code>，在<code>export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL</code>一行的上面添加如下内容：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#set for nodejs</span><br><span class="line"><span class="keyword">export</span> NODE_HOME=<span class="regexp">/usr/</span>local/node/<span class="number">8.11</span><span class="number">.3</span></span><br><span class="line"><span class="keyword">export</span> PATH=$NODE_HOME/bin:$PATH</span><br></pre></td></tr></table></figure></p>
-<p>保存退出之后，<code>source /etc/profile</code>，再<code>node --version</code>看一下版本是v8.11.3就是OK了！</p>
+<p>保存退出之后，<code>source /etc/profile</code>，再<code>node --version</code>看一下版本是<code>v8.11.3</code>就是OK了！</p>
 
       
     </div>
