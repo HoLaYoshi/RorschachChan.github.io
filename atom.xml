@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-07-19T01:33:59.258Z</updated>
+  <updated>2018-07-20T07:17:02.658Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>将radhat的yum更换成免费版本</title>
+    <link href="http://yoursite.com/2018/07/20/%E5%B0%86radhat%E7%9A%84yum%E6%9B%B4%E6%8D%A2%E6%88%90%E5%85%8D%E8%B4%B9%E7%89%88%E6%9C%AC/"/>
+    <id>http://yoursite.com/2018/07/20/将radhat的yum更换成免费版本/</id>
+    <published>2018-07-20T06:40:06.000Z</published>
+    <updated>2018-07-20T07:17:02.658Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="redhat替换yum源">RedHat替换yum源</span></h2><p>这次给吉林做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。于是我登陆上去一看，是redhat，在使用yum的时候会报错：<br><img src="/images/yum2.png" alt="akb48"></p><p>这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。于是就要用CentOS源来替代yum源，而CentOS源是免费的。</p><p>首先先删除掉redhat自带的yum：<code>rpm -qa | grep yum | xargs rpm -e --nodeps</code>。</p><p>然后用<code>cat /etc/redhat-release命</code>令去查看一下系统版本，我这个机器的版本是<code>Red Hat Enterprise Linux Server release 6.5 (Santiago)</code>，就去<a href="http://mirrors.163.com/centos/6/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/6/os/x86_64/Packages/</a> 下载如下几个文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm</span></span><br></pre></td></tr></table></figure></p><p>如果想下载<code>centos 7</code>的就去<a href="http://mirrors.163.com/centos/7/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/7/os/x86_64/Packages/</a> 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。</p><p>然后就是安装这几个包：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh yum-metadata-parser<span class="number">-1.1</span><span class="number">.2</span><span class="number">-16.</span>el6.x86_64.rpm</span><br><span class="line">rpm -ivh yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-81.</span>el6.centos.noarch.rpm</span><br><span class="line">rpm -ivh yum-plugin-fastestmirror<span class="number">-1.1</span><span class="number">.31</span><span class="number">-45.</span>el7.noarch.rpm</span><br><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">wget http:<span class="comment">//mirrors.163.com/.help/CentOS6-Base-163.repo#最好先备份旧文件</span></span><br><span class="line">sed -i <span class="string">'s#$releasever#6#g'</span> ./CentOS6-Base<span class="number">-163.</span>repo</span><br><span class="line">yum clean all#清除原有的缓存</span><br><span class="line">yum makecache#重建缓存</span><br><span class="line">yum update#更新系统</span><br></pre></td></tr></table></figure></p><p>大功告成！可以使用免费的yum去装装装了！</p><h2><span id="修复python-urlgrabber版本过低">修复Python-urlgrabber版本过低</span></h2><p>当执行到<code>rpm -ivh yum-3.2.29-81.el6.centos.noarch.rpm</code>这一步的时候，可能会出现一个python的错误：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python-urlgrabber &gt;= <span class="number">3.9</span><span class="number">.1</span><span class="number">-10</span> is needed by yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-73.</span>el6.centos.noarch</span><br></pre></td></tr></table></figure></p><p>要求<code>python-urlgrabber</code>版本必须大于等于3.9.1-10，而用<code>rpm -qa|grep python</code>查看当前的版本是<code>python-urlgrabber-3.9.1-9.el6.noarch</code>，于是就<code>rpm -e python-urlgrabber-3.9.1-9.el6.noarch</code>卸载掉，<code>wget http://mirrors.163.com/centos/6/os/x86_64/Packages/python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>之后，执行<code>rpm -ivh python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>命令安装即可。</p><p>安装完毕，再用<code>rpm -ivh --force yum-*</code>安装后面的内容。</p><h2><span id="无法解析yum源">无法解析yum源</span></h2><p>如果出现了<code>Couldn&#39;t resolve host：&#39;mirrors.163.com&#39;</code>的错误，就修改一下<code>/etc/resolv.conf</code>，然后在里面添加一句<code>nameserver 8.8.8.8</code>，保存即可。</p><h2><span id="nokey">NOKEY？？？</span></h2><p>如果出现<code>Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</code>，可以使用如下方法解决：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/pki/rpm-gpg/ </span><br><span class="line">wget http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-6 </span><br><span class="line">rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</span><br></pre></td></tr></table></figure></p>]]></content>
+    
+    <summary type="html">
+    
+      自从投入了专有云，就要面对各种各样的甲方爸爸，爸爸们用的系统千奇百怪。
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="redhat" scheme="http://yoursite.com/tags/redhat/"/>
+    
+      <category term="yum源" scheme="http://yoursite.com/tags/yum%E6%BA%90/"/>
+    
+  </entry>
   
   <entry>
     <title>Centos7编码安装php7.2和node.js8.11</title>
@@ -86,9 +110,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
@@ -136,9 +160,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
@@ -162,9 +186,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
@@ -467,30 +491,6 @@
     
     
       <category term="apple" scheme="http://yoursite.com/tags/apple/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>超赞的京都大阪五日游</title>
-    <link href="http://yoursite.com/2018/05/25/%E8%B6%85%E8%B5%9E%E7%9A%84%E4%BA%AC%E9%83%BD%E5%A4%A7%E9%98%AA%E4%BA%94%E6%97%A5%E6%B8%B8/"/>
-    <id>http://yoursite.com/2018/05/25/超赞的京都大阪五日游/</id>
-    <published>2018-05-25T07:34:25.000Z</published>
-    <updated>2018-05-28T01:24:33.709Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>说来惭愧，活了30年了这是我第一次出国旅行，借着公司有一次旅游的机会就跟女朋友一起到京都和大阪玩5天。</p><p>搞定了签证，在网上买好了USJ的快速通行票，又预定了随身WIFI，简单在穷游、知乎和马蜂窝上做了做自由行的攻略，18号晚上6点半从杭州萧山机场出发，两个小时后到达关西机场。之前在《miss pilot》里看到过ANA的航空，这一次亲自乘坐感觉还是不错，飞机场有吃有玩还有葡萄酒喝。</p><p>到关西机场之后，又按指纹又照相的通过了一连串的海关检查，就跟公司其他小伙伴兵分两路，他们去奈良看鹿，我跟女票直接去京都。凭借女票的三脚猫日语功力和她已经来过大阪的经验，我俩先办理了地铁卡，购买了一日游行卡，然后坐上了从大阪出发到京都。</p><p>从大阪到京都大约花了一个半小时左右，抵达京都已经是晚上11点了。路上下着细细小雨，再加上两人拖着箱子有点肚饿，就在路边的seven-eleven里简单买了一点水和东西，买东西之余发现在超市里有成人书籍出售。从便利店出来顺着google地图找之前在爱彼迎上预订的民宿，那是一个公寓型民宿，凭借店主之前在邮件里写的密码，我们从信箱里拿到房间钥匙。</p><h2><span id="日本的庙">日本的庙</span></h2><p>京都是一个充满寺庙和神社的地方，京都的旅行就是“从这个庙出来，到下一个庙去”，而清水寺正是京都众多庙里人气很旺的景点之一，日本的庙和神社有一个习惯，入寺前先用竹勺洗手，如果要入室参拜的话还要脱鞋。在京都穿和服是一个很常见的事情，而且我觉得一群人穿和服是一个蛮cool的风景，不过女票没有租，但是在寺里买了很多的御守。</p><p>昨晚到京都太晚，无法注意天空，到了白天才发现京都的天真的很蓝，看见远方的山轻而易举。从清水寺出来下一站是八坂神社，巧的是遇到了一对新婚夫妇在这里结婚拍照，不得不说日本新郎传统的黑和服加扇子的形象还是很帅的。</p><h2><span id="日本的玩">日本的玩</span></h2><p>水族馆一直都是我非常喜欢的地方，而大阪海游馆也是这一次游玩里安排的一个重要环节，但是比较让我失望的是它的海底隧道很短，大约也就杭州水族馆的一半长度。我俩没有看到喂食节目，而且海游馆也没有海豹顶球，海豚跳舞这样的节目。不过海游馆的鱼种类还是很多的，有些品种还可以亲手去摸一摸它们。出了海游馆就是一个蛮大的摩天轮，用一日通票的话可以免费上去坐一圈。</p><p>大阪的USJ是我们这次日本之行的最后一站也是最高潮的部分，去年圣诞节我跟女票在上海的迪士尼度过的。从迪士尼回来就一直碎碎念大阪的环球影城，我俩还特意挑选了一个工作日去玩就是为了尽可能的少排队，但是那天依旧很多很多人，真的超火爆。</p><p>环球影城的运营模式跟迪士尼差不多，通过IP分主题区，可以购物也有花车游行。但是整个乐园的玩法相对单一—-都是过山车：哈利波特是过山车、蜘蛛侠是过山车、小黄人是原地晃晃过山车、侏罗纪公园是水上过山车，至于翼龙飞行和好莱坞美梦更是超刺激的过山车…</p><p>这一次环球影城的特殊项目有四个：怪物猎人、美少女战士（看动画片）、柯南（密室逃脱）和最终幻想。我跟女票还有公司同事都选择了柯南，虽然通篇日语对白，不过还是能猜出来一个大概剧情，所以一个半小时玩下来感觉就像看了一遍柯南的剧场版，里面的解密就不剧透了，机关真的很难，想要在一个小时内完全逃脱几乎是一个不可能的任务。</p><p>上面把正经的娱乐说完了，下面来说一点不正经的娱乐。我和女票在大阪住在日本桥地铁站附近，那里距离道顿堀走路也就10分钟的路程，而道顿堀附近有一个街叫宗右卫门町，那里就是大阪有名的牛郎街，一路走过去各种牛郎宣传大海报和在路边搭讪的小哥，甚至那附近的小吃店里还有牛郎哥的宣传单。除了铺天盖地的牛郎哥哥外还有站街的妹妹，大多数都是黄发浓妆，但是仔细看脸都不算太好看的。这些人会跟过往的单身男女搭讪，邀请他们去店里坐坐喝点酒说说话，至于有没有更进一步的皮肉关系，那就不好说了。而且据说他们是不做不懂日语人的生意的，所以如果他们真的纠缠你了，就直接说我是外国人就好。</p><h2><span id="日本的购物">日本的购物</span></h2><p>到了日本，买东西是必然的。不过当地的大商场关门很早，基本晚上八点半左右就开始关门。在伏见稻荷大社甚至有的商铺五点半就打烊了，我很好奇，商场这么早关门，那日本人晚上的娱乐是什么呢？他们除了去居酒屋喝酒和广场溜达再加上回家看电视难道就没有其他的娱乐了吗？</p><p>不过，各大药妆店的营业时间很晚，甚至唐吉坷德是24小时营业。这种地方里充满了大陆人、香港人、台湾人、韩国人还有泰国人，在人群和背包中穿梭，拎着篮子买买买，买到5000就可以退税。我女票这次买了很多的卸妆水乳液面膜眼霜口红还有零食，作为一个在旁边无事可做的男人，深深地觉得陪女人逛街是一个很遭罪的事情。</p><h2><span id="日本的吃">日本的吃</span></h2><p>我是看过《深夜食堂》和《孤独的美食家》的，所以对日本的食物有一点好感，而且在杭州吃到日本料理也不是一个难事。不过这次到了日本，连续吃了五天当地的饭，发现日本的菜其实很单一。</p><p>日本普通的餐就是“米饭+猪肉\牛肉\鸡肉+沙拉+味增汤”，日本的米饭是很好吃的，但是他们的肉做法基本就是炸，炒是很少的。如果不是米饭的话就是炒面、拉面、寿司或者是煎饺。期间我跟女票吃了一次烤肉，里面有“最强牛里脊和牛肠”给我留下了很深的印象。此外在海游馆还吃到了我梦寐已久的大阪烧，插播一句话，吃大阪烧的时候还看到足球运动员郑大世，我女票一眼就认出他来了…</p><p>日本的消费能力不低，五天下来，基本上每一顿饭都大约花费了3000多日元，在吉野家吃算比较便宜的，2000不到就能搞定。在烤肉店要了套餐，每人是5000日元。这次在日本，觉得最好吃的是牛里脊，然后就是烤蟹壳。</p><p>说完了吃再说说喝，大阪和京都随处可见自动售卖机，售卖机里面基本就是五样饮品—水、绿茶、优酸乳、可乐和咖啡，价钱还都差不多。日本的水果很贵，一个不到6斤重的西瓜就要2200日元左右，橘子大约五块钱一个，但是他们的酒却相比较便宜。在日本我可没少喝梅子酒、气泡果酒和啤酒。</p><h2><span id="日本的电视">日本的电视</span></h2><p>我俩住的民宿有一个小电视，里面有12个频道，其中三个是购物频道…我想可能日本的免费电视就这么点，大多数都是收费频道。这九个电视台白天有新闻，有韩剧，有街头采访；晚上有芭蕾舞片段、有综艺节目、还有打着圣光的肉番！说到综艺节目，里面有一个片段就是把秃头用毛巾擦的锃亮，然后用遥控板去对着秃头摁键，结果信号经过秃头的折射，竟然能顺利的操纵电视。再后来叫来两个秃头，尝试多次折射，依旧可以准确遥控电视…就这么一个环节把我之前从来不看日本综艺节目的同事笑翻了，回国后就开始恶补这种日本综艺。</p><h2><span id="游玩的tips">游玩的tips</span></h2><p>1.日本路边的垃圾箱很少，据说是因为他们没有边走路边吃喝东西的习惯，所以随处带一个塑料袋来装垃圾；<br>2.USJ的快速通行证只有日语区的页面才有，请准备好visa和master卡；<br>3.办理的地铁充值卡不要扔，下一次再来日本，直接储值依旧可以使用；<br>4.到了USJ别上来先买东西，要先排队玩，东西可以放到最后出院的时候再买；<br>5.不会日语在一般情况下没问题，但是如果看不懂车站的话，就难免要问路了，这样会比较头疼，准备一个google翻译。<br>6.champion在日本的地摊也有卖，人民币大约100多，所以淘宝上那些200左右的champion完全不需要考虑…</p><h2><span id="这次的遗憾">这次的遗憾</span></h2><p>这次玩的蛮爽的，但是大阪仅仅只有三天只能玩一个皮毛，比如本次出游的遗憾如下：</p><p>1.据说大阪有一个棒球场，20日元一个球，然后通过发球机器发射，游客可以轮棒尝试一下本垒打的快感，但是由于时间太紧没有打上棒球…<br>2.没有去游戏机厅，以前常在漫画里看到日本有那种弹子机，如果赢的多，可以用塑料筐装满小弹子去换钱，这种游戏机厅在大阪的商场很常见，而且门口都有大广告，上面写“新品到店，欢迎畅玩”；<br>3.在龟梨和也和山下智久主演的《我命中注定的人》里，龟梨和也手工雕刻了一个王将的木牌，这次到了大阪逛了很多店，都没有发现这款木雕，不仅没有这个木雕，连战国时期各大将的头盔纺织品也没有看到，这一点很遗憾；<br>4.USJ里的变形金刚和终结者2都暂时停业，不过我后来在B战上看了视频，还是过山车…</p><p>等下一次如果有机会能去东京的话，就尝试把上面几个弥补上，再顺便去一趟秋叶原。</p>]]></content>
-    
-    <summary type="html">
-    
-      这五天在日本走了两个完全不同的城市
-    
-    </summary>
-    
-      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="日本" scheme="http://yoursite.com/tags/%E6%97%A5%E6%9C%AC/"/>
-    
-      <category term="旅游" scheme="http://yoursite.com/tags/%E6%97%85%E6%B8%B8/"/>
     
   </entry>
   
