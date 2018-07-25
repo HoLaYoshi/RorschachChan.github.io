@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/yum2.png">
 <meta property="og:image" content="http://yoursite.com/images/yum4.png">
 <meta property="og:image" content="http://yoursite.com/images/yum3.png">
-<meta property="og:updated_time" content="2018-07-20T08:50:46.816Z">
+<meta property="og:updated_time" content="2018-07-24T01:38:21.096Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="将Redhat的yum更换成免费版本">
 <meta name="twitter:description" content="自从投入了专有云，就要面对各种各样的甲方爸爸，爸爸们用的系统千奇百怪。">
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  721
+                  743
                 </span>
               
 
@@ -458,8 +458,8 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="redhat替换yum源">RedHat替换yum源</span></h2><p>这次给吉林做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。于是我登陆上去一看，是redhat，在使用yum的时候会报错：<br><img src="/images/yum2.png" alt="akb48"></p>
-<p>这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。于是就要用CentOS源来替代yum源，而CentOS源是免费的。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="redhat替换yum源">RedHat替换yum源</span></h2><p>这次给吉林移动做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。我登陆上去一看，是redhat，在使用yum的时候会有如下报错：<br><img src="/images/yum2.png" alt="akb48"></p>
+<p>这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。卧槽，怎么可能，我们向来是“要钱没有，要命一条”。于是就要用CentOS源来替代yum源，而CentOS源是免费的。</p>
 <p>首先先删除掉redhat自带的yum：<code>rpm -qa | grep yum | xargs rpm -e --nodeps</code>。</p>
 <p>然后用<code>cat /etc/redhat-release</code>命令去查看一下系统版本，我这个机器的版本是<code>Red Hat Enterprise Linux Server release 6.5 (Santiago)</code>，就去<a href="http://mirrors.163.com/centos/6/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/6/os/x86_64/Packages/</a> 下载如下几个文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm</span></span><br></pre></td></tr></table></figure></p>
 <p>如果想下载<code>centos 7</code>的就去<a href="http://mirrors.163.com/centos/7/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/7/os/x86_64/Packages/</a> 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。</p>
@@ -591,6 +591,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/07/24/使用tqdm添加下载的进度条/" rel="prev" title="使用tqdm添加下载的进度条">
+                使用tqdm添加下载的进度条 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -703,7 +707,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">151</span>
+                  <span class="site-state-item-count">152</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -725,7 +729,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">127</span>
+                  <span class="site-state-item-count">128</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -918,7 +922,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共143.8k字</span>
+  <span class="post-count">博客全站共144.5k字</span>
 </div>
         
 

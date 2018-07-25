@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-07-20T08:50:46.816Z</updated>
+  <updated>2018-07-25T03:05:15.083Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -17,13 +17,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>使用tqdm添加下载的进度条</title>
+    <link href="http://yoursite.com/2018/07/24/%E4%BD%BF%E7%94%A8tqdm%E6%B7%BB%E5%8A%A0%E4%B8%8B%E8%BD%BD%E7%9A%84%E8%BF%9B%E5%BA%A6%E6%9D%A1/"/>
+    <id>http://yoursite.com/2018/07/24/使用tqdm添加下载的进度条/</id>
+    <published>2018-07-24T13:04:48.000Z</published>
+    <updated>2018-07-25T03:05:15.083Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="制作进度条">制作进度条</span></h2><p>既然接手了国内专有云，就要写一个“自动化部署脚本”。于是我就把整个部署的安装包放到阿里云的bucket，用脚本去<code>wget</code>这个部署包，然后进行脚本部署。但是由于这个安装包比较大，<code>wget</code>的过程就是面对一个黑漆漆的屏幕干等，死机了都不知道，这太枯燥了，于是就打算在脚本里添加一个“下载进度条”。</p><p>google了一下，就发现了<code>tqdm</code>这个库，安装tqdm的方法很简单：<code>pip install tqdm</code>。</p><p>具体的用途和参数可以去看<a href="https://lorexxar.cn/2016/07/21/python-tqdm/" target="_blank" rel="noopener">https://lorexxar.cn/2016/07/21/python-tqdm/</a> 这篇文章。</p><p>从tqdm的几个参数可见要使用tqdm进度条首先需要整个文件的大小，其次要下载速度。整个文件的大小可以用<code>requests.get</code>方法获取，获取到<code>header</code>里就有目标的大小。在使用<code>requests</code>模块下载大文件/数据时，建议使用使用<code>stream</code>模式。如果是<code>stream=False</code>，它会立即开始下载文件并放到内存中，如果文件过大，有可能导致内存不足。</p><pre><code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"># -*- coding: utf-8 -*-</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"></span><br><span class="line">def downloadFILE(url,name):</span><br><span class="line">    resp = requests.get(url=url,stream=True)</span><br><span class="line">#stream=True的作用是仅让响应头被下载，连接保持打开状态，</span><br><span class="line">    content_size = int(resp.headers['Content-Length'])/1024#确定整个安装包的大小</span><br><span class="line">    <span class="keyword">with</span> open(name, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        print <span class="string">"安装包整个大小是："</span>,content_size,<span class="string">'k，开始下载...'</span></span><br><span class="line">        <span class="keyword">for</span> data <span class="keyword">in</span> tqdm(iterable=resp.iter_content(<span class="number">1024</span>),total=content_size,unit=<span class="string">'k'</span>,desc=name):</span><br><span class="line">#调用iter_content，一块一块的遍历要下载的内容，搭配stream=True，此时才开始真正的下载</span><br><span class="line">#iterable：可迭代的进度条 total：总的迭代次数 desc：进度条的前缀</span><br><span class="line">            f.write(data)</span><br><span class="line">        print name + <span class="string">"已经下载完毕！"</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    url = <span class="string">"需要下载的文件的地址"</span></span><br><span class="line">    name = url.split('/')[-1]#截取整个url最后一段即文件名</span><br><span class="line">    downloadFILE(url,name)</span><br></pre></td></tr></table></figure></code></pre><p><img src="/images/bpython1.png" alt="paradin" title="脚本执行效果"><br>注意！下载文件所在的bucket要设置成“公有读”而不能是“私有”。</p><h2><span id="补充">补充</span></h2><ol><li>解压缩的脚本： <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> zipfile</span><br><span class="line">filename = <span class="string">'要解压包的路径'</span></span><br><span class="line">fz = zipfile.ZipFile(filename, <span class="string">'r'</span>)</span><br><span class="line"><span class="keyword">for</span> file <span class="keyword">in</span> fz.namelist():</span><br><span class="line">    fz.extract(file, path)</span><br></pre></td></tr></table></figure></li></ol><p>这个脚本即使没有unzip命令也可以执行的。</p><ol><li><p>获取本地IP地址的脚本：</p> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def get_local_ip(ifname = <span class="string">'eth0'</span>):</span><br><span class="line">    <span class="keyword">import</span> socket, fcntl, struct</span><br><span class="line">    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)</span><br><span class="line">    inet = fcntl.ioctl(s.fileno(), <span class="number">0x8915</span>, struct.pack(<span class="string">'256s'</span>, ifname[:<span class="number">15</span>]))</span><br><span class="line">    ret = socket.inet_ntoa(inet[<span class="number">20</span>:<span class="number">24</span>])</span><br><span class="line">    <span class="keyword">return</span> ret</span><br><span class="line"></span><br><span class="line">print get_local_ip()</span><br></pre></td></tr></table></figure></li><li><p>bpython，这是一个好东西，可以在linux环境下实现类似pycharm的提示功能，安装方法就是pip install bpython，然后启动python的时候直接bpython即可。效果如图：<br><img src="/images/bpython.gif" alt="paradin"></p></li></ol><h2><span id="参考资料">参考资料</span></h2><p><a href="https://blog.csdn.net/qq_40666028/article/details/79335961" target="_blank" rel="noopener">https://blog.csdn.net/qq_40666028/article/details/79335961</a><br><a href="http://blog.topspeedsnail.com/archives/9075" target="_blank" rel="noopener">http://blog.topspeedsnail.com/archives/9075</a><br><a href="https://www.168seo.cn/python/24286.html" target="_blank" rel="noopener">https://www.168seo.cn/python/24286.html</a></p>]]></content>
+    
+    <summary type="html">
+    
+      tadm声称比老版的progressbar库的单次响应时间提高了10倍以上
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="可视化" scheme="http://yoursite.com/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/"/>
+    
+  </entry>
+  
+  <entry>
     <title>将Redhat的yum更换成免费版本</title>
     <link href="http://yoursite.com/2018/07/20/%E5%B0%86radhat%E7%9A%84yum%E6%9B%B4%E6%8D%A2%E6%88%90%E5%85%8D%E8%B4%B9%E7%89%88%E6%9C%AC/"/>
     <id>http://yoursite.com/2018/07/20/将radhat的yum更换成免费版本/</id>
     <published>2018-07-20T06:40:06.000Z</published>
-    <updated>2018-07-20T08:50:46.816Z</updated>
+    <updated>2018-07-24T01:38:21.096Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="redhat替换yum源">RedHat替换yum源</span></h2><p>这次给吉林做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。于是我登陆上去一看，是redhat，在使用yum的时候会报错：<br><img src="/images/yum2.png" alt="akb48"></p><p>这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。于是就要用CentOS源来替代yum源，而CentOS源是免费的。</p><p>首先先删除掉redhat自带的yum：<code>rpm -qa | grep yum | xargs rpm -e --nodeps</code>。</p><p>然后用<code>cat /etc/redhat-release</code>命令去查看一下系统版本，我这个机器的版本是<code>Red Hat Enterprise Linux Server release 6.5 (Santiago)</code>，就去<a href="http://mirrors.163.com/centos/6/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/6/os/x86_64/Packages/</a> 下载如下几个文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm</span></span><br></pre></td></tr></table></figure></p><p>如果想下载<code>centos 7</code>的就去<a href="http://mirrors.163.com/centos/7/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/7/os/x86_64/Packages/</a> 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。</p><p>然后就是安装这几个包：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh yum-metadata-parser<span class="number">-1.1</span><span class="number">.2</span><span class="number">-16.</span>el6.x86_64.rpm</span><br><span class="line">rpm -ivh yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-81.</span>el6.centos.noarch.rpm</span><br><span class="line">rpm -ivh yum-plugin-fastestmirror<span class="number">-1.1</span><span class="number">.31</span><span class="number">-45.</span>el7.noarch.rpm</span><br><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">wget http:<span class="comment">//mirrors.163.com/.help/CentOS6-Base-163.repo#最好先备份旧文件</span></span><br><span class="line">sed -i <span class="string">'s#$releasever#6#g'</span> ./CentOS6-Base<span class="number">-163.</span>repo</span><br><span class="line">yum clean all#清除原有的缓存</span><br><span class="line">yum makecache#重建缓存</span><br><span class="line">yum update -y#更新系统</span><br></pre></td></tr></table></figure></p><p>大功告成！可以使用免费的yum去装装装了！</p><h2><span id="修复python-urlgrabber版本过低">修复Python-urlgrabber版本过低</span></h2><p>当执行到<code>rpm -ivh yum-3.2.29-81.el6.centos.noarch.rpm</code>这一步的时候，可能会出现一个python的错误：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python-urlgrabber &gt;= <span class="number">3.9</span><span class="number">.1</span><span class="number">-10</span> is needed by yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-73.</span>el6.centos.noarch</span><br></pre></td></tr></table></figure></p><p>要求<code>python-urlgrabber</code>版本必须大于等于3.9.1-10，而用<code>rpm -qa|grep python</code>查看当前的版本是<code>python-urlgrabber-3.9.1-9.el6.noarch</code>，于是就<code>rpm -e python-urlgrabber-3.9.1-9.el6.noarch</code>卸载掉，<code>wget http://mirrors.163.com/centos/6/os/x86_64/Packages/python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>之后，执行<code>rpm -ivh python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>命令安装即可。</p><p>安装完毕，再用<code>rpm -ivh --force yum-*</code>安装后面的内容。如图:<br><img src="/images/yum4.png" alt="akb48"></p><h2><span id="无法解析yum源">无法解析yum源</span></h2><p>如果在<code>yum makecache</code>的时候出现了<code>http://mirrors.163.com/centos/6/os/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 6 - &quot;Couldn&#39;t resolve host &#39;mirrors.163.com&#39;&quot;</code>的错误，如图：<br><img src="/images/yum3.png" alt="akb48"></p><p>就修改一下<code>/etc/resolv.conf</code>，然后在里面添加一句<code>nameserver 8.8.8.8</code>，保存即可。</p><h2><span id="nokey">NOKEY？？？</span></h2><p>如果出现<code>Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</code>，可以使用如下方法解决：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/pki/rpm-gpg/ </span><br><span class="line">wget http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-6 </span><br><span class="line">rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</span><br></pre></td></tr></table></figure></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="redhat替换yum源">RedHat替换yum源</span></h2><p>这次给吉林移动做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。我登陆上去一看，是redhat，在使用yum的时候会有如下报错：<br><img src="/images/yum2.png" alt="akb48"></p><p>这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。卧槽，怎么可能，我们向来是“要钱没有，要命一条”。于是就要用CentOS源来替代yum源，而CentOS源是免费的。</p><p>首先先删除掉redhat自带的yum：<code>rpm -qa | grep yum | xargs rpm -e --nodeps</code>。</p><p>然后用<code>cat /etc/redhat-release</code>命令去查看一下系统版本，我这个机器的版本是<code>Red Hat Enterprise Linux Server release 6.5 (Santiago)</code>，就去<a href="http://mirrors.163.com/centos/6/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/6/os/x86_64/Packages/</a> 下载如下几个文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm</span></span><br></pre></td></tr></table></figure></p><p>如果想下载<code>centos 7</code>的就去<a href="http://mirrors.163.com/centos/7/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/7/os/x86_64/Packages/</a> 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。</p><p>然后就是安装这几个包：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh yum-metadata-parser<span class="number">-1.1</span><span class="number">.2</span><span class="number">-16.</span>el6.x86_64.rpm</span><br><span class="line">rpm -ivh yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-81.</span>el6.centos.noarch.rpm</span><br><span class="line">rpm -ivh yum-plugin-fastestmirror<span class="number">-1.1</span><span class="number">.31</span><span class="number">-45.</span>el7.noarch.rpm</span><br><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">wget http:<span class="comment">//mirrors.163.com/.help/CentOS6-Base-163.repo#最好先备份旧文件</span></span><br><span class="line">sed -i <span class="string">'s#$releasever#6#g'</span> ./CentOS6-Base<span class="number">-163.</span>repo</span><br><span class="line">yum clean all#清除原有的缓存</span><br><span class="line">yum makecache#重建缓存</span><br><span class="line">yum update -y#更新系统</span><br></pre></td></tr></table></figure></p><p>大功告成！可以使用免费的yum去装装装了！</p><h2><span id="修复python-urlgrabber版本过低">修复Python-urlgrabber版本过低</span></h2><p>当执行到<code>rpm -ivh yum-3.2.29-81.el6.centos.noarch.rpm</code>这一步的时候，可能会出现一个python的错误：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python-urlgrabber &gt;= <span class="number">3.9</span><span class="number">.1</span><span class="number">-10</span> is needed by yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-73.</span>el6.centos.noarch</span><br></pre></td></tr></table></figure></p><p>要求<code>python-urlgrabber</code>版本必须大于等于3.9.1-10，而用<code>rpm -qa|grep python</code>查看当前的版本是<code>python-urlgrabber-3.9.1-9.el6.noarch</code>，于是就<code>rpm -e python-urlgrabber-3.9.1-9.el6.noarch</code>卸载掉，<code>wget http://mirrors.163.com/centos/6/os/x86_64/Packages/python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>之后，执行<code>rpm -ivh python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>命令安装即可。</p><p>安装完毕，再用<code>rpm -ivh --force yum-*</code>安装后面的内容。如图:<br><img src="/images/yum4.png" alt="akb48"></p><h2><span id="无法解析yum源">无法解析yum源</span></h2><p>如果在<code>yum makecache</code>的时候出现了<code>http://mirrors.163.com/centos/6/os/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 6 - &quot;Couldn&#39;t resolve host &#39;mirrors.163.com&#39;&quot;</code>的错误，如图：<br><img src="/images/yum3.png" alt="akb48"></p><p>就修改一下<code>/etc/resolv.conf</code>，然后在里面添加一句<code>nameserver 8.8.8.8</code>，保存即可。</p><h2><span id="nokey">NOKEY？？？</span></h2><p>如果出现<code>Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</code>，可以使用如下方法解决：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/pki/rpm-gpg/ </span><br><span class="line">wget http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-6 </span><br><span class="line">rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</span><br></pre></td></tr></table></figure></p>]]></content>
     
     <summary type="html">
     
@@ -108,11 +132,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
   </entry>
   
@@ -158,11 +182,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
   </entry>
   
@@ -184,11 +208,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
   </entry>
   
@@ -469,28 +493,6 @@
       <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
     
       <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>苹果手机无信用卡注册区美国apple store的办法</title>
-    <link href="http://yoursite.com/2018/05/30/%E8%8B%B9%E6%9E%9C%E6%89%8B%E6%9C%BA%E6%97%A0%E4%BF%A1%E7%94%A8%E5%8D%A1%E6%B3%A8%E5%86%8C%E5%8C%BA%E7%BE%8E%E5%9B%BDapple-store%E7%9A%84%E5%8A%9E%E6%B3%95/"/>
-    <id>http://yoursite.com/2018/05/30/苹果手机无信用卡注册区美国apple-store的办法/</id>
-    <published>2018-05-30T12:14:46.000Z</published>
-    <updated>2018-05-30T20:11:25.876Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>这次去霓虹国在心斋桥Apple体验店买了一个256G的iphone X，由于政府政策的原因，中国区的apple store有很多应用是没有的，于是乎我就打算注册一个美国版的账号，从而登录美国版的apple store去下载那些“你懂得”的app。</p><p>首先先登录<code>https://www.apple.com/</code> ，在网页最下面先确定国家是<code>United States</code>，然后点击<code>Manage Your Apple ID</code>，如图：<br><img src="/images/apple1.png" alt="paradin"></p><p>在<code>https://appleid.apple.com/#!&amp;page=signin</code>页面里，点击<code>Create your Apple ID</code>建立一个新的apple账号，名称正常写，国家还是<code>United States</code>不要动，生日如实填写，但是如果是未成年人的话，有些成人的app是不可以被下载的。然后就是写好自己的登陆问题，这个问题已经要记住，每次登陆都要输入，忘记的话就麻烦了。注册账号这里其他部分我就不多说了。</p><p>账号注册完毕之后，就直接在苹果网站上登录，登录之后，就会看到账号的详细信息，在<code>Payment &amp; Shipping</code>的地方点击<code>Add Payment Method…</code>，如图：<br><img src="/images/apple2.png" alt="paradin"></p><p>这里有一个<code>PAYMENT METHOD</code>的地方，要填写<code>none</code>，如果你用apple手机上登录这个账号的话，这里是不能选none的，无论是<code>Dr.</code>还是<code>Mr.</code>都没有none这个选项，所以说一定要在网页登录账号。然后就是需要你填写一些用户地址、邮编等信息，由于是账号注册时候选择的是美国，那么也需要填写美国的地址，可以在<code>http://www.haoweichi.com/Index/random</code>里生成一个身份信息填写。如图：<br><img src="/images/apple3.png" alt="paradin"></p><p>下面那个<code>SHIPPING ADDRESS</code>就是账单邮寄的地址，想填就填，不想填就放那。填写好了之后点击save，但是目前这个账号还是不能通过的，如果你在apple手机登录了这个账号然后登录apple store的话，会有一个提示：<code>该账号没有被使用过，请填写细节</code>。</p><p>这里如果你还手机上操作填写细节，发现你刚刚在电脑上填写的地址和邮编已经同步到手机的账号了，但是支付卡那一栏还是没有<code>none</code>，也就是说依旧要一个信用卡。此时请在电脑上下载itunes，然后在电脑的itunes里登录这个美国区账号，由于电脑itunes里的支付渠道依旧可以选择none，所以我们可以在这里绕一个弯，使用itunes这个渠道来完成这个美国区账号的彻底注册。</p><p>在itunes把整个账号完整过程都注册完毕之后，再登录到手机端，就可以在美国的apple store里尽情的下载app了！<br><img src="/images/apple4.jpg" alt="paradin"></p>]]></content>
-    
-    <summary type="html">
-    
-      现在的我离开了twitter和line简直不能活...
-    
-    </summary>
-    
-      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="apple" scheme="http://yoursite.com/tags/apple/"/>
     
   </entry>
   

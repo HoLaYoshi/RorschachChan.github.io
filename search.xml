@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用tqdm添加下载的进度条]]></title>
+    <url>%2F2018%2F07%2F24%2F%E4%BD%BF%E7%94%A8tqdm%E6%B7%BB%E5%8A%A0%E4%B8%8B%E8%BD%BD%E7%9A%84%E8%BF%9B%E5%BA%A6%E6%9D%A1%2F</url>
+    <content type="text"><![CDATA[制作进度条既然接手了国内专有云，就要写一个“自动化部署脚本”。于是我就把整个部署的安装包放到阿里云的bucket，用脚本去wget这个部署包，然后进行脚本部署。但是由于这个安装包比较大，wget的过程就是面对一个黑漆漆的屏幕干等，死机了都不知道，这太枯燥了，于是就打算在脚本里添加一个“下载进度条”。 google了一下，就发现了tqdm这个库，安装tqdm的方法很简单：pip install tqdm。 具体的用途和参数可以去看https://lorexxar.cn/2016/07/21/python-tqdm/ 这篇文章。 从tqdm的几个参数可见要使用tqdm进度条首先需要整个文件的大小，其次要下载速度。整个文件的大小可以用requests.get方法获取，获取到header里就有目标的大小。在使用requests模块下载大文件/数据时，建议使用使用stream模式。如果是stream=False，它会立即开始下载文件并放到内存中，如果文件过大，有可能导致内存不足。 1234567891011121314151617181920212223#!/usr/bin/env python# -*- coding: utf-8 -*-import requestsfrom tqdm import tqdmdef downloadFILE(url,name): resp = requests.get(url=url,stream=True) #stream=True的作用是仅让响应头被下载，连接保持打开状态， content_size = int(resp.headers['Content-Length'])/1024 #确定整个安装包的大小 with open(name, "wb") as f: print "安装包整个大小是：",content_size,'k，开始下载...' for data in tqdm(iterable=resp.iter_content(1024),total=content_size,unit='k',desc=name): #调用iter_content，一块一块的遍历要下载的内容，搭配stream=True，此时才开始真正的下载 #iterable：可迭代的进度条 total：总的迭代次数 desc：进度条的前缀 f.write(data) print name + "已经下载完毕！"if __name__ == '__main__': url = "需要下载的文件的地址" name = url.split('/')[-1] #截取整个url最后一段即文件名 downloadFILE(url,name) 注意！下载文件所在的bucket要设置成“公有读”而不能是“私有”。 补充 解压缩的脚本： 12345import zipfilefilename = '要解压包的路径'fz = zipfile.ZipFile(filename, 'r')for file in fz.namelist(): fz.extract(file, path) 这个脚本即使没有unzip命令也可以执行的。 获取本地IP地址的脚本： 12345678def get_local_ip(ifname = 'eth0'): import socket, fcntl, struct s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) inet = fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', ifname[:15])) ret = socket.inet_ntoa(inet[20:24]) return retprint get_local_ip() bpython，这是一个好东西，可以在linux环境下实现类似pycharm的提示功能，安装方法就是pip install bpython，然后启动python的时候直接bpython即可。效果如图： 参考资料https://blog.csdn.net/qq_40666028/article/details/79335961http://blog.topspeedsnail.com/archives/9075https://www.168seo.cn/python/24286.html]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>可视化</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[将Redhat的yum更换成免费版本]]></title>
     <url>%2F2018%2F07%2F20%2F%E5%B0%86radhat%E7%9A%84yum%E6%9B%B4%E6%8D%A2%E6%88%90%E5%85%8D%E8%B4%B9%E7%89%88%E6%9C%AC%2F</url>
-    <content type="text"><![CDATA[RedHat替换yum源这次给吉林做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。于是我登陆上去一看，是redhat，在使用yum的时候会报错： 这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。于是就要用CentOS源来替代yum源，而CentOS源是免费的。 首先先删除掉redhat自带的yum：rpm -qa | grep yum | xargs rpm -e --nodeps。 然后用cat /etc/redhat-release命令去查看一下系统版本，我这个机器的版本是Red Hat Enterprise Linux Server release 6.5 (Santiago)，就去http://mirrors.163.com/centos/6/os/x86_64/Packages/ 下载如下几个文件： 123http://mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpmhttp://mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpmhttp://mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm 如果想下载centos 7的就去http://mirrors.163.com/centos/7/os/x86_64/Packages/ 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。 然后就是安装这几个包： 123456789rpm -ivh yum-metadata-parser-1.1.2-16.el6.x86_64.rpmrpm -ivh yum-3.2.29-81.el6.centos.noarch.rpmrpm -ivh yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpmcd /etc/yum.repos.d/wget http://mirrors.163.com/.help/CentOS6-Base-163.repo #最好先备份旧文件sed -i 's#$releasever#6#g' ./CentOS6-Base-163.repoyum clean all #清除原有的缓存yum makecache #重建缓存yum update -y #更新系统 大功告成！可以使用免费的yum去装装装了！ 修复Python-urlgrabber版本过低当执行到rpm -ivh yum-3.2.29-81.el6.centos.noarch.rpm这一步的时候，可能会出现一个python的错误： 1Python-urlgrabber &gt;= 3.9.1-10 is needed by yum-3.2.29-73.el6.centos.noarch 要求python-urlgrabber版本必须大于等于3.9.1-10，而用rpm -qa|grep python查看当前的版本是python-urlgrabber-3.9.1-9.el6.noarch，于是就rpm -e python-urlgrabber-3.9.1-9.el6.noarch卸载掉，wget http://mirrors.163.com/centos/6/os/x86_64/Packages/python-urlgrabber-3.9.1-11.el6.noarch.rpm之后，执行rpm -ivh python-urlgrabber-3.9.1-11.el6.noarch.rpm命令安装即可。 安装完毕，再用rpm -ivh --force yum-*安装后面的内容。如图: 无法解析yum源如果在yum makecache的时候出现了http://mirrors.163.com/centos/6/os/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 6 - &quot;Couldn&#39;t resolve host &#39;mirrors.163.com&#39;&quot;的错误，如图： 就修改一下/etc/resolv.conf，然后在里面添加一句nameserver 8.8.8.8，保存即可。 NOKEY？？？如果出现Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY，可以使用如下方法解决： 123cd /etc/pki/rpm-gpg/ wget http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-6 rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6]]></content>
+    <content type="text"><![CDATA[RedHat替换yum源这次给吉林移动做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。我登陆上去一看，是redhat，在使用yum的时候会有如下报错： 这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。卧槽，怎么可能，我们向来是“要钱没有，要命一条”。于是就要用CentOS源来替代yum源，而CentOS源是免费的。 首先先删除掉redhat自带的yum：rpm -qa | grep yum | xargs rpm -e --nodeps。 然后用cat /etc/redhat-release命令去查看一下系统版本，我这个机器的版本是Red Hat Enterprise Linux Server release 6.5 (Santiago)，就去http://mirrors.163.com/centos/6/os/x86_64/Packages/ 下载如下几个文件： 123http://mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpmhttp://mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpmhttp://mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm 如果想下载centos 7的就去http://mirrors.163.com/centos/7/os/x86_64/Packages/ 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。 然后就是安装这几个包： 123456789rpm -ivh yum-metadata-parser-1.1.2-16.el6.x86_64.rpmrpm -ivh yum-3.2.29-81.el6.centos.noarch.rpmrpm -ivh yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpmcd /etc/yum.repos.d/wget http://mirrors.163.com/.help/CentOS6-Base-163.repo #最好先备份旧文件sed -i 's#$releasever#6#g' ./CentOS6-Base-163.repoyum clean all #清除原有的缓存yum makecache #重建缓存yum update -y #更新系统 大功告成！可以使用免费的yum去装装装了！ 修复Python-urlgrabber版本过低当执行到rpm -ivh yum-3.2.29-81.el6.centos.noarch.rpm这一步的时候，可能会出现一个python的错误： 1Python-urlgrabber &gt;= 3.9.1-10 is needed by yum-3.2.29-73.el6.centos.noarch 要求python-urlgrabber版本必须大于等于3.9.1-10，而用rpm -qa|grep python查看当前的版本是python-urlgrabber-3.9.1-9.el6.noarch，于是就rpm -e python-urlgrabber-3.9.1-9.el6.noarch卸载掉，wget http://mirrors.163.com/centos/6/os/x86_64/Packages/python-urlgrabber-3.9.1-11.el6.noarch.rpm之后，执行rpm -ivh python-urlgrabber-3.9.1-11.el6.noarch.rpm命令安装即可。 安装完毕，再用rpm -ivh --force yum-*安装后面的内容。如图: 无法解析yum源如果在yum makecache的时候出现了http://mirrors.163.com/centos/6/os/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 6 - &quot;Couldn&#39;t resolve host &#39;mirrors.163.com&#39;&quot;的错误，如图： 就修改一下/etc/resolv.conf，然后在里面添加一句nameserver 8.8.8.8，保存即可。 NOKEY？？？如果出现Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY，可以使用如下方法解决： 123cd /etc/pki/rpm-gpg/ wget http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-6 rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -45,9 +57,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
+        <tag>读写分离</tag>
       </tags>
   </entry>
   <entry>
@@ -70,9 +82,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
+        <tag>读写分离</tag>
       </tags>
   </entry>
   <entry>
@@ -83,9 +95,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
+        <tag>读写分离</tag>
       </tags>
   </entry>
   <entry>
@@ -283,8 +295,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>gitlab</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -491,8 +503,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>docker</tag>
+        <tag>redis</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -541,8 +553,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>nginx</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -696,8 +708,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>运维技术</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -893,9 +905,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>atlas</tag>
-        <tag>mysql</tag>
         <tag>读写分离</tag>
+        <tag>mysql</tag>
+        <tag>atlas</tag>
       </tags>
   </entry>
   <entry>
@@ -952,8 +964,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>运维技术</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1012,8 +1024,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>crontab</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1727,8 +1739,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>git</tag>
         <tag>nginx</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
