@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-07-26T05:55:08.481Z</updated>
+  <updated>2018-07-28T03:29:09.711Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>算算内存的这一笔糊涂帐</title>
+    <link href="http://yoursite.com/2018/07/27/%E7%AE%97%E7%AE%97%E5%86%85%E5%AD%98%E7%9A%84%E8%BF%99%E4%B8%80%E7%AC%94%E7%B3%8A%E6%B6%82%E5%B8%90/"/>
+    <id>http://yoursite.com/2018/07/27/算算内存的这一笔糊涂帐/</id>
+    <published>2018-07-27T07:28:35.000Z</published>
+    <updated>2018-07-28T03:29:09.711Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天发现有一台阿里云线上环境的服务器内存在告急，使用<code>free -m</code>一看，果然剩余的内存不多了，而且buffers和cached也都不高，如图：<br><img src="/images/memcache1.png" alt="paradin"></p><p>用top一看，里面的情况是这样的:<br><img src="/images/memcache2.png" alt="paradin"></p><p>很奇怪，top里的<code>res</code>即物理内存加起来也不到2200M，但是显示已经用掉了几乎3.5个G，那这1.2G的空头去哪了？要知道，<code>free</code>命令会把Slab缓存统计到了<code>used memory</code>里，那就看看slab缓存有多少吧。</p><p><code>yum install -y nmon</code>，使用<code>nmon</code>看一下，如图：<br><img src="/images/memcache3.png" alt="paradin"></p><p>发现里面有几乎650MB的slab内存，这样还是少了大约550MB，那么使用<code>slabtop</code>查看细节，如图：<br><img src="/images/memcache5.png" alt="paradin"></p><p>再用<code>cat /proc/meminfo</code>去查看以下内存详细情况，如图：<br><img src="/images/memcache4.png" alt="paradin"></p><p><a href="https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/" target="_blank" rel="noopener">https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/</a> 这里提到内存的计算公式：<br>     <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + (Slab + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + (Active + Inactive) + (Slab + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + ((“Active(anon)” + “Active(file)”) + (“Inactive(anon)” + “Inactive(file)”)) + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)</span><br></pre></td></tr></table></figure></p><p>这几个公式都可以用，虽然肯定不能严丝合缝但是相差值并不大，我用前两个公式算了一下我这个机器的情况：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MemTotal（<span class="number">3495620</span>） = MemFree（<span class="number">251396</span>） + Buffers（<span class="number">11456</span>） + Cached（<span class="number">292324</span>） + SwapCached（<span class="number">0</span>） + AnonPages（<span class="number">2302484</span>） + Slab（<span class="number">627068</span>） + PageTables（<span class="number">8972</span>） + KernelStack（<span class="number">1920</span>） </span><br><span class="line">MemTotal（<span class="number">3495592</span>） = MemFree（<span class="number">251396</span>） + Active（<span class="number">2450960</span>） + Inactive（<span class="number">155276</span>） + Slab（<span class="number">627068</span>） + PageTables（<span class="number">8972</span>） + KernelStack（<span class="number">1920</span>）</span><br></pre></td></tr></table></figure></p><p>我特么的法克，这个memtotal跟3921112差距很远啊！相差了412MB！为什么会少了这么多？会不会这412MB就是那<code>used memory</code>减去slap内存的那部分神秘内存？他为什么没有统计在<code>/proc/meminfo</code>里？</p><p>于是果断给阿里云提工单，截图发锤，让他们给一个完美的解释。</p><p>等待阿里云回复的时间里，我又找了几个其他的机器，各种型号的都算了一下，发现一个现象：凡是装了这个模块的服务器都出现了<code>MemTotal</code>不相符的问题，大约误差值都是400M~500M，而除了这个模块，<code>MemTotal</code>的误差值基本就是50M以内。</p><p>呃…这好像不能怪阿里云了…不过的确<code>MemTotal</code>是有误差的啊！</p><p>找开发了解了一下，这个服务器里用了大量的tcp长连接，而且是https</p>]]></content>
+    
+    <summary type="html">
+    
+      拿着计算器算内存，我觉得我成了一个会计...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="内存泄漏" scheme="http://yoursite.com/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>使用tqdm制作下载进度条</title>
@@ -132,11 +154,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+    
       <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
   </entry>
   
@@ -182,11 +204,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+    
       <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
   </entry>
   
@@ -208,11 +230,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
+      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
+    
       <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
   </entry>
   
@@ -469,30 +491,6 @@
     
     
       <category term="zabbix" scheme="http://yoursite.com/tags/zabbix/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>记录一次阿里云负载均衡端口监听不正确的过程</title>
-    <link href="http://yoursite.com/2018/05/31/%E8%AE%B0%E5%BD%95%E4%B8%80%E6%AC%A1%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AB%AF%E5%8F%A3%E7%9B%91%E5%90%AC%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84%E8%BF%87%E7%A8%8B/"/>
-    <id>http://yoursite.com/2018/05/31/记录一次阿里云负载均衡端口监听不正确的过程/</id>
-    <published>2018-05-30T19:49:06.000Z</published>
-    <updated>2018-05-30T20:28:45.142Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>在阿里云上新配置了一个负载均衡，后面挂载的服务器上安装了一个nginx，分别开启了80端口和8080端口，其中80端口是给http访问的，8080端口是给https访问的，同时在8080端口上做了http跳转https的配置。</p><p>但是在负载均衡配置完毕之后，发现tcp的80转8080是OK的，但是https的443转80却始终不OK，网页也自然打不开，但是在nginx上看80端口的确是在stand by：<br><img src="/images/alislb1.png" alt="paradin"></p><p>而且安全组都做了配置，telnet端口也是完全没有问题的，如图：<br><img src="/images/alislb2.png" alt="paradin"></p><p>执行了一下<code>time curl -I -X HEAD SLB的域名  -x http://本机IP地址:80</code>看一下效果，如图：<br><img src="/images/alislb3.png" alt="paradin"></p><p>可见命令执行OK，但是耗时需要7秒，而默认的阿里云SLB在https监听的超时时间设定是5秒，怀疑是后端ECS上对head头响应慢导致的健康检查失败。然后在网页上使用“检查”功能，发现有几个js、css文件耗时很长，于是就叫前端的码农们配合查一下，在几位前端吭哧吭哧解决了这个问题之后，https访问恢复正常。</p><p><img src="/images/jpbook3.jpg" alt="paradin" title="霓虹书店一角，我表示只能看得懂图"></p>]]></content>
-    
-    <summary type="html">
-    
-      插播一句题外话，阿里云的SLB不用特别配置WS/WSS，但是必须要将实例升级为性能保障型实例，不然的话就GG
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="nginx" scheme="http://yoursite.com/tags/nginx/"/>
-    
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
   </entry>
   
