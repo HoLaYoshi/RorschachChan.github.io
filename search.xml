@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[获取网站title的脚本]]></title>
+    <url>%2F2018%2F07%2F31%2F%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99title%E7%9A%84%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[脚本在此公司的商城需要添加一个脚本，这个脚本就是观察首页页面是否正常，虽然已经配置了zabbix监控网站是否200，但是有一些特殊的情况，比如网页可以打开但是页面是“file not found”的情况，类似这样就需要被运维第一时间监控到然后通知开发。 原本我打算直接爬取整个首页然后与服务器里的index.html对比一下，如果不符合就报警，但是跟前端同事说了这个思路之后，前端说服务器上是没有index.html的，因为这个index.html是结合其他的php拼接的。前端说“只要能检测title正常就OK，一般来说title能获取到就证明系统是OK的，如果title不OK但是html内容获取不到就是前段代码的问题，跟系统是没关的”。于是就写了这么一个爬虫脚本来获取网站title，如下： 12345678910111213#!/usr/bin/env python#coding=utf-8#这个脚本的用途是用来爬取商城首页，然后判断是否正常import requests,sysfrom bs4 import BeautifulSoupreload(sys)sys.setdefaultencoding('utf-8') #不然就会UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)r = requests.get('https://www.lechange.com') #这里输入要爬的网站域名r.encoding = requests.utils.get_encodings_from_content(r.content)[0]soup = BeautifulSoup(r.text,'lxml') #这一步需要事前pip install lxmlprint soup.title.string 说一下，如果在from bs4 import BeautifulSoup爆出ImportError: No module named &#39;bs4&#39;是因为安装的库装错了，应该是pip install beautifulsoup4而不是pip install beautifulsoup。启动脚本效果如下： 编码问题上面那个脚本里的soup.title.string的类型是bs4.element.NavigableString，如果不用print那么它的形式是unicode的，如图： 这种现象并不新鲜，比如list在python2里一直都不是正常输出中文的，如图： 可见只有for in的时候才会正常编码，那么这样的情况怎么办？ 最简单的方法，改用python3。 安装python 3.6.4首先要先安装相关依赖包yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make，其中readline-devel这个很重要，他是管方向键的，如果python运行的时候方向键不好使，那么就要yum install readline-devel安装，安装完毕后重新configure和make。 然后过程如下： 1234567891011121314151617yum -y install epel-release #运行这个命令添加epel扩展源#安装pipyum install python-pippip install wgetwget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz#解压xz -d Python-3.6.4.tar.xztar -xf Python-3.6.4.tar#进入解压后的目录，依次执行下面命令进行手动编译./configure prefix=/usr/local/python3make &amp;&amp; make install#将原来的链接备份mv /usr/bin/python /usr/bin/python.bak#添加python3的软链接ln -s /usr/local/python3/bin/python3.6 /usr/bin/python#测试是否安装成功了python -V 更改yum配置，因为其要用到python2才能执行，否则会导致yum不能正常使用，需要分别修改/usr/bin/yum和/usr/libexec/urlgrabber-ext-down这两个文件，把他们的#! /usr/bin/python修改为#! /usr/bin/python2。 然后还要给python3的pip做一个软连接: ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[云服务器的内存竟然少了500M...]]></title>
     <url>%2F2018%2F07%2F27%2F%E7%AE%97%E7%AE%97%E5%86%85%E5%AD%98%E7%9A%84%E8%BF%99%E4%B8%80%E7%AC%94%E7%B3%8A%E6%B6%82%E5%B8%90%2F</url>
     <content type="text"><![CDATA[故障发现今天发现有一台阿里云线上环境的服务器内存在告急，使用free -m一看，果然剩余的内存不多了，而且buffers和cached也都不高，如图： 用top一看，里面的情况是这样的: 很奇怪，top里的res即物理内存加起来也就2200M多一点，但是free命令里显示已经用掉了几乎3.4个G，那这1.2G的空头内存去哪了？要知道，free命令会把Slab缓存统计到了used memory里，那就看看slab缓存有多少吧。 yum install -y nmon，使用nmon看一下，如图： 发现里面有几乎650MB的slab内存，这样还是少了大约550MB，那么使用slabtop查看细节，如图： 再用cat /proc/meminfo去查看一下内存详细情况，如图： https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/ 这里提到内存的计算公式： 1234MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + (Slab + PageTables + KernelStack)MemTotal = MemFree + (Active + Inactive) + (Slab + PageTables + KernelStack)MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)MemTotal = MemFree + ((“Active(anon)” + “Active(file)”) + (“Inactive(anon)” + “Inactive(file)”)) + ((SReclaimable + SUnreclaim) + PageTables + KernelStack) 虽然作者说他测试的机器内核是3.2的，但是这几个公式对我这个服务器（内核2.6）都可以用，虽然肯定不能严丝合缝但是相差值并不大，我用前两个公式算了一下我这个机器的情况： 12MemTotal（3495620） = MemFree（251396） + Buffers（11456） + Cached（292324） + SwapCached（0） + AnonPages（2302484） + Slab（627068） + PageTables（8972） + KernelStack（1920） MemTotal（3495592） = MemFree（251396） + Active（2450960） + Inactive（155276） + Slab（627068） + PageTables（8972） + KernelStack（1920） 猜测一下我特么的法克，这个memtotal跟3921112差距很远啊！相差了412MB！为什么会少了这么多？会不会这412MB就是那used memory减去slap内存的那部分神秘内存？他为什么没有统计在/proc/meminfo里？ 于是果断给阿里云提工单，截图发锤，让他们给一个完美的解释。 等待阿里云回复的时间里，我又找了几个其他的机器，各种型号的都算了一下，发现一个现象：凡是装了这个模块的服务器都出现了MemTotal不相符的问题，大约误差值都是400M~500M，而除了这个模块，MemTotal的误差值基本就是50M以内。 呃…这好像不能怪阿里云了…不过的确MemTotal是有误差的啊！ 找开发了解了一下，这个服务器里用了大量的tcp长连接，而且是https的，使用netstat -na|grep ESTABLISHED|wc -l一看，有95000个左右。 而在开发环境的机器里查看，MemTotal的相差率很小，而tcp连接数则不到20个。那用排除法可以确定是TCP长连接的锅，于是我猜测TCP长连接占用掉了一部分内存，而这部分内存又没有在meminfo（SLAB）里体现出来，进而导致free命令与top命令相差过大。 小心求证未完待续… 参考资料http://farll.com/2016/10/high-memory-usage-alarm/#comment-9881http://lday.me/2017/09/02/0012_a_memory_leak_detection_procedure/ （虽然跟本文没啥关系，但是强力推荐）http://blog.yufeng.info/archives/2456http://lovestblog.cn/blog/2015/08/21/rssxmx/https://www.mawenbao.com/research/linux-ate-my-memory.html]]></content>
@@ -69,8 +81,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -94,8 +106,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -107,8 +119,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -514,8 +526,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>redis</tag>
+        <tag>docker</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -777,8 +789,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zookeeper</tag>
         <tag>运维技术</tag>
+        <tag>zookeeper</tag>
       </tags>
   </entry>
   <entry>
@@ -1151,8 +1163,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zookeeper</tag>
         <tag>运维技术</tag>
+        <tag>zookeeper</tag>
       </tags>
   </entry>
   <entry>
@@ -1365,8 +1377,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>crontab</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1641,8 +1653,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
