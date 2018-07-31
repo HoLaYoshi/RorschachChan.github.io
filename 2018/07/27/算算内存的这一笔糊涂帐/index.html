@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/memcache3.png">
 <meta property="og:image" content="http://yoursite.com/images/memcache5.png">
 <meta property="og:image" content="http://yoursite.com/images/memcache4.png">
-<meta property="og:updated_time" content="2018-07-28T09:03:58.379Z">
+<meta property="og:updated_time" content="2018-07-30T11:04:09.445Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="云服务器的内存竟然少了500M...">
 <meta name="twitter:description" content="拿着计算器算内存，我觉得我成了一个会计...">
@@ -419,7 +419,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  717
+                  785
                 </span>
               
 
@@ -468,13 +468,13 @@
 <p>再用<code>cat /proc/meminfo</code>去查看一下内存详细情况，如图：<br><img src="/images/memcache4.png" alt="paradin"></p>
 <p><a href="https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/" target="_blank" rel="noopener">https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/</a> 这里提到内存的计算公式：<br>     <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + (Slab + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + (Active + Inactive) + (Slab + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + ((“Active(anon)” + “Active(file)”) + (“Inactive(anon)” + “Inactive(file)”)) + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)</span><br></pre></td></tr></table></figure></p>
 <p>虽然作者说他测试的机器内核是3.2的，但是这几个公式对我这个服务器（内核2.6）都可以用，虽然肯定不能严丝合缝但是相差值并不大，我用前两个公式算了一下我这个机器的情况：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MemTotal（<span class="number">3495620</span>） = MemFree（<span class="number">251396</span>） + Buffers（<span class="number">11456</span>） + Cached（<span class="number">292324</span>） + SwapCached（<span class="number">0</span>） + AnonPages（<span class="number">2302484</span>） + Slab（<span class="number">627068</span>） + PageTables（<span class="number">8972</span>） + KernelStack（<span class="number">1920</span>） </span><br><span class="line">MemTotal（<span class="number">3495592</span>） = MemFree（<span class="number">251396</span>） + Active（<span class="number">2450960</span>） + Inactive（<span class="number">155276</span>） + Slab（<span class="number">627068</span>） + PageTables（<span class="number">8972</span>） + KernelStack（<span class="number">1920</span>）</span><br></pre></td></tr></table></figure></p>
-<h2><span id="反馈阿里云">反馈阿里云</span></h2><p>我特么的法克，这个memtotal跟3921112差距很远啊！相差了412MB！为什么会少了这么多？会不会这412MB就是那<code>used memory</code>减去slap内存的那部分神秘内存？他为什么没有统计在<code>/proc/meminfo</code>里？</p>
+<h2><span id="猜测一下">猜测一下</span></h2><p>我特么的法克，这个memtotal跟3921112差距很远啊！相差了412MB！为什么会少了这么多？会不会这412MB就是那<code>used memory</code>减去slap内存的那部分神秘内存？他为什么没有统计在<code>/proc/meminfo</code>里？</p>
 <p>于是果断给阿里云提工单，截图发锤，让他们给一个完美的解释。</p>
 <p>等待阿里云回复的时间里，我又找了几个其他的机器，各种型号的都算了一下，发现一个现象：凡是装了这个模块的服务器都出现了<code>MemTotal</code>不相符的问题，大约误差值都是400M~500M，而除了这个模块，<code>MemTotal</code>的误差值基本就是50M以内。</p>
 <p>呃…这好像不能怪阿里云了…不过的确<code>MemTotal</code>是有误差的啊！</p>
 <p>找开发了解了一下，这个服务器里用了大量的tcp长连接，而且是https的，使用<code>netstat -na|grep ESTABLISHED|wc -l</code>一看，有95000个左右。</p>
-<p>而在开发环境的机器里查看，<code>MemTotal</code>的相差率很小，而tcp连接数则不到20个。</p>
-<p><strong>未完待续…</strong></p>
+<p>而在开发环境的机器里查看，<code>MemTotal</code>的相差率很小，而tcp连接数则不到20个。那用排除法可以确定是TCP长连接的锅，于是我猜测<strong>TCP长连接占用掉了一部分内存，而这部分内存又没有在meminfo（SLAB）里体现出来，进而导致free命令与top命令相差过大</strong>。</p>
+<h2><span id="小心求证">小心求证</span></h2><p><strong>未完待续…</strong></p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="http://farll.com/2016/10/high-memory-usage-alarm/#comment-9881" target="_blank" rel="noopener">http://farll.com/2016/10/high-memory-usage-alarm/#comment-9881</a><br><a href="http://lday.me/2017/09/02/0012_a_memory_leak_detection_procedure/" target="_blank" rel="noopener">http://lday.me/2017/09/02/0012_a_memory_leak_detection_procedure/</a> （虽然跟本文没啥关系，但是强力推荐）<br><a href="http://blog.yufeng.info/archives/2456" target="_blank" rel="noopener">http://blog.yufeng.info/archives/2456</a><br><a href="http://lovestblog.cn/blog/2015/08/21/rssxmx/" target="_blank" rel="noopener">http://lovestblog.cn/blog/2015/08/21/rssxmx/</a><br><a href="https://www.mawenbao.com/research/linux-ate-my-memory.html" target="_blank" rel="noopener">https://www.mawenbao.com/research/linux-ate-my-memory.html</a></p>
 
       
@@ -868,7 +868,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x6545;&#x969C;&#x53D1;&#x73B0;">&#x6545;&#x969C;&#x53D1;&#x73B0;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53CD;&#x9988;&#x963F;&#x91CC;&#x4E91;">&#x53CD;&#x9988;&#x963F;&#x91CC;&#x4E91;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x6545;&#x969C;&#x53D1;&#x73B0;">&#x6545;&#x969C;&#x53D1;&#x73B0;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x731C;&#x6D4B;&#x4E00;&#x4E0B;">&#x731C;&#x6D4B;&#x4E00;&#x4E0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5C0F;&#x5FC3;&#x6C42;&#x8BC1;">&#x5C0F;&#x5FC3;&#x6C42;&#x8BC1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
