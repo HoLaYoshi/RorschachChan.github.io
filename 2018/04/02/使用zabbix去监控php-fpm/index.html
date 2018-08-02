@@ -98,8 +98,12 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/checkphp.png">
 <meta property="og:image" content="http://yoursite.com/images/checkphp2.png">
+<meta property="og:image" content="http://yoursite.com/images/checkphp3.png">
+<meta property="og:image" content="http://yoursite.com/images/checkphp4.png">
+<meta property="og:image" content="http://yoursite.com/images/checkphp5.png">
+<meta property="og:image" content="http://yoursite.com/images/checkphp6.png">
 <meta property="og:image" content="http://yoursite.com/images/百年美洲杯对委内瑞拉助攻伊瓜因.gif">
-<meta property="og:updated_time" content="2018-04-03T11:58:46.168Z">
+<meta property="og:updated_time" content="2018-08-02T02:37:30.072Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用zabbix去监控php-fpm">
 <meta name="twitter:description" content="php-fpm得多一点了解，不然即使有报警了也不知道怎么办">
@@ -417,7 +421,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  434
+                  617
                 </span>
               
 
@@ -433,7 +437,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -465,6 +469,12 @@
 <h2><span id="配置监控">配置监控</span></h2><p>跑到<code>zabbix-agentd.conf</code>里添加一个自定义监控项，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">UserParameter=php-fpm.status[*],/usr/bin/curl -s <span class="string">"http://127.0.0.1/php-fpm_status?xml"</span> | grep <span class="string">"&lt;$1&gt;"</span> | awk -F<span class="string">'&gt;|&lt;'</span> <span class="string">'&#123; print $$3&#125;'</span></span><br></pre></td></tr></table></figure></p>
 <p>然后重启一下<code>zabbix-agent</code>，模板就是<a href="https://gitee.com/careyjike_173/zabbix/tree/master/template" target="_blank" rel="noopener">https://gitee.com/careyjike_173/zabbix/tree/master/template</a> 里的<code>zbx_php-fpm_templates.xml</code>，直接导入即可！</p>
 <p>效果如下图：<br><img src="/images/checkphp2.png" alt="paradin"></p>
+<h2><span id="没有监控到进程">没有监控到进程？</span></h2><p>zabbix有时候会在监控进程出现不太准的情况，比如我这个机器的php。配置了<code>proc.num[php-fpm,,,]</code>这个key，但是在zabbix-server死活都取不到值，如图：<br><img src="/images/checkphp3.png" alt="paradin"></p>
+<p>但是在被监控机器里，进程是明明存在的：<br><img src="/images/checkphp4.png" alt="paradin"></p>
+<p>这特么的是为啥？</p>
+<p>这就是因为<code>proc.num[进程名,,,]</code>里面的进程名是在<code>/proc/进程PID/status</code>里的name一栏获得的，比如我这个机器的php情况：<br><img src="/images/checkphp5.png" alt="paradin"></p>
+<p>name里写的是php-fpm56，所以key也要改成<code>proc.num[php-fpm56,,,]</code>，这个时候在zabbix-server就成功取值了，如图：<br><img src="/images/checkphp6.png" alt="paradin"></p>
+<p>注意！<code>/proc/进程PID/status</code>的name会被截断为15个字符。所以在配置时要事前检查一下。</p>
 <p><img src="/images/百年美洲杯对委内瑞拉助攻伊瓜因.gif" alt="paradin" title="梅西百年美洲杯对委内瑞拉助攻伊瓜因"></p>
 
       
@@ -864,7 +874,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x542F;&#x72B6;&#x6001;&#x7EDF;&#x8BA1;">&#x5F00;&#x542F;&#x72B6;&#x6001;&#x7EDF;&#x8BA1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="php-fpm-status&#x8BE6;&#x89E3;">php-fpm status&#x8BE6;&#x89E3;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x76D1;&#x63A7;">&#x914D;&#x7F6E;&#x76D1;&#x63A7;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5F00;&#x542F;&#x72B6;&#x6001;&#x7EDF;&#x8BA1;">&#x5F00;&#x542F;&#x72B6;&#x6001;&#x7EDF;&#x8BA1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="php-fpm-status&#x8BE6;&#x89E3;">php-fpm status&#x8BE6;&#x89E3;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x76D1;&#x63A7;">&#x914D;&#x7F6E;&#x76D1;&#x63A7;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x6CA1;&#x6709;&#x76D1;&#x63A7;&#x5230;&#x8FDB;&#x7A0B;">&#x6CA1;&#x6709;&#x76D1;&#x63A7;&#x5230;&#x8FDB;&#x7A0B;&#xFF1F;</span></span></a></li></ol></div>
             
 
           </div>
@@ -917,7 +927,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共146.2k字</span>
+  <span class="post-count">博客全站共146.4k字</span>
 </div>
         
 
