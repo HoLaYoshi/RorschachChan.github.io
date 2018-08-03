@@ -102,7 +102,7 @@
 <meta property="og:image" content="http://yoursite.com/images/dockernginx4.png">
 <meta property="og:image" content="http://yoursite.com/images/dockernginx5.png">
 <meta property="og:image" content="http://yoursite.com/images/dockernginx6.png">
-<meta property="og:updated_time" content="2018-02-25T12:09:17.094Z">
+<meta property="og:updated_time" content="2018-08-03T02:21:14.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="DockerFile创建一个nginx容器的全过程">
 <meta name="twitter:description" content="中国共产党建议修改宪法，取消国家主席任期不得超过两届的规定。">
@@ -420,7 +420,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  880
+                  985
                 </span>
               
 
@@ -476,6 +476,8 @@
 <p>这里就是随机分配了一个32775端口给宿主机，访问的时候也是要访问这个32775端口。</p>
 <p>有时候port这里却不显示端口映射的情况，如图：<br><img src="/images/dockernginx6.png" alt="paradin"></p>
 <p>这个情况是因为这个容器的status是<code>exited</code>，docker会在容器主进程结束后自动终止容器运行，而<code>nginx</code>启动后就会在后台运行，docker以为<code>nginx</code>已经结束运行了，所以就会停止容器。</p>
+<h2><span id="源码安装nginx如何开机自启动">源码安装nginx如何开机自启动</span></h2><p>切换到<code>/lib/systemd/system/</code>目录，创建<code>nginx.service</code>文件,文件内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[Unit]</span><br><span class="line">Description=nginx </span><br><span class="line">After=network.target </span><br><span class="line">   </span><br><span class="line">[Service] </span><br><span class="line">Type=forking </span><br><span class="line">ExecStart=<span class="regexp">/usr/</span>local/nginx/sbin/nginx</span><br><span class="line">ExecReload=<span class="regexp">/usr/</span>local/nginx/sbin/nginx reload</span><br><span class="line">ExecStop=<span class="regexp">/usr/</span>local/nginx/sbin/nginx quit</span><br><span class="line">PrivateTmp=<span class="literal">true</span> </span><br><span class="line">   </span><br><span class="line">[Install] </span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></p>
+<p>退出并保存文件，执行<code>systemctl enable nginx.service</code>使nginx开机启动，<code>systemctl restart nginx.service</code>重启nginx。</p>
 
       
     </div>
@@ -874,7 +876,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x5BB9;&#x5668;">&#x521B;&#x5EFA;&#x5BB9;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="docker&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#x7684;&#x95EE;&#x9898;">docker&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#x7684;&#x95EE;&#x9898;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x521B;&#x5EFA;&#x5BB9;&#x5668;">&#x521B;&#x5EFA;&#x5BB9;&#x5668;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="docker&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#x7684;&#x95EE;&#x9898;">docker&#x7AEF;&#x53E3;&#x6620;&#x5C04;&#x7684;&#x95EE;&#x9898;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x6E90;&#x7801;&#x5B89;&#x88C5;nginx&#x5982;&#x4F55;&#x5F00;&#x673A;&#x81EA;&#x542F;&#x52A8;">&#x6E90;&#x7801;&#x5B89;&#x88C5;nginx&#x5982;&#x4F55;&#x5F00;&#x673A;&#x81EA;&#x542F;&#x52A8;</span></span></a></li></ol></div>
             
 
           </div>
@@ -927,7 +929,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共146.4k字</span>
+  <span class="post-count">博客全站共146.5k字</span>
 </div>
         
 
