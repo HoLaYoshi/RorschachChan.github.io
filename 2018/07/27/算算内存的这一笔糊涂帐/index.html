@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/memcache3.png">
 <meta property="og:image" content="http://yoursite.com/images/memcache5.png">
 <meta property="og:image" content="http://yoursite.com/images/memcache4.png">
-<meta property="og:updated_time" content="2018-07-30T11:04:09.445Z">
+<meta property="og:updated_time" content="2018-08-03T05:54:17.603Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="云服务器的内存竟然少了500M...">
 <meta name="twitter:description" content="拿着计算器算内存，我觉得我成了一个会计...">
@@ -460,9 +460,9 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="故障发现">故障发现</span></h2><p>今天发现有一台阿里云线上环境的服务器内存在告急，使用<code>free -m</code>一看，果然剩余的内存不多了，而且buffers和cached也都不高，如图：<br><img src="/images/memcache1.png" alt="paradin"></p>
-<p>用top一看，里面的情况是这样的:<br><img src="/images/memcache2.png" alt="paradin"></p>
-<p>很奇怪，<code>top</code>里的<code>res</code>即物理内存加起来也就2200M多一点，但是<code>free</code>命令里显示已经用掉了几乎3.4个G，那这1.2G的空头内存去哪了？要知道，<code>free</code>命令会把Slab缓存统计到了<code>used memory</code>里，那就看看slab缓存有多少吧。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="故障发现">故障发现</span></h2><p>今天发现有一台阿里云线上环境的服务器内存在告急，使用<code>free -m</code>一看，果然剩余的内存不多了，而且<code>buffers</code>和<code>cached</code>也都不高，如图：<br><img src="/images/memcache1.png" alt="paradin"></p>
+<p>用<code>top</code>一看，里面的情况是这样的:<br><img src="/images/memcache2.png" alt="paradin"></p>
+<p>很奇怪，<code>top</code>里的<code>res</code>即物理内存加起来也就2200M多一点，但是<code>free</code>命令里显示已经用掉了几乎3.4个G，那这1.2G的空头内存去哪了？要知道，<code>free</code>命令会把<code>Slab缓存</code>统计到了<code>used memory</code>里，那就看看<code>slab缓存</code>有多少吧。</p>
 <p><code>yum install -y nmon</code>，使用<code>nmon</code>看一下，如图：<br><img src="/images/memcache3.png" alt="paradin"></p>
 <p>发现里面有几乎650MB的slab内存，这样还是少了大约550MB，那么使用<code>slabtop</code>查看细节，如图：<br><img src="/images/memcache5.png" alt="paradin"></p>
 <p>再用<code>cat /proc/meminfo</code>去查看一下内存详细情况，如图：<br><img src="/images/memcache4.png" alt="paradin"></p>
@@ -925,7 +925,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共146.5k字</span>
+  <span class="post-count">博客全站共146.8k字</span>
 </div>
         
 

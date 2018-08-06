@@ -97,7 +97,7 @@
 <meta property="og:description" content="1.7版本的git就是一个坑">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/gakki1.gif">
-<meta property="og:updated_time" content="2018-06-19T01:35:50.329Z">
+<meta property="og:updated_time" content="2018-08-06T02:54:56.277Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos6安装git1.9安装过程">
 <meta name="twitter:description" content="1.7版本的git就是一个坑">
@@ -415,7 +415,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  431
+                  702
                 </span>
               
 
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -459,6 +459,8 @@
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装过程">安装过程</span></h2><p>Centos 6.x用yum安装git的话，默认是<code>1.7.1</code>。它在执行<code>git push</code>的时候会报错:<code>error: The requested URL returned error: 401 Unauthorized while accessing</code>。这种情况升级git可破。</p>
 <p>具体的升级方法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">yum install -y curl-devel expat-devel gettext-devel openssl-devel zlib-devel perl-devel		#先准备一下环境</span><br><span class="line">cd /root</span><br><span class="line">wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/git-core/git-1.9.0.tar.gz		#下载1.9的包</span><br><span class="line">tar -zvxf git-1.9.0.tar.gz</span><br><span class="line">cd git-1.9.0</span><br><span class="line">make prefix=/usr/local/git all		#安装到/usr/local里</span><br><span class="line">make prefix=/usr/local/git install</span><br><span class="line">ln -s /usr/local/git/bin/* /usr/bin/		#建立软连接</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure></p>
 <h2><span id="常用命令">常用命令</span></h2><p>随便列举几个常用命令：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">git remote add origin http://xxxxxxx		#将后面那个网址作为remote的源站</span><br><span class="line">git remote rm origin	#将刚刚建立的那个源站删了 </span><br><span class="line">git pull origin master		#把remote的master分支的内容down到本地</span><br><span class="line">git reset --hard HEAD 	#撤销未提交的文件</span><br><span class="line">git fetch -p 	#更新最新的远程分支，如果远程分支已删除，则删除本地对应标记的远程分支</span><br><span class="line">git branch -a 	#查看所有分支</span><br><span class="line">git checkout -b  feature/test origin/feature/test  #在本地新增对应的远程分支并切换到 新增的分支上</span><br><span class="line">git branch -D feature/test 	#删除本地feature/test分支  这个命令慎用，生产环境后期一般留个4,5个版本的release开头的分支,可以通过此命令删除一些早期版本的分支</span><br><span class="line">git branch checkout feature/test   #通过此命令可以来回切换本地分支，当存在线上代码需要回滚的时候，可以进行次命令切换到之前的release分支</span><br></pre></td></tr></table></figure></p>
+<h2><span id="配置忽视文件">配置忽视文件</span></h2><p>每一个项目肯定都会有一些不会变的文件，比如日志等，那么这种“不想要加入版本库”的文件就要做一个忽视，这样每一次push或者pull都回节约一点时间。</p>
+<p>要对这种“被忽视”文件进行配置，首先要先在git的文件夹里打开<code>.gitignore</code>，把要忽视的文件或者文件夹路径写进去，<font color="red">注意，这里的根目录是git文件夹而不是传统的根目录。</font>然后<code>git add .gitignore</code>，此时<code>git commit -m &#39;添加忽视文件&#39;</code>和<code>git push</code>给远程gitlab提交一个版本，然后到目标文件夹去，<code>git rm -r --cached 要忽视的文件名</code>，然后<code>git status</code>看一下这个文件是否已经被gitlab上删除了，如果真的删除掉了同时本地文件也没有丢失，就可以再一次的<code>git commit + git push</code>，去gitlab网页检查时候这个文件应该就不会出现在网页里了，以后这个文件也不会参与任何的更改。</p>
 <p><img src="/images/gakki1.gif" alt="akb48" title="元气满满的刚巴得~~~"></p>
 
       
@@ -856,7 +858,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x8FC7;&#x7A0B;">&#x5B89;&#x88C5;&#x8FC7;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5E38;&#x7528;&#x547D;&#x4EE4;">&#x5E38;&#x7528;&#x547D;&#x4EE4;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;&#x8FC7;&#x7A0B;">&#x5B89;&#x88C5;&#x8FC7;&#x7A0B;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x5E38;&#x7528;&#x547D;&#x4EE4;">&#x5E38;&#x7528;&#x547D;&#x4EE4;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x5FFD;&#x89C6;&#x6587;&#x4EF6;">&#x914D;&#x7F6E;&#x5FFD;&#x89C6;&#x6587;&#x4EF6;</span></span></a></li></ol></div>
             
 
           </div>
@@ -909,7 +911,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共146.5k字</span>
+  <span class="post-count">博客全站共146.8k字</span>
 </div>
         
 
