@@ -97,7 +97,7 @@
 <meta property="og:description" content="不备份，要是数据丢了就死翘翘了...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/gitlab19.png">
-<meta property="og:updated_time" content="2018-05-16T07:51:07.958Z">
+<meta property="og:updated_time" content="2018-08-13T06:57:08.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gitlab的配置备份">
 <meta name="twitter:description" content="不备份，要是数据丢了就死翘翘了...">
@@ -415,7 +415,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  362
+                  470
                 </span>
               
 
@@ -431,7 +431,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -456,13 +456,15 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是<code>10.7.3</code>。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="备份正文">备份正文</span></h2><p>我这个gitlab是容器安装的，直接使用最新的gitlab镜像，gitlab版本是<code>10.7.3</code>。</p>
 <p>要备份数据的话，就要进入容器里，执行<code>gitlab-rake gitlab:backup:create</code>，效果如下：<br><img src="/images/gitlab19.png" alt="paradin"></p>
 <p>执行完毕之后，在<code>/var/opt/gitlab/backups</code>文件夹里就会生成一个备份文件，我这里生成的文件叫：1526454102_2018_05_16_10.7.3_gitlab_backup.tar，这个就是备份的文件。</p>
 <p>如果要还原的话，命令如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 先关闭连接数据库的进程</span><br><span class="line">sudo gitlab-ctl stop</span><br><span class="line"></span><br><span class="line"># 通过指定时间戳来执行restore操作，这个操作会复写gitlab的数据库</span><br><span class="line">sudo gitlab-rake gitlab:backup:restore BACKUP=1526454102 	#BACKUP后面的是备份文件开头的那串数字</span><br><span class="line"></span><br><span class="line"># 再次启动gitlab</span><br><span class="line">sudo gitlab-ctl start</span><br><span class="line"></span><br><span class="line"># 通过下面命令检查gitlab</span><br><span class="line">sudo gitlab-rake gitlab:check SANITIZE=true</span><br></pre></td></tr></table></figure></p>
 <p>注意！利用backup机制进行备份的话，对gitlab的版本是要求严格一致的。例如用8.6版的gitlab生成的备份文件，拿到8.7版的gitlab上进行恢复，是会报错的。</p>
+<p>同时除了要导入备份文件之外，还要备份以下几个文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/etc/gitlab/gitlab.rb 	配置文件须备份</span><br><span class="line">/<span class="keyword">var</span>/opt/gitlab/nginx/conf 	nginx配置文件</span><br><span class="line">/etc/postfix/main.cfpostfix 	邮件配置备份</span><br></pre></td></tr></table></figure></p>
 <p>如果要设置这个备份文件的生命周期和备份文件存储的位置，编辑<code>/etc/gitlab/gitlab.rb</code>，修改如下的地方：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gitlab_rails[&apos;backup_path&apos;] = &quot;/var/opt/gitlab/backups&quot;		#这里改新路径</span><br><span class="line">gitlab_rails[&apos;backup_archive_permissions&apos;] = 0644			#这里可以设定文件的权限</span><br><span class="line"># limit backup lifetime to 7 days - 604800 seconds</span><br><span class="line">gitlab_rails[&apos;backup_keep_time&apos;] = 604800		#文件存储时间一周</span><br></pre></td></tr></table></figure></p>
 <p>然后重启一下gitlab即可。</p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://eimsteim.github.io/2017/12/12/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9D%91%E7%88%B9%E7%9A%84Gitlab%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E4%B9%8B%E6%97%85/" target="_blank" rel="noopener">http://eimsteim.github.io/2017/12/12/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%9D%91%E7%88%B9%E7%9A%84Gitlab%E6%95%B0%E6%8D%AE%E8%BF%81%E7%A7%BB%E4%B9%8B%E6%97%85/</a></p>
 
       
     </div>
@@ -666,8 +668,17 @@ var jiathis_config={
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -841,6 +852,22 @@ show_date_time();
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5907;&#x4EFD;&#x6B63;&#x6587;">&#x5907;&#x4EFD;&#x6B63;&#x6587;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -887,7 +914,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共148.5k字</span>
+  <span class="post-count">博客全站共148.6k字</span>
 </div>
         
 
