@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[阿里云Centos7开启swap虚拟内存]]></title>
+    <url>%2F2018%2F08%2F13%2F%E9%98%BF%E9%87%8C%E4%BA%91Centos7%E5%BC%80%E5%90%AFswap%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%2F</url>
+    <content type="text"><![CDATA[出差归来，几个开发反馈说gitlab网页卡的不行，上传代码也非常吃力。我登入服务器一看，原来是内存已经耗尽了。 修改配置文件gitlab本身就是一个特别吃内存的一个软件，服务器还是一个2核4G的配置，于是我就登陆到gitlab容器里，修改一下/etc/gitlab/gitlab.rb，把unicorn[&#39;worker_processes&#39;]手动改成了3，也就是比CPU大一个，这样可以少开一点进程。但是注意，这个参数最小值是2，如果设置成1，那么gitlab就会崩坏。 保存文件之后，gitlab-ctl reconfigure，看一下内存的情况，嗯，比刚才好一点点。如图： 开启虚拟内存上面那个方法毕竟效果有限，时间长了还是会把内存一点点蚕食光，于是就要使用Swap分区，但是阿里云虚拟服务器默认是不带swap分区的，如何手动创建swap分区才是本文的要点。 这里我用了另外一个非生产环境的机器做实验。 主要的中心思想就是“创建一个文件，然后将这块文件格式化为swap格式”，首先我们先看一下当前的磁盘容量： 当前已用磁盘容量是16G，使用cat /proc/swaps看一下当前虚拟内存的情况： 这个情况说明没开启swap，于是就手动建立一个文件夹，比如叫/swaps，在/swaps这个路径下执行dd if=/dev/zero of=swaps bs=512 count=8388616，在这里创建swap大小为bs*count=4294971392(4G)，这个过程需要一点时间，稍等片刻： 通过mkswap swaps命令将上面新建出的swaps文件做成swap分区： 此时使用cat /proc/sys/vm/swappiness查看数值应该是0，需要sysctl -w vm.swappiness=60把它改成60，这里60的含义是：100%-60%=40%，即物理内存剩下40%的时候时启用虚拟内存。若想永久修改，则编辑/etc/sysctl.conf文件，改文件中有vm.swappiness变量配置。 再swapon /swaps/swaps： 最后就是添加开机自动挂载，即修改/etc/fstab文件如下： 1/swaps/swaps swap swap defaults 0 0 再用cat /proc/swaps命令检查一下swap分区是否启动： 最后，重启一下服务器，看一下开机是否正常挂载上这个虚拟分区了： 可见原来使用了16G容量，现在用了20G，这中间差的4G就是拿来做了swap，于是内存就这样多了4个G…]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+        <tag>虚拟内存</tag>
+        <tag>阿里云服务器</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[爬取当前IP并且修改阿里云安全组的脚本]]></title>
     <url>%2F2018%2F08%2F07%2F%E7%88%AC%E5%8F%96%E5%BD%93%E5%89%8DIP%E5%B9%B6%E4%B8%94%E4%BF%AE%E6%94%B9%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%89%E5%85%A8%E7%BB%84%E7%9A%84%E8%84%9A%E6%9C%AC%2F</url>
     <content type="text"><![CDATA[动机与脚本我工位所用的网络是公司特批的海外专线，速度OK还能翻墙出去看看，自从有了这条线爽的飞起，但缺陷就是每周IP地址都会变，IP一变很多的阿里云ecs安全组就要重新配置，因为有一些公网端口比如grafana或者跳板机是只能公司运维人员访问的。这样每周都要手动改一次IP地址太烦了，于是乎，写了下面这个脚本，一劳永逸的解决这个问题： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576#coding=utf-8#这个脚本在python3.6下自验通过，用途是去爬当前的IP地址然后给阿里云安全组添加新的IP，并且删除掉老的IPfrom aliyunsdkcore import clientfrom aliyunsdkecs.request.v20140526 import AuthorizeSecurityGroupRequestfrom aliyunsdkecs.request.v20140526 import RevokeSecurityGroupRequestfrom aliyunsdkcore.profile import region_providerimport requests,sys,re,osfrom bs4 import BeautifulSoupclt = client.AcsClient('这里是AK', '这里是SK', 'cn-hangzhou') #鉴权file = "F:\\ip.txt"def checkDIR(): global file if os.path.exists(file) == True: #先判断文件是否存在 with open(file, "r") as f: old_ip = f.read() return (old_ip) #获取旧ip else: print("ip.txt文件不存在，请手动生成！") sys.exit() #文件不存在直接退出def getIP(): global file r = requests.get('http://www.ip111.cn/') #这里输入要爬的网站域名 soup = BeautifulSoup(r.text, "lxml") context = [] for link in soup.find_all('td'): #获取所有td标签内容 context.append(link.get_text()) #添加一个列里 str = context[4] ip = re.split(r'[\n\s]\s*', str)[1] #多符号分割字符串 with open(file, "w") as f: f.write(ip) return ipdef addnewRULE(func): global clt # 设置参数 for port in ['3000/3000', '34872/34872']: #这里是端口 request = AuthorizeSecurityGroupRequest.AuthorizeSecurityGroupRequest() request.set_accept_format('json') request.add_query_param('RegionId', 'cn-hangzhou') request.add_query_param('SecurityGroupId', '目标安全组ID') request.add_query_param('IpProtocol', 'tcp') request.add_query_param('PortRange', port) request.add_query_param('SourceCidrIp',func()) request.add_query_param('NicType', 'intranet') #如果不加这句话就是公网添加 if port == '3000/3000': request.add_query_param('Description', 'Grafana使用端口') else: request.add_query_param('Description', 'Zabbix和堡垒机使用端口') # 发起请求 response = clt.do_action(request) print (response)def deloldRULE(func): global clt # 设置参数 for port in ['3000/3000','34872/34872']: request = RevokeSecurityGroupRequest.RevokeSecurityGroupRequest() request.set_accept_format('json') request.add_query_param('RegionId', 'cn-hangzhou') request.add_query_param('SecurityGroupId', '目标安全组ID') request.add_query_param('IpProtocol', 'tcp') request.add_query_param('PortRange', port) request.add_query_param('SourceCidrIp', func()) request.add_query_param('NicType', 'intranet') #如果不加这句话就是公网删除 # 发起请求 response = clt.do_action(request) print (response)if __name__ == '__main__': checkDIR() deloldRULE(checkDIR) getIP() addnewRULE(getIP) 整个脚本的逻辑就是先在F盘下有ip.txt里面就保存当前IP地址，然后执行脚本的时候就会先在目标安全组里删除掉这个IP相关的3000端口和34872端口，然后去www.ip111.cn里爬取当前的网址，把新IP写入到ip.txt的同时，再去目标安全组里添加这个新IP相关的3000端口和34872端口。 新的知识点 把上一个函数结果当作参数在下一个函数里执行的方法： python的退出有两个：os._exit()和sys.exit()：os._exit()会直接将python程序终止，之后的所有代码都不会执行；sys.exit()会抛出一个异常: SystemExit，如果这个异常没有被捕获，那么python解释器将会退出。如果有捕获该异常的代码，那么这些代码还是会执行。使用sys.exit()来退出程序比较优雅，一般情况下也用这个，os._exit()可以在os.fork()产生的子进程里使用。 在windows里定时执行python脚本的方法：打开控制面板—&gt;系统和安全—&gt;计划任务。如图： 点击右侧的创建基本任务，输入任务名称和可选的描述。点击下一步，设置任务的开始时间，可以选择每日执行、每周执行或每月执行。点击下一步，操作选择启动程序，点击下一步输入参数。如图： 123程序或脚本：python.exe 添加参数：输入要执行的python脚本路径（包括文件名）起始于：输入python.exe的目录（不包括文件名） 最后点击下一步，整个过程搞定。]]></content>
@@ -94,8 +107,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -119,8 +132,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -132,8 +145,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -331,8 +344,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>gitlab</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -589,8 +602,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>nginx</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -1000,8 +1013,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>运维技术</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1060,8 +1073,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>crontab</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1726,9 +1739,9 @@
         <category>博客搭建</category>
       </categories>
       <tags>
-        <tag>github</tag>
         <tag>hexo</tag>
         <tag>博客搭建</tag>
+        <tag>github</tag>
       </tags>
   </entry>
   <entry>
