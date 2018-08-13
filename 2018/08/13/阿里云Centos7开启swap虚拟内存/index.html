@@ -104,7 +104,7 @@
 <meta property="og:image" content="http://yoursite.com/images/swap6.png">
 <meta property="og:image" content="http://yoursite.com/images/swap7.png">
 <meta property="og:image" content="http://yoursite.com/images/swap8.png">
-<meta property="og:updated_time" content="2018-08-13T04:16:07.629Z">
+<meta property="og:updated_time" content="2018-08-13T06:27:39.627Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="阿里云Centos7开启swap虚拟内存">
 <meta name="twitter:description" content="不想掏内存钱，那就把磁盘改造成内存吧...">
@@ -464,17 +464,17 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>出差归来，几个开发反馈说gitlab网页卡的不行，上传代码也非常吃力。我登入服务器一看，原来是内存已经耗尽了。</p>
-<h2><span id="修改配置文件">修改配置文件</span></h2><p>gitlab本身就是一个特别吃内存的一个软件，服务器还是一个2核4G的配置，于是我就登陆到gitlab容器里，修改一下<code>/etc/gitlab/gitlab.rb</code>，把<code>unicorn[&#39;worker_processes&#39;]</code>手动改成了3，也就是比CPU大一个，这样可以少开一点进程。但是注意，这个参数最小值是2，如果设置成1，那么gitlab就会崩坏。</p>
+<h2><span id="修改配置文件">修改配置文件</span></h2><p>gitlab本身就是一个特别吃内存的软件，服务器还是2核4G的配置。于是我就登陆到gitlab容器里，修改一下<code>/etc/gitlab/gitlab.rb</code>，把<code>unicorn[&#39;worker_processes&#39;]</code>手动改成了3，也就是比CPU大一个，这样可以少开一点进程。但是注意，这个参数最小值是2，如果设置成1，那么gitlab就会崩坏。</p>
 <p>保存文件之后，<code>gitlab-ctl reconfigure</code>，看一下内存的情况，嗯，比刚才好一点点。如图：<br><img src="/images/swap1.png" alt="paradin"></p>
 <h2><span id="开启虚拟内存">开启虚拟内存</span></h2><p>上面那个方法毕竟效果有限，时间长了还是会把内存一点点蚕食光，于是就要使用Swap分区，但是阿里云虚拟服务器默认是不带swap分区的，如何手动创建swap分区才是本文的要点。</p>
-<p>这里我用了另外一个非生产环境的机器做实验。</p>
-<p>主要的中心思想就是“创建一个文件，然后将这块文件格式化为swap格式”，首先我们先看一下当前的磁盘容量：<br><img src="/images/swap2.png" alt="paradin"></p>
+<p>这里我用了一个非生产环境的机器做实验。</p>
+<p>创建swap分区主要的中心思想就是“创建一个文件，然后将这块文件格式化为swap格式”，首先先看一下当前的磁盘容量：<br><img src="/images/swap2.png" alt="paradin"></p>
 <p>当前已用磁盘容量是16G，使用<code>cat /proc/swaps</code>看一下当前虚拟内存的情况：<br><img src="/images/swap3.png" alt="paradin"></p>
 <p>这个情况说明没开启swap，于是就手动建立一个文件夹，比如叫/swaps，在/swaps这个路径下执行<code>dd if=/dev/zero of=swaps bs=512 count=8388616</code>，在这里创建swap大小为bs*count=4294971392(4G)，这个过程需要一点时间，稍等片刻：<br><img src="/images/swap4.png" alt="paradin"></p>
 <p>通过<code>mkswap swaps</code>命令将上面新建出的swaps文件做成swap分区：<br><img src="/images/swap5.png" alt="paradin"></p>
-<p>此时使用<code>cat /proc/sys/vm/swappiness</code>查看数值应该是0，需要<code>sysctl -w vm.swappiness=60</code>把它改成60，这里60的含义是：100%-60%=40%，即物理内存剩下40%的时候时启用虚拟内存。若想永久修改，则编辑/etc/sysctl.conf文件，改文件中有vm.swappiness变量配置。</p>
+<p>此时使用<code>cat /proc/sys/vm/swappiness</code>查看数值应该是0，需要<code>sysctl -w vm.swappiness=60</code>把它改成60，这里60的含义是：100%-60%=40%，即物理内存剩下40%的时候时启用虚拟内存。若想永久修改，则编辑<code>/etc/sysctl.conf</code>文件，改文件中有<code>vm.swappiness</code>变量配置。</p>
 <p>再<code>swapon /swaps/swaps</code>：<br><img src="/images/swap6.png" alt="paradin"></p>
-<p>最后就是添加开机自动挂载，即修改<code>/etc/fstab</code>文件如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/swaps/swaps  swap      swap    defaults   <span class="number">0</span>       <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<p>最后就是添加开机自动挂载，即在<code>/etc/fstab</code>文件添加如下一句：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/swaps/swaps  swap      swap    defaults   <span class="number">0</span>       <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
 <p>再用<code>cat /proc/swaps</code>命令检查一下swap分区是否启动：<br><img src="/images/swap7.png" alt="paradin"></p>
 <p>最后，重启一下服务器，看一下开机是否正常挂载上这个虚拟分区了：<br><img src="/images/swap8.png" alt="paradin"></p>
 <p>可见原来使用了16G容量，现在用了20G，这中间差的4G就是拿来做了swap，于是内存就这样多了4个G…</p>
