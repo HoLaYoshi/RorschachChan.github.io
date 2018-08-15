@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab4.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab5.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab6.png">
-<meta property="og:updated_time" content="2018-08-15T07:16:01.102Z">
+<meta property="og:updated_time" content="2018-08-15T07:36:06.139Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用gitlab搭配阿里云容器镜像服务构建镜像">
 <meta name="twitter:description" content="出去参加交流才发现，我们的运维简直就是手工作坊...">
@@ -462,7 +462,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="工作思路">工作思路</span></h2><p>本次北京AWS技术峰会里看到了很多公司在运维上使用容器部署和扩容的实例，一天下来感受良多。现在比较流行部署办法就是“云镜像”：即开发把新的代码提交到gitlab上，然后gitlab与云厂家的镜像服务相关联，然后每一次commit提交都会触发一次镜像的构建，然后再根据这个镜像部署到实际的服务器里，同时将此服务器作一个快照，同时再搭配上容器监控，如果服务吃紧，就用此快照购买实例扩容；如果服务闲余，那么也会自动将最老的服务器实例关机，进而释放退款。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="工作思路">工作思路</span></h2><p>本次北京AWS技术峰会里看到了很多公司在运维上使用容器部署和扩容的实例，一天下来感受良多。现在比较流行部署办法就是“云镜像”：<strong>即开发把新的代码提交到gitlab上，然后gitlab与云厂家的镜像服务相关联，然后每一次commit提交都会触发一次镜像的构建，然后再根据这个镜像部署到实际的服务器里，同时将此服务器作一个快照，同时再搭配上容器监控，如果服务吃紧，就用此快照购买实例扩容；如果服务闲余，那么也会自动将最老的服务器实例关机，进而释放退款。</strong></p>
 <p>用图像来说就是这个意思：<br><img src="/images/aliyungitlab7.png" alt="paradin" title="也可以gitlab触发jenkins，用jenkins构建镜像并且把镜像推送到阿里云容器仓库去"></p>
 <h2><span id="勾连gitlab与云镜像">勾连gitlab与云镜像</span></h2><p>本文使用的镜像厂家是阿里云，gitlab版本是<code>10.7.3</code>。</p>
 <p>进入阿里云的“容器镜像”页面，如果你是第一次使用这个产品需要先建立一个仓库密码，然后点击左侧的代码源，如图：<br><img src="/images/aliyungitlab1.png" alt="paradin"></p>
