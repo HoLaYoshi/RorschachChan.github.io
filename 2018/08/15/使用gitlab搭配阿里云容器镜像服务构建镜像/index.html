@@ -97,12 +97,13 @@
 <meta property="og:description" content="出去一看才发现，我们的运维简直就是手工作坊...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab1.png">
+<meta property="og:image" content="http://yoursite.com/images/aliyungitlab1.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab2.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab3.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab4.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab5.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyungitlab6.png">
-<meta property="og:updated_time" content="2018-08-15T05:08:31.769Z">
+<meta property="og:updated_time" content="2018-08-15T05:59:15.011Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用gitlab搭配阿里云容器镜像服务构建镜像">
 <meta name="twitter:description" content="出去一看才发现，我们的运维简直就是手工作坊...">
@@ -420,7 +421,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,129
+                  1,128
                 </span>
               
 
@@ -462,11 +463,11 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="工作思路">工作思路</span></h2><p>本次北京AWS技术峰会看到了很多公司在运维上的实例，感受很多。现在很多公司使用的部署办法就是“云镜像”：即开发把新的代码提交到gitlab上，然后gitlab与云厂家的镜像服务相关联，然后每一次commit提交都回触发一次镜像的构建，然后再根据这个镜像部署到实际的服务器里，同时将此服务器作一个快照，以后扩容就用此快照扩容。</p>
-<p>用图像来说就是这个意思：</p>
+<p>用图像来说就是这个意思：<br><img src="/images/aliyungitlab1.png" alt="paradin" title="也可以gitlab触发jenkins，用jenkins构建镜像并且把镜像推送到阿里云容器仓库去"></p>
 <h2><span id="勾连gitlab与云镜像">勾连gitlab与云镜像</span></h2><p>本文使用的镜像厂家是阿里云。</p>
 <p>进入阿里云的“容器镜像”页面，如果你是第一次使用这个产品需要先建立一个密码，然后点击左侧的代码源，如图：<br><img src="/images/aliyungitlab1.png" alt="paradin"></p>
 <p>在gitlab地方选择“绑定账号”，就需要填写对应的栏目：<br><img src="/images/aliyungitlab2.png" alt="paradin"></p>
-<p>前两项很好写，最后一个token，需要在gitlab里创建：在gitlab的页面，点击个人的头像，然后<code>settings</code>—<code>Access Tokens</code>，填写好名字（生产环境一般都是填运维的账号）然后点击api，生成的那个东东就是token，直接填写到阿里云的页面即可。如图：<br><img src="/images/aliyungitlab3.png" alt="paradin"></p>
+<p>前两项很好写，最后一个token需要在gitlab里创建：在gitlab的页面，点击个人的头像，然后<code>settings</code>—<code>Access Tokens</code>，填写好名字（生产环境一般都是填运维的账号）然后点击api，生成的那个东东就是token，直接填写到阿里云的页面即可。如图：<br><img src="/images/aliyungitlab3.png" alt="paradin"></p>
 <h2><span id="配置镜像仓库">配置镜像仓库</span></h2><p>在阿里云容器镜像界面点击“创建镜像仓库”，填写好名字摘要仓库类型之后，在代码源里选择gitlab，由于刚刚填写了token所以是可以看得到gitlab用户下所有的project名的，如图：<br><img src="/images/aliyungitlab4.png" alt="paradin"></p>
 <p>然后点击新创建的那个仓库，在构建一栏默认已经选择好了“代码变更时自动构建镜像”，点击“添加规则”，如图：<br><img src="/images/aliyungitlab5.png" alt="paradin"></p>
 <p>这里我选择了master分支，然后指明了dockerfile文件名和路径，最后版本号就先写一个version，这个可以通过gitlab在commit时指定。</p>
