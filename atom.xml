@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-08-13T06:27:39.627Z</updated>
+  <updated>2018-08-15T03:19:25.057Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用gitlab搭配阿里云容器镜像服务构建镜像</title>
+    <link href="http://yoursite.com/2018/08/15/%E4%BD%BF%E7%94%A8gitlab%E6%90%AD%E9%85%8D%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F/"/>
+    <id>http://yoursite.com/2018/08/15/使用gitlab搭配阿里云容器镜像服务构建镜像/</id>
+    <published>2018-08-15T02:15:44.000Z</published>
+    <updated>2018-08-15T03:19:25.057Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="工作思路">工作思路</span></h2><p>本次北京AWS技术峰会看到了很多公司在运维上的实例，感受很多。现在很多公司使用的部署办法就是“云镜像”：即开发把新的代码提交到gitlab上，然后gitlab与云厂家的镜像服务相关联，然后每一次commit提交都回触发一次镜像的构建，然后再根据这个镜像部署到实际的服务器里，同时将此服务器作一个快照，以后扩容就用此快照扩容。</p><p>用图像来说就是这个意思：</p><h2><span id="勾连gitlab与云镜像">勾连gitlab与云镜像</span></h2><p>本文使用的镜像厂家是阿里云。</p><p>进入阿里云的“容器镜像”页面，如果你是第一次使用这个产品需要先建立一个密码，然后点击左侧的代码源，如图：<br><img src="/images/aliyungitlab1.png" alt="paradin"></p><p>在gitlab地方选择“绑定账号”，就需要填写对应的栏目：<br><img src="/images/aliyungitlab2.png" alt="paradin"></p><p>前两项很好写，最后一个token，需要在gitlab里创建：在gitlab的页面，点击个人的头像，然后<code>settings</code>—<code>Access Tokens</code>，填写好名字（生产环境一般都是填运维的账号）然后点击api，生成的那个东东就是token，直接填写到阿里云的页面即可。如图：<br><img src="/images/aliyungitlab3.png" alt="paradin"></p><h2><span id="配置镜像仓库">配置镜像仓库</span></h2><p>在阿里云容器镜像界面点击“创建镜像仓库”，填写好名字摘要仓库类型之后，在代码源里选择gitlab，由于刚刚填写了token所以是可以看得到gitlab用户下所有的project名的，如图：<br><img src="/images/aliyungitlab4.png" alt="paradin"></p><p>然后点击新创建的那个仓库，在构建一栏默认已经选择好了“代码变更时自动构建镜像”，点击“添加规则”，如图：<br><img src="/images/aliyungitlab5.png" alt="paradin"></p><p>这里我选择了master分支，然后指明了dockerfile文件名和路径，最后版本号就先写一个version，这个可以通过gitlab在commit时指定。</p><p>webhook是用来发送提示的，可以在钉钉里创建一个机器人，在创建机器人时会生成webhook，然后把这个webhook添加到阿里云容器镜像里的webhook即可。不过我在添加的时候提示“当前请求失败，请重试”，这个情况我已经反馈给阿里云售后了。</p><h2><span id="编写dockerfile">编写dockerfile</span></h2><p>如果没有dockerfile是无法构建镜像的，于是就在上面“规则”的目录里创建dockerfile文件，写dockerfile的基础知识和语法这里不多说了，网络上有的是，我就把我测试的一个dockerfile写一下。</p>]]></content>
+    
+    <summary type="html">
+    
+      出去一看才发现，我们的运维简直就是手工作坊...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
+    
+      <category term="持续集成" scheme="http://yoursite.com/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/"/>
+    
+      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
+    
+      <category term="docker镜像" scheme="http://yoursite.com/tags/docker%E9%95%9C%E5%83%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>阿里云Centos7开启swap虚拟内存</title>
@@ -60,11 +88,11 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
+      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
+    
       <category term="python3.6" scheme="http://yoursite.com/tags/python3-6/"/>
     
       <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
   </entry>
   
@@ -73,9 +101,9 @@
     <link href="http://yoursite.com/2018/07/31/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99title%E7%9A%84%E8%84%9A%E6%9C%AC/"/>
     <id>http://yoursite.com/2018/07/31/获取网站title的脚本/</id>
     <published>2018-07-31T07:48:40.000Z</published>
-    <updated>2018-08-01T01:53:42.697Z</updated>
+    <updated>2018-08-13T07:13:24.623Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="脚本在此">脚本在此</span></h2><p>公司的商城需要添加一个脚本，这个脚本就是观察首页页面是否正常，虽然已经配置了zabbix监控网站是否200，但是有一些特殊的情况，比如网页可以打开但是页面是“file not found”，类似这样就需要被运维第一时间监控到然后通知开发。</p><p>原本我打算直接爬取整个首页然后与服务器里的<code>index.html</code>对比一下，如果不符合就报警，但是跟前端同事说了这个思路之后，前端说服务器上是没有<code>index.html</code>的，因为这个<code>index.html</code>是结合其他的php拼接的。前端说“只要能检测title正常就OK，一般来说title能获取到就证明系统是OK的，如果titleOK但是html内容获取不到就是前段代码的问题，跟系统无关”。于是我就写了这么一个爬虫脚本来获取网站title，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#这个脚本的用途是用来爬取商城首页title，然后判断是否正常</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,sys</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding('utf-8')#不然就会UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)</span><br><span class="line">r = requests.get('https://www.lechange.com')#这里输入要爬的网站域名</span><br><span class="line">r.encoding = requests.utils.get_encodings_from_content(r.content)[<span class="number">0</span>]</span><br><span class="line">soup = BeautifulSoup(r.text,'lxml')#这一步需要事前pip install lxml</span><br><span class="line">print soup.title.string</span><br></pre></td></tr></table></figure></p><p>说一下，如果在<code>from bs4 import BeautifulSoup</code>爆出<code>ImportError: No module named &#39;bs4&#39;</code>是因为安装的库装错了，应该是<code>pip install beautifulsoup4</code>而不是<code>pip install beautifulsoup</code>。启动脚本效果如下：<br><img src="/images/spider1.png" alt="paradin"></p><h2><span id="编码问题">编码问题</span></h2><p>上面那个脚本里的<code>soup.title.string</code>的类型是<code>bs4.element.NavigableString</code>，如果不用print那么它的形式是<code>unicode</code>的，如图：<br><img src="/images/spider2.png" alt="paradin"></p><p>这种现象并不新鲜，比如<code>list</code>在python2里一直都不是正常输出中文的，如图：<br><img src="/images/spider3.png" alt="paradin"></p><p>可见只有<code>for in</code>的时候才会正常编码，那么这样的情况怎么办？</p><p>最简单的方法，改用python3。不过上面那个脚本是可以直接把中文放到<code>soup.title.string</code>进行判断的。</p><h2><span id="安装python-364">安装python 3.6.4</span></h2><p>首先要先安装相关依赖包<code>yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</code>，其中<code>readline-devel</code>这个很重要，他是管方向键的，如果python运行的时候方向键不好使，那么就要<code>yum install readline-devel</code>安装，安装完毕后重新<code>configure</code>和<code>make</code>。</p><p>然后过程如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">yum -y install epel-release#运行这个命令添加epel扩展源</span><br><span class="line">#安装pip</span><br><span class="line">yum install python-pip</span><br><span class="line">pip install wget</span><br><span class="line">wget https:<span class="comment">//www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz</span></span><br><span class="line">#解压</span><br><span class="line">xz -d Python<span class="number">-3.6</span><span class="number">.4</span>.tar.xz</span><br><span class="line">tar -xf Python<span class="number">-3.6</span><span class="number">.4</span>.tar</span><br><span class="line">#进入解压后的目录，依次执行下面命令进行手动编译</span><br><span class="line">./configure prefix=<span class="regexp">/usr/</span>local/python3</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">#将原来的链接备份</span><br><span class="line">mv /usr/bin/python /usr/bin/python.bak</span><br><span class="line">#添加python3的软链接</span><br><span class="line">ln -s /usr/local/python3/bin/python3<span class="number">.6</span> /usr/bin/python</span><br><span class="line">#测试是否安装成功了</span><br><span class="line">python -V</span><br></pre></td></tr></table></figure></p><p>更改yum配置，因为其要用到python2才能执行，否则会导致yum不能正常使用，需要分别修改<code>/usr/bin/yum</code>和<code>/usr/libexec/urlgrabber-ext-down</code>这两个文件，把他们的<code>#! /usr/bin/python</code>修改为<code>#! /usr/bin/python2</code>。</p><p>然后还要给python3的pip3做一个软连接: <code>ln -s  /usr/local/python3/bin/pip3 /usr/bin/pip3</code>。</p><p>注意！如果你用了python3那么上面那个脚本就会有很大的变动。</p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="脚本在此">脚本在此</span></h2><p>公司的商城需要添加一个脚本，这个脚本就是观察首页页面是否正常，虽然已经配置了zabbix监控网站是否200，但是有一些特殊的情况，比如网页可以打开但是页面是“file not found”，类似这样就需要被运维第一时间监控到然后通知开发。</p><p>原本我打算直接爬取整个首页然后与服务器里的<code>index.html</code>对比一下，如果不符合就报警，但是跟前端同事说了这个思路之后，前端说服务器上是没有<code>index.html</code>的，因为这个<code>index.html</code>是结合其他的php拼接的。前端说“只要能检测title正常就OK，一般来说title能获取到就证明系统是OK的，如果titleOK但是html内容获取不到就是前段代码的问题，跟系统无关”。于是我就写了这么一个爬虫脚本来获取网站title，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#这个脚本的用途是用来爬取商城首页title，然后判断是否正常</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests,sys</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">reload(sys)</span><br><span class="line">sys.setdefaultencoding('utf-8')#不然就会UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)</span><br><span class="line">r = requests.get('https://www.lechange.com')#这里输入要爬的网站域名</span><br><span class="line">r.encoding = requests.utils.get_encodings_from_content(r.content)[<span class="number">0</span>]</span><br><span class="line">soup = BeautifulSoup(r.text,'lxml')#这一步需要事前pip install lxml</span><br><span class="line">print soup.title.string</span><br></pre></td></tr></table></figure></p><p>说一下，如果在<code>from bs4 import BeautifulSoup</code>爆出<code>ImportError: No module named &#39;bs4&#39;</code>是因为安装的库装错了，应该是<code>pip install beautifulsoup4</code>而不是<code>pip install beautifulsoup</code>。启动脚本效果如下：<br><img src="/images/spider1.png" alt="paradin"></p><h2><span id="编码问题">编码问题</span></h2><p>上面那个脚本里的<code>soup.title.string</code>的类型是<code>bs4.element.NavigableString</code>，如果不用print那么它的形式是<code>unicode</code>的，如图：<br><img src="/images/spider2.png" alt="paradin"></p><p>这种现象并不新鲜，比如<code>list</code>在python2里一直都不是正常输出中文的，如图：<br><img src="/images/spider3.png" alt="paradin"></p><p>可见只有<code>for in</code>的时候才会正常编码，那么这样的情况怎么办？</p><p>最简单的方法，改用python3。不过上面那个脚本是可以直接把中文放到<code>soup.title.string</code>进行判断的。</p><h2><span id="安装python-364">安装python 3.6.4</span></h2><p>首先要先安装相关依赖包<code>yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make</code>，其中<code>readline-devel</code>这个很重要，他是管方向键的，如果python运行的时候方向键不好使，那么就要<code>yum install readline-devel</code>安装，安装完毕后重新<code>configure</code>和<code>make</code>。</p><p>然后过程如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">yum -y install epel-release#运行这个命令添加epel扩展源</span><br><span class="line">#安装pip</span><br><span class="line">yum install python-pip</span><br><span class="line">pip install wget</span><br><span class="line">wget https:<span class="comment">//www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz</span></span><br><span class="line">#解压</span><br><span class="line">xz -d Python<span class="number">-3.6</span><span class="number">.4</span>.tar.xz</span><br><span class="line">tar -xf Python<span class="number">-3.6</span><span class="number">.4</span>.tar</span><br><span class="line">#进入解压后的目录，依次执行下面命令进行手动编译</span><br><span class="line">./configure prefix=<span class="regexp">/usr/</span>local/python3</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">#将原来的链接备份</span><br><span class="line">mv /usr/bin/python /usr/bin/python.bak</span><br><span class="line">#添加python3的软链接</span><br><span class="line">ln -s /usr/local/python3/bin/python3<span class="number">.6</span> /usr/bin/python</span><br><span class="line">#测试是否安装成功了</span><br><span class="line">python -V</span><br></pre></td></tr></table></figure></p><p>更改yum配置，因为其要用到python2才能执行，否则会导致yum不能正常使用，需要分别修改<code>/usr/bin/yum</code>和<code>/usr/libexec/urlgrabber-ext-down</code>这两个文件，把他们的<code>#! /usr/bin/python</code>修改为<code>#! /usr/bin/python2</code>。</p><p>然后还要给python3的pip3做一个软连接: <code>ln -s  /usr/local/python3/bin/pip3 /usr/bin/pip3</code>。</p><p>注意！如果你用了python3那么上面那个脚本就会有很大的变动。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html" target="_blank" rel="noopener">https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.html</a><br><a href="http://scrapy-chs.readthedocs.io/zh_CN/1.0/intro/tutorial.html" target="_blank" rel="noopener">http://scrapy-chs.readthedocs.io/zh_CN/1.0/intro/tutorial.html</a></p>]]></content>
     
     <summary type="html">
     
@@ -479,28 +507,6 @@
       <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
     
       <category term="内核" scheme="http://yoursite.com/tags/%E5%86%85%E6%A0%B8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Grafana配置smtp邮件</title>
-    <link href="http://yoursite.com/2018/06/06/Grafana%E9%85%8D%E7%BD%AEsmtp%E9%82%AE%E4%BB%B6/"/>
-    <id>http://yoursite.com/2018/06/06/Grafana配置smtp邮件/</id>
-    <published>2018-06-06T11:05:43.000Z</published>
-    <updated>2018-06-14T01:32:10.124Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="配置smtp">配置smtp</span></h2><p>如果要通过grafana接收告警邮件，都需要配置邮箱。而相关配置文件就是<code>grafana.ini</code>，分别要修改如下几个地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">#################################### SMTP / Emailing ##########################</span><br><span class="line">[smtp]</span><br><span class="line">enabled = <span class="literal">true</span></span><br><span class="line">host = smtp<span class="number">.163</span>.com:<span class="number">465</span></span><br><span class="line">user = 邮箱前缀@<span class="number">163.</span>com</span><br><span class="line"># If the password contains # or ; you have to wrap it with trippel quotes. Ex """#password;"""</span><br><span class="line">password = 客户端授权密码</span><br><span class="line">;cert_file =</span><br><span class="line">;key_file =</span><br><span class="line">skip_verify = <span class="literal">true</span></span><br><span class="line">from_address = 邮箱前缀@<span class="number">163.</span>com</span><br><span class="line">from_name = Grafana</span><br><span class="line"># EHLO identity in SMTP dialog (defaults to instance_name)</span><br><span class="line">;ehlo_identity = dashboard.example.com</span><br><span class="line">#################################### Alerting ############################</span><br><span class="line">[alerting]</span><br><span class="line"># Disable alerting engine &amp; UI features</span><br><span class="line">;enabled = <span class="literal">true</span></span><br><span class="line"># Makes it possible to turn off alert rule execution but alerting UI is visible</span><br><span class="line">execute_alerts = <span class="literal">true</span></span><br></pre></td></tr></table></figure></p><p>我采用了网易邮箱，把文件保存退出之后，重启一下<code>grafana-server</code>。然后在页面的alatm页面里配置<code>Notification channels</code>，如图：<br><img src="/images/grafanasmtp3.png" alt="paradin"></p><p>如果发送不成功，去查看一下日志，日志地址是<code>/var/log/grafana/grafana.log</code>。如果发送成功了，那么邮箱会收到这样的一个邮件：<br><img src="/images/grafanasmtp4.png" alt="paradin"></p><h2><span id="邮箱密码问题问题">邮箱密码问题问题</span></h2><p>这里要注意几个问题！</p><ol><li>阿里云的服务器出于安全考虑默认是不会开放25端口的，如果你非要用阿里云的服务器去打开25端口，请移步<a href="https://www.alibabacloud.com/help/zh/doc-detail/56130.htm" target="_blank" rel="noopener">https://www.alibabacloud.com/help/zh/doc-detail/56130.htm</a> ；</li><li>如果不想麻烦阿里云那么就要使用其他端口，比如我配置文件里面写的加密的465端口，这个端口不能使用登陆邮箱的普通密码，而是需要填写“授权码”；</li><li>以网易邮箱为例，首先先要打开<code>POP3/SMTP服务</code>，如图：<br><img src="/images/grafanasmtp1.png" alt="paradin"></li></ol><p>其次然后在<code>客户端授权密码</code>里设置一个新的密码，如图：<br><img src="/images/grafanasmtp2.png" alt="paradin"></p><p>然后把这个授权码填写到<code>grafana.ini</code>里，填邮箱的登录密码是错误的。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://www.kubiops.com/blog/2017/02/27/Grafana%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.html" target="_blank" rel="noopener">http://www.kubiops.com/blog/2017/02/27/Grafana%E5%91%8A%E8%AD%A6%E9%85%8D%E7%BD%AE.html</a></p><p><img src="/images/马夏尔1.gif" alt="akb48" title="马夏尔在底线的标准操作"></p>]]></content>
-    
-    <summary type="html">
-    
-      不仅是告警，grafana就是新建用户都要用邮箱邀请注册
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="grafana" scheme="http://yoursite.com/tags/grafana/"/>
     
   </entry>
   

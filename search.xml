@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用gitlab搭配阿里云容器镜像服务构建镜像]]></title>
+    <url>%2F2018%2F08%2F15%2F%E4%BD%BF%E7%94%A8gitlab%E6%90%AD%E9%85%8D%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F%2F</url>
+    <content type="text"><![CDATA[工作思路本次北京AWS技术峰会看到了很多公司在运维上的实例，感受很多。现在很多公司使用的部署办法就是“云镜像”：即开发把新的代码提交到gitlab上，然后gitlab与云厂家的镜像服务相关联，然后每一次commit提交都回触发一次镜像的构建，然后再根据这个镜像部署到实际的服务器里，同时将此服务器作一个快照，以后扩容就用此快照扩容。 用图像来说就是这个意思： 勾连gitlab与云镜像本文使用的镜像厂家是阿里云。 进入阿里云的“容器镜像”页面，如果你是第一次使用这个产品需要先建立一个密码，然后点击左侧的代码源，如图： 在gitlab地方选择“绑定账号”，就需要填写对应的栏目： 前两项很好写，最后一个token，需要在gitlab里创建：在gitlab的页面，点击个人的头像，然后settings—Access Tokens，填写好名字（生产环境一般都是填运维的账号）然后点击api，生成的那个东东就是token，直接填写到阿里云的页面即可。如图： 配置镜像仓库在阿里云容器镜像界面点击“创建镜像仓库”，填写好名字摘要仓库类型之后，在代码源里选择gitlab，由于刚刚填写了token所以是可以看得到gitlab用户下所有的project名的，如图： 然后点击新创建的那个仓库，在构建一栏默认已经选择好了“代码变更时自动构建镜像”，点击“添加规则”，如图： 这里我选择了master分支，然后指明了dockerfile文件名和路径，最后版本号就先写一个version，这个可以通过gitlab在commit时指定。 webhook是用来发送提示的，可以在钉钉里创建一个机器人，在创建机器人时会生成webhook，然后把这个webhook添加到阿里云容器镜像里的webhook即可。不过我在添加的时候提示“当前请求失败，请重试”，这个情况我已经反馈给阿里云售后了。 编写dockerfile如果没有dockerfile是无法构建镜像的，于是就在上面“规则”的目录里创建dockerfile文件，写dockerfile的基础知识和语法这里不多说了，网络上有的是，我就把我测试的一个dockerfile写一下。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>gitlab</tag>
+        <tag>持续集成</tag>
+        <tag>阿里云</tag>
+        <tag>docker镜像</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[阿里云Centos7开启swap虚拟内存]]></title>
     <url>%2F2018%2F08%2F13%2F%E9%98%BF%E9%87%8C%E4%BA%91Centos7%E5%BC%80%E5%90%AFswap%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%2F</url>
     <content type="text"><![CDATA[出差归来，几个开发反馈说gitlab网页卡的不行，上传代码也非常吃力。我登入服务器一看，原来是内存已经耗尽了。 修改配置文件gitlab本身就是一个特别吃内存的软件，服务器还是2核4G的配置。于是我就登陆到gitlab容器里，修改一下/etc/gitlab/gitlab.rb，把unicorn[&#39;worker_processes&#39;]手动改成了3，也就是比CPU大一个，这样可以少开一点进程。但是注意，这个参数最小值是2，如果设置成1，那么gitlab就会崩坏。 保存文件之后，gitlab-ctl reconfigure，看一下内存的情况，嗯，比刚才好一点点。如图： 开启虚拟内存上面那个方法毕竟效果有限，时间长了还是会把内存一点点蚕食光，于是就要使用Swap分区，但是阿里云虚拟服务器默认是不带swap分区的，如何手动创建swap分区才是本文的要点。 这里我用了一个非生产环境的机器做实验。 创建swap分区主要的中心思想就是“创建一个文件，然后将这块文件格式化为swap格式”，首先先看一下当前的磁盘容量： 当前已用磁盘容量是16G，使用cat /proc/swaps看一下当前虚拟内存的情况： 这个情况说明没开启swap，于是就手动建立一个文件夹，比如叫/swaps，在/swaps这个路径下执行dd if=/dev/zero of=swaps bs=512 count=8388616，在这里创建swap大小为bs*count=4294971392(4G)，这个过程需要一点时间，稍等片刻： 通过mkswap swaps命令将上面新建出的swaps文件做成swap分区： 此时使用cat /proc/sys/vm/swappiness查看数值应该是0，需要sysctl -w vm.swappiness=60把它改成60，这里60的含义是：100%-60%=40%，即物理内存剩下40%的时候时启用虚拟内存。若想永久修改，则编辑/etc/sysctl.conf文件，改文件中有vm.swappiness变量配置。 再swapon /swaps/swaps： 最后就是添加开机自动挂载，即在/etc/fstab文件添加如下一句： 1/swaps/swaps swap swap defaults 0 0 再用cat /proc/swaps命令检查一下swap分区是否启动： 最后，重启一下服务器，看一下开机是否正常挂载上这个虚拟分区了： 可见原来使用了16G容量，现在用了20G，这中间差的4G就是拿来做了swap，于是内存就这样多了4个G…]]></content>
@@ -21,15 +35,15 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>阿里云</tag>
         <tag>python3.6</tag>
         <tag>爬虫</tag>
-        <tag>阿里云</tag>
       </tags>
   </entry>
   <entry>
     <title><![CDATA[获取网站title的脚本]]></title>
     <url>%2F2018%2F07%2F31%2F%E8%8E%B7%E5%8F%96%E7%BD%91%E7%AB%99title%E7%9A%84%E8%84%9A%E6%9C%AC%2F</url>
-    <content type="text"><![CDATA[脚本在此公司的商城需要添加一个脚本，这个脚本就是观察首页页面是否正常，虽然已经配置了zabbix监控网站是否200，但是有一些特殊的情况，比如网页可以打开但是页面是“file not found”，类似这样就需要被运维第一时间监控到然后通知开发。 原本我打算直接爬取整个首页然后与服务器里的index.html对比一下，如果不符合就报警，但是跟前端同事说了这个思路之后，前端说服务器上是没有index.html的，因为这个index.html是结合其他的php拼接的。前端说“只要能检测title正常就OK，一般来说title能获取到就证明系统是OK的，如果titleOK但是html内容获取不到就是前段代码的问题，跟系统无关”。于是我就写了这么一个爬虫脚本来获取网站title，如下： 12345678910111213#!/usr/bin/env python#coding=utf-8#这个脚本的用途是用来爬取商城首页title，然后判断是否正常import requests,sysfrom bs4 import BeautifulSoupreload(sys)sys.setdefaultencoding('utf-8') #不然就会UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)r = requests.get('https://www.lechange.com') #这里输入要爬的网站域名r.encoding = requests.utils.get_encodings_from_content(r.content)[0]soup = BeautifulSoup(r.text,'lxml') #这一步需要事前pip install lxmlprint soup.title.string 说一下，如果在from bs4 import BeautifulSoup爆出ImportError: No module named &#39;bs4&#39;是因为安装的库装错了，应该是pip install beautifulsoup4而不是pip install beautifulsoup。启动脚本效果如下： 编码问题上面那个脚本里的soup.title.string的类型是bs4.element.NavigableString，如果不用print那么它的形式是unicode的，如图： 这种现象并不新鲜，比如list在python2里一直都不是正常输出中文的，如图： 可见只有for in的时候才会正常编码，那么这样的情况怎么办？ 最简单的方法，改用python3。不过上面那个脚本是可以直接把中文放到soup.title.string进行判断的。 安装python 3.6.4首先要先安装相关依赖包yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make，其中readline-devel这个很重要，他是管方向键的，如果python运行的时候方向键不好使，那么就要yum install readline-devel安装，安装完毕后重新configure和make。 然后过程如下： 1234567891011121314151617yum -y install epel-release #运行这个命令添加epel扩展源#安装pipyum install python-pippip install wgetwget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz#解压xz -d Python-3.6.4.tar.xztar -xf Python-3.6.4.tar#进入解压后的目录，依次执行下面命令进行手动编译./configure prefix=/usr/local/python3make &amp;&amp; make install#将原来的链接备份mv /usr/bin/python /usr/bin/python.bak#添加python3的软链接ln -s /usr/local/python3/bin/python3.6 /usr/bin/python#测试是否安装成功了python -V 更改yum配置，因为其要用到python2才能执行，否则会导致yum不能正常使用，需要分别修改/usr/bin/yum和/usr/libexec/urlgrabber-ext-down这两个文件，把他们的#! /usr/bin/python修改为#! /usr/bin/python2。 然后还要给python3的pip3做一个软连接: ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3。 注意！如果你用了python3那么上面那个脚本就会有很大的变动。]]></content>
+    <content type="text"><![CDATA[脚本在此公司的商城需要添加一个脚本，这个脚本就是观察首页页面是否正常，虽然已经配置了zabbix监控网站是否200，但是有一些特殊的情况，比如网页可以打开但是页面是“file not found”，类似这样就需要被运维第一时间监控到然后通知开发。 原本我打算直接爬取整个首页然后与服务器里的index.html对比一下，如果不符合就报警，但是跟前端同事说了这个思路之后，前端说服务器上是没有index.html的，因为这个index.html是结合其他的php拼接的。前端说“只要能检测title正常就OK，一般来说title能获取到就证明系统是OK的，如果titleOK但是html内容获取不到就是前段代码的问题，跟系统无关”。于是我就写了这么一个爬虫脚本来获取网站title，如下： 12345678910111213#!/usr/bin/env python#coding=utf-8#这个脚本的用途是用来爬取商城首页title，然后判断是否正常import requests,sysfrom bs4 import BeautifulSoupreload(sys)sys.setdefaultencoding('utf-8') #不然就会UnicodeEncodeError: 'ascii' codec can't encode characters in position 0-4: ordinal not in range(128)r = requests.get('https://www.lechange.com') #这里输入要爬的网站域名r.encoding = requests.utils.get_encodings_from_content(r.content)[0]soup = BeautifulSoup(r.text,'lxml') #这一步需要事前pip install lxmlprint soup.title.string 说一下，如果在from bs4 import BeautifulSoup爆出ImportError: No module named &#39;bs4&#39;是因为安装的库装错了，应该是pip install beautifulsoup4而不是pip install beautifulsoup。启动脚本效果如下： 编码问题上面那个脚本里的soup.title.string的类型是bs4.element.NavigableString，如果不用print那么它的形式是unicode的，如图： 这种现象并不新鲜，比如list在python2里一直都不是正常输出中文的，如图： 可见只有for in的时候才会正常编码，那么这样的情况怎么办？ 最简单的方法，改用python3。不过上面那个脚本是可以直接把中文放到soup.title.string进行判断的。 安装python 3.6.4首先要先安装相关依赖包yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gcc make，其中readline-devel这个很重要，他是管方向键的，如果python运行的时候方向键不好使，那么就要yum install readline-devel安装，安装完毕后重新configure和make。 然后过程如下： 1234567891011121314151617yum -y install epel-release #运行这个命令添加epel扩展源#安装pipyum install python-pippip install wgetwget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tar.xz#解压xz -d Python-3.6.4.tar.xztar -xf Python-3.6.4.tar#进入解压后的目录，依次执行下面命令进行手动编译./configure prefix=/usr/local/python3make &amp;&amp; make install#将原来的链接备份mv /usr/bin/python /usr/bin/python.bak#添加python3的软链接ln -s /usr/local/python3/bin/python3.6 /usr/bin/python#测试是否安装成功了python -V 更改yum配置，因为其要用到python2才能执行，否则会导致yum不能正常使用，需要分别修改/usr/bin/yum和/usr/libexec/urlgrabber-ext-down这两个文件，把他们的#! /usr/bin/python修改为#! /usr/bin/python2。 然后还要给python3的pip3做一个软连接: ln -s /usr/local/python3/bin/pip3 /usr/bin/pip3。 注意！如果你用了python3那么上面那个脚本就会有很大的变动。 参考资料https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.zh.htmlhttp://scrapy-chs.readthedocs.io/zh_CN/1.0/intro/tutorial.html]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -344,8 +358,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>gitlab</tag>
         <tag>zabbix</tag>
+        <tag>gitlab</tag>
       </tags>
   </entry>
   <entry>
@@ -602,8 +616,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>zabbix</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -1013,8 +1027,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1073,8 +1087,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
