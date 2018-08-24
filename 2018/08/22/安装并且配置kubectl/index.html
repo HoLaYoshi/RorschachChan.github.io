@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="既要维持拳脚功夫，也要掌握先进武器">
+<meta name="description" content="每个kube集群有多个pod，而每个pod里有多个容器。当我们在 Kubernetes 上创建一个部署时，该部署将在其中创建包含容器的 Pod (而不是直接创建容器)。Pod 总是运行在 Node上。">
 <meta name="keywords" content="阿里云,kubernetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="安装并且配置kubectl">
+<meta property="og:title" content="kubectl使用的简单举例">
 <meta property="og:url" content="http://yoursite.com/2018/08/22/安装并且配置kubectl/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="既要维持拳脚功夫，也要掌握先进武器">
+<meta property="og:description" content="每个kube集群有多个pod，而每个pod里有多个容器。当我们在 Kubernetes 上创建一个部署时，该部署将在其中创建包含容器的 Pod (而不是直接创建容器)。Pod 总是运行在 Node上。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/k8s1.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s2.png">
@@ -102,10 +102,13 @@
 <meta property="og:image" content="http://yoursite.com/images/k8s4.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s5.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s6.png">
-<meta property="og:updated_time" content="2018-08-23T06:15:19.213Z">
+<meta property="og:image" content="http://yoursite.com/images/k8s7.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s8.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s9.png">
+<meta property="og:updated_time" content="2018-08-24T07:25:40.452Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="安装并且配置kubectl">
-<meta name="twitter:description" content="既要维持拳脚功夫，也要掌握先进武器">
+<meta name="twitter:title" content="kubectl使用的简单举例">
+<meta name="twitter:description" content="每个kube集群有多个pod，而每个pod里有多个容器。当我们在 Kubernetes 上创建一个部署时，该部署将在其中创建包含容器的 Pod (而不是直接创建容器)。Pod 总是运行在 Node上。">
 <meta name="twitter:image" content="http://yoursite.com/images/k8s1.png">
 
 
@@ -142,7 +145,7 @@
 
 
 
-  <title>安装并且配置kubectl | Chris Chan's BLOG</title>
+  <title>kubectl使用的简单举例 | Chris Chan's BLOG</title>
   
 
 
@@ -342,7 +345,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">安装并且配置kubectl</h1>
+          <h1 class="post-title" itemprop="name headline">kubectl使用的简单举例</h1>
         
 
         <div class="post-meta">
@@ -394,7 +397,7 @@
 
           
           
-             <span id="/2018/08/22/安装并且配置kubectl/" class="leancloud_visitors" data-flag-title="安装并且配置kubectl">
+             <span id="/2018/08/22/安装并且配置kubectl/" class="leancloud_visitors" data-flag-title="kubectl使用的简单举例">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -420,7 +423,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  405
+                  697
                 </span>
               
 
@@ -436,7 +439,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -444,7 +447,7 @@
 
           
               <div class="post-description">
-                  既要维持拳脚功夫，也要掌握先进武器
+                  每个kube集群有多个pod，而每个pod里有多个容器。当我们在 Kubernetes 上创建一个部署时，该部署将在其中创建包含容器的 Pod (而不是直接创建容器)。Pod 总是运行在 Node上。
               </div>
           
 
@@ -462,14 +465,33 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装kubectl">安装kubectl</span></h2><p>在阿里云的Kubernetes界面生成一个新的集群，如图：<br><img src="/images/k8s1.png" alt="akb48"></p>
-<p>但是这个集群是无法通过ssh登陆云服务器那样登录的，这个时候有两个招数，第一个招数就是用<code>kubectl</code>这个工具去连接到集群。但是<code>kubectl</code>很难搞，因为它所在的<code>storage.googleapis.com</code>在大陆是无法访问的，如果效仿<a href="https://www.kubernetes.org.cn/installkubectl" target="_blank" rel="noopener">https://www.kubernetes.org.cn/installkubectl</a> 里面的方式去下载<code>kubectl</code>是无法成功的，如图：<br><img src="/images/k8s2.png" alt="akb48"></p>
+<p>但是这个集群是无法通过ssh登陆云服务器那样登录的，这个时候要操作k8s就有两个招数，第一个招数就是用<code>kubectl</code>这个工具去连接到集群。但是<code>kubectl</code>很难搞，因为它所在的<code>storage.googleapis.com</code>在大陆是无法访问的，如果效仿<a href="https://www.kubernetes.org.cn/installkubectl" target="_blank" rel="noopener">https://www.kubernetes.org.cn/installkubectl</a> 里面的方式去下载<code>kubectl</code>是无法成功的，如图：<br><img src="/images/k8s2.png" alt="akb48"></p>
 <p>为了应付这个办法，就要去kubernete的github界面里下载代码包，然后手动上传到云服务器里。</p>
 <p>首先去<a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112" target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112</a> 里的<code>Client Binaries</code>下载1.11版本的kubectl的包，如图：<br><img src="/images/k8s3.png" alt="akb48"></p>
 <p>将这个包上传到云服务器之后解压缩，然后把kubernetes安装包里的<code>/client/bin/kubectl</code>做一个<code>/usr/local/bin/kubectl</code>的软连接，如图：<br><img src="/images/k8s4.png" alt="akb48"></p>
 <p>如果所在的网络也无法打开github，那么只好用国内的源<a href="https://mirrors.ustc.edu.cn/kubernetes/apt/pool/" target="_blank" rel="noopener">https://mirrors.ustc.edu.cn/kubernetes/apt/pool/</a> ，下载相应的包之后手动上传到云服务器里也能达到一样的效果，缺点就是国内源没有github更新的那么快。</p>
 <h2><span id="配置kubectl">配置kubectl</span></h2><p>阿里云在生成kubernetes集群后，点击<code>管理</code>，最下面会有一个配置文件，将整个文件内容写入<code>/root/.kube/config</code>，然后再一次使用<code>kubectl cluster-info</code>就能看到配置成功了，如图：<br><img src="/images/k8s5.png" alt="akb48"></p>
 <p>再用<code>kubectl config view</code>能进一步看到细节：<br><img src="/images/k8s6.png" alt="akb48"></p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed</a> （这个是通过ssh访问k8s负载均衡的方法）</p>
+<p>这样就证明可以通过kubectl连接到kubenetes集群了。</p>
+<h2><span id="kubectl基本操作">kubectl基本操作</span></h2><ol>
+<li><p><code>kubectl get nodes</code>：查看master和worker的基本情况，如图：<br><img src="/images/k8s7.png" alt="akb48" title="这里面有各个节点的角色、命名、版本和状态"></p>
+</li>
+<li><p><code>kubectl run ngx-test --image=nginx:latest --port=8080 --restart=Never</code>：部署一个以nginx最新镜像为班底的叫<code>ngx-test</code>的镜像，并且开放容器的8080端口，每个集群的名称不能重复；</p>
+</li>
+<li><p><code>kubectl delete deployment chen-test</code>:删除一个叫<code>chen-test</code>的部署，请注意，不直接删除pod。使用kubectl命令，要删除拥有该pod的Deployment。如果我们直接删除pod，Deployment将会重新创建该pod；</p>
+</li>
+<li><p><code>kubectl get deployments</code>：查看部署情况，如图：<br><img src="/images/k8s8.png" alt="akb48"></p>
+</li>
+<li><p><code>kubectl proxy</code>: 每个pod在kuber集群里都是一个封闭的网络环境里，可以通过这个命令使API server监听在本地的8001端口上；</p>
+</li>
+<li><p><code>kubectl get pods</code>：获取每一个pods的基本情况，如图:<br><img src="/images/k8s9.png" alt="akb48"></p>
+</li>
+<li><p><code>kubectl describe pods</code>:查看每一个pods的运行细节，可以出来为什么pods没有正常的运行，如果要特别制定具体的pod，那就是<code>kubectl describe pods pod的名称</code>；</p>
+</li>
+<li><p><code>kubectl exec -it POD_NAME bash</code>:连接到对应的pod里；</p>
+</li>
+</ol>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed</a> （这个是通过ssh访问k8s负载均衡的方法）<br><a href="https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener">https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/</a></p>
 
       
     </div>
@@ -534,7 +556,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/08/22/安装并且配置kubectl/" title="安装并且配置kubectl">安装并且配置kubectl</a>
+					<a href="http://yoursite.com/2018/08/22/安装并且配置kubectl/" title="kubectl使用的简单举例">kubectl使用的简单举例</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -864,7 +886,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;kubectl">&#x5B89;&#x88C5;kubectl</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;kubectl">&#x914D;&#x7F6E;kubectl</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x5B89;&#x88C5;kubectl">&#x5B89;&#x88C5;kubectl</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;kubectl">&#x914D;&#x7F6E;kubectl</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="kubectl&#x57FA;&#x672C;&#x64CD;&#x4F5C;">kubectl&#x57FA;&#x672C;&#x64CD;&#x4F5C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -917,7 +939,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共150.2k字</span>
+  <span class="post-count">博客全站共150.5k字</span>
 </div>
         
 
