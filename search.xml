@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Centos6.5升级最新内核4.18的坑]]></title>
+    <url>%2F2018%2F08%2F25%2Fcentos6-5%E5%8D%87%E7%BA%A7%E6%9C%80%E6%96%B0%E5%86%85%E6%A0%B84-18%E7%9A%84%E5%9D%91%2F</url>
+    <content type="text"><![CDATA[升级流程开发童鞋要搞BBR，然后让我在他的阿里云服务器上升级一下内核。我登进去一看，centos 6.5，内核还是2.6的。 之前我曾经搞过centos 7升级内核到最新版，文章在此：https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/ 。centos6升级内核有几个地方不太一样，但是过程差不多。整个升级内核步骤如下： 12345先备份镜像，很重要！！！ 而且备份镜像成功之前，云服务器不可以重启。yum uodate -yrpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org #导入ELRepo GPG keyrpm -Uvh https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm #安装 6版本的ELRepoyum --enablerepo=elrepo-kernel install kernel-ml -y #截至本文，最新的是4.18，lt版本是4.4 如果yum的时候有提示Warning: RPMDB altered outside of yum，只需要删除一下yum的历史记录即可：rm -rf /var/lib/yum/history/*.sqlite 。 安装完毕之后，vim /etc/grub.conf，把default改成0，即指定使用第一个内核启动，如图： 然后在阿里云控制台重启一下这个服务器即可。 无法启动？可能有的人直接就启动成功了，因为网络上很多文章到此就结束了。但是我这台服务器，很不幸，出现了问题。在控制台上看服务器是“运行中”，但是无法ssh连接，而且ping也是失败。不一会，控制台的服务器就显示“已停止”，可见是内核出了问题。 联系了阿里的后台，他们反馈这个机器现在的状态是Module scsi_wait_scan not found，那知道了原因就对症下药吧，这个问题解决方法不止一个，我亲测以下的方法好使。 首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下： 123echo 'add_drivers+="virtio_blk"' &gt;/etc/dracut.conf.d/force-vitio_blk-to-ensure-boot.confcp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak #把新下载的4.18的img文件备份dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64 #4.18.5-1.el6.elrepo.x86_64这个文件就是/lib/modules/下的，编译生成新的img 重新在阿里云控制台重启一下这个服务器，这一次就OK了。 发生异常的原因是：更新内核后,在写dracut程序时无法检测KVM’s virtual disk driver “virtio_blk”，此驱动被用于访问 KVM 虚拟磁盘,dracut 没有正常添加新的initramfs module,导致系统没有磁盘访问驱动无法正常启动。 参考资料https://bugzilla.kernel.org/show_bug.cgi?id=60758https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>内核</tag>
+        <tag>BBR</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Kubectl使用的简单举例]]></title>
     <url>%2F2018%2F08%2F22%2F%E5%AE%89%E8%A3%85%E5%B9%B6%E4%B8%94%E9%85%8D%E7%BD%AEkubectl%2F</url>
     <content type="text"><![CDATA[安装kubectl在阿里云的Kubernetes界面生成一个新的集群，如图： 但是这个集群是无法通过ssh登陆云服务器那样登录的，这个时候要操作k8s就有两个招数，第一个招数就是用kubectl这个工具去连接到集群。但是kubectl很难搞，因为它所在的storage.googleapis.com在大陆是无法访问的，如果效仿https://www.kubernetes.org.cn/installkubectl 里面的方式去下载kubectl是无法成功的，如图： 为了应付这个办法，就要去kubernete的github界面里下载代码包，然后手动上传到云服务器里安装。 首先到https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112 里的Client Binaries下载1.11版本的kubectl的包，如图： 将这个包上传到云服务器之后解压缩，然后把kubernetes安装包里的/client/bin/kubectl做一个/usr/local/bin/kubectl的软连接，如图： 如果所在的网络也无法打开github，那么只好用国内的源https://mirrors.ustc.edu.cn/kubernetes/apt/pool/ ，下载相应的包之后手动上传到云服务器里也能达到一样的效果，缺点就是国内源没有github更新的那么快。 配置kubectl阿里云在生成kubernetes集群后，点击管理，最下面会有一个配置文件，将整个文件内容写入/root/.kube/config，然后再一次使用kubectl cluster-info就能看到配置成功了，如图： 再用kubectl config view能进一步看到细节： 这样就证明可以通过kubectl连接到kubenetes集群了。 kubectl基本操作 kubectl get nodes：查看master和worker的基本情况，如图： kubectl run ngx-test --image=nginx:latest --port=8080 --restart=Never：部署一个以nginx最新镜像为底的叫ngx-test的部署，并且开放下面容器的8080端口，每个部署的名称不能重复。部署会自动生成pod，如果加上了--restart=Never，那么pod生成一次失败就不再生成； kubectl delete deployment chen-test:删除一个叫chen-test的部署，注意，使用kubectl命令，要删除拥有该pod的Deployment。如果我们直接删除pod，Deployment将会重新创建该pod； kubectl get deployments：查看部署情况，如图： kubectl proxy: 每个pod在kuber集群里都是一个封闭的网络环境里，可以通过这个命令使API server监听在本地的8001端口上； kubectl get pods：获取每一个pods的基本情况，如图: kubectl describe pods:查看每一个pods的运行细节，可以出来为什么pods没有正常的运行，如果要特别制定具体的pod，那就是kubectl describe pods pod的名称； kubectl exec -it POD_NAME bash:连接到对应的pod里； 参考资料https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed （这个是通过ssh访问k8s负载均衡的方法）https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/]]></content>
@@ -48,8 +60,8 @@
       </categories>
       <tags>
         <tag>阿里云</tag>
-        <tag>爬虫</tag>
         <tag>python3.6</tag>
+        <tag>爬虫</tag>
       </tags>
   </entry>
   <entry>
@@ -133,8 +145,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -158,8 +170,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -171,8 +183,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -783,8 +795,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>mysql</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1705,8 +1717,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -1717,8 +1729,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nginx</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>

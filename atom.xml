@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-08-24T07:59:33.360Z</updated>
+  <updated>2018-08-25T06:00:53.516Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Centos6.5升级最新内核4.18的坑</title>
+    <link href="http://yoursite.com/2018/08/25/centos6-5%E5%8D%87%E7%BA%A7%E6%9C%80%E6%96%B0%E5%86%85%E6%A0%B84-18%E7%9A%84%E5%9D%91/"/>
+    <id>http://yoursite.com/2018/08/25/centos6-5升级最新内核4-18的坑/</id>
+    <published>2018-08-25T03:34:59.000Z</published>
+    <updated>2018-08-25T06:00:53.516Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="升级流程">升级流程</span></h2><p>开发童鞋要搞BBR，然后让我在他的阿里云服务器上升级一下内核。我登进去一看，centos 6.5，内核还是2.6的。</p><p>之前我曾经搞过centos 7升级内核到最新版，文章在此：<a href="https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/</a> 。centos6升级内核有几个地方不太一样，但是过程差不多。整个升级内核步骤如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先备份镜像，很重要！！！  而且备份镜像成功之前，云服务器不可以重启。</span><br><span class="line">yum uodate -y</span><br><span class="line">rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org #导入ELRepo GPG key</span><br><span class="line">rpm -Uvh https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm #安装 6版本的ELRepo</span><br><span class="line">yum --enablerepo=elrepo-kernel install kernel-ml -y#截至本文，最新的是4.18，lt版本是4.4</span><br></pre></td></tr></table></figure></p><p>如果yum的时候有提示<code>Warning: RPMDB altered outside of yum</code>，只需要删除一下yum的历史记录即可：<code>rm -rf /var/lib/yum/history/*.sqlite</code> 。 </p><p>安装完毕之后，<code>vim /etc/grub.conf</code>，把default改成0，即指定使用第一个内核启动，如图：<br><img src="/images/centos6updatecore1.png" alt="akb48"></p><p>然后在阿里云控制台重启一下这个服务器即可。</p><h2><span id="无法启动">无法启动？</span></h2><p>可能有的人直接就启动成功了，因为网络上很多文章到此就结束了。但是我这台服务器，很不幸，出现了问题。在控制台上看服务器是“运行中”，但是无法ssh连接，而且ping也是失败。不一会，控制台的服务器就显示“已停止”，可见是内核出了问题。</p><p>联系了阿里的后台，他们反馈这个机器现在的状态是<code>Module scsi_wait_scan not found</code>，那知道了原因就对症下药吧，这个问题解决方法不止一个，我亲测以下的方法好使。</p><p>首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">'add_drivers+="virtio_blk"'</span> &gt;<span class="regexp">/etc/</span>dracut.conf.d/force-vitio_blk-to-ensure-boot.conf</span><br><span class="line">cp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak#把新下载的4.18的img文件备份</span><br><span class="line">dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64#4.18.5-1.el6.elrepo.x86_64这个文件就是/lib/modules/下的，编译生成新的img</span><br></pre></td></tr></table></figure></p><p>重新在阿里云控制台重启一下这个服务器，这一次就OK了。<br><img src="/images/centos6updatecore2.png" alt="akb48"></p><p>发生异常的原因是：更新内核后,在写dracut程序时无法检测KVM’s virtual disk driver “virtio_blk”，此驱动被用于访问 KVM 虚拟磁盘,dracut 没有正常添加新的initramfs module,导致系统没有磁盘访问驱动无法正常启动。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://bugzilla.kernel.org/show_bug.cgi?id=60758" target="_blank" rel="noopener">https://bugzilla.kernel.org/show_bug.cgi?id=60758</a><br><a href="https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/" target="_blank" rel="noopener">https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      修改/usr/share/dracut/modules.d/90kernel-modules/installkernel把blk_init_queue修改为blk_mq_init_queue，然后重新rpm -ivh也可以
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="内核" scheme="http://yoursite.com/tags/%E5%86%85%E6%A0%B8/"/>
+    
+      <category term="BBR" scheme="http://yoursite.com/tags/BBR/"/>
+    
+  </entry>
   
   <entry>
     <title>Kubectl使用的简单举例</title>
@@ -114,9 +138,9 @@
     
       <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
-      <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
       <category term="python3.6" scheme="http://yoursite.com/tags/python3-6/"/>
+    
+      <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
     
   </entry>
   
@@ -284,9 +308,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
@@ -334,9 +358,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
@@ -360,9 +384,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
+    
+      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
   </entry>
   
@@ -483,30 +507,6 @@
     
     
       <category term="git" scheme="http://yoursite.com/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Jenkins搭配ansible部署</title>
-    <link href="http://yoursite.com/2018/06/12/Jenkins%E6%90%AD%E9%85%8Dansible%E9%83%A8%E7%BD%B2/"/>
-    <id>http://yoursite.com/2018/06/12/Jenkins搭配ansible部署/</id>
-    <published>2018-06-12T08:19:00.000Z</published>
-    <updated>2018-06-13T11:45:10.917Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="架构流程">架构流程</span></h2><p>现在运维组工具里加入了gitlab这个版本控制工具，再加上原有的jenkins和ansible，整个代码模块部署流程如下：<br>1.在代码服务器上push更改的代码到gitlab；<br>2.gitlab通过webhook推送事件到jenkins,触发构建任务；<br>3.jenkins从gitlab将最新代码拉取下来；<br>4.jenkins通过ansible将最新的代码部署到应用服务器；<br>5.推送构建状态到gitlab；</p><h2><span id="安装ansible">安装ansible</span></h2><p>jenkins虽然支持ansible，但是前提是jenkins所在的主机上要有ansible程序，安装ansible的方法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install --upgrade pip</span><br><span class="line">pip install paramiko PyYAML Jinja2 httplib2 six</span><br><span class="line">pip install ansible#安装的是2.5.4版本</span><br></pre></td></tr></table></figure></p><p>然后需要jenkins服务器与代码服务器之间建立ssh免密码登陆的关系，这里就不说细节了，可以去看一下<a href="http://blog.51cto.com/chenx1242/1763978" target="_blank" rel="noopener">http://blog.51cto.com/chenx1242/1763978</a> 这个文章。</p><p>再去<code>/etc/ansible/hosts</code>手动输入一下授信服务器的IP地址，启动一下ansible看效果：<br><img src="/images/jenkinsansible2.png" alt="akb48"></p><p>如果在启动ansible的时候出现了如下的错误：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/usr/lib/python2.7/site-packages/requests/__init__.py:80: RequestsDependencyWarning: urllib3 (1.21.1) or chardet (2.2.1) doesn&apos;t match a supported version!</span><br><span class="line">  RequestsDependencyWarning)</span><br></pre></td></tr></table></figure></p><p>那就是python库中<code>urllib3 (1.21.1)</code> or <code>chardet (2.2.1)</code>的版本不兼容，解决办法如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip uninstall urllib3</span><br><span class="line">pip uninstall chardet</span><br><span class="line">pip install requests</span><br></pre></td></tr></table></figure></p><h2><span id="安装插件">安装插件</span></h2><p>登陆jenkins的web页面，选择<code>系统管理</code>—&gt;<code>管理插件</code>，安装如下三个插件：<code>Ansible plugin</code>、<code>Ansible Tower Plugin</code>、<code>AnsiColor</code>。如图：<br><img src="/images/jenkinsansible1.png" alt="akb48"></p><p>安装插件并且重启了ansible之后，还是<code>系统管理-</code>–&gt;<code>全局工具配置</code>，找到<code>ansible安装</code>，分别把ansible的路径根据实际情况填写进去，如图：<br><img src="/images/jenkinsansible3.png" alt="akb48"></p><p>填写完毕之后保存即可。</p><h2><span id="配置工程">配置工程</span></h2><p>打开某一个project，就用之前在<a href="https://rorschachchan.github.io/2018/05/25/Gitlab-Jenkins搭建持续集成系统/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/05/25/Gitlab-Jenkins搭建持续集成系统/</a> 这个文章里用到的jicheng-test，因为它已经跟gitlab集成了，所以只要gitlab有commit变化，就会webhook到jenkins进行操作。</p><p>配置jicheng-test，选择<code>构建</code>这个标签页。在<code>增加构建步骤</code>选择<code>Invoke Ansible Ad-Hoc Command</code>，这里我为了做实验随便写了一点命令，如图：<br><img src="/images/jenkinsansible4.png" alt="akb48"></p><p>上面的配置就是先让jenkins输出<code>这个是来自jenkins机器的信息！！</code>，然后启动ansible，对<code>/etc/ansible/hosts</code>里的所有ip机器执行<code>hostname</code>和<code>cd /mnt ; echo &quot;我是你大爷！&quot; &gt;&gt; 321.txt</code>这两个命令。</p><h2><span id="测试结果">测试结果</span></h2><p>前文说了，这个jicheng-test已经做了<code>gitlab+jenkins</code>的配置，所以只要在代码服务器的git文件夹里，执行commit，代码被push到gitlab服务器上的同时也会触发jenkins打包。</p><p>于是操作如图：<br><img src="/images/jenkinsansible5.png" alt="akb48"></p><p>在gitlab的网页端查看代码已经上传：<br><img src="/images/jenkinsansible6.png" alt="akb48"></p><p>再去jenkins里确认是否被成功触发了：<br><img src="/images/jenkinsansible7.png" alt="akb48"></p><p>这次操作显示蓝灯，就是OK，点击选择控制台输出，查看一下执行细节：<br><img src="/images/jenkinsansible8.png" alt="akb48"></p><p>效果达到！试验成功！</p><p>如果需要回滚，就在jenkins新建一个与gitlab相连的project，切换gitlab的分支，然后重新commit，触发jenkins打包并且ansible部署即可。</p><h2><span id="故障排错">故障排错</span></h2><p>可能在jenkins集成的时候出现如下错误:<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">代码服务器ip| UNREACHABLE! =&gt; &#123;</span><br><span class="line">   &quot;changed&quot;: false, </span><br><span class="line">   &quot;msg&quot;: &quot;Failed to connect to the host via ssh: Host key verification failed.\r\n&quot;, </span><br><span class="line">   &quot;unreachable&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>这是因为jenkins在执行ansible是通过jenkins用户去操作的，虽然我们在安装ansible那一步的时候已经构建了服务器之间的ssh关系，但是那只是root用户的，所以如果没配置jenkins用户的ssh免密码登录，那么<code>sudo su -s /bin/bash jenkins</code>切换到jenkins用户在<code>ssh jenkins@目标IP</code>这一步的时候，会出现如下的提示：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">The authenticity of host &apos;目标IP(目标IP)&apos; can&apos;t be established.</span><br><span class="line">ECDSA key fingerprint is SHA256:Nerx/EZH+ul0/qeb21+ii5EctQ0mO8hijIDlAWEGje8.</span><br><span class="line">ECDSA key fingerprint is MD5:6e:d8:6d:17:ca:79:9c:5e:bc:7e:9e:e6:33:41:08:25.</span><br><span class="line">Are you sure you want to continue connecting (yes/no)?</span><br></pre></td></tr></table></figure></p><p>因为ansible不会主动帮你输入yes，所以还需要在jenkins用户下把<code>id_dsa.pub</code>文件添加到代码服务器的<code>authorized_keys</code>里，制作一个ssh免密码登录。如果这时候你手动执行一下<code>ssh jenkins@目标IP</code>并且输入yes之后，再重新构建这个project就会发现错误变样了：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">代码服务器ip | UNREACHABLE! =&gt; &#123;</span><br><span class="line">   &quot;changed&quot;: false, </span><br><span class="line">   &quot;msg&quot;: &quot;Failed to connect to the host via ssh: Permission denied (publickey,gssapi-keyex,gssapi-with-mic,password).\r\n&quot;, </span><br><span class="line">   &quot;unreachable&quot;: true</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p><p>原因还是上面的话，由于目标机器上是没有jenkins这个用户的，所以自然也不会存在登录密码，即使用了jenkins用户制作了<code>authorized_keys</code>也是没用，所以需要指定ssh到目标IP的用户，如果是ansible的命令就是<code>ansible all -i /etc/ansible/hosts -u root -m shell -a &quot;具体的shell命令&quot;</code>，但是jenkins里配置root的地方很难找，所以就可以在<code>/etc/ansible/hosts</code>里更改一下，改成如下的样子：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">目标ip地址 ansible_ssh_user=root#指定用root用户登录到目标IP，</span><br></pre></td></tr></table></figure></p><p>这样执行命令就没有障碍了，不过root用户权限过大，实际生产环境还是建立一个更加保险的账号最佳。</p>]]></content>
-    
-    <summary type="html">
-    
-      gitlab提交版本信息，触发jenkins打包，然后ansible直接部署，三位合一，滚也好滚
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="ansible" scheme="http://yoursite.com/tags/ansible/"/>
-    
-      <category term="jenkins" scheme="http://yoursite.com/tags/jenkins/"/>
     
   </entry>
   
