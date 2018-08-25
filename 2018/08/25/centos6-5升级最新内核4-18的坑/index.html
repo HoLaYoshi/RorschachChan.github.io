@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/centos6updatecore1.png">
 <meta property="og:image" content="http://yoursite.com/images/centos6updatecore2.png">
-<meta property="og:updated_time" content="2018-08-25T06:00:53.516Z">
+<meta property="og:updated_time" content="2018-08-25T06:28:36.794Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Centos6.5升级最新内核4.18的坑">
 <meta name="twitter:description" content="修改/usr/share/dracut/modules.d/90kernel-modules/installkernel把blk_init_queue修改为blk_mq_init_queue，然后重新rpm -ivh也可以">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  715
+                  712
                 </span>
               
 
@@ -464,9 +464,9 @@
 <p>然后在阿里云控制台重启一下这个服务器即可。</p>
 <h2><span id="无法启动">无法启动？</span></h2><p>可能有的人直接就启动成功了，因为网络上很多文章到此就结束了。但是我这台服务器，很不幸，出现了问题。在控制台上看服务器是“运行中”，但是无法ssh连接，而且ping也是失败。不一会，控制台的服务器就显示“已停止”，可见是内核出了问题。</p>
 <p>联系了阿里的后台，他们反馈这个机器现在的状态是<code>Module scsi_wait_scan not found</code>，那知道了原因就对症下药吧，这个问题解决方法不止一个，我亲测以下的方法好使。</p>
-<p>首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">'add_drivers+="virtio_blk"'</span> &gt;<span class="regexp">/etc/</span>dracut.conf.d/force-vitio_blk-to-ensure-boot.conf</span><br><span class="line">cp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak		#把新下载的4.18的img文件备份</span><br><span class="line">dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64	#4.18.5-1.el6.elrepo.x86_64这个文件就是/lib/modules/下的，编译生成新的img</span><br></pre></td></tr></table></figure></p>
+<p>首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">'add_drivers+="virtio_blk"'</span> &gt;<span class="regexp">/etc/</span>dracut.conf.d/force-vitio_blk-to-ensure-boot.conf</span><br><span class="line">cp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak		#把新下载的4.18的img文件备份</span><br><span class="line">dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64	#编译生成新的img，4.18.5-1.el6.elrepo.x86_64这个文件在/lib/modules/下</span><br></pre></td></tr></table></figure></p>
 <p>重新在阿里云控制台重启一下这个服务器，这一次就OK了。<br><img src="/images/centos6updatecore2.png" alt="akb48"></p>
-<p>发生异常的原因是：更新内核后,在写dracut程序时无法检测KVM’s virtual disk driver “virtio_blk”，此驱动被用于访问 KVM 虚拟磁盘,dracut 没有正常添加新的initramfs module,导致系统没有磁盘访问驱动无法正常启动。</p>
+<p>发生异常的原因是：更新内核后,在写dracut程序时无法检测<code>KVM&#39;s virtual disk driver &quot;virtio_blk&quot;</code>，此驱动被用于访问KVM虚拟磁盘,dracut没有正常添加新的<code>initramfs module</code>,导致系统没有磁盘访问驱动无法正常启动。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://bugzilla.kernel.org/show_bug.cgi?id=60758" target="_blank" rel="noopener">https://bugzilla.kernel.org/show_bug.cgi?id=60758</a><br><a href="https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/" target="_blank" rel="noopener">https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/</a></p>
 
       
