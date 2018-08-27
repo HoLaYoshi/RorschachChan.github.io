@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[K8s从部署到扩容]]></title>
+    <url>%2F2018%2F08%2F27%2FK8s%E4%BB%8E%E9%83%A8%E7%BD%B2%E5%88%B0%E6%89%A9%E5%AE%B9%2F</url>
+    <content type="text"><![CDATA[环境说明kubenetes:阿里云服务，版本v1.10.4，三个master，一个node，我也不知道为啥阿里云设定master最少是3个，而node最少可以是1个…服务器:阿里云Centos 7.4 部署服务首先，我们先部署一个nginx。命令如下：kubectl run nginx-test --image=nginx:latest --port=80。 同理，再部署一个redis的话，就是找葫芦画瓢：kubectl run redis-test --image=redis:latest --port=6379。 这就给k8s下达了一个deployment（部署任务），可kubectl get deployments和kubectl get pods命令查看： 可以看到现在已经生成了对应的pod，而pod里就是容器了，容器里就是对应的nginx服务。如果想爬进这个容器看一下里面的文件等情况，命令是：kubectl exec -it nginx-test-bb95c4645-7qpbj bash。 这里插播一下kubectl get pods里各参数的含义： 1234DESIRED状态显示配置的副本数CURRENT状态显示现在正在运行的副本数量UP-TO-DATE是已更新以匹配所需（已配置）状态的副本数AVAILABLE状态显示实际可用于用户的副本数量 但是现在这个服务是外网无法访问的，因为宿主机还没有一个端口与这个nginx容器的80端口相对应。所以要暴露一个端口给外部，让他们可以访问到这个nginx。命令是：kubectl expose deployment/kubernetes-bootcamp --type=&quot;NodePort&quot; --port 80，然后用kubectl get services查看一下效果： 然后在对应的master和node里就看到30497端口已经启动了，如图： 在浏览器上看一下，果然可以访问到nginx服务： 扩容服务服务总有高峰低谷，比如微博，突然爆出来哪个娱乐明星的新闻，肯定就会有大量的流量涌入，此时就需要扩容，那么k8s的扩容很简单，就是pod的复制，如果要把上面那个nginx-test的部署任务进行扩展，命令就是kubectl scale deployments/nginx-test --replicas=4，如图： 可见nginx-test又生成了三个pod，与原来的组成了4个pod，而另一个redis的部署任务是没有变化的。 用kubectl get pods -o wide可见，每一个pod分配到了不同的虚拟IP上，而且node都是阿里云的那台node服务器。 在阿里云控制台也能看到里面的情况： 此时进入到node节点，docker ps -a就会看到新的nginx景象生成，同时也生成了三个/pause的容器： kubernetes中的pause容器主要为每个业务容器提供以下功能： 在pod中担任Linux命名空间共享的基础； 启用pid命名空间，开启init进程。 此时如果在访问，就会看到访问会相对均匀的落到这四个pod中的每一个，起到一个负载均衡的作用。如果高峰期过了，不需要那么多pod了，就kubectl scale deployments/nginx-test --replicas=1，pod就会恢复成1个，据我几次试验，每次都是保留最老的那一个pod。 参考资料https://jimmysong.io/posts/what-is-a-pause-container/https://blog.csdn.net/mailjoin/article/details/79686937http://pipul.org/2016/05/why-we-need-the-pod-and-service-of-kubernetes/https://www.imooc.com/article/30473]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>容器</tag>
+        <tag>阿里云</tag>
+        <tag>kubenetes</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Centos6.5升级最新内核4.18的坑]]></title>
     <url>%2F2018%2F08%2F25%2Fcentos6-5%E5%8D%87%E7%BA%A7%E6%9C%80%E6%96%B0%E5%86%85%E6%A0%B84-18%E7%9A%84%E5%9D%91%2F</url>
     <content type="text"><![CDATA[升级流程开发童鞋要搞BBR，然后让我在他的阿里云服务器上升级一下内核。我登进去一看，centos 6.5，内核还是2.6的。 之前我曾经搞过centos 7升级内核到最新版，文章在此：https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/ 。centos6升级内核有几个地方不太一样，但是过程差不多。整个升级内核步骤如下： 12345先备份镜像，很重要！！！ 而且备份镜像成功之前，云服务器不可以重启。yum uodate -yrpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org #导入ELRepo GPG keyrpm -Uvh https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm #安装 6版本的ELRepoyum --enablerepo=elrepo-kernel install kernel-ml -y #截至本文，最新的是4.18，lt版本是4.4 如果yum的时候有提示Warning: RPMDB altered outside of yum，只需要删除一下yum的历史记录即可：rm -rf /var/lib/yum/history/*.sqlite 。 安装完毕之后，vim /etc/grub.conf，把default改成0，即指定使用第一个内核启动，如图： 然后在阿里云控制台重启一下这个服务器即可。 无法启动？可能有的人直接就启动成功了，因为网络上很多文章到此就结束了。但是我这台服务器，很不幸，出现了问题。在控制台上看服务器是“运行中”，但是无法ssh连接，而且ping也是失败。不一会，控制台的服务器就显示“已停止”，可见是内核出了问题。 联系了阿里的后台，他们反馈这个机器现在的状态是Module scsi_wait_scan not found，那知道了原因就对症下药吧，这个问题解决方法不止一个，我亲测以下的方法好使。 首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下： 123echo 'add_drivers+="virtio_blk"' &gt;/etc/dracut.conf.d/force-vitio_blk-to-ensure-boot.confcp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak #把新下载的4.18的img文件备份dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64 #编译生成新的img，4.18.5-1.el6.elrepo.x86_64这个文件在/lib/modules/下 重新在阿里云控制台重启一下这个服务器，这一次就OK了。 发生异常的原因是：更新内核后,在写dracut程序时无法检测KVM&#39;s virtual disk driver &quot;virtio_blk&quot;，此驱动被用于访问KVM虚拟磁盘,dracut没有正常添加新的initramfs module,导致系统没有磁盘访问驱动无法正常启动。 参考资料https://bugzilla.kernel.org/show_bug.cgi?id=60758https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/]]></content>
@@ -145,8 +158,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -170,8 +183,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -183,8 +196,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -559,18 +572,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root启动进程以及启动docker]]></title>
-    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root用户启动tomcat进程]]></title>
     <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
     <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
@@ -580,6 +581,18 @@
       <tags>
         <tag>centos</tag>
         <tag>运维安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root启动进程以及启动docker]]></title>
+    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -980,8 +993,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>阿里云</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -1717,8 +1730,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>zabbix</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
