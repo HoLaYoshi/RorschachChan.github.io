@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title><![CDATA[K8S从部署到扩容]]></title>
+    <title><![CDATA[K8S的基础操作]]></title>
     <url>%2F2018%2F08%2F27%2FK8s%E4%BB%8E%E9%83%A8%E7%BD%B2%E5%88%B0%E6%89%A9%E5%AE%B9%2F</url>
-    <content type="text"><![CDATA[环境说明kubenetes:阿里云服务，版本v1.10.4，三个master，一个node，我也不知道为啥阿里云设定master最少是3个，而node最少可以是1个…服务器:阿里云Centos 7.4 部署服务首先，我们先部署一个以dockhub最新nginx镜像为底的nginx。命令如下：kubectl run nginx-test --image=nginx:latest --port=80。同理，再部署一个最新版redis的话，就是找葫芦画瓢：kubectl run redis-test --image=redis:latest --port=6379。 两个命令敲完，这就给k8s下达了一个deployment（部署任务），可kubectl get deployments和kubectl get pods命令查看： 可以看到现在已经生成了对应的pod，而pod里就是容器了，容器里就是对应的nginx服务。如果想爬进这个容器看一下里面的文件等情况，命令是：kubectl exec -it nginx-test-bb95c4645-7qpbj bash。 这里插播一下kubectl get deployment里各参数的含义： 1234DESIRED状态显示配置的副本数CURRENT状态显示现在正在运行的副本数量UP-TO-DATE是已更新以匹配所需（已配置）状态的副本数AVAILABLE状态显示实际可用于用户的副本数量 但是现在这个服务是外网无法访问的，因为宿主机还没有一个端口与这个nginx容器的80端口相对应。所以要暴露一个端口给外部用于访问。命令是：kubectl expose deployment/kubernetes-bootcamp --type=&quot;NodePort&quot; --port 80，然后用kubectl get services查看一下效果： 然后在对应的master和node里就看到宿主机随机分配的那个30497端口已经启动了，如图： 在浏览器上访问一下30497端口，果然可以访问到nginx服务： 扩容服务服务嘛，总有高峰低谷。比如微博，突然爆出来哪个娱乐明星的新闻，肯定就会有大量的流量涌入，此时就需要扩容，那么k8s的扩容很简单，就是pod的复制，如果要把上面那个nginx-test的部署任务进行扩展，命令就是kubectl scale deployments/nginx-test --replicas=4，如图： 可见nginx-test又生成了三个pod，与原来的组成了4个pod，而另一个redis的部署任务是没有变化的。 用kubectl get pods -o wide可见，每一个pod分配到了不同的虚拟IP上，而且node都是阿里云的那台node服务器。 在阿里云控制台也能看到里面的情况： 此时进入到node节点，docker ps -a就会看到新的nginx景象生成，同时也生成了三个/pause的容器： kubernetes中的pause容器主要为每个业务容器提供以下功能： 在pod中担任Linux命名空间共享的基础； 启用pid命名空间，开启init进程。 此时如果在访问，就会看到访问会相对均匀的落到这四个pod中的每一个，起到一个负载均衡的作用。如果高峰期过了，不需要那么多pod了，就kubectl scale deployments/nginx-test --replicas=1，pod就会恢复成1个，据我几次试验，每次都是保留最老的那一个pod。 参考资料https://jimmysong.io/posts/what-is-a-pause-container/https://blog.csdn.net/mailjoin/article/details/79686937http://pipul.org/2016/05/why-we-need-the-pod-and-service-of-kubernetes/https://www.imooc.com/article/30473]]></content>
+    <content type="text"><![CDATA[环境说明kubenetes:阿里云服务，版本v1.10.4，三个master，一个node，我也不知道为啥阿里云设定master最少是3个，而node最少可以是1个…服务器:阿里云Centos 7.4 部署服务首先，我们先部署一个以dockhub最新nginx镜像为底的nginx。命令如下：kubectl run nginx-test --image=nginx:latest --port=80。同理，再部署一个最新版redis的话，就是找葫芦画瓢：kubectl run redis-test --image=redis:latest --port=6379。 两个命令敲完，这就给k8s下达了一个deployment（部署任务），可kubectl get deployments和kubectl get pods命令查看： 可以看到现在已经生成了对应的pod，而pod里就是容器了，容器里就是对应的nginx服务。如果想爬进这个容器看一下里面的文件等情况，命令是：kubectl exec -it nginx-test-bb95c4645-7qpbj bash。 这里插播一下kubectl get deployment里各参数的含义： 1234DESIRED状态显示配置的副本数CURRENT状态显示现在正在运行的副本数量UP-TO-DATE是已更新以匹配所需（已配置）状态的副本数AVAILABLE状态显示实际可用于用户的副本数量 但是现在这个服务是外网无法访问的，因为宿主机还没有一个端口与这个nginx容器的80端口相对应。所以要暴露一个端口给外部用于访问。命令是：kubectl expose deployment/kubernetes-bootcamp --type=&quot;NodePort&quot; --port 80，然后用kubectl get services查看一下效果： 然后在对应的master和node里就看到宿主机随机分配的那个30497端口已经启动了，如图： 在浏览器上访问一下30497端口，果然可以访问到nginx服务： 扩容服务服务嘛，总有高峰低谷。比如微博，突然爆出来哪个娱乐明星的新闻，肯定就会有大量的流量涌入，此时就需要扩容，那么k8s的扩容很简单，就是pod的复制，如果要把上面那个nginx-test的部署任务进行扩展，命令就是kubectl scale deployments/nginx-test --replicas=4，如图： 可见nginx-test又生成了三个pod，与原来的组成了4个pod，而另一个redis的部署任务是没有变化的。 用kubectl get pods -o wide可见，每一个pod分配到了不同的虚拟IP上，而且node都是阿里云的那台node服务器。 在阿里云控制台也能看到里面的情况： 此时进入到node节点，docker ps -a就会看到新的nginx景象生成，同时也生成了三个/pause的容器： kubernetes中的pause容器主要为每个业务容器提供以下功能： 在pod中担任Linux命名空间共享的基础； 启用pid命名空间，开启init进程。 此时如果在访问，就会看到访问会相对均匀的落到这四个pod中的每一个，起到一个负载均衡的作用。如果高峰期过了，不需要那么多pod了，就kubectl scale deployments/nginx-test --replicas=1，pod就会恢复成1个，据我几次试验，每次都是保留最老的那一个pod。 yaml文件创建一个podK8S的yaml文件怎么写，官方社区就有教程：https://www.kubernetes.org.cn/1414.html 。但是如果要搭配阿里云的私有景象，需要先参考一下https://help.aliyun.com/document_detail/86562.html 。注意，这个方法不能在命令行里使用，只能在yaml或者json里用。这里先写一个简单的nginx配置文件pod-nginx.yaml： 1234567891011121314151617181920---apiVersion: v1kind: Podmetadata: name: aliyun-nginx labels: app: webspec: restartPolicy: Always #表明该容器一直运行，默认k8s的策略，在此容器退出后，会立即创建一个相同的容器 nodeSelector: zone: node1 #节点选择 containers: - name: aliyun-test-nginx image: registry-vpc.cn-hangzhou.aliyuncs.com/lechangetest/chentest:1.1 imagePullPolicy: IfNotPresent #可选择Always、Never、IfNotPresent，即每次启动时检查和更新images的策略，IfNotPresent是节点上没有此nginx镜像时才执行pull操作 ports: - containerPort: 80 #容器开发对外的端口 hostPort: 33664 #映射到主机的端口/对外映射的端口（一般可以不写） imagePullSecrets: - name: regsecret 保存退出，再kubectl create -f pod-redis.yaml把这个文件执行一下。然后kubectl get pod看一下效果： 发现我们创建那个redis-pod状态是Pending（等待中），那就是不成功啊。于是就kubectl describe pod/pod-redis查看一下原因，反馈如下： 这个错误的意思是“如果指定的label在所有node上都无法匹配，则创建Pod失败”。那先把pod-redis删除掉，然后把nodeSelector那一行去掉再重新create一下。kubectl get pod检查一下： 然后就是给这个pod增加一个对外的端口。kubectl expose pod/aliyun-nginx --type=&quot;NodePort&quot; --port 80，效果如下： 再去浏览器里，输入node的外网网址：31829看看效果： 配置成功，当然这整个过程也可以在阿里云的控制台操作，而且阿里云会自动把对外端口配置到SLB里，步骤可以看 升级与回滚假设我们把nginx-test这个deployment的镜像升级成阿里云私有仓库的1.1版本，那么命令是： 1kubectl set image deployments/nginx-test nginx-test=registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:1.1 升级之后，kubectl get pod发现有几个节点不正常，如图： 那么这种情况下需要紧急回滚，回滚命令： 1kubectl rollout undo deployment/nginx-test 一会就看到回滚成功了。如图： 参考资料https://jimmysong.io/posts/what-is-a-pause-container/https://blog.csdn.net/mailjoin/article/details/79686937http://pipul.org/2016/05/why-we-need-the-pod-and-service-of-kubernetes/https://www.imooc.com/article/30473]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -158,8 +158,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -183,8 +183,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -196,8 +196,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>mycat</tag>
         <tag>数据库中间件</tag>
+        <tag>mycat</tag>
       </tags>
   </entry>
   <entry>
@@ -572,18 +572,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root用户启动tomcat进程]]></title>
-    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>运维安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root启动进程以及启动docker]]></title>
     <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
     <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
@@ -593,6 +581,18 @@
       <tags>
         <tag>docker</tag>
         <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root用户启动tomcat进程]]></title>
+    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>运维安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1730,8 +1730,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -1742,8 +1742,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>nginx</tag>
         <tag>运维技术</tag>
+        <tag>nginx</tag>
       </tags>
   </entry>
   <entry>

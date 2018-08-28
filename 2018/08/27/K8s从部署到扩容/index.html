@@ -91,7 +91,7 @@
 <meta name="description" content="基础笔记，基础笔记而已...">
 <meta name="keywords" content="容器,阿里云,kubenetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8S从部署到扩容">
+<meta property="og:title" content="K8S的基础操作">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/K8s从部署到扩容/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="基础笔记，基础笔记而已...">
@@ -104,9 +104,16 @@
 <meta property="og:image" content="http://yoursite.com/images/k8s15.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s16.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s17.png">
-<meta property="og:updated_time" content="2018-08-28T01:36:41.789Z">
+<meta property="og:image" content="http://yoursite.com/images/k8s18.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s19.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s20.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s21.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s22.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s23.png">
+<meta property="og:image" content="http://yoursite.com/images/k8s24.png">
+<meta property="og:updated_time" content="2018-08-28T07:39:53.342Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="K8S从部署到扩容">
+<meta name="twitter:title" content="K8S的基础操作">
 <meta name="twitter:description" content="基础笔记，基础笔记而已...">
 <meta name="twitter:image" content="http://yoursite.com/images/k8s10.png">
 
@@ -144,7 +151,7 @@
 
 
 
-  <title>K8S从部署到扩容 | Chris Chan's BLOG</title>
+  <title>K8S的基础操作 | Chris Chan's BLOG</title>
   
 
 
@@ -344,7 +351,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">K8S从部署到扩容</h1>
+          <h1 class="post-title" itemprop="name headline">K8S的基础操作</h1>
         
 
         <div class="post-meta">
@@ -396,7 +403,7 @@
 
           
           
-             <span id="/2018/08/27/K8s从部署到扩容/" class="leancloud_visitors" data-flag-title="K8S从部署到扩容">
+             <span id="/2018/08/27/K8s从部署到扩容/" class="leancloud_visitors" data-flag-title="K8S的基础操作">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -422,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  828
+                  1,427
                 </span>
               
 
@@ -438,7 +445,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  6
                 </span>
               
             </div>
@@ -482,6 +489,17 @@
 <li>启用pid命名空间，开启init进程。</li>
 </ol>
 <p>此时如果在访问，就会看到访问会相对均匀的落到这四个pod中的每一个，起到一个负载均衡的作用。如果高峰期过了，不需要那么多pod了，就<code>kubectl scale deployments/nginx-test  --replicas=1</code>，pod就会恢复成1个，据我几次试验，每次都是保留最老的那一个pod。</p>
+<h2><span id="yaml文件创建一个pod">yaml文件创建一个pod</span></h2><p>K8S的yaml文件怎么写，官方社区就有教程：<a href="https://www.kubernetes.org.cn/1414.html" target="_blank" rel="noopener">https://www.kubernetes.org.cn/1414.html</a> 。但是如果要搭配阿里云的私有景象，需要先参考一下<a href="https://help.aliyun.com/document_detail/86562.html" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/86562.html</a> 。注意，这个方法不能在命令行里使用，只能在yaml或者json里用。这里先写一个简单的nginx配置文件<code>pod-nginx.yaml</code>：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: aliyun-nginx</span><br><span class="line">  labels:</span><br><span class="line">    app: web</span><br><span class="line">spec:</span><br><span class="line">  restartPolicy: Always         #表明该容器一直运行，默认k8s的策略，在此容器退出后，会立即创建一个相同的容器</span><br><span class="line">  nodeSelector:  </span><br><span class="line">   	zone: node1			#节点选择</span><br><span class="line">  containers:</span><br><span class="line">  - name: aliyun-test-nginx</span><br><span class="line">    image: registry-vpc.cn-hangzhou.aliyuncs.com/lechangetest/chentest:<span class="number">1.1</span></span><br><span class="line">    imagePullPolicy: IfNotPresent      #可选择Always、Never、IfNotPresent，即每次启动时检查和更新images的策略，IfNotPresent是节点上没有此nginx镜像时才执行pull操作</span><br><span class="line">    ports:</span><br><span class="line">    - containerPort: 80       #容器开发对外的端口</span><br><span class="line">      hostPort: 33664            #映射到主机的端口/对外映射的端口（一般可以不写）</span><br><span class="line">  imagePullSecrets:</span><br><span class="line">    - name: regsecret</span><br></pre></td></tr></table></figure></p>
+<p>保存退出，再<code>kubectl create -f pod-redis.yaml</code>把这个文件执行一下。然后<code>kubectl get pod</code>看一下效果：<br><img src="/images/k8s18.png" alt="paradin"></p>
+<p>发现我们创建那个redis-pod状态是<code>Pending</code>（等待中），那就是不成功啊。于是就<code>kubectl describe pod/pod-redis</code>查看一下原因，反馈如下：<br><img src="/images/k8s19.png" alt="paradin"></p>
+<p>这个错误的意思是“如果指定的label在所有node上都无法匹配，则创建Pod失败”。那先把<code>pod-redis</code>删除掉，然后把<code>nodeSelector</code>那一行去掉再重新create一下。<code>kubectl get pod</code>检查一下：<br><img src="/images/k8s20.png" alt="paradin"></p>
+<p>然后就是给这个pod增加一个对外的端口。<code>kubectl expose pod/aliyun-nginx --type=&quot;NodePort&quot; --port 80</code>，效果如下：<br><img src="/images/k8s21.png" alt="paradin"></p>
+<p>再去浏览器里，输入<code>node的外网网址：31829</code>看看效果：<br><img src="/images/k8s22.png" alt="paradin"></p>
+<p>配置成功，当然这整个过程也可以在阿里云的控制台操作，而且阿里云会自动把对外端口配置到SLB里，步骤可以看</p>
+<h2><span id="升级与回滚">升级与回滚</span></h2><p>假设我们把nginx-test这个deployment的镜像升级成阿里云私有仓库的1.1版本，那么命令是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl set image deployments/nginx-test nginx-test=registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:<span class="number">1.1</span></span><br></pre></td></tr></table></figure></p>
+<p>升级之后，<code>kubectl get pod</code>发现有几个节点不正常，如图：<br><img src="/images/k8s23.png" alt="paradin"></p>
+<p>那么这种情况下需要紧急回滚，回滚命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl rollout undo deployment/nginx-test</span><br></pre></td></tr></table></figure></p>
+<p>一会就看到回滚成功了。如图：<br><img src="/images/k8s24.png" alt="paradin"></p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/what-is-a-pause-container/" target="_blank" rel="noopener">https://jimmysong.io/posts/what-is-a-pause-container/</a><br><a href="https://blog.csdn.net/mailjoin/article/details/79686937" target="_blank" rel="noopener">https://blog.csdn.net/mailjoin/article/details/79686937</a><br><a href="http://pipul.org/2016/05/why-we-need-the-pod-and-service-of-kubernetes/" target="_blank" rel="noopener">http://pipul.org/2016/05/why-we-need-the-pod-and-service-of-kubernetes/</a><br><a href="https://www.imooc.com/article/30473" target="_blank" rel="noopener">https://www.imooc.com/article/30473</a></p>
 
       
@@ -547,7 +565,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/08/27/K8s从部署到扩容/" title="K8S从部署到扩容">K8S从部署到扩容</a>
+					<a href="http://yoursite.com/2018/08/27/K8s从部署到扩容/" title="K8S的基础操作">K8S的基础操作</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -879,7 +897,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x73AF;&#x5883;&#x8BF4;&#x660E;">&#x73AF;&#x5883;&#x8BF4;&#x660E;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x90E8;&#x7F72;&#x670D;&#x52A1;">&#x90E8;&#x7F72;&#x670D;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x6269;&#x5BB9;&#x670D;&#x52A1;">&#x6269;&#x5BB9;&#x670D;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x73AF;&#x5883;&#x8BF4;&#x660E;">&#x73AF;&#x5883;&#x8BF4;&#x660E;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x90E8;&#x7F72;&#x670D;&#x52A1;">&#x90E8;&#x7F72;&#x670D;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x6269;&#x5BB9;&#x670D;&#x52A1;">&#x6269;&#x5BB9;&#x670D;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="yaml&#x6587;&#x4EF6;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;pod">yaml&#x6587;&#x4EF6;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;pod</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x5347;&#x7EA7;&#x4E0E;&#x56DE;&#x6EDA;">&#x5347;&#x7EA7;&#x4E0E;&#x56DE;&#x6EDA;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -932,7 +950,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共152.1k字</span>
+  <span class="post-count">博客全站共152.7k字</span>
 </div>
         
 
