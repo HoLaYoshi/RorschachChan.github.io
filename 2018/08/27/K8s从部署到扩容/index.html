@@ -91,7 +91,7 @@
 <meta name="description" content="基础笔记，基础笔记而已...">
 <meta name="keywords" content="容器,阿里云,kubenetes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="K8S的基础操作">
+<meta property="og:title" content="K8s的基础操作">
 <meta property="og:url" content="http://yoursite.com/2018/08/27/K8s从部署到扩容/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="基础笔记，基础笔记而已...">
@@ -111,9 +111,9 @@
 <meta property="og:image" content="http://yoursite.com/images/k8s22.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s23.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s24.png">
-<meta property="og:updated_time" content="2018-08-28T07:42:29.056Z">
+<meta property="og:updated_time" content="2018-08-28T07:49:24.827Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="K8S的基础操作">
+<meta name="twitter:title" content="K8s的基础操作">
 <meta name="twitter:description" content="基础笔记，基础笔记而已...">
 <meta name="twitter:image" content="http://yoursite.com/images/k8s10.png">
 
@@ -151,7 +151,7 @@
 
 
 
-  <title>K8S的基础操作 | Chris Chan's BLOG</title>
+  <title>K8s的基础操作 | Chris Chan's BLOG</title>
   
 
 
@@ -351,7 +351,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">K8S的基础操作</h1>
+          <h1 class="post-title" itemprop="name headline">K8s的基础操作</h1>
         
 
         <div class="post-meta">
@@ -403,7 +403,7 @@
 
           
           
-             <span id="/2018/08/27/K8s从部署到扩容/" class="leancloud_visitors" data-flag-title="K8S的基础操作">
+             <span id="/2018/08/27/K8s从部署到扩容/" class="leancloud_visitors" data-flag-title="K8s的基础操作">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,459
+                  1,474
                 </span>
               
 
@@ -495,8 +495,8 @@
 <p>这个错误的意思是“如果指定的label在所有node上都无法匹配，则创建Pod失败”。那先把<code>pod-redis</code>删除掉，然后把<code>nodeSelector</code>那一行去掉再重新create一下。<code>kubectl get pod</code>检查一下：<br><img src="/images/k8s20.png" alt="paradin"></p>
 <p>然后就是给这个pod增加一个对外的端口。<code>kubectl expose pod/aliyun-nginx --type=&quot;NodePort&quot; --port 80</code>，效果如下：<br><img src="/images/k8s21.png" alt="paradin"></p>
 <p>再去浏览器里，输入<code>node的外网网址：31829</code>看看效果：<br><img src="/images/k8s22.png" alt="paradin"></p>
-<p>配置成功，当然这整个过程也可以在阿里云的控制台操作，而且阿里云会自动把对外端口配置到SLB里，步骤可以看</p>
-<h2><span id="升级与回滚">升级与回滚</span></h2><p>假设我们把nginx-test这个deployment的镜像升级成阿里云私有仓库的1.1版本，那么命令是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl set image deployments/nginx-test nginx-test=registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:<span class="number">1.1</span></span><br></pre></td></tr></table></figure></p>
+<p>配置成功，当然这整个过程也可以在阿里云的控制台操作，更简单更直观，而且阿里云还会自动把对外端口配置到SLB里，步骤可以看阿里云的官方文档。</p>
+<h2><span id="升级与回滚">升级与回滚</span></h2><p>假设我们把<code>nginx-test</code>这个deployment的镜像升级成阿里云私有仓库的1.1版本，那么命令是：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl set image deployments/nginx-test nginx-test=registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:<span class="number">1.1</span></span><br></pre></td></tr></table></figure></p>
 <p>升级之后，<code>kubectl get pod</code>发现有几个节点不正常，如图：<br><img src="/images/k8s23.png" alt="paradin"></p>
 <p>那么这种情况下需要紧急回滚，回滚命令：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl rollout undo deployment/nginx-test</span><br></pre></td></tr></table></figure></p>
 <p>一会就看到回滚成功了。如图：<br><img src="/images/k8s24.png" alt="paradin"></p>
@@ -565,7 +565,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/08/27/K8s从部署到扩容/" title="K8S的基础操作">K8S的基础操作</a>
+					<a href="http://yoursite.com/2018/08/27/K8s从部署到扩容/" title="K8s的基础操作">K8s的基础操作</a>
 				</li>
 
 				<li class="post-copyright-date">
