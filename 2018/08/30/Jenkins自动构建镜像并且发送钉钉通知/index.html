@@ -98,7 +98,8 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsdingding2.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsdingding1.png">
-<meta property="og:updated_time" content="2018-08-30T05:44:06.460Z">
+<meta property="og:image" content="http://yoursite.com/images/jenkinsdingding3.png">
+<meta property="og:updated_time" content="2018-08-30T06:14:32.305Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins自动构建镜像并且发送钉钉通知">
 <meta name="twitter:description" content="使用Jenkins进行持续构建与发布应用到kubernetes集群中">
@@ -416,7 +417,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  439
+                  630
                 </span>
               
 
@@ -469,7 +470,9 @@
 <h2><span id="环境说明">环境说明</span></h2><p>Jenkins:2.124<br>云存储:阿里云OSS<br>Gitlab:10.7.3<br>镜像仓库:阿里云容器镜像仓库<br>钉钉:4.5.5</p>
 <h2><span id="jinkens安装钉钉插件">Jinkens安装钉钉插件</span></h2><p>既然要让jenkins调用钉钉发送成功消息，那么就需要把jenkins跟钉钉结合在一起。怎么配自定义钉钉机器人，请看<a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1" target="_blank" rel="noopener">https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1</a> 。而钉钉也是有官方的钉钉插件，在Jenkins界面<code>系统管理</code>–<code>管理插件</code>，然后搜索“dingding”，然后安装即可，如图：<br><img src="/images/jenkinsdingding1.png" alt="akb48"></p>
 <p>插件安装完毕之后，重启jenkins即可。</p>
-<h2><span id="挂载云存储">挂载云存储</span></h2><h2><span id="配置任务">配置任务</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/" target="_blank" rel="noopener">https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/</a></p>
+<h2><span id="挂载云存储">挂载云存储</span></h2><p>阿里云官方挂载云存储的方法是ossfs，登陆到jenkins所在的服务器(centos 7.4)里，步骤如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//github.com/aliyun/ossfs/releases/download/v1.80.5/ossfs_1.80.5_centos7.0_x86_64.rpm</span></span><br><span class="line">yum localinstall ossfs_1.80.5_centos7.0_x86_64.rpm 		#这一步安装可能会比较慢</span><br><span class="line">echo 需要挂载的bucket名:云存储对应ak:云存储对应sk &gt; /etc/passwd-ossfs	#将云存储的ak,sk写入到文件里</span><br><span class="line">chmod <span class="number">640</span> /etc/passwd-ossfs</span><br><span class="line">mkdir /tmp/ossfs	#创建挂载文件</span><br><span class="line">ossfs 需要挂载的bucket名 /tmp/ossfs -ourl=http:<span class="comment">//oss-cn-hangzhou-internal.aliyuncs.com	#如果不是阿里云就要用外网的endpoint</span></span><br></pre></td></tr></table></figure></p>
+<p>操作的效果如下，我挂载的bucket叫ligentest，毕竟代码是高度机密，属性设置是私有，256T的容量爽爽的：<br><img src="/images/jenkinsdingding3.png" alt="akb48"></p>
+<h2><span id="配置任务">配置任务</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/" target="_blank" rel="noopener">https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/</a></p>
 
       
     </div>
@@ -919,7 +922,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共153.2k字</span>
+  <span class="post-count">博客全站共153.4k字</span>
 </div>
         
 
