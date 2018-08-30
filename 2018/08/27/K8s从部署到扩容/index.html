@@ -111,7 +111,7 @@
 <meta property="og:image" content="http://yoursite.com/images/k8s22.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s23.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s24.png">
-<meta property="og:updated_time" content="2018-08-28T08:59:32.688Z">
+<meta property="og:updated_time" content="2018-08-29T07:14:22.810Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="K8s的基础操作">
 <meta name="twitter:description" content="基础笔记，基础笔记而已...">
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,525
+                  1,521
                 </span>
               
 
@@ -474,7 +474,7 @@
 <h2><span id="部署服务">部署服务</span></h2><p>首先，我们先部署一个以dockhub最新nginx镜像为底的nginx。命令如下：<code>kubectl run nginx-test --image=nginx:latest --port=80</code>。同理，再部署一个最新版redis的话，就是找葫芦画瓢：<code>kubectl run redis-test --image=redis:latest --port=6379</code>。</p>
 <p>两个命令敲完，这就给k8s下达了一个deployment（部署任务），可用<code>kubectl get deployments</code>和<code>kubectl get pods</code>命令查看：<br><img src="/images/k8s10.png" alt="paradin"></p>
 <p>可以看到现在已经生成了对应的pod，而pod里就是容器了，容器里就是对应的服务。如果想爬进这个容器看一下里面的文件等情况，命令是：<code>kubectl exec -it nginx-test-bb95c4645-7qpbj bash</code>。</p>
-<p>这里插播一下<code>kubectl get deployment</code>里各参数的含义：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DESIRED状态显示配置的副本数</span><br><span class="line">CURRENT状态显示现在正在运行的副本数量</span><br><span class="line">UP-TO-DATE是已更新以匹配所需（已配置）状态的副本数</span><br><span class="line">AVAILABLE状态显示实际可用于用户的副本数量</span><br></pre></td></tr></table></figure></p>
+<p>这里插播一下<code>kubectl get deployment</code>里各参数的含义：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">DESIRED：对应.spec.replicas，用户设定的期望副本数</span><br><span class="line">CURRENT：对应.status.replicas，目前运行的副本数</span><br><span class="line">UP-TO-DATE:对应.status.updatedReplicas，包含最新的pod template的副本数</span><br><span class="line">AVAILABLE：对应.status.availableReplicas，进入正常状态的副本数</span><br></pre></td></tr></table></figure></p>
 <p>但是现在这个服务是外网无法访问的，因为宿主机还没有一个端口与这个nginx容器的80端口相对应。所以要暴露一个端口给外部用于访问。命令是：<code>kubectl expose deployment/kubernetes-bootcamp --type=&quot;NodePort&quot; --port 80</code>，然后用<code>kubectl get services</code>查看一下效果：<br><img src="/images/k8s11.png" alt="paradin"></p>
 <p>然后在对应的master和node里就看到宿主机随机分配的那个30497端口已经启动了，如图：<br><img src="/images/k8s12.png" alt="paradin"></p>
 <p>在浏览器上访问一下30497端口，果然可以访问到nginx服务：<br><img src="/images/k8s13.png" alt="paradin"></p>
@@ -623,6 +623,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/08/30/Jenkins自动构建镜像并且发送钉钉通知/" rel="prev" title="Jenkins自动构建镜像并且发送钉钉通知">
+                Jenkins自动构建镜像并且发送钉钉通知 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -735,7 +739,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">160</span>
+                  <span class="site-state-item-count">161</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -757,7 +761,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">137</span>
+                  <span class="site-state-item-count">138</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -950,7 +954,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共152.8k字</span>
+  <span class="post-count">博客全站共153.1k字</span>
 </div>
         
 
