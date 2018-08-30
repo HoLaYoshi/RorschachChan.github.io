@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsdingding2.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkinsdingding1.png">
-<meta property="og:updated_time" content="2018-08-30T04:10:35.852Z">
+<meta property="og:updated_time" content="2018-08-30T05:44:06.460Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins自动构建镜像并且发送钉钉通知">
 <meta name="twitter:description" content="使用Jenkins进行持续构建与发布应用到kubernetes集群中">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  394
+                  439
                 </span>
               
 
@@ -432,7 +432,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  2
                 </span>
               
             </div>
@@ -466,9 +466,10 @@
 <li>Jinkens针对本次镜像和部署构建一个yaml文件；</li>
 <li>通过create这个yaml文件，启动对应的services，达到用户访问的目的，此时Jenkins再发一条钉钉通知。</li>
 </ol>
+<h2><span id="环境说明">环境说明</span></h2><p>Jenkins:2.124<br>云存储:阿里云OSS<br>Gitlab:10.7.3<br>镜像仓库:阿里云容器镜像仓库<br>钉钉:4.5.5</p>
 <h2><span id="jinkens安装钉钉插件">Jinkens安装钉钉插件</span></h2><p>既然要让jenkins调用钉钉发送成功消息，那么就需要把jenkins跟钉钉结合在一起。怎么配自定义钉钉机器人，请看<a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1" target="_blank" rel="noopener">https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1</a> 。而钉钉也是有官方的钉钉插件，在Jenkins界面<code>系统管理</code>–<code>管理插件</code>，然后搜索“dingding”，然后安装即可，如图：<br><img src="/images/jenkinsdingding1.png" alt="akb48"></p>
 <p>插件安装完毕之后，重启jenkins即可。</p>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/" target="_blank" rel="noopener">https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/</a></p>
+<h2><span id="挂载云存储">挂载云存储</span></h2><h2><span id="配置任务">配置任务</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/" target="_blank" rel="noopener">https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/</a></p>
 
       
     </div>
@@ -865,7 +866,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x90E8;&#x7F72;&#x6D41;&#x7A0B;&#x56FE;">&#x90E8;&#x7F72;&#x6D41;&#x7A0B;&#x56FE;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="jinkens&#x5B89;&#x88C5;&#x9489;&#x9489;&#x63D2;&#x4EF6;">Jinkens&#x5B89;&#x88C5;&#x9489;&#x9489;&#x63D2;&#x4EF6;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x90E8;&#x7F72;&#x6D41;&#x7A0B;&#x56FE;">&#x90E8;&#x7F72;&#x6D41;&#x7A0B;&#x56FE;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x73AF;&#x5883;&#x8BF4;&#x660E;">&#x73AF;&#x5883;&#x8BF4;&#x660E;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="jinkens&#x5B89;&#x88C5;&#x9489;&#x9489;&#x63D2;&#x4EF6;">Jinkens&#x5B89;&#x88C5;&#x9489;&#x9489;&#x63D2;&#x4EF6;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x6302;&#x8F7D;&#x4E91;&#x5B58;&#x50A8;">&#x6302;&#x8F7D;&#x4E91;&#x5B58;&#x50A8;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text"><span id="&#x914D;&#x7F6E;&#x4EFB;&#x52A1;">&#x914D;&#x7F6E;&#x4EFB;&#x52A1;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -918,7 +919,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共153.1k字</span>
+  <span class="post-count">博客全站共153.2k字</span>
 </div>
         
 

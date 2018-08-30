@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-08-30T04:10:35.852Z</updated>
+  <updated>2018-08-30T05:44:06.460Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://yoursite.com/2018/08/30/Jenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F%E5%B9%B6%E4%B8%94%E5%8F%91%E9%80%81%E9%92%89%E9%92%89%E9%80%9A%E7%9F%A5/"/>
     <id>http://yoursite.com/2018/08/30/Jenkins自动构建镜像并且发送钉钉通知/</id>
     <published>2018-08-30T03:39:27.000Z</published>
-    <updated>2018-08-30T04:10:35.852Z</updated>
+    <updated>2018-08-30T05:44:06.460Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="部署流程图">部署流程图</span></h2><p>k8s的基本操作已经了解之后，就可以把k8s引入到整个部署流程里，那么整个自动化的流程就如下图：<br><img src="/images/jenkinsdingding2.png" alt="akb48" title="这是宋净超大神的图，侵权则删"></p><p>图像已经说的很明白了，但是结合到我公司的政策，文字流程如下：</p><ol><li>开发将代码上传到svn或者gitlab，进行jira通知；</li><li>如果是svn的话，jenkins将新代码打包成zip文件，启动jenkins把windows的zip包上传到阿里云云存储上；如果是到gitlab，就不用打包成zip了，直接就把包传到云存储上；</li><li>Gitlab/Svn通过webhook通知jenkins去挂载云存储bucket的文件夹里，并且根据对应的dockerfile进行build成镜像，然后再把镜像推送到云镜像仓库里，推送成功后，Jenkins发送一个钉钉成功的通知；</li><li>Jinkens针对本次镜像和部署构建一个yaml文件；</li><li>通过create这个yaml文件，启动对应的services，达到用户访问的目的，此时Jenkins再发一条钉钉通知。</li></ol><h2><span id="jinkens安装钉钉插件">Jinkens安装钉钉插件</span></h2><p>既然要让jenkins调用钉钉发送成功消息，那么就需要把jenkins跟钉钉结合在一起。怎么配自定义钉钉机器人，请看<a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1" target="_blank" rel="noopener">https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1</a> 。而钉钉也是有官方的钉钉插件，在Jenkins界面<code>系统管理</code>–<code>管理插件</code>，然后搜索“dingding”，然后安装即可，如图：<br><img src="/images/jenkinsdingding1.png" alt="akb48"></p><p>插件安装完毕之后，重启jenkins即可。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/" target="_blank" rel="noopener">https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/</a></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="部署流程图">部署流程图</span></h2><p>k8s的基本操作已经了解之后，就可以把k8s引入到整个部署流程里，那么整个自动化的流程就如下图：<br><img src="/images/jenkinsdingding2.png" alt="akb48" title="这是宋净超大神的图，侵权则删"></p><p>图像已经说的很明白了，但是结合到我公司的政策，文字流程如下：</p><ol><li>开发将代码上传到svn或者gitlab，进行jira通知；</li><li>如果是svn的话，jenkins将新代码打包成zip文件，启动jenkins把windows的zip包上传到阿里云云存储上；如果是到gitlab，就不用打包成zip了，直接就把包传到云存储上；</li><li>Gitlab/Svn通过webhook通知jenkins去挂载云存储bucket的文件夹里，并且根据对应的dockerfile进行build成镜像，然后再把镜像推送到云镜像仓库里，推送成功后，Jenkins发送一个钉钉成功的通知；</li><li>Jinkens针对本次镜像和部署构建一个yaml文件；</li><li>通过create这个yaml文件，启动对应的services，达到用户访问的目的，此时Jenkins再发一条钉钉通知。</li></ol><h2><span id="环境说明">环境说明</span></h2><p>Jenkins:2.124<br>云存储:阿里云OSS<br>Gitlab:10.7.3<br>镜像仓库:阿里云容器镜像仓库<br>钉钉:4.5.5</p><h2><span id="jinkens安装钉钉插件">Jinkens安装钉钉插件</span></h2><p>既然要让jenkins调用钉钉发送成功消息，那么就需要把jenkins跟钉钉结合在一起。怎么配自定义钉钉机器人，请看<a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1" target="_blank" rel="noopener">https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1</a> 。而钉钉也是有官方的钉钉插件，在Jenkins界面<code>系统管理</code>–<code>管理插件</code>，然后搜索“dingding”，然后安装即可，如图：<br><img src="/images/jenkinsdingding1.png" alt="akb48"></p><p>插件安装完毕之后，重启jenkins即可。</p><h2><span id="挂载云存储">挂载云存储</span></h2><h2><span id="配置任务">配置任务</span></h2><h2><span id="参考资料">参考资料</span></h2><p><a href="https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/" target="_blank" rel="noopener">https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/</a></p>]]></content>
     
     <summary type="html">
     
