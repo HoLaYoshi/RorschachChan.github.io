@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[制作前端页面生成yaml文件]]></title>
+    <url>%2F2018%2F09%2F03%2F%E5%88%B6%E4%BD%9C%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E7%94%9F%E6%88%90yaml%E6%96%87%E4%BB%B6%2F</url>
+    <content type="text"><![CDATA[整体流程与环境说明整体流程如下图，请感受灵魂画师的功力： django:2.1.1，阿里云服务器python:3.6.4，安装方法见：https://rorschachchan.github.io/2018/07/31/获取网站title的脚本/ Django启动12345django-admin startproject Kubernetes #如果提示django-admin命令不存在可以做一个软连接到/usr/local/bin/目录下cd Kubernetespython manage.py startapp createyaml #创建APPpython manage.py migratepython manage.py createsuperuser app创建完毕之后，在Kubernetes/settings.py的INSTALLED_APPS字段添加createyaml，此时就创建好了项目和app。python manage.py runserver 0.0.0.0:8000启动django，然后浏览器地址栏输入外网IP：8000，就会看到django正常启动了，如图： Django准备首先我们先准备一个脚本，这个脚本很简单，就是接收到前端传入的数值然后加工成一个yaml文件，如下： 123456789101112131415161718192021222324#!/bin/bash#用来生成对应的yaml文件cat &lt;&lt; EOF================================ HERE IS YOUR YAML ================================EOFecho apiVersion: v1echo kind: $1echo metadata:echo name: $2echo labels:echo app: webecho spec:echo containers:echo -- name: front-endecho image: $5echo ports:echo -- containerPort: $3echo -- name: rss-readerecho image: nickchase/rss-php-nginx:v1echo ports:echo - containerPort: $4 可以看出上面这个生成yaml脚本太粗糙了，很多地方还有待改进，但是这仅仅是一个小例子而已。再去/django/Kubernetes/createyaml/templates里准备一个比较简单的前端页面脚本，内容如下： 12345678910111213141516171819202122&lt;!DOCTYPE html&gt;&lt;html lang="en"&gt; &lt;head&gt; &lt;meta charset="UTF-8"&gt; &lt;title&gt;创建yaml文件&lt;/title&gt; &lt;/head&gt; &lt;body&gt; &lt;h1&gt;创建YAML文件用于K8s部署&lt;/h1&gt; &lt;h2&gt;请根据实际情况填写以下内容&lt;/h2&gt; &lt;form method="post" action="/create_yaml/"&gt; &lt;input type="text" name="kind" placeholder="类型"&gt;&lt;br&gt; &lt;input type="text" name="name" placeholder="名称"&gt;&lt;br&gt; &lt;input type="text" name="containerPort1" placeholder="容器端口1"&gt;&lt;br&gt; &lt;input type="text" name="containerPort2" placeholder="容器端口2"&gt;&lt;br&gt; &lt;input type="text" name="mirror" placeholder="镜像"&gt;&lt;br&gt; &#123;&#123; error &#125;&#125;&lt;br&gt; &lt;button id="btn" type="submit"&gt;生成yaml&lt;/button&gt; &#123;% csrf_token %&#125; &lt;!-- 标签添加CSRF令牌，这是因为django针对CSRF(跨站请求伪造)有保护措施，没有这句话就是403 --!&gt; &lt;/form&gt; &lt;/body&gt;&lt;/html&gt; 有了页面，还需要一个域名指向这个页面，修改一下/django/Kubernetes/Kubernetes/urls.py，改成如下： 12345678from django.contrib import adminfrom django.urls import pathfrom createyaml import views #将createyaml这个app的views引进urlpatterns = [ path('admin/', admin.site.urls), path(r'create_yaml/', views.create_yaml), #新版的这里不再是url了，把这个url指向views.py里的create_yaml函数] 再继续，写一下views.py里的create_yaml函数： 123456789101112#创建yamldef create_yaml(request): if request.method == 'POST': kind = request.POST.get('kind', '') #后面的''是默认值的意思 name = request.POST.get('name', '') containerPort1 = request.POST.get('containerPort1', '') containerPort2 = request.POST.get('containerPort2', '') mirror = request.POST.get('mirror', '') result = subprocess.Popen(args=['bash','/docker/111.sh',name,mirror,containerPort1,containerPort2],stdout = subprocess.PIPE,shell = False).stdout.read() #在这里通过subprocess去启动111.sh这个脚本 return HttpResponse(result,content_type="text/plain") else: return render(request,'createyaml.html') 以上函数多说几句： 首先判断请求的方法是否是POST，不是的话返回该页面; request.POST.get方法获取前端传入的名称或者端口等值，此处的kind、name、mirror和containerPort就是html文件里form表单部分那两个input标签的name属性； 获取到了变量，然后就让subprocess来调用111.sh来用这些变量去运行脚本，执行的结果就是result，然后return这个result结果； 使用subprocess最好不打开shell = True，因为这样的话，要是不小心rm -rf /，你就gg了，但是如果shell = False的话，就会把刚才的命令看成rm和-rf /两部分，也就是不能成功，这样也免去了别人恶意注入的危险； 实际操作效果 参考资料https://blog.csdn.net/xiaoyaozizai017/article/details/72794469http://lipeilipei.top/2018/02/07/python+django%E5%AE%9E%E7%8E%B0%E7%99%BB%E9%99%86%E5%8A%9F%E8%83%BD%EF%BC%88%E4%B8%8B%E7%AF%87%EF%BC%89/https://blog.csdn.net/bjbz_cxy/article/details/79358718 (如果不想用django就可以看看这个cgi方法)]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>python</tag>
+        <tag>django</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Jenkins自动构建镜像并且发送钉钉通知]]></title>
     <url>%2F2018%2F08%2F30%2FJenkins%E8%87%AA%E5%8A%A8%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F%E5%B9%B6%E4%B8%94%E5%8F%91%E9%80%81%E9%92%89%E9%92%89%E9%80%9A%E7%9F%A5%2F</url>
     <content type="text"><![CDATA[部署流程图把k8s引入到整个部署的自动化流程如下图： 上图已经说的很明白了，但是结合到我公司的内部情况，再加一点文字的解释： 运维做一个前端页面，上面提供一些关键词作为变量传入; 开发将代码上传到svn或者gitlab，进行jira通知，如果是svn的话，jenkins将新代码打包成zip文件，启动jenkins把windows的zip包上传到阿里云云存储上；如果是到gitlab，就不用打包成zip了，直接就把包传到云存储上； Gitlab/Svn通过webhook通知jenkins去挂载云存储bucket的文件夹里，并且根据对应的dockerfile进行build成镜像，然后再把镜像推送到云镜像仓库里，推送成功后，Jenkins发送一个钉钉成功的通知； Jinkens针对本次镜像和实际部署内容再搭配上之前传递进来的变量，构建一个yaml文件； 通过create这个yaml文件，启动对应的services来达到用户访问的目的，此时Jenkins再发一条钉钉通知，整个部署流程结束。 环境说明Jenkins:2.124,jenkins与docker在同一台云服务器上，并且确定这个机器上可以顺利login到阿里云的私有仓库云存储:阿里云OSSGitlab:10.7.3镜像仓库:阿里云容器镜像仓库钉钉:4.5.5 Jinkens安装钉钉插件既然要让jenkins调用钉钉发送成功消息，那么就需要把jenkins跟钉钉结合在一起。至于怎么配自定义钉钉机器人，请看钉钉的官方文档：https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&amp;treeId=257&amp;articleId=105735&amp;docType=1 。而jenkins里也是有官方的钉钉插件，界面系统管理–管理插件，然后搜索“dingding”，安装即可，如图： 插件安装完毕之后，重启jenkins即可。 挂载阿里云存储阿里云官方挂载云存储的方法是ossfs，登陆到jenkins所在的服务器(centos 7.4)里，步骤如下： 123456wget https://github.com/aliyun/ossfs/releases/download/v1.80.5/ossfs_1.80.5_centos7.0_x86_64.rpmyum localinstall ossfs_1.80.5_centos7.0_x86_64.rpm #这一步安装可能会比较慢echo 需要挂载的bucket名:云存储对应ak:云存储对应sk &gt; /etc/passwd-ossfs #将云存储的ak,sk写入到文件里chmod 640 /etc/passwd-ossfsmkdir /tmp/ossfs #创建挂载文件ossfs 需要挂载的bucket名 /tmp/ossfs -ourl=http://oss-cn-hangzhou-internal.aliyuncs.com #如果不是阿里云就要用外网的endpoint 操作的效果如下，我挂载的bucket叫ligentest，毕竟代码是高度机密，bucket属性设置是私有，256T的容量爽爽的： 配置任务在jenkins里创建一个新的工程，取名叫“构建镜像并且上传到云仓库”。“gitlab更新就触发jenkins”的配置内容可以参考 https://rorschachchan.github.io/2018/05/25/Gitlab-Jenkins搭建持续集成系统/ 一文进行操作。 配置正确jenkins与gitlab各自的webhook，测试提交能返回200之后。就要配置构建和构建后操作。 构建选择执行shell，里面填写这样一个命令：sudo sh /docker/pushimage.sh，也就是运行一个脚本，脚本内容如下： 12345678#!/bin/bash#这个脚本用来推送最新的镜像去阿里云镜像仓库version=$(date +20%y%m%d) #用当前日期作为versiondocker build -f /docker/chenpyfile -t chentest/python:$version . #先本地构建镜像image_id=$(docker images | awk '&#123;print $3&#125;' | sed -n '2p') #获取image的id号docker tag $image_id registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:$version #给本地的镜像打一个tagdocker push registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:$version #推送到阿里云对应的仓库去 构建后操作选择钉钉通知器配置，jenkins URL一栏应该默认填好的，即jenkins的网址；钉钉access token这一栏就是直接填机器人的那个access token，然后选择根据什么情景机器人触发通知，如图： 触发验证首先要确认jenkins用户能否正常使用docker命令，方法就是修改一下/etc/sudoers添加jenkins这个用户即可。 这次测试，我们就不搞nginx那种静态页面了，换一个python在后台运行的例子。首先，准备一个叫time.py的脚本，这个脚本很简单，就是不断的输出当前时间的脚本： 123456789101112#!/usr/bin/env python#coding=utf-8import timedef get_time(): localtime = time.asctime( time.localtime(time.time()) ) print ("本地时间为 :", localtime) #python的dockerfile用的是latest，python3是要求有括号的if __name__ == '__main__': while True: get_time() time.sleep(1) 对应的dockerfile叫chenpyfile，如下： 123456789101112############################################################# Dockerfile to build A python container images ## Based on Python #############################################################FROM python:latestMAINTAINER ChrisChan "Chris@jjfjj.com"RUN apt-get update &amp;&amp; \ apt-get install -y vim &amp;&amp; \ apt-get install -y procpsRUN mkdir -p /root/appCOPY /script/ /root/script #把上面那个脚本拷贝到容器里，当然挂载也可以CMD ["python", "/root/script/time.py"] #这里不要写“python /root/script/time.py”，注意前后台问题 这个dockerfile在本地测试构建镜像是完全没问题的，然后触发一下git push，就会看到钉钉机器人启动了： 构建完毕之后，机器人也会给一个成功的标志，然后去阿里云的云仓库一看，嗯，果然已经推送过来了！如图： 再docker run -dit --name chen-pytest registry.cn-hangzhou.aliyuncs.com/lechangetest/chentest:20180831，也能看到新创建的镜像是可以启动的： 至此整个“Jenkins自动构建镜像并且发送钉钉通知”部分就结束了。 参考资料https://jimmysong.io/posts/kubernetes-jenkins-ci-cd/https://help.aliyun.com/document_detail/32196.htmlhttp://www.cnblogs.com/jianxuanbing/p/7211006.html]]></content>
@@ -171,8 +183,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -196,8 +208,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -209,8 +221,8 @@
       </categories>
       <tags>
         <tag>读写分离</tag>
-        <tag>数据库中间件</tag>
         <tag>mycat</tag>
+        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -585,18 +597,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root启动进程以及启动docker]]></title>
-    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root用户启动tomcat进程]]></title>
     <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
     <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
@@ -606,6 +606,18 @@
       <tags>
         <tag>centos</tag>
         <tag>运维安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root启动进程以及启动docker]]></title>
+    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1755,8 +1767,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>nginx</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1816,8 +1828,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -1828,8 +1840,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Nginx</tag>
         <tag>运维</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -1852,8 +1864,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>git</tag>
         <tag>nginx</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
