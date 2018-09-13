@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://yoursite.com/images/k8s7.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s8.png">
 <meta property="og:image" content="http://yoursite.com/images/k8s9.png">
-<meta property="og:updated_time" content="2018-08-24T07:59:33.360Z">
+<meta property="og:updated_time" content="2018-09-10T03:38:05.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Kubectl使用的简单举例">
 <meta name="twitter:description" content="k8s集群有多个部署，每个部署里有多个pod，而每个pod里有多个容器。当我们在Kubernetes上创建一个部署时，该部署将在其中创建包含容器的Pod(而不是直接创建容器)。Pod 总是运行在Node上。">
@@ -423,7 +423,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  722
+                  761
                 </span>
               
 
@@ -490,7 +490,10 @@
 </li>
 <li><p><code>kubectl exec -it POD_NAME bash</code>:连接到对应的pod里；</p>
 </li>
+<li><p><code>kubectl get pods -n kube-system</code>:查看NAMESPACE是<code>kube-system</code>的所有pod；</p>
+</li>
 </ol>
+<p>10.<code>kubectl delete pods/kubernetes-dashboard-7b9c7bc8c9-q8425 -n kube-system</code>:删除掉<code>kube-system</code>这个NAMESPACE里<code>kubernetes-dashboard-7b9c7bc8c9-q8425</code>这个pod；</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed</a> （这个是通过ssh访问k8s负载均衡的方法）<br><a href="https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener">https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/</a></p>
 
       
@@ -728,7 +731,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">163</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -943,7 +946,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共167.3k字</span>
+  <span class="post-count">博客全站共167.6k字</span>
 </div>
         
 

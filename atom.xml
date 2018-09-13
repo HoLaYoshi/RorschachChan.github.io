@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-07T01:54:18.561Z</updated>
+  <updated>2018-09-13T01:51:01.576Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,51 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Django制作前端页面生成yaml文件之改进版</title>
+    <link href="http://yoursite.com/2018/09/13/Django%E5%88%B6%E4%BD%9C%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E7%94%9F%E6%88%90yaml%E6%96%87%E4%BB%B6%E4%B9%8B%E6%94%B9%E8%BF%9B%E7%89%88/"/>
+    <id>http://yoursite.com/2018/09/13/Django制作前端页面生成yaml文件之改进版/</id>
+    <published>2018-09-13T01:20:16.000Z</published>
+    <updated>2018-09-13T01:51:01.576Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>之前搞了一个简易版的“通过前端页面生成yaml”的方法，地址在此：<a href="https://rorschachchan.github.io/2018/09/03/制作前端页面生成yaml文件/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/09/03/制作前端页面生成yaml文件/</a> 。但是这个方法实际上有很多的不足，比如说每一次生成记录就消失了，无法追溯，所以要引入数据库，把每一次的数据保存到数据库里。</p><p>但是整体的思想还是跟以前的一样：</p><ol><li>制作一个a.html网页让用户输入相关数值，并且有两个按钮，一个是重置，一个是生成yaml；</li><li>数值保存到django的数据库里；</li><li>做一个脚本，脚本从django数据库里取值然后执行；</li><li>脚本的结果返回到b.html网页，它也有两个按钮，一个是返回，一个是执行此yaml；</li></ol><p>project名：Kubernetes<br>app名:createyaml</p><h2><span id="配置数据库">配置数据库</span></h2><p>由于这个小系统保存的数据量不多，所以我就直接使用django默认的<code>db.sqlite3</code>数据库。</p>]]></content>
+    
+    <summary type="html">
+    
+      信息安全检查，折腾人啊！
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="django" scheme="http://yoursite.com/tags/django/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决Kubernetes HPA无法获取CPU的问题</title>
+    <link href="http://yoursite.com/2018/09/07/%E8%A7%A3%E5%86%B3Kubernetes-HPA%E6%97%A0%E6%B3%95%E8%8E%B7%E5%8F%96CPU%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2018/09/07/解决Kubernetes-HPA无法获取CPU的问题/</id>
+    <published>2018-09-07T08:53:30.000Z</published>
+    <updated>2018-09-07T10:00:08.093Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>使用阿里云Kubernetes做一下POD自动伸缩测试（Horizontal Pod Autoscaling，简称HPA），在效仿<a href="https://k8smeetup.github.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/" target="_blank" rel="noopener">https://k8smeetup.github.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/</a> 的步骤的时候，发现CPU无法获取。如图：<br><img src="/images/hpa1.png" alt="akb48"></p><p>错误提示是：<code>unable to get metrics for resource cpu: no metrics returned from heapster</code>，跑到node上一看，heapster在正常运行的，如图：<br><img src="/images/hpa2.png" alt="akb48"></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;script src=&quot;\assets\js\APlayer.min.js&quot;&gt; &lt;/script&gt;&lt;p&gt;使用阿里云Kubernetes做一下POD自动伸缩测试（Horizontal Pod Autoscaling，简称HPA），在效仿&lt;a href=&quot;https://k8sme
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>一篇旧文----《当今中国会不会发生革命》</title>
@@ -56,9 +101,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
       <category term="django" scheme="http://yoursite.com/tags/django/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
   </entry>
   
@@ -143,9 +188,9 @@
     <link href="http://yoursite.com/2018/08/22/%E5%AE%89%E8%A3%85%E5%B9%B6%E4%B8%94%E9%85%8D%E7%BD%AEkubectl/"/>
     <id>http://yoursite.com/2018/08/22/安装并且配置kubectl/</id>
     <published>2018-08-22T08:39:41.000Z</published>
-    <updated>2018-08-24T07:59:33.360Z</updated>
+    <updated>2018-09-10T03:38:05.516Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装kubectl">安装kubectl</span></h2><p>在阿里云的Kubernetes界面生成一个新的集群，如图：<br><img src="/images/k8s1.png" alt="akb48"></p><p>但是这个集群是无法通过ssh登陆云服务器那样登录的，这个时候要操作k8s就有两个招数，第一个招数就是用<code>kubectl</code>这个工具去连接到集群。但是<code>kubectl</code>很难搞，因为它所在的<code>storage.googleapis.com</code>在大陆是无法访问的，如果效仿<a href="https://www.kubernetes.org.cn/installkubectl" target="_blank" rel="noopener">https://www.kubernetes.org.cn/installkubectl</a> 里面的方式去下载<code>kubectl</code>是无法成功的，如图：<br><img src="/images/k8s2.png" alt="akb48"></p><p>为了应付这个办法，就要去kubernete的github界面里下载代码包，然后手动上传到云服务器里安装。</p><p>首先到<a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112" target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112</a> 里的<code>Client Binaries</code>下载1.11版本的kubectl的包，如图：<br><img src="/images/k8s3.png" alt="akb48"></p><p>将这个包上传到云服务器之后解压缩，然后把kubernetes安装包里的<code>/client/bin/kubectl</code>做一个<code>/usr/local/bin/kubectl</code>的软连接，如图：<br><img src="/images/k8s4.png" alt="akb48"></p><p>如果所在的网络也无法打开github，那么只好用国内的源<a href="https://mirrors.ustc.edu.cn/kubernetes/apt/pool/" target="_blank" rel="noopener">https://mirrors.ustc.edu.cn/kubernetes/apt/pool/</a> ，下载相应的包之后手动上传到云服务器里也能达到一样的效果，缺点就是国内源没有github更新的那么快。</p><h2><span id="配置kubectl">配置kubectl</span></h2><p>阿里云在生成kubernetes集群后，点击<code>管理</code>，最下面会有一个配置文件，将整个文件内容写入<code>/root/.kube/config</code>，然后再一次使用<code>kubectl cluster-info</code>就能看到配置成功了，如图：<br><img src="/images/k8s5.png" alt="akb48"></p><p>再用<code>kubectl config view</code>能进一步看到细节：<br><img src="/images/k8s6.png" alt="akb48"></p><p>这样就证明可以通过kubectl连接到kubenetes集群了。</p><h2><span id="kubectl基本操作">kubectl基本操作</span></h2><ol><li><p><code>kubectl get nodes</code>：查看master和worker的基本情况，如图：<br><img src="/images/k8s7.png" alt="akb48" title="这里面有各个节点的角色、命名、版本和状态"></p></li><li><p><code>kubectl run ngx-test --image=nginx:latest --port=8080 --restart=Never</code>：部署一个以nginx最新镜像为底的叫<code>ngx-test</code>的部署，并且开放下面容器的8080端口，每个部署的名称不能重复。部署会自动生成pod，如果加上了<code>--restart=Never</code>，那么pod生成一次失败就不再生成；</p></li><li><p><code>kubectl delete deployment chen-test</code>:删除一个叫<code>chen-test</code>的部署，注意，使用kubectl命令，要删除拥有该pod的Deployment。如果我们直接删除pod，Deployment将会重新创建该pod；</p></li><li><p><code>kubectl get deployments</code>：查看部署情况，如图：<br><img src="/images/k8s8.png" alt="akb48"></p></li><li><p><code>kubectl proxy</code>: 每个pod在kuber集群里都是一个封闭的网络环境里，可以通过这个命令使API server监听在本地的8001端口上；</p></li><li><p><code>kubectl get pods</code>：获取每一个pods的基本情况，如图:<br><img src="/images/k8s9.png" alt="akb48"></p></li><li><p><code>kubectl describe pods</code>:查看每一个pods的运行细节，可以出来为什么pods没有正常的运行，如果要特别制定具体的pod，那就是<code>kubectl describe pods pod的名称</code>；</p></li><li><p><code>kubectl exec -it POD_NAME bash</code>:连接到对应的pod里；</p></li></ol><h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed</a> （这个是通过ssh访问k8s负载均衡的方法）<br><a href="https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener">https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/</a></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装kubectl">安装kubectl</span></h2><p>在阿里云的Kubernetes界面生成一个新的集群，如图：<br><img src="/images/k8s1.png" alt="akb48"></p><p>但是这个集群是无法通过ssh登陆云服务器那样登录的，这个时候要操作k8s就有两个招数，第一个招数就是用<code>kubectl</code>这个工具去连接到集群。但是<code>kubectl</code>很难搞，因为它所在的<code>storage.googleapis.com</code>在大陆是无法访问的，如果效仿<a href="https://www.kubernetes.org.cn/installkubectl" target="_blank" rel="noopener">https://www.kubernetes.org.cn/installkubectl</a> 里面的方式去下载<code>kubectl</code>是无法成功的，如图：<br><img src="/images/k8s2.png" alt="akb48"></p><p>为了应付这个办法，就要去kubernete的github界面里下载代码包，然后手动上传到云服务器里安装。</p><p>首先到<a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112" target="_blank" rel="noopener">https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.11.md#v1112</a> 里的<code>Client Binaries</code>下载1.11版本的kubectl的包，如图：<br><img src="/images/k8s3.png" alt="akb48"></p><p>将这个包上传到云服务器之后解压缩，然后把kubernetes安装包里的<code>/client/bin/kubectl</code>做一个<code>/usr/local/bin/kubectl</code>的软连接，如图：<br><img src="/images/k8s4.png" alt="akb48"></p><p>如果所在的网络也无法打开github，那么只好用国内的源<a href="https://mirrors.ustc.edu.cn/kubernetes/apt/pool/" target="_blank" rel="noopener">https://mirrors.ustc.edu.cn/kubernetes/apt/pool/</a> ，下载相应的包之后手动上传到云服务器里也能达到一样的效果，缺点就是国内源没有github更新的那么快。</p><h2><span id="配置kubectl">配置kubectl</span></h2><p>阿里云在生成kubernetes集群后，点击<code>管理</code>，最下面会有一个配置文件，将整个文件内容写入<code>/root/.kube/config</code>，然后再一次使用<code>kubectl cluster-info</code>就能看到配置成功了，如图：<br><img src="/images/k8s5.png" alt="akb48"></p><p>再用<code>kubectl config view</code>能进一步看到细节：<br><img src="/images/k8s6.png" alt="akb48"></p><p>这样就证明可以通过kubectl连接到kubenetes集群了。</p><h2><span id="kubectl基本操作">kubectl基本操作</span></h2><ol><li><p><code>kubectl get nodes</code>：查看master和worker的基本情况，如图：<br><img src="/images/k8s7.png" alt="akb48" title="这里面有各个节点的角色、命名、版本和状态"></p></li><li><p><code>kubectl run ngx-test --image=nginx:latest --port=8080 --restart=Never</code>：部署一个以nginx最新镜像为底的叫<code>ngx-test</code>的部署，并且开放下面容器的8080端口，每个部署的名称不能重复。部署会自动生成pod，如果加上了<code>--restart=Never</code>，那么pod生成一次失败就不再生成；</p></li><li><p><code>kubectl delete deployment chen-test</code>:删除一个叫<code>chen-test</code>的部署，注意，使用kubectl命令，要删除拥有该pod的Deployment。如果我们直接删除pod，Deployment将会重新创建该pod；</p></li><li><p><code>kubectl get deployments</code>：查看部署情况，如图：<br><img src="/images/k8s8.png" alt="akb48"></p></li><li><p><code>kubectl proxy</code>: 每个pod在kuber集群里都是一个封闭的网络环境里，可以通过这个命令使API server监听在本地的8001端口上；</p></li><li><p><code>kubectl get pods</code>：获取每一个pods的基本情况，如图:<br><img src="/images/k8s9.png" alt="akb48"></p></li><li><p><code>kubectl describe pods</code>:查看每一个pods的运行细节，可以出来为什么pods没有正常的运行，如果要特别制定具体的pod，那就是<code>kubectl describe pods pod的名称</code>；</p></li><li><p><code>kubectl exec -it POD_NAME bash</code>:连接到对应的pod里；</p></li><li><p><code>kubectl get pods -n kube-system</code>:查看NAMESPACE是<code>kube-system</code>的所有pod；</p></li></ol><p>10.<code>kubectl delete pods/kubernetes-dashboard-7b9c7bc8c9-q8425 -n kube-system</code>:删除掉<code>kube-system</code>这个NAMESPACE里<code>kubernetes-dashboard-7b9c7bc8c9-q8425</code>这个pod；</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/64940.html?spm=a2c4g.11186623.4.1.2c4652f3qdpMed</a> （这个是通过ssh访问k8s负载均衡的方法）<br><a href="https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener">https://kubernetes.io/cn/docs/tutorials/kubernetes-basics/</a></p>]]></content>
     
     <summary type="html">
     
@@ -406,9 +451,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
       <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
+    
+      <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
   </entry>
   
@@ -456,61 +501,9 @@
     
       <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
     
-      <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
       <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
     
-  </entry>
-  
-  <entry>
-    <title>Mycat 1.6.5的部署与启动</title>
-    <link href="http://yoursite.com/2018/07/05/Mycat%E7%9A%84%E9%83%A8%E7%BD%B2%E4%B8%8E%E7%AE%80%E5%8D%95%E6%B5%8B%E8%AF%95/"/>
-    <id>http://yoursite.com/2018/07/05/Mycat的部署与简单测试/</id>
-    <published>2018-07-05T03:19:29.000Z</published>
-    <updated>2018-07-10T06:17:33.392Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="准备工作">准备工作</span></h2><p>先说一下硬件：</p><ol><li>mycat服务器:阿里云ECS,centos7.4,2核2G1M带宽,外网带宽主要是为了yum安装方便；</li><li>数据库主库:阿里云RDS;</li><li>数据库读库:阿里云RDS只读实例;</li></ol><p>登陆阿里云ECS之后，首先先进行如下操作：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">wget http:<span class="comment">//dl.mycat.io/1.6.5/Mycat-server-1.6.5-release-20180122220033-linux.tar.gz #下载1.6.5版本</span></span><br><span class="line">yum install java-1.8.0-openjdk* -y #安装java 1.8</span><br><span class="line">yum install -y mysql #安装mysql客户端</span><br><span class="line">useradd mycat#创建mycat用户</span><br><span class="line">passwd mycat#更改这个用户的密码</span><br><span class="line">tar -zxvf Mycat-server-1.6.5-release-20180122220033-linux.tar.gz -C /usr/local#解压缩/usr/local</span><br><span class="line">cd /usr/local/</span><br><span class="line">chown -R mycat.mycat /usr/local/mycat/#设置mycat目录的属主和属组</span><br></pre></td></tr></table></figure></p><p>然后登陆到阿里云RDS读库和写库，看一下大小写是否是“不敏感”,否则可能会发生表找不到的问题，阿里云的RDS默认是不敏感的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL [(none)]&gt; show global variables like <span class="string">'%lower_case%'</span>;</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| Variable_name          | Value |</span><br><span class="line">+------------------------+-------+</span><br><span class="line">| lower_case_file_system | OFF   |#这个是“当前系统文件是否大小写敏感”，只读参数，无法修改</span><br><span class="line">| lower_case_table_names | 1     |#这个是“表名是否大小写敏感”，可以修改，改完了重启生效</span><br><span class="line">+------------------------+-------+</span><br><span class="line"><span class="number">2</span> rows <span class="keyword">in</span> set (<span class="number">0.00</span> sec)</span><br></pre></td></tr></table></figure></p><h2><span id="mycat原理和文件结构">Mycat原理和文件结构</span></h2><p>Mycat的原理跟Atlas查不多，都是用一个虚拟的数据库作为前端，后面是挂上真实的写库和读库。如图：<br><img src="/images/mycat1.png" alt="akb48"></p><p>mycat文件夹的文件结构很简单：</p><ol><li><font color="red">conf</font>：配置文件；</li><li><font color="red">lib</font>：服务依赖的一些jar文件.；</li><li><font color="red">logs</font>：日志存储文件夹；</li><li><font color="red">bin</font>：可执行命令的地方：</li></ol><p>mycat的配置文件主要在<code>/usr/local/mycat/conf</code>文件夹里，里面有很多文件，但是主要的配置文件是如下几个：</p><ol><li><code>server.xml</code>用来配置虚拟数据库的信息；</li><li><code>schema.xml</code>用来配置真实读库写库的信息；</li><li><code>rule.xml</code>是分片规则的配置文件，分片规则的具体一些参数信息单独存放为文件；<br>注意！在这个目录下，配置文件修改，需要重启Mycat或者通过9066端口reload才会生效。</li></ol><p>首先在打开<code>server.xml</code>，在如下的地方做修改:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;user name=<span class="string">"root"</span> defaultAccount=<span class="string">"true"</span>&gt;&lt;!-- 这里是给虚拟库设定一个账号叫root，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;chenx1242&lt;/property&gt;&lt;!-- 账号root的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;&lt;!-- 账号root对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br><span class="line">&lt;user name=<span class="string">"test"</span>&gt;&lt;!-- 这里是给虚拟库设定一个账号叫test，并且作为默认账号 --&gt;</span><br><span class="line">        &lt;property name="password"&gt;26e9p69r&lt;/property&gt;&lt;!-- 账号test的密码 --&gt;</span><br><span class="line">        &lt;property name="schemas"&gt;TESTDB&lt;/property&gt;&lt;!-- 账号test对应的虚拟库,这个库保持默认比较好 --&gt;</span><br><span class="line">        &lt;property name="readOnly"&gt;true&lt;/property&gt;&lt;!-- 说明这个账号是只读账号 --&gt;</span><br><span class="line">&lt;/user&gt;</span><br></pre></td></tr></table></figure></p><p>然后打开<code>schema.xml</code>，编辑如下地方：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataHost name=<span class="string">"localhost1"</span> maxCon=<span class="string">"1000"</span> minCon=<span class="string">"10"</span> balance=<span class="string">"0"</span> writeType=<span class="string">"0"</span> dbType=<span class="string">"mysql"</span> dbDriver=<span class="string">"native"</span> switchType=<span class="string">"1"</span>  slaveThreshold=<span class="string">"100"</span>&gt;</span><br><span class="line">               &lt;heartbeat&gt;select user()&lt;<span class="regexp">/heartbeat&gt;</span></span><br><span class="line"><span class="regexp">               &lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;writeHost host="hostM1" url="阿里云RDS:3306" user="账号"   password="对应密码"&gt;</span></span><br><span class="line"><span class="regexp">                       &lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line"><span class="regexp">               &lt;readHost host="hostS1" url="阿里云只读RDS:3306" user="账号"   password="对应密码"/</span>&gt;</span><br><span class="line">               &lt;<span class="regexp">/writeHost&gt;</span></span><br><span class="line"><span class="regexp">&lt;!-- &lt;writeHost host="hostS2" url="localhost:3316" user="root" password="123456"/</span>&gt; --&gt;</span><br><span class="line">               &lt;!-- &lt;writeHost host="hostM2" url="localhost:3316" user="root" password="123456"/&gt; --&gt;</span><br><span class="line">   &lt;/dataHost&gt;</span><br></pre></td></tr></table></figure></p><p>检查好格式并保存之后，就到mycat目录下的/bin/里<code>./mycat start</code>就启动mycat了。启动成功之后，8066和9066都是被监听的，如图：<br><img src="/images/mycat2.png" alt="akb48"></p><p><img src="/images/mycat3.png" alt="akb48"></p><h2><span id="启动故障排错">启动故障排错</span></h2><p>如果启动mycat失败，可以去logs文件夹里看日志，这里举例几个有代表性的错误：</p><ol><li><p><code>wrapper.log</code>日志：<code>Caused by: io.mycat.config.util.ConfigException: SelfCheck###  schema mycat refered by user test is not exist!</code><br><code>server.xml</code>里schema最好选择默认的TESTDB，而不是错误里的自己起名的mycat。</p></li><li><p><code>wrapper.log</code>日志：<code>org.xml.sax.SAXParseException; lineNumber: 23; columnNumber: 3; The content of elements must consist of well-formed character data or markup</code><br>去检查一下<code>server.xml</code>的第23行，看一下是不是多了一个’&lt;’或者’&gt;’。</p></li><li><p><code>wrapper.log</code>日志：<code>Caused by: io.mycat.config.util.ConfigException: user root duplicated!</code><br><code>server.xml</code>里普通账号root，只读账号也叫root，冲突了。</p></li><li><p><code>wrapper.log</code>日志：<code>Caused by: org.xml.sax.SAXParseException; lineNumber: 16; columnNumber: 101; Element type &quot;WriteHost&quot; must be declared.</code><br><code>schema.xml</code>配置中writeHost写成了WriteHost导致报错。</p></li><li><p><code>mycat.log</code>日志如下：</p> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2018</span><span class="number">-07</span><span class="number">-06</span> <span class="number">15</span>:<span class="number">53</span>:<span class="number">22.894</span>  WARN [$_NIOREACTOR<span class="number">-8</span>-RW] (io.mycat.backend.mysql.nio.MySQLConnectionAuthenticator.handle(MySQLConnectionAuthenticator.java:<span class="number">91</span>)) - can<span class="string">'t connect to mysql server ,errmsg:Access denied for user '</span>数据库账号<span class="string">'@'</span>本地IP<span class="string">' (using password: YES) MySQLConnection [id=8, lastTime=1530863602566, user=数据库账号, schema=db3, old shema=db3, borrowed=false, fromSlaveDB=false, threadId=4555911, charset=utf8, txIsolation=3, autocommit=true, attachment=null, respHandler=null, host=阿里云写库地址, port=3306, statusSync=null, writeQueue=0, modifiedSQLExecuted=false]</span></span><br></pre></td></tr></table></figure></li></ol><p><code>schema.xml</code>里把真实库的配置写错了。</p><ol><li><code>mycat.log</code>日志：<code>(io.mycat.net.NIOConnector.finishConnect(NIOConnector.java:155)) - error: java.net.ConnectException: Connection refused</code><br><code>schema.xml</code>的<code>&lt;dataHost&gt;</code>字段是否写入了多余的数据库。</li></ol><h2><span id="参考资料">参考资料</span></h2><p><a href="http://valleylord.github.io/post/201601-mycat-install/" target="_blank" rel="noopener">http://valleylord.github.io/post/201601-mycat-install/</a><br><a href="https://www.jianshu.com/p/f15d64fcb2f3" target="_blank" rel="noopener">https://www.jianshu.com/p/f15d64fcb2f3</a></p>]]></content>
-    
-    <summary type="html">
-    
-      MyCAT模拟了一个虚拟Mysql数据库，并通过简单的配置文件配置，将虚拟数据库中的表映射到实际数据库中
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="读写分离" scheme="http://yoursite.com/tags/%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB/"/>
-    
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
-    
-      <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>写在阿根廷出局之后</title>
-    <link href="http://yoursite.com/2018/07/03/%E5%86%99%E5%9C%A8%E9%98%BF%E6%A0%B9%E5%BB%B7%E5%87%BA%E5%B1%80%E4%B9%8B%E5%90%8E/"/>
-    <id>http://yoursite.com/2018/07/03/写在阿根廷出局之后/</id>
-    <published>2018-07-03T01:49:33.000Z</published>
-    <updated>2018-07-03T02:15:20.886Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="桑保利的无奈">桑保利的无奈</span></h2><p>阿根廷在俄罗斯世界杯的征程结束了，3:4输给法国看上去好像不那么糟糕，但是在姆巴佩下半场的2球时间里，阿根廷的后防线的的确确崩溃了。</p><p>一天之后的凌晨，俄罗斯靠点球大战送西班牙回家。很多阿根廷的球迷说阿根廷应该效仿俄罗斯，跟法国摆大巴，靠着偷鸡或者点球胜利。</p><p>我个人认为，此方法不可取。虽然阿根廷2014年是靠防守进了决赛，但是这支阿根廷老人更老，新人不牛，而且整支队伍缺乏磨合，纪律性也不够。桑保利深知阿根廷无法保持90分钟的高质量大巴，最多三十分钟。而且大巴阵需要一个高点去压迫对方的后卫，比如穆里尼奥的德罗巴、科斯塔、卢卡库，至少也得有一个能跳又壮的C罗在禁区里搅合，但是伊卡尔迪这次没来，所以桑保利无论是防守还是进攻都无法选择大巴。</p><p>所以说，“攻出去”是桑保利无奈的选择，至少这样能死的还壮烈一点。当然，桑保利换上法齐奥是一个败笔，但是最根本的原因还是阿根廷人才断档造成的阵容畸形。</p><h2><span id="梅西的困局">梅西的困局</span></h2><p>梅西在国家队是不是过得不爽？这是必然的。因为他在巴萨得到的支持远大于他在国家队得到的支持，但是这种支持差以肉眼可见的速度缩小。而且阿根廷的媒体对梅西也是比较苛刻，这就吃了没有好公关团队的亏。</p><p>让梅西去踢中场是很暴殄天物的行为，但是现在中场式微，梅西不得不去后撤拿球，甚至还要在边路拿球。我曾经说过，梅西后撤拿球就是慢性自杀，首先他不靠近禁区就无法高质量的射门，其次后撤拿球会让对手更多的容错率去包夹他进而消耗他的体力。这样下来不仅场面不好看，梅西的数据更难看，难免被人黑。不过我还是不明白为什么迪巴拉与梅西无法共存，他俩是位置冲突没错，但是梅西可以踢边路，让迪巴拉去踢前腰/影锋，这个从理论上来说是可行的。</p><p>反正在俱乐部解决梅西的问题很简单，砸钱买人即可，但是在国家队，估计要费桑保利的脑细胞了（前提是他不下课），所以说足球是和平年代的战争，表面拼的是场上比分，实际拼的是场下准备。</p><p>很多球迷反应说梅西在世界杯上没什么笑容，这让我想起来中日甲午战争的时候，中国船上的洋水手回忆说“中国的海员战斗前摩拳擦掌跃跃欲试，但是中国的军官则是一脸忧虑、若有所思”。事实说明，其实军官是更了解敌我实力差距的，梅西也是如此。但是没有办法，他必须要做打一个很难打赢的战争。</p><h2><span id="梅罗之争">梅罗之争</span></h2><p>可以说这两个人在俄罗斯的表现都是他们各自在俱乐部七层左右的功力（C罗要高一点），但是这两个人都踢飞了点球，而那个点球原本都可以把他们队伍带到下半区去面对较弱对队伍从而提高晋级的概率，可以说国家队过早出局跟他们有直接关系。</p><p>梅西在淘汰赛表现还可以但是在0:3输克罗地亚那一场太过失常，但是C罗这一边也是“高开低走”，不过同样四届世界杯，梅西世界杯6球3助攻，C罗是7球1助攻，大家都没有在淘汰赛进球，的确很巧合。</p><p>不过皇马三连冠外加葡萄牙拿到了欧洲杯冠军，让C罗的生涯看起来比梅西完美了很多。明年是巴西美洲杯，现在美洲杯的竞争完全不逊于欧洲杯，小马哥离开的阿根廷想夺冠并不乐观，梅西估计注定无法作为领袖为阿根廷带来一个洲际冠军了。</p><p>这两个人都是超级射手，而且不可否认的是他们都需要优秀的中场作为火力支持，以前梅西有“哈白布”大杀四方，而C罗现在有了“克卡莫”也逆转了金球奖总数，所以作为球迷，要认识到这一点：现代足球单打一场或许可以，连续独斗五场以上就是天神下凡了。</p><p>不过客观的说，除非内马尔等人能拿到世界杯，不然今年的金球奖还是C罗的，梅西和巴萨需要尽快加油，而加油最有效的方法就是补强中场，加强控制。</p>]]></content>
-    
-    <summary type="html">
-    
-      四年之后，一个轮回
-    
-    </summary>
-    
-      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="足球" scheme="http://yoursite.com/tags/%E8%B6%B3%E7%90%83/"/>
-    
-      <category term="世界杯" scheme="http://yoursite.com/tags/%E4%B8%96%E7%95%8C%E6%9D%AF/"/>
-    
-      <category term="阿根廷" scheme="http://yoursite.com/tags/%E9%98%BF%E6%A0%B9%E5%BB%B7/"/>
     
   </entry>
   
