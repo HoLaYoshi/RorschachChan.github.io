@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/aliyundns2.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyundns1.png">
-<meta property="og:updated_time" content="2018-09-17T09:02:13.775Z">
+<meta property="og:updated_time" content="2018-09-17T09:07:57.379Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="调用阿里云api去修改域名">
 <meta name="twitter:description" content="山竹台风近日肆虐深圳香港地区，为了防止当地机房崩溃，所以就有这篇文章">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  945
+                  961
                 </span>
               
 
@@ -457,8 +457,8 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="问题简述">问题简述</span></h2><p>以阿里云为例，假设我们有一个网站，它的服务器、数据库、负载均衡都是部署在杭州区可用区B,将IP A绑定到某个域名上，那么如果要对这整套系统进行灾备，应该怎么做？</p>
-<p>第一个方法：再在可用D复制一模一样的环境，然后以“主备服务器组”的方式配置一下负载均衡：如果端口监听不正常就会切换到备用服务器上，监听正常了再切回来。但是这个方式有一个问题，就是当前模式<strong>阿里云的主备切换是不支持HTTPS/HTTP的</strong>，如图：<br><img src="/images/aliyundns2.png" alt="akb48"></p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="问题简述">问题简述</span></h2><p>以阿里云厂家为例，假设我们有一个网站，它的服务器、数据库、负载均衡都部署在杭州区可用区B,将IP A绑定到某个域名上，启动了系统之后为客户提供服务。那么如果现在要对这套系统进行灾备，应该怎么做？</p>
+<p>第一个方法：在可用区D复制一模一样的环境，然后以“主备服务器组”的方式配置一下负载均衡：如果端口监听不正常就会切换到备用服务器上，监听正常了再切回来。但是这个方式有一个问题，就是当前模式<strong>阿里云的主备切换是不支持HTTPS/HTTP的</strong>，如图：<br><img src="/images/aliyundns2.png" alt="akb48"></p>
 <p>可见，这种方式是有很大的局限性的。</p>
 <p>那既然同是花钱，干脆就做一个异地容灾，整套系统在其他的地理区域比如上海区也复制一遍，把上海区的B IP也绑定到这个网站域名上，阿里云的域名解析是支持多IP绑定同一个域名的。平时的时候，上海区的IP被域名解析的权重是0，一旦杭州区出现了某些线路方面的硬件问题，那么就将杭州区的权重降成0，同时提高上海区的权重，这样用户就会直接访问到上海区的系统。</p>
 <p>理想是丰满的，但是现实是骨感的，因为阿里云的权重配置区域是1~100，而不是0~100，如下图：<br><img src="/images/aliyundns1.png" alt="akb48"></p>
@@ -582,8 +582,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/09/15/服务器执行脚本，通过django前端页面展示/" rel="next" title="服务器执行脚本，通过django前端页面展示">
-                <i class="fa fa-chevron-left"></i> 服务器执行脚本，通过django前端页面展示
+              <a href="/2018/09/13/Django制作前端页面生成yaml文件之改进版/" rel="next" title="Django将前端页面存储到后台数据库">
+                <i class="fa fa-chevron-left"></i> Django将前端页面存储到后台数据库
               </a>
             
           </div>
@@ -704,7 +704,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">166</span>
+                  <span class="site-state-item-count">165</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
