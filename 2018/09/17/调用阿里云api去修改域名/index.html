@@ -91,16 +91,17 @@
 <meta name="description" content="山竹台风近日肆虐深圳香港地区，为了防止当地机房崩溃，所以就有这篇文章">
 <meta name="keywords" content="python,阿里云">
 <meta property="og:type" content="article">
-<meta property="og:title" content="调用阿里云api去修改域名">
+<meta property="og:title" content="调用阿里云api去修改域名对应IP">
 <meta property="og:url" content="http://yoursite.com/2018/09/17/调用阿里云api去修改域名/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="山竹台风近日肆虐深圳香港地区，为了防止当地机房崩溃，所以就有这篇文章">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/aliyundns2.png">
 <meta property="og:image" content="http://yoursite.com/images/aliyundns1.png">
-<meta property="og:updated_time" content="2018-09-17T09:07:57.379Z">
+<meta property="og:image" content="http://yoursite.com/images/aliyundns3.gif">
+<meta property="og:updated_time" content="2018-09-17T09:29:37.703Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="调用阿里云api去修改域名">
+<meta name="twitter:title" content="调用阿里云api去修改域名对应IP">
 <meta name="twitter:description" content="山竹台风近日肆虐深圳香港地区，为了防止当地机房崩溃，所以就有这篇文章">
 <meta name="twitter:image" content="http://yoursite.com/images/aliyundns2.png">
 
@@ -138,7 +139,7 @@
 
 
 
-  <title>调用阿里云api去修改域名 | Chris Chan's BLOG</title>
+  <title>调用阿里云api去修改域名对应IP | Chris Chan's BLOG</title>
   
 
 
@@ -338,7 +339,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">调用阿里云api去修改域名</h1>
+          <h1 class="post-title" itemprop="name headline">调用阿里云api去修改域名对应IP</h1>
         
 
         <div class="post-meta">
@@ -390,7 +391,7 @@
 
           
           
-             <span id="/2018/09/17/调用阿里云api去修改域名/" class="leancloud_visitors" data-flag-title="调用阿里云api去修改域名">
+             <span id="/2018/09/17/调用阿里云api去修改域名/" class="leancloud_visitors" data-flag-title="调用阿里云api去修改域名对应IP">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -416,7 +417,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  961
+                  983
                 </span>
               
 
@@ -463,7 +464,7 @@
 <p>那既然同是花钱，干脆就做一个异地容灾，整套系统在其他的地理区域比如上海区也复制一遍，把上海区的B IP也绑定到这个网站域名上，阿里云的域名解析是支持多IP绑定同一个域名的。平时的时候，上海区的IP被域名解析的权重是0，一旦杭州区出现了某些线路方面的硬件问题，那么就将杭州区的权重降成0，同时提高上海区的权重，这样用户就会直接访问到上海区的系统。</p>
 <p>理想是丰满的，但是现实是骨感的，因为阿里云的权重配置区域是1~100，而不是0~100，如下图：<br><img src="/images/aliyundns1.png" alt="akb48"></p>
 <p>也就是说这个云解析的负载均衡是不能当做主备切换使用的，如果想要通过阿里云解析来达到主备切换的目的，方法只能是<code>升级VIP DNS，配置网站监控</code>，具体操作是<a href="https://help.aliyun.com/document_detail/59372.html?spm=5176.215331.1147916.23.65de614dac85Sw" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/59372.html?spm=5176.215331.1147916.23.65de614dac85Sw</a> 。但是这个VIP升级是需要钱的，如果监控的网站越多，花费越大，如果老板不肯掏这份钱，那就只能换条路走。</p>
-<h2><span id="脚本内容">脚本内容</span></h2><p>想来想去，还是老办法—-调用阿里云API修改云解析记录，脚本如下，这里我采取了命令行交互的形式，实际上都是将域名IP写死的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#此脚本版本是2.7，用来修改阿里云云解析IP地址，使用之前请先安装sdk:pip install aliyun-python-sdk-domain</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.client <span class="keyword">import</span> AcsClient</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.request <span class="keyword">import</span> CommonRequest</span><br><span class="line">print <span class="string">"请注意！本脚本只会修改lechange.com域名下的A记录！！！"</span></span><br><span class="line">RRKeyWord = raw_input(<span class="string">"请输入您要修改的域名："</span>)</span><br><span class="line">Value = raw_input(<span class="string">"请输入新的IP："</span>)</span><br><span class="line">client = AcsClient(<span class="string">'这里是AK'</span>, <span class="string">'这里是SK'</span>,<span class="string">'cn-hangzhou'</span>)</span><br><span class="line">request = CommonRequest()</span><br><span class="line">request.set_accept_format(<span class="string">'json'</span>)</span><br><span class="line">request.set_domain(<span class="string">'alidns.aliyuncs.com'</span>)</span><br><span class="line">request.set_method(<span class="string">'POST'</span>)</span><br><span class="line">request.set_version(<span class="string">'2015-01-09'</span>)</span><br><span class="line"></span><br><span class="line">def getRecordId(RRKeyWord):</span><br><span class="line">        global RecordId</span><br><span class="line">        request.set_action_name(<span class="string">'DescribeDomainRecords'</span>)</span><br><span class="line">        request.add_query_param('DomainName', 'lechange.com')	#这里写死了lechange.com域名</span><br><span class="line">        request.add_query_param(<span class="string">'RRKeyWord'</span>, RRKeyWord)</span><br><span class="line">        request.add_query_param(<span class="string">'TypeKeyWord'</span>, <span class="string">'A'</span>)</span><br><span class="line">        response = client.do_action_with_exception(request)</span><br><span class="line">        encode_json = json.loads(response)</span><br><span class="line">        RecordId = encode_json['DomainRecords']['Record'][0]['RecordId']	#需要获取这个RecordId</span><br><span class="line">                </span><br><span class="line">def UpdateDomainRecord(RRKeyWord,Value):</span><br><span class="line">        request.set_action_name(<span class="string">'UpdateDomainRecord'</span>)</span><br><span class="line">        request.add_query_param(<span class="string">'RecordId'</span>, RecordId)</span><br><span class="line">        request.add_query_param(<span class="string">'RR'</span>, RRKeyWord)</span><br><span class="line">        request.add_query_param(<span class="string">'Type'</span>, <span class="string">'A'</span>)</span><br><span class="line">        request.add_query_param(<span class="string">'Value'</span>, Value)</span><br><span class="line">        response = client.do_action_with_exception(request)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">        getRecordId(RRKeyWord)</span><br><span class="line">        UpdateDomainRecord(RRKeyWord,Value)</span><br></pre></td></tr></table></figure></p>
+<h2><span id="脚本内容">脚本内容</span></h2><p>想来想去，还是老办法—-调用阿里云API修改云解析记录达到切换IP的目的。脚本如下，这里我采取了命令行交互的形式，实际上都是将域名IP写死的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#此脚本版本是2.7，用来修改阿里云云解析IP地址，使用之前请先安装sdk:pip install aliyun-python-sdk-domain</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.client <span class="keyword">import</span> AcsClient</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.request <span class="keyword">import</span> CommonRequest</span><br><span class="line">print <span class="string">"请注意！本脚本只会修改lechange.com域名下的A记录！！！"</span></span><br><span class="line">RRKeyWord = raw_input(<span class="string">"请输入您要修改的域名："</span>)</span><br><span class="line">Value = raw_input(<span class="string">"请输入新的IP："</span>)</span><br><span class="line">client = AcsClient(<span class="string">'这里是AK'</span>, <span class="string">'这里是SK'</span>,<span class="string">'cn-hangzhou'</span>)</span><br><span class="line">request = CommonRequest()</span><br><span class="line">request.set_accept_format(<span class="string">'json'</span>)</span><br><span class="line">request.set_domain(<span class="string">'alidns.aliyuncs.com'</span>)</span><br><span class="line">request.set_method(<span class="string">'POST'</span>)</span><br><span class="line">request.set_version(<span class="string">'2015-01-09'</span>)</span><br><span class="line"></span><br><span class="line">def getRecordId(RRKeyWord):</span><br><span class="line">        global RecordId</span><br><span class="line">        request.set_action_name(<span class="string">'DescribeDomainRecords'</span>)</span><br><span class="line">        request.add_query_param('DomainName', 'lechange.com')	#这里写死了lechange.com域名</span><br><span class="line">        request.add_query_param(<span class="string">'RRKeyWord'</span>, RRKeyWord)</span><br><span class="line">        request.add_query_param(<span class="string">'TypeKeyWord'</span>, <span class="string">'A'</span>)</span><br><span class="line">        response = client.do_action_with_exception(request)</span><br><span class="line">        encode_json = json.loads(response)</span><br><span class="line">        RecordId = encode_json['DomainRecords']['Record'][0]['RecordId']	#需要获取这个RecordId</span><br><span class="line">                </span><br><span class="line">def UpdateDomainRecord(RRKeyWord,Value):</span><br><span class="line">        request.set_action_name(<span class="string">'UpdateDomainRecord'</span>)</span><br><span class="line">        request.add_query_param(<span class="string">'RecordId'</span>, RecordId)</span><br><span class="line">        request.add_query_param(<span class="string">'RR'</span>, RRKeyWord)</span><br><span class="line">        request.add_query_param(<span class="string">'Type'</span>, <span class="string">'A'</span>)</span><br><span class="line">        request.add_query_param(<span class="string">'Value'</span>, Value)</span><br><span class="line">        response = client.do_action_with_exception(request)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">        getRecordId(RRKeyWord)</span><br><span class="line">        UpdateDomainRecord(RRKeyWord,Value)</span><br></pre></td></tr></table></figure></p>
 <p>这个脚本比较粗糙，可以改进的地方如下：</p>
 <ol>
 <li>判断输入的域名和IP是否符合格式的规范；</li>
@@ -471,6 +472,7 @@
 <li>如果添加错误，对应的报错；</li>
 <li>搭配爬虫页面脚本使用，如果爬虫页面脚本出现了异常，那么直接启动这个脚本，并且发送微信/邮件通知！</li>
 </ol>
+<h2><span id="效果展示">效果展示</span></h2><p>整个脚本启动后效果如下：<br><img src="/images/aliyundns3.gif" alt="akb48"></p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/29776.html?spm=a2c4g.11186623.2.37.d31b31dfNqojPT" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/29776.html?spm=a2c4g.11186623.2.37.d31b31dfNqojPT</a><br><a href="https://help.aliyun.com/document_detail/44657.html?spm=a2c4g.11186623.6.579.4d1d7cd208aSgl" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/44657.html?spm=a2c4g.11186623.6.579.4d1d7cd208aSgl</a></p>
 
       
@@ -536,7 +538,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/09/17/调用阿里云api去修改域名/" title="调用阿里云api去修改域名">调用阿里云api去修改域名</a>
+					<a href="http://yoursite.com/2018/09/17/调用阿里云api去修改域名/" title="调用阿里云api去修改域名对应IP">调用阿里云api去修改域名对应IP</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -866,7 +868,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x95EE;&#x9898;&#x7B80;&#x8FF0;">&#x95EE;&#x9898;&#x7B80;&#x8FF0;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x811A;&#x672C;&#x5185;&#x5BB9;">&#x811A;&#x672C;&#x5185;&#x5BB9;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x95EE;&#x9898;&#x7B80;&#x8FF0;">&#x95EE;&#x9898;&#x7B80;&#x8FF0;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x811A;&#x672C;&#x5185;&#x5BB9;">&#x811A;&#x672C;&#x5185;&#x5BB9;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x6548;&#x679C;&#x5C55;&#x793A;">&#x6548;&#x679C;&#x5C55;&#x793A;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -919,7 +921,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共169.9k字</span>
+  <span class="post-count">博客全站共170.0k字</span>
 </div>
         
 
