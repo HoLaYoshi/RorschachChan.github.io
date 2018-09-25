@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="本文是杨世航在Bilibili的第19讲，我这里只是做一个自己理解的复述而已">
+<meta name="description" content="本文是杨世航大佬在Bilibili的第19讲，我这里只是做一个自己理解的复述而已">
 <meta name="keywords" content="django,python">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Django将某个数据库字段给多个app使用">
 <meta property="og:url" content="http://yoursite.com/2018/09/25/Django将某个数据库字段给多个app使用/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="本文是杨世航在Bilibili的第19讲，我这里只是做一个自己理解的复述而已">
+<meta property="og:description" content="本文是杨世航大佬在Bilibili的第19讲，我这里只是做一个自己理解的复述而已">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/django14.png">
 <meta property="og:image" content="http://yoursite.com/images/django15.png">
@@ -102,10 +102,10 @@
 <meta property="og:image" content="http://yoursite.com/images/django17.png">
 <meta property="og:image" content="http://yoursite.com/images/django18.png">
 <meta property="og:image" content="http://yoursite.com/images/django19.png">
-<meta property="og:updated_time" content="2018-09-25T11:17:26.295Z">
+<meta property="og:updated_time" content="2018-09-25T11:47:47.912Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Django将某个数据库字段给多个app使用">
-<meta name="twitter:description" content="本文是杨世航在Bilibili的第19讲，我这里只是做一个自己理解的复述而已">
+<meta name="twitter:description" content="本文是杨世航大佬在Bilibili的第19讲，我这里只是做一个自己理解的复述而已">
 <meta name="twitter:image" content="http://yoursite.com/images/django14.png">
 
 
@@ -420,7 +420,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,120
+                  1,119
                 </span>
               
 
@@ -444,7 +444,7 @@
 
           
               <div class="post-description">
-                  本文是杨世航在Bilibili的第19讲，我这里只是做一个自己理解的复述而已
+                  本文是杨世航大佬在Bilibili的第19讲，我这里只是做一个自己理解的复述而已
               </div>
           
 
@@ -461,7 +461,7 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>Django里经常会有这样的一个需求—-同样的一组数据要给很多个app使用。比如是一个运维系统，运维人员的名单就既要给“项目部署”这个APP用又要给“责任负责人”这个APP用。如果每次都要去跨应用去<code>from XXX.models import xxx</code>的话，代码感觉很不友好。那么要解决这个问题，就要用到django自带的<code>ContentTypes</code>框架。以下是所用软件版本：<br>Django:<code>2.1.1</code><br>Python:<code>3.6.4</code><br>old app:<code>Articles</code><br>new app:<code>read_stats</code></p>
+        <script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>Django里经常会有这样的一个需求—-同样的一组数据要给很多个app使用。比如一个运维系统，运维人员的名单就既要给“项目部署”这个APP用又要给“责任负责人”这个APP用。如果每次都要去跨应用去<code>from XXX.models import xxx</code>的话，代码感觉很不友好。那么要解决这个问题，就要用到django自带的<code>ContentTypes</code>框架。以下是所用软件版本：<br>Django:<code>2.1.1</code><br>Python:<code>3.6.4</code><br>old app:<code>Articles</code><br>new app:<code>read_stats</code></p>
 <h2><span id="原始状态与前期配置">原始状态与前期配置</span></h2><p>目前在django的控制台页面的情况是这样的：<br><img src="/images/django14.png" alt="paradin"></p>
 <p>可见里面就一个叫<code>Articles</code>的app，点开之后，发现对应的项目也很简单，只有<code>id</code>和<code>title</code>这两个字段而已：<br><img src="/images/django15.png" alt="paradin"></p>
 <p>本次试验的目的就是<strong>新建立一个文章统计计数的app，在里面配置数据库，然后让原来的blog这个app能够使用得到新app的数据项</strong>。</p>
