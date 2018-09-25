@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-19T02:11:27.790Z</updated>
+  <updated>2018-09-25T11:08:27.539Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Django将某个数据库字段给多个app使用</title>
+    <link href="http://yoursite.com/2018/09/25/Django%E5%B0%86%E6%9F%90%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%97%E6%AE%B5%E7%BB%99%E5%A4%9A%E4%B8%AAapp%E4%BD%BF%E7%94%A8/"/>
+    <id>http://yoursite.com/2018/09/25/Django将某个数据库字段给多个app使用/</id>
+    <published>2018-09-25T06:48:20.000Z</published>
+    <updated>2018-09-25T11:08:27.539Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="前言">前言</span></h2><p>Django里经常会有这样的一个需求—-同样的一组数据要给很多个app使用。比如是一个运维系统，同样运维人员名单就既要给“项目部署”这个APP用又要给“项目负责人”这个APP用。如果每次都要去跨应用的<code>from XXX.models import xxx</code>很有不友好，所以要解决这个问题，就要用到django自带的<code>ContentTypes</code>框架。<br>Django:<code>2.1.1</code><br>Python:<code>3.6.4</code><br>old app:<code>Articles</code><br>new app:<code>read_stats</code></p><h2><span id="原始状态与前期配置">原始状态与前期配置</span></h2><p>目前在django的控制台页面的情况是这样的：<br><img src="/images/django14.png" alt="paradin"></p><p>可见里面就一个叫<code>Articles</code>的app，点开之后，发现对应的项目也很简单，只有<code>id</code>和<code>title</code>这两个字段而已：<br><img src="/images/django15.png" alt="paradin"></p><p>本次试验的目的就是<strong>新建立一个文章统计计数的app，在里面配置数据库，然后让原来的blog这个app能够使用得到新app的数据项</strong>。</p><p>首先先建立一个专门用来计数的app，比如就叫<code>read_stat</code>，那么在django项目路径下<code>python manage.py startapp read_stats</code>，再把这个新的app添加到settings.py里：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">INSTALLED_APPS = [</span><br><span class="line">    &apos;django.contrib.admin&apos;,</span><br><span class="line">    &apos;django.contrib.auth&apos;,</span><br><span class="line">    &apos;django.contrib.contenttypes&apos;,</span><br><span class="line">    &apos;django.contrib.sessions&apos;,</span><br><span class="line">    &apos;django.contrib.messages&apos;,</span><br><span class="line">    &apos;django.contrib.staticfiles&apos;,</span><br><span class="line">    &apos;article&apos;,#先加载django自身的app，然后是第三方app，最后是自己开发的app</span><br><span class="line">    &apos;read_stats&apos;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p><p>编辑一下<code>read_stats</code>里的<code>models.py</code>：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line">from django.contrib.contenttypes.fields import GenericForeignKey</span><br><span class="line">from django.contrib.contenttypes.models import ContentType</span><br><span class="line"># Create your models here.</span><br><span class="line"></span><br><span class="line">class ReadNum(models.Model):</span><br><span class="line">    read_num = models.IntegerField(default=0)</span><br><span class="line">    content_type = models.ForeignKey(ContentType,on_delete=models.DO_NOTHING)</span><br><span class="line">    object_id = models.PositiveIntegerField()</span><br><span class="line">    content_object = GenericForeignKey(&quot;content_type&quot;,&quot;object_id&quot;)</span><br></pre></td></tr></table></figure></p><p>配置了数据库，肯定需要<code>python manage.py makemigrations</code>和<code>python manage.py migrate</code>：<br><img src="/images/django16.png" alt="paradin"></p><p>修改一下负责后台展示的<code>admin.py</code>：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib import admin</span><br><span class="line">from .models import ReadNum</span><br><span class="line"># Register your models here.</span><br><span class="line"></span><br><span class="line">@admin.register(ReadNum)   #装饰器</span><br><span class="line">class ReadNumAdmin(admin.ModelAdmin):</span><br><span class="line">        list_display = (&apos;read_num&apos;,&apos;content_object&apos;)</span><br></pre></td></tr></table></figure></p><p>此时刷新一下django页面就看到app已经注册成功了：<br><img src="/images/django17.png" alt="paradin"></p><p>由于是新的，所以里面空空如也，点击一下<code>ADD</code>，就可以输入值了，<code>Read num</code>就是设定的“阅读次数”，<code>Content type</code>这个数据是一个选择项，选择对应的app：<code>Article</code>，而<code>Object id</code>就<code>Articles</code>对应的文章编号：<br><img src="/images/django18.png" alt="paradin"></p><p>这样达到了后台配置“将Article应用里的第2篇文章的阅读次数上调到了99次”。</p><h2><span id="数据库的跨app配置">数据库的跨app配置</span></h2><p>刚才手动在后台配置完毕，但是目前这个<code>read_num</code>数据只能是在<code>read_stats</code>这个app里自嗨。要给让<code>Article</code>能够得到这个<code>read_num</code>的话，首先要配置<code>Article</code>下的<code>models.py</code>：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from django.db import models</span><br><span class="line">from django.db.models.fields import exceptions#引入错误给try...except使用</span><br><span class="line">from django.contrib.contenttypes.models import ContentType#引入ContentType</span><br><span class="line">from read_stats.models import ReadNum      #从另一个app里引入类</span><br><span class="line"></span><br><span class="line"># Create your models here.</span><br><span class="line">class Article(models.Model):</span><br><span class="line">    title = models.CharField(max_length=30)</span><br><span class="line">    content = models.TextField()#这是它原来的数据库内容</span><br><span class="line">    </span><br><span class="line">    #添加一个方法给admin.py使用，如果有就直接返回值（字符串），如果没有object就返回一个0</span><br><span class="line">    def get_read_num(self):</span><br><span class="line">        try:</span><br><span class="line">            ct = ContentType.objects.get_for_model(self)#确定ContentType</span><br><span class="line">            readnum = ReadNum.objects.get(content_type=ct,object_id=self.pk)#每个readnum都是content_type和object_id对应的项</span><br><span class="line">            return readnum.read_num#这样返回就是一个具体的值，不然只是一个数据</span><br><span class="line">        except exceptions.ObjectDoesNotExist:</span><br><span class="line">            return 0</span><br></pre></td></tr></table></figure></p><p>再修改<code>Article</code>下的<code>admin.py</code>，让后台可以体现出来<code>read_num</code>：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">from django.contrib import admin</span><br><span class="line">from .models import Article</span><br><span class="line"># Register your models here.</span><br><span class="line"></span><br><span class="line">@admin.register(Article)</span><br><span class="line">class Article(admin.ModelAdmin):</span><br><span class="line">        list_display = (&apos;id&apos;,&apos;title&apos;,&apos;get_read_num&apos;)#这里新加上刚才的那个方法</span><br></pre></td></tr></table></figure></p><p>由于<code>admin.py</code>里返回的必须是字段，所以我们才在<code>models.py</code>里添加了一个方法去生成字段。</p><p>刷新一下Django后台页面，就看到效果了：<br><img src="/images/django19.png" alt="paradin"></p><p>至此，这个read_num数据就同时被两个APP分享了。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://docs.djangoproject.com/en/2.1/ref/contrib/contenttypes/" target="_blank" rel="noopener">https://docs.djangoproject.com/en/2.1/ref/contrib/contenttypes/</a>    （官方文档）</p>]]></content>
+    
+    <summary type="html">
+    
+      本文是杨世航在Bilibili的第19讲，我这里只是做一个自己理解的复述而已
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="django" scheme="http://yoursite.com/tags/django/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+  </entry>
   
   <entry>
     <title>Django前端输入变量通过内部脚本返回前端展示之二</title>
@@ -154,9 +178,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="钉钉" scheme="http://yoursite.com/tags/%E9%92%89%E9%92%89/"/>
-    
       <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+      <category term="钉钉" scheme="http://yoursite.com/tags/%E9%92%89%E9%92%89/"/>
     
       <category term="Docker" scheme="http://yoursite.com/tags/Docker/"/>
     
@@ -483,30 +507,6 @@
       <category term="数据库中间件" scheme="http://yoursite.com/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E9%97%B4%E4%BB%B6/"/>
     
       <category term="mycat" scheme="http://yoursite.com/tags/mycat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>博客评论改用来必力</title>
-    <link href="http://yoursite.com/2018/07/09/%E5%8D%9A%E5%AE%A2%E8%AF%84%E8%AE%BA%E6%94%B9%E7%94%A8%E6%9D%A5%E5%BF%85%E5%8A%9B/"/>
-    <id>http://yoursite.com/2018/07/09/博客评论改用来必力/</id>
-    <published>2018-07-09T11:01:09.000Z</published>
-    <updated>2018-07-09T11:27:22.966Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>原来我的博客评论用的是<code>hypercomments</code>，但是这几天发现评论已经不能用了，变成了<code>Close discussion</code>，如图：<br><img src="/images/pinglun1.png" alt="akb48"></p><p>去<a href="https://www.hypercomments.com/en/pricing" target="_blank" rel="noopener">https://www.hypercomments.com/en/pricing</a> 发现已经没有免费版了，或者是我这个google邮箱里的免费版<code>hypercomments</code>到期了，于是就琢磨换成来必力吧。</p><p>首先先去<code>https://livere.com</code> 注册一个账号，这个来必力是韩国的软件，但是用google翻译就不用怕了，注册很简单，找回密码也很简单。</p><p>再去<a href="https://livere.com/insight/communite" target="_blank" rel="noopener">https://livere.com/insight/communite</a> 里选择免费版，然后填写博客的地址和名称，选择<code>个人网站</code>。这个时候会得到一个<code>data-uid</code>，如图：<br><img src="/images/pinglun2.png" alt="akb48"></p><p>打开NexT主题的配置文件<code>_config.yml</code>中，搜索<code>livere_uid</code>，将<code>livere_uid</code>前面的<code>#</code>号去掉，将id填写到<code>livere_uid：</code>后面。再找到<code>Hypercomments</code>，把<code>hypercomments_id</code>这一行注释掉即可。</p>]]></content>
-    
-    <summary type="html">
-    
-      生命在于折腾
-    
-    </summary>
-    
-      <category term="博客搭建" scheme="http://yoursite.com/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
-    
-    
-      <category term="hexo" scheme="http://yoursite.com/tags/hexo/"/>
-    
-      <category term="博客搭建" scheme="http://yoursite.com/tags/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/"/>
     
   </entry>
   

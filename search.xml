@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Django将某个数据库字段给多个app使用]]></title>
+    <url>%2F2018%2F09%2F25%2FDjango%E5%B0%86%E6%9F%90%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%97%E6%AE%B5%E7%BB%99%E5%A4%9A%E4%B8%AAapp%E4%BD%BF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[前言Django里经常会有这样的一个需求—-同样的一组数据要给很多个app使用。比如是一个运维系统，同样运维人员名单就既要给“项目部署”这个APP用又要给“项目负责人”这个APP用。如果每次都要去跨应用的from XXX.models import xxx很有不友好，所以要解决这个问题，就要用到django自带的ContentTypes框架。Django:2.1.1Python:3.6.4old app:Articlesnew app:read_stats 原始状态与前期配置目前在django的控制台页面的情况是这样的： 可见里面就一个叫Articles的app，点开之后，发现对应的项目也很简单，只有id和title这两个字段而已： 本次试验的目的就是新建立一个文章统计计数的app，在里面配置数据库，然后让原来的blog这个app能够使用得到新app的数据项。 首先先建立一个专门用来计数的app，比如就叫read_stat，那么在django项目路径下python manage.py startapp read_stats，再把这个新的app添加到settings.py里： 12345678910INSTALLED_APPS = [ &apos;django.contrib.admin&apos;, &apos;django.contrib.auth&apos;, &apos;django.contrib.contenttypes&apos;, &apos;django.contrib.sessions&apos;, &apos;django.contrib.messages&apos;, &apos;django.contrib.staticfiles&apos;, &apos;article&apos;, #先加载django自身的app，然后是第三方app，最后是自己开发的app &apos;read_stats&apos;,] 编辑一下read_stats里的models.py： 12345678910from django.db import modelsfrom django.contrib.contenttypes.fields import GenericForeignKeyfrom django.contrib.contenttypes.models import ContentType# Create your models here.class ReadNum(models.Model): read_num = models.IntegerField(default=0) content_type = models.ForeignKey(ContentType,on_delete=models.DO_NOTHING) object_id = models.PositiveIntegerField() content_object = GenericForeignKey(&quot;content_type&quot;,&quot;object_id&quot;) 配置了数据库，肯定需要python manage.py makemigrations和python manage.py migrate： 修改一下负责后台展示的admin.py： 1234567from django.contrib import adminfrom .models import ReadNum# Register your models here.@admin.register(ReadNum) #装饰器class ReadNumAdmin(admin.ModelAdmin): list_display = (&apos;read_num&apos;,&apos;content_object&apos;) 此时刷新一下django页面就看到app已经注册成功了： 由于是新的，所以里面空空如也，点击一下ADD，就可以输入值了，Read num就是设定的“阅读次数”，Content type这个数据是一个选择项，选择对应的app：Article，而Object id就Articles对应的文章编号： 这样达到了后台配置“将Article应用里的第2篇文章的阅读次数上调到了99次”。 数据库的跨app配置刚才手动在后台配置完毕，但是目前这个read_num数据只能是在read_stats这个app里自嗨。要给让Article能够得到这个read_num的话，首先要配置Article下的models.py： 123456789101112131415161718from django.db import modelsfrom django.db.models.fields import exceptions #引入错误给try...except使用from django.contrib.contenttypes.models import ContentType #引入ContentTypefrom read_stats.models import ReadNum #从另一个app里引入类# Create your models here.class Article(models.Model): title = models.CharField(max_length=30) content = models.TextField() #这是它原来的数据库内容 #添加一个方法给admin.py使用，如果有就直接返回值（字符串），如果没有object就返回一个0 def get_read_num(self): try: ct = ContentType.objects.get_for_model(self) #确定ContentType readnum = ReadNum.objects.get(content_type=ct,object_id=self.pk) #每个readnum都是content_type和object_id对应的项 return readnum.read_num #这样返回就是一个具体的值，不然只是一个数据 except exceptions.ObjectDoesNotExist: return 0 再修改Article下的admin.py，让后台可以体现出来read_num： 1234567from django.contrib import adminfrom .models import Article# Register your models here.@admin.register(Article)class Article(admin.ModelAdmin): list_display = (&apos;id&apos;,&apos;title&apos;,&apos;get_read_num&apos;) #这里新加上刚才的那个方法 由于admin.py里返回的必须是字段，所以我们才在models.py里添加了一个方法去生成字段。 刷新一下Django后台页面，就看到效果了： 至此，这个read_num数据就同时被两个APP分享了。 参考资料https://docs.djangoproject.com/en/2.1/ref/contrib/contenttypes/ （官方文档）]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>django</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Django前端输入变量通过内部脚本返回前端展示之二]]></title>
     <url>%2F2018%2F09%2F18%2FDjango%E9%80%9A%E8%BF%87%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E7%AC%A6%E5%B0%86%E5%90%8E%E5%8F%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E5%BA%94%E8%BE%93%E5%87%BA%2F</url>
     <content type="text"><![CDATA[背景说明python：3.6.5Django：2.1.1Project：Kubernetes，文件夹路径就是/django/Kubernetes/App：createyaml，文件夹路径就是/django/Kubernetes/createyaml前文地址：https://rorschachchan.github.io/2018/09/13/Django%E5%88%B6%E4%BD%9C%E5%89%8D%E7%AB%AF%E9%A1%B5%E9%9D%A2%E7%94%9F%E6%88%90yaml%E6%96%87%E4%BB%B6%E4%B9%8B%E6%94%B9%E8%BF%9B%E7%89%88/ sqlite3的用法sqlite是django默认的数据库，如果只是存一点简单的数据，那么它是足够胜任的。如果在django的APP文件夹里配置了models.py而且执行了python manage.py makemigrations和python manage.py migrate的话，那么在project的文件夹里是会生成db.sqlite3这个文件的。至于如何命令行操作sqlite和python调用sqlite，请去看：http://blog.51cto.com/zengestudy/1904680 ，里面说的已经很清楚了。 不过要注意的是execute方法得到的是一个对象，是看不到具体的sql结果。还需要fetchall方法进一步的解析，这样得到的是一个列表，然后取其中的具体元素，如图： 使用唯一标识符由于yaml的参数是从前端传入的，如果同时有多个人传入数据，那么后端脚本在取参数就会出现错误：多个人在传入不同的数据之后得到的结果却是一样的，即服务器接收到的最后那个数据返回的结果。为了不出现这样的混乱，所以我们就要引入唯一标识符保证每个人得到都是他们的结果。 在数据库里是有一个主键的也就是id，它是django生成数据库的时候自带的private key，每一个id都是唯一的，既然唯一那肯定就是我们选做唯一标识符的首选。至于怎么用它，其实就是在原有的views.py上做一点小手脚。如下： 1234567891011121314151617181920212223242526272829303132333435363738394041424344from django.shortcuts import renderfrom django.http import HttpResponsefrom .models import parameter #引入同级的modes.py里的parameter类def create_yaml(request): return render(request,'create_yaml.html') #这个页面是用来输入各值def get_yaml(request): if request.method == 'POST': #如果是post传参，那么就记录下来 apiVersion = request.POST.get('apiVersion','v1') kind = request.POST.get('kind','RC') name = request.POST.get('name') replicas = request.POST.get('replicas','1') labels_app = request.POST.get('labels_app',None) containers_name = request.POST.get('containers_name',None) containers_image = request.POST.get('containers_image',None) containerPort1 = request.POST.get('containerPort1',None) containerPort2 = request.POST.get('containerPort2',None) containers_name2 = request.POST.get('containers_name2',None) containers_image2 = request.POST.get('containers_image2',None) containerPort2_1 = request.POST.get('containerPort2_1',None) containerPort2_2 = request.POST.get('containerPort2_2',None) signer = request.POST.get('signer', 'Micheal Jackson') else: return HttpResponse('404') Parameter = parameter() #将parameter实例化 Parameter.apiVersion = apiVersion #把刚刚从前端得到的值对应赋值 Parameter.kind = kind Parameter.name = name Parameter.replicas = replicas Parameter.labels_app = labels_app Parameter.containers_name = containers_name Parameter.containers_image = containers_image Parameter.containerPort1 = containerPort1 Parameter.containerPort2 = containerPort2 Parameter.containers_name2 = containers_name2 Parameter.containers_image2 = containers_image2 Parameter.containerPort2_1 = containerPort2_1 Parameter.containerPort2_2 = containerPort2_2 Parameter.save() #保存修改 yaml = parameter.objects.get(id=Parameter.id) #通过object.get方法是得到保存的所有值，但是我们只要本次的值，也就是id与private key一致的 return HttpResponse('api版本:%s yaml类型:%s yaml名称:%s 副本数量:%s yaml所属APP:%s 容器名称:%s 容器镜像名:%s' % (yaml.apiVersion,yaml.kind,yaml.name,yaml.replicas,yaml.labels_app,yaml.containers_name,yaml.containers_image))) #输出部分刚输入的值到页面，检查一下是否正确 urls.py如下： 123456789from django.contrib import adminfrom django.urls import pathfrom createyaml import viewsurlpatterns = [ path('admin/', admin.site.urls), path(r'create_yaml/', views.create_yaml), path(r'get_yaml/', views.get_yaml),] 启动django，在前端页面测试一下看看是否得到的结果就是本次输入的结果，如图： 可以看到，返回的页面正确的输出了本次各个参数！剩下还有三部分： 做一个python脚本，把脚本加工的结果返回到前端； 用css/js把界面加工一下； 加入javascript，在前端输入的时候判断输入值是否合法； 参考资料http://blog.51cto.com/lannyma/1735751http://www.liujiangblog.com/course/django/152https://www.jianshu.com/p/46188b39eae5]]></content>
@@ -68,8 +80,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>钉钉</tag>
         <tag>Jenkins</tag>
+        <tag>钉钉</tag>
         <tag>Docker</tag>
       </tags>
   </entry>
@@ -645,18 +657,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root启动进程以及启动docker]]></title>
-    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root用户启动tomcat进程]]></title>
     <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
     <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
@@ -666,6 +666,18 @@
       <tags>
         <tag>centos</tag>
         <tag>运维安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root启动进程以及启动docker]]></title>
+    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1912,8 +1924,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>git</tag>
         <tag>nginx</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
