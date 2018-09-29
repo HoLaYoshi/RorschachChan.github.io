@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-27T02:40:30.985Z</updated>
+  <updated>2018-09-29T06:44:33.132Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>容器报错：rpc error: code = 14 desc = grpc: the connection is unavailable</title>
+    <link href="http://yoursite.com/2018/09/29/%E5%AE%B9%E5%99%A8%E6%8A%A5%E9%94%99%EF%BC%9Arpc-error-code-14-desc-grpc-the-connection-is-unavailable/"/>
+    <id>http://yoursite.com/2018/09/29/容器报错：rpc-error-code-14-desc-grpc-the-connection-is-unavailable/</id>
+    <published>2018-09-29T06:14:52.000Z</published>
+    <updated>2018-09-29T06:44:33.132Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>开发同学反馈某一个开发环境的机器卡的要命，我登录一看，内存已经被耗的差不多，但是一看top又看不出来哪个进程占用了很多的内存，如图：<br><img src="/images/docker8.png" alt="akb48"></p><p>换<code>ps -e -o &#39;pid,comm,args,pcpu,rsz,vsz,stime,user,uid&#39; |  sort -nrk5</code>看也没看出来个之乎者也。</p><p>发现这个服务器里有两个容器，但是很奇怪，用docker stats却无法获得他们的基础值：<br><img src="/images/docker9.png" alt="akb48"></p><p>明明容器都是up状态啊，于是我就尝试链接到其中一台，发现报错：rpc error: code = 14 desc = grpc: the connection is unavailable，而且不能restart和kill,如图：<br><img src="/images/docker10.png" alt="akb48"></p><p>使用<code>docker-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --shim docker-containerd-shim --runtime docker-runc --debug</code>，发现里面是这样：<br><img src="/images/docker11.png" alt="akb48"></p><p>后来在<a href="https://github.com/moby/moby/issues/30984" target="_blank" rel="noopener">https://github.com/moby/moby/issues/30984</a> 这个文章下面找到了一个跟我情况差不多的哥们，也是<code>docker stats</code>命令失效。解决方法是重启docker进程：<code>systemctl restart docker.service</code>，果然，重启之后在手动启动上面两个容器，容器就可以正常访问了：<br><img src="/images/docker12.png" alt="akb48"></p><p>服务器的内存情况也得到了一定的缓解：<br><img src="/images/docker13.png" alt="akb48"></p><p>后来跟开发复盘，原来是这个机器上一次死机了，没法关闭容器，只能直接在阿里云控制台重启，而正常的流程应该是先关闭容器再重启的。</p>]]></content>
+    
+    <summary type="html">
+    
+      一次服务器重启引起的小故障
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
+    
+      <category term="容器" scheme="http://yoursite.com/tags/%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>Django前端输入变量通过内部脚本返回前端展示之三</title>
@@ -241,9 +265,9 @@
     <link href="http://yoursite.com/2018/08/25/centos6-5%E5%8D%87%E7%BA%A7%E6%9C%80%E6%96%B0%E5%86%85%E6%A0%B84-18%E7%9A%84%E5%9D%91/"/>
     <id>http://yoursite.com/2018/08/25/centos6-5升级最新内核4-18的坑/</id>
     <published>2018-08-25T03:34:59.000Z</published>
-    <updated>2018-08-25T06:28:36.794Z</updated>
+    <updated>2018-09-29T01:30:23.132Z</updated>
     
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="升级流程">升级流程</span></h2><p>开发童鞋要搞BBR，然后让我在他的阿里云服务器上升级一下内核。我登进去一看，centos 6.5，内核还是2.6的。</p><p>之前我曾经搞过centos 7升级内核到最新版，文章在此：<a href="https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/</a> 。centos6升级内核有几个地方不太一样，但是过程差不多。整个升级内核步骤如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先备份镜像，很重要！！！  而且备份镜像成功之前，云服务器不可以重启。</span><br><span class="line">yum uodate -y</span><br><span class="line">rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org #导入ELRepo GPG key</span><br><span class="line">rpm -Uvh https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm #安装 6版本的ELRepo</span><br><span class="line">yum --enablerepo=elrepo-kernel install kernel-ml -y#截至本文，最新的是4.18，lt版本是4.4</span><br></pre></td></tr></table></figure></p><p>如果yum的时候有提示<code>Warning: RPMDB altered outside of yum</code>，只需要删除一下yum的历史记录即可：<code>rm -rf /var/lib/yum/history/*.sqlite</code> 。 </p><p>安装完毕之后，<code>vim /etc/grub.conf</code>，把default改成0，即指定使用第一个内核启动，如图：<br><img src="/images/centos6updatecore1.png" alt="akb48"></p><p>然后在阿里云控制台重启一下这个服务器即可。</p><h2><span id="无法启动">无法启动？</span></h2><p>可能有的人直接就启动成功了，因为网络上很多文章到此就结束了。但是我这台服务器，很不幸，出现了问题。在控制台上看服务器是“运行中”，但是无法ssh连接，而且ping也是失败。不一会，控制台的服务器就显示“已停止”，可见是内核出了问题。</p><p>联系了阿里的后台，他们反馈这个机器现在的状态是<code>Module scsi_wait_scan not found</code>，那知道了原因就对症下药吧，这个问题解决方法不止一个，我亲测以下的方法好使。</p><p>首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">'add_drivers+="virtio_blk"'</span> &gt;<span class="regexp">/etc/</span>dracut.conf.d/force-vitio_blk-to-ensure-boot.conf</span><br><span class="line">cp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak#把新下载的4.18的img文件备份</span><br><span class="line">dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64#编译生成新的img，4.18.5-1.el6.elrepo.x86_64这个文件在/lib/modules/下</span><br></pre></td></tr></table></figure></p><p>重新在阿里云控制台重启一下这个服务器，这一次就OK了。<br><img src="/images/centos6updatecore2.png" alt="akb48"></p><p>发生异常的原因是：更新内核后,在写dracut程序时无法检测<code>KVM&#39;s virtual disk driver &quot;virtio_blk&quot;</code>，此驱动被用于访问KVM虚拟磁盘,dracut没有正常添加新的<code>initramfs module</code>,导致系统没有磁盘访问驱动无法正常启动。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://bugzilla.kernel.org/show_bug.cgi?id=60758" target="_blank" rel="noopener">https://bugzilla.kernel.org/show_bug.cgi?id=60758</a><br><a href="https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/" target="_blank" rel="noopener">https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/</a></p>]]></content>
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="升级流程">升级流程</span></h2><p>开发童鞋要搞BBR，然后让我在他的阿里云服务器上升级一下内核。我登进去一看，centos 6.5，内核还是2.6的。</p><p>之前我曾经搞过centos 7升级内核到最新版，文章在此：<a href="https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/06/11/阿里云centos7升级内核过程/</a> 。centos6升级内核有几个地方不太一样，但是过程差不多。整个升级内核步骤如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">先备份镜像，很重要！！！  而且备份镜像成功之前，云服务器不可以重启。</span><br><span class="line">yum update -y</span><br><span class="line">rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org #导入ELRepo GPG key</span><br><span class="line">rpm -Uvh https://www.elrepo.org/elrepo-release-6-8.el6.elrepo.noarch.rpm #安装 6版本的ELRepo</span><br><span class="line">yum --enablerepo=elrepo-kernel install kernel-ml -y#截至本文，最新的是4.18，lt版本是4.4</span><br></pre></td></tr></table></figure></p><p>如果yum的时候有提示<code>Warning: RPMDB altered outside of yum</code>，只需要删除一下yum的历史记录即可：<code>rm -rf /var/lib/yum/history/*.sqlite</code> 。 </p><p>安装完毕之后，<code>vim /etc/grub.conf</code>，把default改成0，即指定使用第一个内核启动，如图：<br><img src="/images/centos6updatecore1.png" alt="akb48"></p><p>然后在阿里云控制台重启一下这个服务器即可。</p><h2><span id="无法启动">无法启动？</span></h2><p>可能有的人直接就启动成功了，因为网络上很多文章到此就结束了。但是我这台服务器，很不幸，出现了问题。在控制台上看服务器是“运行中”，但是无法ssh连接，而且ping也是失败。不一会，控制台的服务器就显示“已停止”，可见是内核出了问题。</p><p>联系了阿里的后台，他们反馈这个机器现在的状态是<code>Module scsi_wait_scan not found</code>，那知道了原因就对症下药吧，这个问题解决方法不止一个，我亲测以下的方法好使。</p><p>首先先用刚刚做的那个磁盘快照回滚到之前正常的状态，重新执行上面整个安装4.18的内核的所有操作，然后还要补充如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">'add_drivers+="virtio_blk"'</span> &gt;<span class="regexp">/etc/</span>dracut.conf.d/force-vitio_blk-to-ensure-boot.conf</span><br><span class="line">cp /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img /boot/initramfs-4.18.5-1.el6.elrepo.x86_64.img-bak#把新下载的4.18的img文件备份</span><br><span class="line">dracut -f initramfs-4.18.5-1.el6.elrepo.x86_64.img 4.18.5-1.el6.elrepo.x86_64#编译生成新的img，4.18.5-1.el6.elrepo.x86_64这个文件在/lib/modules/下</span><br></pre></td></tr></table></figure></p><p>重新在阿里云控制台重启一下这个服务器，这一次就OK了。<br><img src="/images/centos6updatecore2.png" alt="akb48"></p><p>发生异常的原因是：更新内核后,在写dracut程序时无法检测<code>KVM&#39;s virtual disk driver &quot;virtio_blk&quot;</code>，此驱动被用于访问KVM虚拟磁盘,dracut没有正常添加新的<code>initramfs module</code>,导致系统没有磁盘访问驱动无法正常启动。</p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://bugzilla.kernel.org/show_bug.cgi?id=60758" target="_blank" rel="noopener">https://bugzilla.kernel.org/show_bug.cgi?id=60758</a><br><a href="https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/" target="_blank" rel="noopener">https://opengers.github.io/linux/linux-source-code-compile-kernel-rpm/</a></p>]]></content>
     
     <summary type="html">
     
@@ -481,30 +505,6 @@
       <category term="nodejs" scheme="http://yoursite.com/tags/nodejs/"/>
     
       <category term="gc++" scheme="http://yoursite.com/tags/gc/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>世界杯的一些感悟</title>
-    <link href="http://yoursite.com/2018/07/12/%E4%B8%96%E7%95%8C%E6%9D%AF%E7%9A%84%E4%B8%80%E4%BA%9B%E6%96%B0%E6%84%9F%E6%82%9F/"/>
-    <id>http://yoursite.com/2018/07/12/世界杯的一些新感悟/</id>
-    <published>2018-07-12T02:21:00.000Z</published>
-    <updated>2018-07-16T05:53:43.496Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="传控已死">传控已死？</span></h2><p>今早英格兰加时赛输给了克罗地亚，至此就剩下一名曼城球员还在本届世界杯继续前进了，那就是法国队的边后卫门迪。再加上之前小组出局的德国和1/8赛输球的西班牙，不得让人怀疑是否“传控已死”？</p><p>传控被瓜迪奥拉发扬光大已经10年了，2008年的西班牙也是靠着传控和巴萨的班底拿下两次欧洲杯和一次世界杯。传控虽然在理论上是一个完美的战术，但是战术也需要人来执行，球员水平有高低状态有起伏，裁判的尺度也不一样，这都会影响传控的比赛结果。这几年的传控逐渐被各路教练针对性研究，他们用“高压迫，快速反击，大巴防守”的套路击败传控的经典战役已经屡见不鲜。所以这几年的传控可谓是磕磕绊绊，风光不再。</p><p>传控对中场球员要求很高，一旦球员失去了往前传球的机会，那么就成了无效控球，倒脚来倒脚去时间就走光了。而传统打法对球员的要求相对简单但是对球员身体素质和纪律要求很高，所以更多球队选择了传统打法，而他们也很有针对性的对强队进行了部署，或打高空球或者摆大巴打反击。</p><p>我个人通过今年的世界杯和以往的几次欧冠来得到这样的结论：传控没有死，但是传控在杯赛的统治力已经大幅下滑，仅但在联赛和小型杯赛还有一定的优势。原因很简单，联赛是三十多场比赛，容错率要远大于杯赛，这就是传控的好处—虐菜相对来说比较稳。但是最近的足坛趋势是世界杯/欧洲杯/欧冠最大，拿不到上面几个锦标，球员就很难得到金球奖。所以在成绩的压力下，足坛也会慢慢将传控降温，改走传统打法。</p><p>即使是442也要有能一脚长传功力的中场做炮台，合适的球员搭配合适的战术才会得到胜利。任何战术本身也要自我修复漏洞，现在的传控队伍也开始慢慢放弃无用的控制，讲究定位球破门和远射破门，但是如何破密集防守还是世界教练共同面对的难题。</p><h2><span id="决赛怎么看">决赛怎么看？</span></h2><p>世界杯决赛肯定是防守为主的低比分比赛。法国那边进攻肯定还是“吉鲁吸引炮火，格里兹曼见缝插针，有反击找姆巴佩，角球任意球上大个子”的常规进攻路线。而克罗地亚也是慢节奏抓定位球的方法。我觉得克罗地亚中场并不虚法国，但是莫德里奇这几年没有跟坎特交手过，可以通过这场决赛看看双方谁更技高一筹。法国这批球员相对年轻，虽然这场比赛他们输不起，但是他们已经有了2016年欧洲杯亚军的惨痛经验，而克罗地亚虽然有些球员没有决赛经验，但是他们心态更放松，比较明显的隐患就是克罗地亚的体能是否能支持他们再一次顶得住法国的炮火。</p><p>从2006年至今，三届世界杯都踢了延长赛，所以我个人推荐买常规时间法国赢或者平。</p><p>至于季军赛，我觉得凯恩会进球，但是比利时3：2赢下英超内战。</p><p>世界杯让足彩也跟着热闹起来。我也跟着潮流买了几场比赛，但是我发现凡是“我跟别人说自己没买的”比赛，结果真中了；凡是我“下注买”的比赛都输了，且不用说德国输墨西哥，日本赢哥伦比亚的冷门战，英格兰打哥伦比亚那场的常规时间最后一分钟，米纳进了一个头球，我直接损失100块… </p><p>由此我坚信了，我就不是一个特别有好运气的人，而且也比较害怕成为赌徒，完全符合毛主席对知识分子和小资产阶级的定义，一辈子就是老婆孩子热炕头的命。</p><h2><span id="中国足球怎么办">中国足球怎么办？</span></h2><p>每到这种重大足球赛事，国足就要被当作反面典型来说嘴。前几天黄西发了微博调侃遭到国足及相关人士的狂喷，其实喷来喷去，主题就是一个“国足那些球员拿钱多，成绩却这么烂，如何能提高国足成绩？”</p><p>其实这个主题是老生常谈，每次都说改革但是也没什么进步，哪怕输给泰国1-5，全国上下一片骂，几天之后涛声依旧…</p><p>我个人认为中国足球在20年时间内是不可能强大的，因为这与中国国情有关。</p><p>第一，在中国传统教育里，中高阶级就没有那种“把孩子培养成运动员”的想法，毕竟丁俊晖父亲和张玉宁父亲才是少数，更多的父母希望孩子去当医生当公务员做生意，这不仅仅是大陆家庭，香港家庭和台湾家庭也是如此。只有贫苦家庭才会把孩子送去专门搞体育；</p><p>第二，为什么中产家庭不希望孩子只是把体育当作兴趣爱好而不是职业？首先现在独生子女太多，家长担心吃苦；其次，搞职业体育是从小开始的，万一踢不出来光阴就白白浪费了，而在发达国家，比如日本，贫富差距没有那么大，而且球员素养相对较高，即使不能大红大紫也不至于饿死，而比如南美部分贫困国家，家里不是独生子女，本来很穷上不起学，踢不出来就继续去搬砖，所以这两种国家的足球成绩不会太烂；再其次，足球青训部分教练素质不高，家长担心孩子跟着学坏；</p><p>第三，足球需要青训，而青训需要几代人的时间，但是足协更喜欢速成的方法，这与足球规律相悖，所以搞来搞去钱花了不少却始终原地转圈；</p><p>记得“诗人”贺炜在日本与比利时之战之后，发微博羡慕日本足球的同时也说“不多说了，说多了反动”。的确，如果潜规则少一点，贫富差距均衡一点，或许不止是足球，全中国体育的市场化就会有更加显著的改善了。</p>]]></content>
-    
-    <summary type="html">
-    
-      这一个月，说快真快啊！
-    
-    </summary>
-    
-      <category term="坠乱花天" scheme="http://yoursite.com/categories/%E5%9D%A0%E4%B9%B1%E8%8A%B1%E5%A4%A9/"/>
-    
-    
-      <category term="足球" scheme="http://yoursite.com/tags/%E8%B6%B3%E7%90%83/"/>
-    
-      <category term="世界杯" scheme="http://yoursite.com/tags/%E4%B8%96%E7%95%8C%E6%9D%AF/"/>
     
   </entry>
   
