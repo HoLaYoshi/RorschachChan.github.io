@@ -102,7 +102,8 @@
 <meta property="og:image" content="http://yoursite.com/images/docker11.png">
 <meta property="og:image" content="http://yoursite.com/images/docker12.png">
 <meta property="og:image" content="http://yoursite.com/images/docker13.png">
-<meta property="og:updated_time" content="2018-09-29T07:03:19.428Z">
+<meta property="og:image" content="http://yoursite.com/images/hazard.gif">
+<meta property="og:updated_time" content="2018-09-29T09:36:37.517Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="容器报错：rpc error: code = 14 desc = grpc: the connection is unavailable">
 <meta name="twitter:description" content="一次服务器重启引起的小故障">
@@ -468,7 +469,7 @@
 <p>使用<code>docker-containerd -l unix:///var/run/docker/libcontainerd/docker-containerd.sock --metrics-interval=0 --start-timeout 2m --state-dir /var/run/docker/libcontainerd/containerd --shim docker-containerd-shim --runtime docker-runc --debug</code>，发现里面是这样：<br><img src="/images/docker11.png" alt="akb48"></p>
 <p>后来在<a href="https://github.com/moby/moby/issues/30984" target="_blank" rel="noopener">https://github.com/moby/moby/issues/30984</a> 这个文章下面找到了一个跟我情况差不多的哥们，也是<code>docker stats</code>命令失效。解决方法是重启docker进程：<code>systemctl restart docker.service</code>，果然，重启之后在手动启动上面两个容器，容器就可以正常访问了：<br><img src="/images/docker12.png" alt="akb48"></p>
 <p>服务器的内存情况也得到了一定的缓解：<br><img src="/images/docker13.png" alt="akb48"></p>
-<p>后来跟开发复盘，原来是这个机器上一次死机了，没法关闭容器，只能直接在阿里云控制台重启，而正常的流程应该是先关闭容器再重启的。</p>
+<p>后来跟开发复盘，原来是这个机器上一次死机了，没法关闭容器，只能直接在阿里云控制台重启，而正常的流程应该是先关闭容器再重启的。<br><img src="/images/hazard.gif" alt="akb48"></p>
 
       
     </div>
