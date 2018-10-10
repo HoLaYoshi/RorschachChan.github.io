@@ -97,7 +97,7 @@
 <meta property="og:description" content="阿里云华东1区的D区竟然突然说不卖服务器了...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/docker14.png">
-<meta property="og:updated_time" content="2018-10-10T07:01:47.971Z">
+<meta property="og:updated_time" content="2018-10-10T07:07:47.069Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker部署的几个tips">
 <meta name="twitter:description" content="阿里云华东1区的D区竟然突然说不卖服务器了...">
@@ -415,7 +415,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  616
+                  664
                 </span>
               
 
@@ -456,8 +456,8 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>公司的电商平台使用的是阿里云VPC网络，整个交换机都是部署在D区，结果突然接到噩耗，D区已经不再出售服务器了，如图：<br><img src="/images/docker14.png" alt="akb48"></p>
-<p>没办法，只能把原来的服务器调高配置，然后在里面安装docker，尽可能的让进程之间之间不受干扰。由于事发仓促，镜像就选用<code>centos：latest</code>，然后在里面装环境和git代码，把容器当做虚拟机来用了。</p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>公司的电商平台使用的是阿里云VPC网络，整个交换机和云服务器都是部署在D区。今天在部署测试环境的时候，发现无法购买服务器，在钉钉上与阿里云售后交涉后，接到噩耗—D区已经不再出售服务器了，如图：<br><img src="/images/docker14.png" alt="akb48"></p>
+<p>没办法，只能把现有的服务器调高配置，在里面安装docker，尽可能的让进程之间之间不受干扰。由于事发仓促，整个架构都要重新调整，镜像就先选用<code>centos：latest</code>，然后在里面装环境以及git  pull代码，把容器当做虚拟机来用了。</p>
 <h2><span id="几个小提示">几个小提示</span></h2><ol>
 <li><p>如果要<code>pecl install swoole</code>的话，要先<code>yum install -y glibc-headers gcc-c++ kernel-headers gcc openssl pcre-devel</code>和<code>yum install -y openssl-devel</code>；</p>
 </li>
@@ -468,7 +468,7 @@
 <li><p>容器需要php7.2的环境的话，就要用最新的源：</p>
  <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release -y</span><br><span class="line">rpm -Uvh https:<span class="comment">//mirror.webtatic.com/yum/el7/webtatic-release.rpm</span></span><br></pre></td></tr></table></figure>
 </li>
-<li><p>别忘了开机自启动docker：<code>systemctl enable docker</code>；</p>
+<li><p>别忘了开机自启动docker进程：<code>systemctl enable docker</code>；</p>
 </li>
 <li><p><code>yum install node npm</code>之前要</p>
  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release</span><br><span class="line">curl --silent --location https:<span class="comment">//rpm.nodesource.com/setup_8.x | bash -</span></span><br><span class="line">yum install -y nodejs		#这样版本是8.12,npm的版本是6.4.1</span><br></pre></td></tr></table></figure>
