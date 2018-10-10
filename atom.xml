@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-29T09:36:37.517Z</updated>
+  <updated>2018-10-10T07:01:47.971Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Docker部署的几个tips</title>
+    <link href="http://yoursite.com/2018/10/10/Docker%E9%83%A8%E7%BD%B2%E7%9A%84%E5%87%A0%E4%B8%AAtips/"/>
+    <id>http://yoursite.com/2018/10/10/Docker部署的几个tips/</id>
+    <published>2018-10-10T06:17:58.000Z</published>
+    <updated>2018-10-10T07:01:47.971Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>公司的电商平台使用的是阿里云VPC网络，整个交换机都是部署在D区，结果突然接到噩耗，D区已经不再出售服务器了，如图：<br><img src="/images/docker14.png" alt="akb48"></p><p>没办法，只能把原来的服务器调高配置，然后在里面安装docker，尽可能的让进程之间之间不受干扰。由于事发仓促，镜像就选用<code>centos：latest</code>，然后在里面装环境和git代码，把容器当做虚拟机来用了。</p><h2><span id="几个小提示">几个小提示</span></h2><ol><li><p>如果要<code>pecl install swoole</code>的话，要先<code>yum install -y glibc-headers gcc-c++ kernel-headers gcc openssl pcre-devel</code>和<code>yum install -y openssl-devel</code>；</p></li><li><p>centos:latest镜像目前是7.5版本，如果要查看的话需要先安装lsb命令：<code>yum install redhat-lsb -y</code>；</p></li><li><p>如果容器里使用yum下载爆’Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds’，用<code>yum -y install wget</code>解决；</p></li><li><p>容器需要php7.2的环境的话，就要用最新的源：</p> <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release -y</span><br><span class="line">rpm -Uvh https:<span class="comment">//mirror.webtatic.com/yum/el7/webtatic-release.rpm</span></span><br></pre></td></tr></table></figure></li><li><p>别忘了开机自启动docker：<code>systemctl enable docker</code>；</p></li><li><p><code>yum install node npm</code>之前要</p> <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install -y epel-release</span><br><span class="line">curl --silent --location https:<span class="comment">//rpm.nodesource.com/setup_8.x | bash -</span></span><br><span class="line">yum install -y nodejs#这样版本是8.12,npm的版本是6.4.1</span><br></pre></td></tr></table></figure></li><li><p>在容器里查看端口情况就要安装netstat命令：<code>yum install -y net-tools</code>；</p></li><li><p>将一个运行中的容器做成镜像的命令：<code>docker commit 容器ID号 镜像名称</code>；</p></li><li><p>进入容器最好不要用<code>docker attach 容器ID</code>的方式，而是用<code>docker exec -it 容器ID /bin/bash</code>，离开容器的时候也不要用<code>exit</code>或者<code>ctrl + D</code>，这样会将容器停止，而是用<code>ctrl + P</code>、<code>ctrl + Q</code> 组合键退出，这样就不会终止容器运行；</p></li><li><p>容器默认的时间与宿主机的时间相差8个小时，可以在<code>docker run</code>的时候使用-v挂载的方法挂载宿主机的时间文件，比如：<code>docker run --name 容器名 -v /etc/localtime:/etc/localtime:ro ...</code>，或者在dockerfile里添加“设定时区”的语句：</p><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#设置时区</span><br><span class="line">RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \</span><br><span class="line">    &amp;&amp; echo <span class="string">'Asia/Shanghai'</span> &gt;<span class="regexp">/etc/</span>timezone \</span><br></pre></td></tr></table></figure></li><li><p>容器映射默认情况下是tcp6的，这是正常的现象，如果telnet不通，请先去检查容器内的服务是否正常，比如在容器里<code>curl 127.0.0.1 端口号</code>；</p></li></ol><h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html</a><br><a href="https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/" target="_blank" rel="noopener">https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/</a></p>]]></content>
+    
+    <summary type="html">
+    
+      阿里云华东1区的D区竟然突然说不卖服务器了...
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="docker" scheme="http://yoursite.com/tags/docker/"/>
+    
+      <category term="容器" scheme="http://yoursite.com/tags/%E5%AE%B9%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>容器报错：rpc error: code = 14 desc = grpc: the connection is unavailable</title>
@@ -226,9 +250,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
-    
       <category term="钉钉" scheme="http://yoursite.com/tags/%E9%92%89%E9%92%89/"/>
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
     
       <category term="Docker" scheme="http://yoursite.com/tags/Docker/"/>
     
@@ -479,32 +503,6 @@
       <category term="redhat" scheme="http://yoursite.com/tags/redhat/"/>
     
       <category term="yum源" scheme="http://yoursite.com/tags/yum%E6%BA%90/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Centos7编码安装php7.2和node.js8.11</title>
-    <link href="http://yoursite.com/2018/07/17/centos7%E7%BC%96%E7%A0%81%E5%AE%89%E8%A3%85php7-2-7/"/>
-    <id>http://yoursite.com/2018/07/17/centos7编码安装php7-2-7/</id>
-    <published>2018-07-17T07:47:18.000Z</published>
-    <updated>2018-07-19T01:33:59.258Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="安装php72">安装php7.2</span></h2><p>首先先做准备工作：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">yum install -y libpng libpng-devel</span><br><span class="line">yum install -y bzip2 bzip2-devel</span><br><span class="line">yum install -y curl curl-devel</span><br></pre></td></tr></table></figure></p><p>编译安装步骤在此：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">cd /root/</span><br><span class="line">wget http:<span class="comment">//101.96.10.64/cn2.php.net/distributions/php-7.2.7.tar.gz</span></span><br><span class="line">tar -zxvf php<span class="number">-7.2</span><span class="number">.7</span>.tar.gz</span><br><span class="line">cd  php<span class="number">-7.2</span><span class="number">.7</span></span><br><span class="line">sudo ./configure /</span><br><span class="line">--prefix=/usr/local/php727 /#PHP7安装的根目录</span><br><span class="line">--with-config-file-path=/usr/local/php727/etc /#PHP7的配置目录</span><br><span class="line">--with-apxs2=/usr/bin/apxs#如果用的是nginx就不要这句话</span><br><span class="line">--with-gd /#PHP gd模块</span><br><span class="line">--with-bz2 /#包含BZip2支持</span><br><span class="line">--with-zlib /#包含ZLIB支持</span><br><span class="line">--with-curl /#包含cURL支持</span><br><span class="line">--enable-mbstring / #启用多字节字符串支持</span><br><span class="line">--enable-zip / #包含Zip读写支持</span><br><span class="line">--enable-fpm / #启用PHP-FPM进程管理</span><br><span class="line">--enable-mysqlnd /#Enable mysqlnd explicitly</span><br><span class="line">--with-mysqli / #包含mysql支持</span><br><span class="line">--with-pdo-mysql/#包含mysql支持</span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p><p>如果出现了<code>configure error xml2-config not found. please check your libxml2 installation</code>错误，要执行如下两个：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install libxml2</span><br><span class="line">yum install libxml2-devel -y</span><br></pre></td></tr></table></figure></p><p>重新去执行<code>./configure</code>那步和<code>make &amp;&amp; make install</code>，整个编译完成之后，再把原带的<code>php.ini</code>拷贝到源码安装的文件夹里：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp /root/php<span class="number">-7.2</span><span class="number">.7</span>/php.ini-development /usr/local/php727/lib/php.ini</span><br></pre></td></tr></table></figure></p><p>设置环境变量，修改<code>/etc/profile</code>文件使其永久性生效，并对所有系统用户生效，在文件末尾加上如下两行代码：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PATH=$PATH:<span class="regexp">/usr/</span>local/php/bin</span><br><span class="line"><span class="keyword">export</span> PATH</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure></p><p>设置<code>php-fpm</code>开机自动启动<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chmod +x /etc/init.d/php-fpm</span><br><span class="line">chkconfig php-fpm on</span><br><span class="line">cp /usr/local/php727/etc/php-fpm.conf.default /usr/local/php727/etc/php-fpm.conf</span><br><span class="line">service php-fpm start</span><br></pre></td></tr></table></figure></p><h2><span id="安装gcc-810">安装gcc 8.1.0</span></h2><p>安装node.js需要先安装gcc，但是这个gcc不能用<code>yum install gcc-c++</code>装，因为centos7的gcc版本太低（4.8.5）不满足，在node.js编译的时候会报错：<code>WARNING: C++ compiler too old, need g++ 4.9.4 or clang++ 3.4.2 (CXX=g++)</code>。所以要去<a href="https://ftp.gnu.org/gnu/gcc/" target="_blank" rel="noopener">https://ftp.gnu.org/gnu/gcc/</a> 下载一个高版本的，我选择了目前最牛逼的<code>8.1.0</code>。<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//ftp.gnu.org/gnu/gcc/gcc-8.1.0/gcc-8.1.0.tar.gz</span></span><br><span class="line">tar -zxvf gcc<span class="number">-8.1</span><span class="number">.0</span>.tar.gz</span><br><span class="line">cd gcc<span class="number">-8.1</span><span class="number">.0</span></span><br><span class="line">./contrib/download_prerequisites</span><br></pre></td></tr></table></figure></p><p>此时进入漫长的等待，一会就会出现如下的字样，代表成功安装了!<br><img src="/images/gcc1.png" alt="办公室"></p><p>此时进行编译安装：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">./configure --enable-checking=release --enable-languages=c,c++ --disable-multilib </span><br><span class="line">make &amp;&amp;　make install</span><br></pre></td></tr></table></figure></p><p>又要进行漫长的等待…这一次非常非常漫长，我当时几乎用了大约2个小时…<br><img src="/images/gcc2.png" alt="办公室"></p><p>然后使用<code>gcc -v</code>检查一下版本：<br><img src="/images/gcc3.png" alt="办公室"></p><h2><span id="安装nodejs-811">安装node.js 8.11</span></h2><p>先去<a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">https://nodejs.org/en/download/</a> 下载新的版本包:<br><img src="/images/gcc4.png" alt="办公室"></p><p>直接下载到linux里解压缩，如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">wget https:<span class="comment">//ftp.gnu.org/gnu/gcc/gcc-8.1.0/gcc-8.1.0.tar.gz</span></span><br><span class="line">tar zxvf node-v8<span class="number">.11</span><span class="number">.3</span>.tar.gz</span><br><span class="line">cd node-v8<span class="number">.11</span><span class="number">.3</span></span><br><span class="line">./configure --prefix=<span class="regexp">/usr/</span>local/node/<span class="number">8.11</span><span class="number">.3</span></span><br><span class="line">make &amp;&amp; make install</span><br></pre></td></tr></table></figure></p><p>此时在make这一步可能会有这样的错误：<br><img src="/images/gcc5.png" alt="办公室"></p><p>这个原因是“升级gcc时，生成的动态库没有替换老版本gcc动态库”，所以要将gcc最新版本的动态库替换系统中老版本的动态库。</p><p>使用<code>find / -name &quot;libstdc++.so*&quot;</code>查找编译gcc时生成的最新动态库，发现最近的动态库是这个：<br><img src="/images/gcc6.png" alt="办公室"></p><p>于是就进行替换并作一个软连接:<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cp /root/gcc<span class="number">-8.1</span><span class="number">.0</span>/stage1-x86_64-pc-linux-gnu/libstdc++-v3/src/.libs/libstdc++.so<span class="number">.6</span><span class="number">.0</span><span class="number">.25</span> /usr/lib64</span><br><span class="line">cd /usr/lib64</span><br><span class="line">ll libstdc++.so<span class="number">.6</span></span><br><span class="line">lrwxrwxrwx 1 root root 19 Jul 17 09:59 libstdc++.so.6 -&gt; libstdc++.so.6.0.19#把原来的记住，防止有回滚的现象</span><br><span class="line">rm -rf  libstdc++.so<span class="number">.6</span></span><br><span class="line">ln -s libstdc++.so<span class="number">.6</span><span class="number">.0</span><span class="number">.25</span> libstdc++.so<span class="number">.6</span></span><br></pre></td></tr></table></figure></p><p>然后重新返回到<code>node-v8.11.3</code>文件夹里去<code>make</code>就OK了！</p><p>设定环境变量，<code>vim /etc/profile</code>，在<code>export PATH USER LOGNAME MAIL HOSTNAME HISTSIZE HISTCONTROL</code>一行的上面添加如下内容：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#set for nodejs</span><br><span class="line"><span class="keyword">export</span> NODE_HOME=<span class="regexp">/usr/</span>local/node/<span class="number">8.11</span><span class="number">.3</span></span><br><span class="line"><span class="keyword">export</span> PATH=$NODE_HOME/bin:$PATH</span><br></pre></td></tr></table></figure></p><p>保存退出之后，<code>source /etc/profile</code>，再<code>node --version</code>看一下版本是<code>v8.11.3</code>就是OK了！</p>]]></content>
-    
-    <summary type="html">
-    
-      久闻php7的速度以及性能那可是比php5系列的任何一版本都要快，今天来试试
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="php" scheme="http://yoursite.com/tags/php/"/>
-    
-      <category term="nodejs" scheme="http://yoursite.com/tags/nodejs/"/>
-    
-      <category term="gc++" scheme="http://yoursite.com/tags/gc/"/>
     
   </entry>
   
