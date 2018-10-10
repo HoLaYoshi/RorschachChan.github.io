@@ -97,7 +97,7 @@
 <meta property="og:description" content="阿里云华东1区的D区竟然突然说不卖服务器了...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/docker14.png">
-<meta property="og:updated_time" content="2018-10-10T07:07:47.069Z">
+<meta property="og:updated_time" content="2018-10-10T07:28:12.157Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker部署的几个tips">
 <meta name="twitter:description" content="阿里云华东1区的D区竟然突然说不卖服务器了...">
@@ -415,7 +415,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  664
+                  671
                 </span>
               
 
@@ -457,7 +457,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>公司的电商平台使用的是阿里云VPC网络，整个交换机和云服务器都是部署在D区。今天在部署测试环境的时候，发现无法购买服务器，在钉钉上与阿里云售后交涉后，接到噩耗—D区已经不再出售服务器了，如图：<br><img src="/images/docker14.png" alt="akb48"></p>
-<p>没办法，只能把现有的服务器调高配置，在里面安装docker，尽可能的让进程之间之间不受干扰。由于事发仓促，整个架构都要重新调整，镜像就先选用<code>centos：latest</code>，然后在里面装环境以及git  pull代码，把容器当做虚拟机来用了。</p>
+<p>没办法，只能把现有的服务器调高配置，在里面安装docker，尽可能的让各进程的环境彼此之间不受干扰。由于事发仓促，整个架构都要重新调整，镜像就先选用<code>centos：latest</code>，生成容器后在里面装环境以及<code>git  pull</code>代码，把容器当做虚拟机来用了。</p>
 <h2><span id="几个小提示">几个小提示</span></h2><ol>
 <li><p>如果要<code>pecl install swoole</code>的话，要先<code>yum install -y glibc-headers gcc-c++ kernel-headers gcc openssl pcre-devel</code>和<code>yum install -y openssl-devel</code>；</p>
 </li>
