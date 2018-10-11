@@ -97,7 +97,9 @@
 <meta property="og:description" content="阿里云华东1区的D区竟然突然说不卖服务器了...">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/docker14.png">
-<meta property="og:updated_time" content="2018-10-10T07:28:35.419Z">
+<meta property="og:image" content="http://yoursite.com/images/docker15.png">
+<meta property="og:image" content="http://yoursite.com/images/docker16.png">
+<meta property="og:updated_time" content="2018-10-11T02:05:09.244Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker部署的几个tips">
 <meta name="twitter:description" content="阿里云华东1区的D区竟然突然说不卖服务器了...">
@@ -415,7 +417,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  671
+                  801
                 </span>
               
 
@@ -477,15 +479,24 @@
 </li>
 <li><p>将一个运行中的容器做成镜像的命令：<code>docker commit 容器ID号 镜像名称</code>；</p>
 </li>
-<li><p>进入容器最好不要用<code>docker attach 容器ID</code>的方式，而是用<code>docker exec -it 容器ID /bin/bash</code>，离开容器的时候也不要用<code>exit</code>或者<code>ctrl + D</code>，这样会将容器停止，而是用<code>ctrl + P</code>、<code>ctrl + Q</code> 组合键退出，这样就不会终止容器运行；</p>
+<li><p>进入容器最好不要用<code>docker attach 容器ID</code>的方式，而是用<code>docker exec -it 容器ID /bin/bash</code>，离开容器的时候也不要用<code>exit</code>或者<code>ctrl + D</code>，这样会将容器停止，而是用<code>ctrl + P</code>、<code>ctrl + Q</code> 或者<code>ctrl + Q + P</code>组合键退出，这样就不会终止容器运行；</p>
 </li>
 <li><p>容器默认的时间与宿主机的时间相差8个小时，可以在<code>docker run</code>的时候使用-v挂载的方法挂载宿主机的时间文件，比如：<code>docker run --name 容器名 -v /etc/localtime:/etc/localtime:ro ...</code>，或者在dockerfile里添加“设定时区”的语句：</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#设置时区</span><br><span class="line">RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \</span><br><span class="line">    &amp;&amp; echo <span class="string">'Asia/Shanghai'</span> &gt;<span class="regexp">/etc/</span>timezone \</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>容器映射默认情况下是tcp6的，这是正常的现象，如果telnet不通，请先去检查容器内的服务是否正常，比如在容器里<code>curl 127.0.0.1 端口号</code>；</p>
 </li>
+<li><p>容器内的进程是会映射到宿主机上的，举个例子，比如容器里运行了swoole，如图：<br><img src="/images/docker15.png" alt="akb48"></p>
+</li>
 </ol>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html</a><br><a href="https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/" target="_blank" rel="noopener">https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/</a></p>
+<p>在宿主机上看也是能看到这个进程的：<br><img src="/images/docker16.png" alt="akb48"></p>
+<ol>
+<li><p>使用<code>docker top 容器id</code>命令能获取的PID是容器内进程在宿主机上的pid，ppid是容器内进程在宿主机上的父进程pid；</p>
+</li>
+<li><p>如果多个容器要挂载一样的数据就是用<code>-volumes-from</code>，比如<code>docker run --volume-from 容器ID号</code>；</p>
+</li>
+</ol>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html</a><br><a href="https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/" target="_blank" rel="noopener">https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/</a><br><a href="http://dockone.io/article/128" target="_blank" rel="noopener">http://dockone.io/article/128</a></p>
 
       
     </div>
@@ -933,7 +944,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共175.5k字</span>
+  <span class="post-count">博客全站共175.6k字</span>
 </div>
         
 
