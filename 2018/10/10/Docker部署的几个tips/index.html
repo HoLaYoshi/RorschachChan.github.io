@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/docker14.png">
 <meta property="og:image" content="http://yoursite.com/images/docker15.png">
 <meta property="og:image" content="http://yoursite.com/images/docker16.png">
-<meta property="og:updated_time" content="2018-10-11T02:17:48.281Z">
+<meta property="og:updated_time" content="2018-10-11T02:35:18.419Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker部署的几个tips">
 <meta name="twitter:description" content="更加优雅的使用容器">
@@ -417,7 +417,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  809
+                  821
                 </span>
               
 
@@ -486,17 +486,15 @@
 </li>
 <li><p>容器映射默认情况下是tcp6的，这是正常的现象，如果telnet不通，请先去检查容器内的服务是否正常，比如在容器里<code>curl 127.0.0.1 端口号</code>；</p>
 </li>
+<li><p>使用<code>docker top 容器id</code>命令能获取的PID是容器内进程在宿主机上的pid，ppid是容器内进程在宿主机上的父进程pid；</p>
+</li>
+<li><p>如果多个容器要挂载一样的数据就是用<code>-volumes-from</code>，比如<code>docker run --volume-from 容器ID号</code>； </p>
+</li>
 <li><p>容器内的进程是会映射到宿主机上的，举个例子，比如容器里运行了swoole，如图：<br><img src="/images/docker15.png" alt="akb48"></p>
 </li>
 </ol>
 <p>在宿主机上看也是能看到这个进程的：<br><img src="/images/docker16.png" alt="akb48" title="容器与宿主机时差相差8小时"></p>
-<ol>
-<li><p>使用<code>docker top 容器id</code>命令能获取的PID是容器内进程在宿主机上的pid，ppid是容器内进程在宿主机上的父进程pid；</p>
-</li>
-<li><p>如果多个容器要挂载一样的数据就是用<code>-volumes-from</code>，比如<code>docker run --volume-from 容器ID号</code>；</p>
-</li>
-</ol>
-<h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html</a><br><a href="https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/" target="_blank" rel="noopener">https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/</a><br><a href="http://dockone.io/article/128" target="_blank" rel="noopener">http://dockone.io/article/128</a><br><a href="https://blog.csdn.net/halcyonbaby/article/details/46884605" target="_blank" rel="noopener">https://blog.csdn.net/halcyonbaby/article/details/46884605</a></p>
+<h2><span id="参考资料">参考资料</span></h2><p><a href="http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.html</a><br><a href="https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/" target="_blank" rel="noopener">https://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/</a><br><a href="http://dockone.io/article/128" target="_blank" rel="noopener">http://dockone.io/article/128</a><br><a href="https://blog.csdn.net/halcyonbaby/article/details/46884605" target="_blank" rel="noopener">https://blog.csdn.net/halcyonbaby/article/details/46884605</a><br><a href="https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec" target="_blank" rel="noopener">https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exec</a></p>
 
       
     </div>
