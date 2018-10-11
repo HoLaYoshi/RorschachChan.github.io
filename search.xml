@@ -556,7 +556,7 @@
   <entry>
     <title><![CDATA[浅析django里models.py、views.py与网页之间的爱恨纠葛]]></title>
     <url>%2F2018%2F05%2F14%2F%E6%B5%85%E6%9E%90django%E9%87%8Cmodels-py%E3%80%81views-py%E3%80%81page%E4%B9%8B%E9%97%B4%E7%9A%84%E7%BA%A0%E8%91%9B%2F</url>
-    <content type="text"><![CDATA[环境：django 2.0 + python 3.6 + pycharm 2018 django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; admin.py是用来设置在/admin/后台里面的显示样式; views.py是用来设置在前台网页里的显示样式； urls.py是用来编辑域名规则； admin.py是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：models.py、views.py和对应的网页。 举个例子，假设有一个models.py，内容如下： 1234567from django.db import models from django.contrib.auth.models import User class BlogType(models.Model): type_name = models.CharField(max_length=15) #规定type_name是一个最大为15字节的charfield def __str__(self): return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name 然后随便加入一些内容，如图： 而在views.py里，要求在前端网页里如此的显示： 1234567from django.shortcuts import render_to_response,get_object_or_404 from .models import Blog,BlogType #这里引用了models.py里的那两个class def blog_list(request): context = &#123;&#125; context[&apos;blog_types&apos;] = BlogType.objects.all() return render_to_response(&apos;pageblog/blog_list.html&apos;,context) 在views.py里规定，如果有访问域名是/blog_list/的网页，就返回pageblog/blog_list.html这个页面，而这个blog_list.html只是一个框架，里面的内容是context。context本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，objects.all()就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。 那么现在就可以在blog_list.html里使用blog_types这个key了，如下： 1234&lt;!-- 前面略 --&gt; &lt;h4&gt;博客分类&lt;/h4&gt; &lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt; &lt;!-- 后面略 --&gt; 这样的效果如下： 返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出blog_types已经成功的引入到了blog_list.html里。 至于拆成每一个“博客类型”就很简单了，html部分如下： 12345678910&lt;h4&gt;博客分类&lt;/h4&gt; &lt;!-- ul是无项目的标签 --&gt; &lt;ul&gt; &#123;% for blog_type in blog_types%&#125; #开始一个for循环 &lt;li&gt;&lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog_type.pk %&#125;&quot;&gt;&#123;&#123; blog_type.type_name &#125;&#125; &lt;/a&gt;&lt;/li&gt; #对每一个类型加上一个a链接 &#123;% empty %&#125; #如果唯空就说“暂无分类” &lt;!-- li是具体的项目 --&gt; &lt;li&gt; 暂无分类 &lt;/li&gt; &#123;% endfor %&#125; &lt;/ul&gt;]]></content>
+    <content type="text"><![CDATA[前言Django + Boostrap现在是运维开发的必备技能，因为他俩是运维可视化的关键技术，而本文就是简单说一下整个django的数据库---后台---前端的工作原理。其实所谓django开发，就是熟悉了它的规则之后，按照它的规则去填空。 环境：django 2.0 + python 3.6 + pycharm 2018 django建立一个app之后就会有models.py、views.py、admin.py这几个文件，他们三个分别的用途如下： models.py主要是用来设置数据在数据库的存储格式（比如默认值，字段类型和字段长度等等）; admin.py是用来设置在/admin/后台里面的显示样式; views.py是用来设置在前台网页里的显示样式； urls.py是用来编辑域名规则； admin.py是后台配置的文件，所以对前台网页来说，它不重要，而真正与前端网页相关的就是三个部分：models.py、views.py和对应的网页html文件，而这其中重中之重的就是views.py，说它是整个django的灵魂都不为过！ 举个例子假设有一个models.py，内容如下： 1234567from django.db import models from django.contrib.auth.models import User class BlogType(models.Model): type_name = models.CharField(max_length=15) #规定type_name是一个最大为15字节的charfield def __str__(self): return &apos;&lt;BlogType:%s&gt;&apos; % self.type_name 然后随便加入一些内容，如图： 而在views.py里，要求在前端网页里如此的显示： 1234567from django.shortcuts import render_to_response,get_object_or_404 from .models import Blog,BlogType #这里引用了models.py里的那两个class def blog_list(request): context = &#123;&#125; context[&apos;blog_types&apos;] = BlogType.objects.all() return render_to_response(&apos;pageblog/blog_list.html&apos;,context) 在views.py里规定，如果有访问域名是/blog_list/的网页，就返回pageblog/blog_list.html这个页面，而这个blog_list.html只是一个框架，里面的内容是context。context本身是一个字典，里面的里面的key对应的value是用ojbects这个函数获得的，objects.all()就是获取全部的意思。用来填充blog_list.html的context里面有blogs和blog_types两个key。 那么现在就可以在blog_list.html里使用blog_types这个key了，如下： 1234&lt;!-- 前面略 --&gt; &lt;h4&gt;博客分类&lt;/h4&gt; &lt;h3&gt; &#123;&#123; blog_types&#125;&#125; &lt;/h3&gt; &lt;!-- 后面略 --&gt; 这样的效果如下： 返回的是QuerySet类型，QuerySet是Django的查询集，可以通过QuerySet条件查询得到对应模型的对象集合。由此看出blog_types已经成功的引入到了blog_list.html里。 至于拆成每一个“博客类型”就很简单了，html部分如下： 12345678910&lt;h4&gt;博客分类&lt;/h4&gt; &lt;!-- ul是无项目的标签 --&gt; &lt;ul&gt; &#123;% for blog_type in blog_types%&#125; #开始一个for循环 &lt;li&gt;&lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog_type.pk %&#125;&quot;&gt;&#123;&#123; blog_type.type_name &#125;&#125; &lt;/a&gt;&lt;/li&gt; #对每一个类型加上一个a链接 &#123;% empty %&#125; #如果唯空就说“暂无分类” &lt;!-- li是具体的项目 --&gt; &lt;li&gt; 暂无分类 &lt;/li&gt; &#123;% endfor %&#125; &lt;/ul&gt; 再说urls.py上面说过了，urls.py是配置域名路由规则的。它的配置模式比较简单，就是path(&#39;域名&#39;，views.py里的函数，name=&#39;自定义名称&#39;)。比如下面这个urls.py： 123456789from django.contrib import adminfrom django.urls import include,pathfrom article.views import blog_list #article是django项目里自己创建的一个appurlpatterns = [ path('',blog_list,name='home'), #这里的name可写可不写，如果写的话，在href跳转的时候就可以直接用 path('admin/', admin.site.urls), path('blog/',include('article.urls')), #引用的的include方法用在这里] 上面这个是总的路由文件，当然可以把所有的app的路由都写到里面去，也可以在各自的app下写各自的路由，这样方便管理。比如我就在article这个app文件夹下面又单独了一个urls.py，这里面所有的域名就会自动添加blog/这个路径，而整个urls.py内容如下： 1234567from django.urls import pathfrom . import viewsurlpatterns = [ path('&lt;int:blog_pk&gt;',views.blog_detail,name='blog_detail'), path('type/&lt;int:blog_type_pk&gt;',views.blogs_with_type,name='blogs_with_type'),] 在上面的第一个path里，目的就是传入一个值blog_pk，而这个blog_pk就是在views.py里的blog_detail需要传入的参数。上面也说过了，这个两个path都会自动在前面加上/blog/路径。 views.py与前端如何把数据库里的内容映射到前端页面呢？就是用views.py里的render_to_response，它是负责渲染的。render_to_response的用法是后面要加上对应的html页面和要映射的内容，比如下面这个views.py: 1234567from django.shortcuts import render_to_response,get_object_or_404from .models import Blog #这里引用了models.py里面的类：Blogdef blog_detail(request,blog_pk): #每一次使用这个函数都要传入一个参数：blog_pk context = &#123;&#125; context['blog'] = get_object_or_404(Blog,pk=blog_pk) #通过get_object_or_404这个方法生成一个字典 return render_to_response('blog_detail.html',context) #这个blog_detail.html就是对应的前端页面 从上面可以看到，views.py先引入了数据库文件models.py里的Blog这个class，然后设定一个控字典，将这个字典按照对应数据库默认的主键pk与浏览器输入的pk一一对应填满，最后就是按照blog_detail.html为前端框架，里面赋予整个填满值的context字典。 而对应的前端页面blog_detail.html如下： 12345678910111213141516171819202122232425&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt; &lt;meta charset='UTF-8'&gt; &lt;title&gt;&#123;&#123; blog.title &#125;&#125;&lt;/title&gt; &lt;!-- 这里的blog就是views.py里context['blog']里的blog --&gt;&lt;/head&gt;&lt;body&gt; &lt;div&gt; &lt;a href="&#123;% url 'home' %&#125;"&gt; &lt;!-- 这里就是返回首页，home是在urls.py里设定的 --&gt; &lt;h2&gt;BACK TO HOMEPAGE&lt;/h2&gt; &lt;/a&gt; &lt;/div&gt; &lt;h3&gt;&#123;&#123; blog.title &#125;&#125;&lt;/h3&gt; &lt;p&gt;作者：&#123;&#123; blog.author &#125;&#125;&lt;/p&gt; &lt;p&gt;分类： &lt;a href="&#123;% url 'blogs_with_type' blog.blog_type.pk %&#125;"&gt; &lt;!-- 就是将blog.blog_type.pk作为views.py里blog_detail函数的传入值 --&gt; &#123;&#123; blog.blog_type &#125;&#125; &lt;/a&gt; &lt;/p&gt; &lt;p&gt; &#123;&#123; blog.blog_type.pk &#125;&#125;&lt;/p&gt; &lt;p&gt;发表时间：&#123;&#123; blog.created_time|date:"Y-m-d H:i:s"&#125;&#125;&lt;/p&gt; &lt;!-- 这里将输出时间做了规范化 --&gt; &lt;hr&gt; &lt;p&gt;&#123;&#123; blog.content &#125;&#125;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -1185,8 +1185,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>运维技术</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1245,8 +1245,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>linux</tag>
         <tag>crontab</tag>
+        <tag>linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1851,8 +1851,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>redis</tag>
         <tag>zabbix</tag>
+        <tag>redis</tag>
       </tags>
   </entry>
   <entry>
