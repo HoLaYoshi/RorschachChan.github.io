@@ -98,8 +98,9 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/docker14.png">
 <meta property="og:image" content="http://yoursite.com/images/docker15.png">
+<meta property="og:image" content="http://yoursite.com/images/docker15.png">
 <meta property="og:image" content="http://yoursite.com/images/docker16.png">
-<meta property="og:updated_time" content="2018-10-11T03:09:10.586Z">
+<meta property="og:updated_time" content="2018-10-12T07:53:17.002Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker部署的几个tips">
 <meta name="twitter:description" content="更加优雅的使用容器">
@@ -417,7 +418,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  832
+                  949
                 </span>
               
 
@@ -489,6 +490,10 @@
 <li><p>使用<code>docker top 容器id</code>命令能获取的PID是容器内进程在宿主机上的pid，ppid是容器内进程在宿主机上的父进程pid；</p>
 </li>
 <li><p>如果多个容器要挂载一样的数据就是用<code>-volumes-from</code>，比如<code>docker run --volume-from 容器ID号</code>； </p>
+</li>
+<li><p>在容器外启动容器内部进程的方法是：<code>docker exec 容器ID /bin/bash -c &quot;对应的命令&quot;</code>，在zabbix监控docker发现进程死了后，就可以用这个方法拉起来；<br><img src="/images/docker15.png" alt="akb48" title="在容器外面启动并且关闭apache"></p>
+</li>
+<li><p>接上一条的说，docker跟虚拟机不同，它启动的时候是不会运行<code>/etc/rc.d/rc.local</code>的，如果想要Docker在启动后就自动运行<code>/etc/rc.d/rc.local</code>，请看<a href="https://github.com/johnnian/Blog/issues/13" target="_blank" rel="noopener">https://github.com/johnnian/Blog/issues/13</a> 里面说的方法；</p>
 </li>
 <li><p>容器内的进程是会映射到宿主机上的，举个例子，比如容器里运行了swoole，如图：<br><img src="/images/docker15.png" alt="akb48"></p>
 </li>
@@ -942,7 +947,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共176.6k字</span>
+  <span class="post-count">博客全站共176.7k字</span>
 </div>
         
 
