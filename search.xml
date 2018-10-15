@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Mysql.sock没了怎么办？]]></title>
+    <url>%2F2018%2F10%2F15%2FMysql-sock%E6%B2%A1%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F%2F</url>
+    <content type="text"><![CDATA[今天在调整jumpserver堡垒机资产用户的时候，在点击“更新”的时候，爆出127.0.0.1:3306无法被访问，于是登录到服务器里一看，发现mysql进程挂了。先检查服务器存储空间，发现还很富裕，于是就启动mysql，爆出来如下错误： 12[root@lcshop-jumpserver ~]# mysqlERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (111) 然后来到/var/lib/mysql/里，瞅着这个紫了吧唧的mysql.sock，脑子一抽，把它删了… 删了… 这尼玛，再次启动mysql，错误码从111变成2： 12[root@lcshop-jumpserver mysql]# mysqlERROR 2002 (HY000): Can't connect to local MySQL server through socket '/var/lib/mysql/mysql.sock' (2) 这一下就尴尬了，mysql.sock没了怎么生成？有人说“重启服务器可以生成”，事实证明这就是纯粹的扯淡。真实的方法是：mysqld_safe &amp;。 如果mysqld_safe &amp;命令失败了，就要去查看一下mysql的日志，多半是某个文件权限不对，要改成mysql用户。 补充一句其他的问题：ImportError: libxslt.so.0: cannot open shared object file: No such file or directory，遇到这个问题怎么办？ yum install libxslt-devel -y]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+        <tag>jumpserver堡垒机</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[Docker部署的几个tips]]></title>
     <url>%2F2018%2F10%2F10%2FDocker%E9%83%A8%E7%BD%B2%E7%9A%84%E5%87%A0%E4%B8%AAtips%2F</url>
     <content type="text"><![CDATA[公司的电商平台使用的是阿里云VPC网络，整个交换机和云服务器都是部署在D区。今天在部署测试环境的时候，发现无法购买服务器，在钉钉上与阿里云售后交涉后，接到噩耗—D区已经不再出售服务器了，如图： 没办法，只能把现有的服务器调高配置，在里面安装docker，尽可能的让各进程的环境彼此之间不受干扰。由于事发仓促，整个架构都要重新调整，镜像就先选用centos：latest，生成容器后在里面装环境以及git pull代码，把容器当做虚拟机来用了。 几个小提示 如果要pecl install swoole的话，要先yum install -y glibc-headers gcc-c++ kernel-headers gcc openssl pcre-devel和yum install -y openssl-devel； centos:latest镜像目前是7.5版本，如果要查看的话需要先安装lsb命令：yum install redhat-lsb -y； 如果容器里使用yum下载爆’Operation too slow. Less than 1000 bytes/sec transferred the last 30 seconds’，用yum -y install wget解决； 容器需要php7.2的环境的话，就要用最新的源： 12yum install epel-release -yrpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm 别忘了开机自启动docker进程：systemctl enable docker； yum install node npm之前要 123yum install -y epel-releasecurl --silent --location https://rpm.nodesource.com/setup_8.x | bash -yum install -y nodejs #这样版本是8.12,npm的版本是6.4.1 在容器里查看端口情况就要安装netstat命令：yum install -y net-tools； 将一个运行中的容器做成镜像的命令：docker commit 容器ID号 镜像名称； 进入容器最好不要用docker attach 容器ID的方式，而是用docker exec -it 容器ID /bin/bash，离开容器的时候也不要用exit或者ctrl + D，这样会将容器停止，而是用ctrl + P、ctrl + Q 或者ctrl + Q + P组合键退出，这样就不会终止容器运行； 容器默认的时间与宿主机的时间相差8个小时，可以在docker run的时候使用-v挂载的方法挂载宿主机的时间文件，比如：docker run --name 容器名 -v /etc/localtime:/etc/localtime:ro ...，或者在dockerfile里添加“设定时区”的语句： 123#设置时区RUN /bin/cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \ &amp;&amp; echo 'Asia/Shanghai' &gt;/etc/timezone \ 容器映射默认情况下是tcp6的，这是正常的现象，如果telnet不通，请先去检查容器内的服务是否正常，比如在容器里curl 127.0.0.1 端口号； 使用docker top 容器id命令能获取的PID是容器内进程在宿主机上的pid，ppid是容器内进程在宿主机上的父进程pid； 如果多个容器要挂载一样的数据就是用-volumes-from，比如docker run --volume-from 容器ID号； 在容器外启动容器内部进程的方法是：docker exec 容器ID /bin/bash -c &quot;对应的命令&quot;，在zabbix监控docker发现进程死了后，就可以用这个方法拉起来； 接上一条的说，docker跟虚拟机不同，它启动的时候是不会运行/etc/rc.d/rc.local的，如果想要Docker在启动后就自动运行/etc/rc.d/rc.local，请看https://github.com/johnnian/Blog/issues/13 里面说的方法； 容器内的进程是会映射到宿主机上的，举个例子，比如容器里运行了swoole，如图： 在宿主机上看也是能看到这个进程的： 参考资料http://blog.sina.com.cn/s/blog_5ff8e0a00102wmti.htmlhttps://outmanzzq.github.io/2018/01/11/docker-exit-without-stop/http://dockone.io/article/128https://blog.csdn.net/halcyonbaby/article/details/46884605https://stackoverflow.com/questions/30960686/difference-between-docker-attach-and-docker-exechttps://www.binss.me/blog/learn-docker-with-me-about-volume/]]></content>
@@ -116,8 +128,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>钉钉</tag>
         <tag>Jenkins</tag>
+        <tag>钉钉</tag>
         <tag>Docker</tag>
       </tags>
   </entry>
@@ -693,18 +705,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root用户启动tomcat进程]]></title>
-    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>centos</tag>
-        <tag>运维安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root启动进程以及启动docker]]></title>
     <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
     <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
@@ -714,6 +714,18 @@
       <tags>
         <tag>docker</tag>
         <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[用非root用户启动tomcat进程]]></title>
+    <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>centos</tag>
+        <tag>运维安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1185,8 +1197,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1245,8 +1257,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
@@ -1851,8 +1863,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-12T08:58:29.741Z</updated>
+  <updated>2018-10-15T03:54:07.096Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql.sock没了怎么办？</title>
+    <link href="http://yoursite.com/2018/10/15/Mysql-sock%E6%B2%A1%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F/"/>
+    <id>http://yoursite.com/2018/10/15/Mysql-sock没了怎么办？/</id>
+    <published>2018-10-15T03:33:55.000Z</published>
+    <updated>2018-10-15T03:54:07.096Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>今天在调整jumpserver堡垒机资产用户的时候，在点击“更新”的时候，爆出127.0.0.1:3306无法被访问，于是登录到服务器里一看，发现mysql进程挂了。先检查服务器存储空间，发现还很富裕，于是就启动mysql，爆出来如下错误：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@lcshop-jumpserver ~]# mysql</span><br><span class="line">ERROR <span class="number">2002</span> (HY000): Can<span class="string">'t connect to local MySQL server through socket '</span>/<span class="keyword">var</span>/lib/mysql/mysql.sock<span class="string">' (111)</span></span><br></pre></td></tr></table></figure></p><p>然后来到/var/lib/mysql/里，瞅着这个紫了吧唧的<code>mysql.sock</code>，脑子一抽，把它删了…</p><p>删了…</p><p>这尼玛，再次启动mysql，错误码从111变成2：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@lcshop-jumpserver mysql]# mysql</span><br><span class="line">ERROR <span class="number">2002</span> (HY000): Can<span class="string">'t connect to local MySQL server through socket '</span>/<span class="keyword">var</span>/lib/mysql/mysql.sock<span class="string">' (2)</span></span><br></pre></td></tr></table></figure></p><p>这一下就尴尬了，<code>mysql.soc</code>k没了怎么生成？有人说“重启服务器可以生成”，事实证明这就是纯粹的扯淡。真实的方法是：<code>mysqld_safe &amp;</code>。<br><img src="/images/mysql-sock.png" alt="akb48"></p><p>如果<code>mysqld_safe &amp;</code>命令失败了，就要去查看一下mysql的日志，多半是某个文件权限不对，要改成mysql用户。</p><p>补充一句其他的问题：<code>ImportError: libxslt.so.0: cannot open shared object file: No such file or directory</code>，遇到这个问题怎么办？ <code>yum install  libxslt-devel -y</code><br><img src="/images/shaq.gif" alt="akb48" title="鲨鱼哥的拉杆上篮"></p>]]></content>
+    
+    <summary type="html">
+    
+      不蒜子网站计数网站从dn-lbstatics.qbox.me/改成busuanzi.ibruce.info/
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="mysql" scheme="http://yoursite.com/tags/mysql/"/>
+    
+      <category term="jumpserver堡垒机" scheme="http://yoursite.com/tags/jumpserver%E5%A0%A1%E5%9E%92%E6%9C%BA/"/>
+    
+  </entry>
   
   <entry>
     <title>Docker部署的几个tips</title>
@@ -250,9 +274,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="钉钉" scheme="http://yoursite.com/tags/%E9%92%89%E9%92%89/"/>
-    
       <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
+    
+      <category term="钉钉" scheme="http://yoursite.com/tags/%E9%92%89%E9%92%89/"/>
     
       <category term="Docker" scheme="http://yoursite.com/tags/Docker/"/>
     
@@ -479,30 +503,6 @@
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
       <category term="可视化" scheme="http://yoursite.com/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>将Redhat的yum更换成免费版本</title>
-    <link href="http://yoursite.com/2018/07/20/%E5%B0%86radhat%E7%9A%84yum%E6%9B%B4%E6%8D%A2%E6%88%90%E5%85%8D%E8%B4%B9%E7%89%88%E6%9C%AC/"/>
-    <id>http://yoursite.com/2018/07/20/将radhat的yum更换成免费版本/</id>
-    <published>2018-07-20T06:40:06.000Z</published>
-    <updated>2018-07-24T01:38:21.096Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="redhat替换yum源">RedHat替换yum源</span></h2><p>这次给吉林移动做一个项目，他们的服务器必须要用IE浏览器登陆堡垒机进行环境部署。我登陆上去一看，是redhat，在使用yum的时候会有如下报错：<br><img src="/images/yum2.png" alt="akb48"></p><p>这句话的意思是“redhat自带的yum源是需要注册才是更新下载软件的，如果必须注册才能使用”，换而言之就是要收费。卧槽，怎么可能，我们向来是“要钱没有，要命一条”。于是就要用CentOS源来替代yum源，而CentOS源是免费的。</p><p>首先先删除掉redhat自带的yum：<code>rpm -qa | grep yum | xargs rpm -e --nodeps</code>。</p><p>然后用<code>cat /etc/redhat-release</code>命令去查看一下系统版本，我这个机器的版本是<code>Red Hat Enterprise Linux Server release 6.5 (Santiago)</code>，就去<a href="http://mirrors.163.com/centos/6/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/6/os/x86_64/Packages/</a> 下载如下几个文件：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-metadata-parser-1.1.2-16.el6.x86_64.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-3.2.29-81.el6.centos.noarch.rpm</span></span><br><span class="line">http:<span class="comment">//mirrors.163.com/centos/6/os/x86_64/Packages/yum-plugin-fastestmirror-1.1.31-45.el7.noarch.rpm</span></span><br></pre></td></tr></table></figure></p><p>如果想下载<code>centos 7</code>的就去<a href="http://mirrors.163.com/centos/7/os/x86_64/Packages/" target="_blank" rel="noopener">http://mirrors.163.com/centos/7/os/x86_64/Packages/</a> 这个网站下，文件名字是一样的就是版本号不一样，需要自己找一下。</p><p>然后就是安装这几个包：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">rpm -ivh yum-metadata-parser<span class="number">-1.1</span><span class="number">.2</span><span class="number">-16.</span>el6.x86_64.rpm</span><br><span class="line">rpm -ivh yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-81.</span>el6.centos.noarch.rpm</span><br><span class="line">rpm -ivh yum-plugin-fastestmirror<span class="number">-1.1</span><span class="number">.31</span><span class="number">-45.</span>el7.noarch.rpm</span><br><span class="line">cd /etc/yum.repos.d/</span><br><span class="line">wget http:<span class="comment">//mirrors.163.com/.help/CentOS6-Base-163.repo#最好先备份旧文件</span></span><br><span class="line">sed -i <span class="string">'s#$releasever#6#g'</span> ./CentOS6-Base<span class="number">-163.</span>repo</span><br><span class="line">yum clean all#清除原有的缓存</span><br><span class="line">yum makecache#重建缓存</span><br><span class="line">yum update -y#更新系统</span><br></pre></td></tr></table></figure></p><p>大功告成！可以使用免费的yum去装装装了！</p><h2><span id="修复python-urlgrabber版本过低">修复Python-urlgrabber版本过低</span></h2><p>当执行到<code>rpm -ivh yum-3.2.29-81.el6.centos.noarch.rpm</code>这一步的时候，可能会出现一个python的错误：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python-urlgrabber &gt;= <span class="number">3.9</span><span class="number">.1</span><span class="number">-10</span> is needed by yum<span class="number">-3.2</span><span class="number">.29</span><span class="number">-73.</span>el6.centos.noarch</span><br></pre></td></tr></table></figure></p><p>要求<code>python-urlgrabber</code>版本必须大于等于3.9.1-10，而用<code>rpm -qa|grep python</code>查看当前的版本是<code>python-urlgrabber-3.9.1-9.el6.noarch</code>，于是就<code>rpm -e python-urlgrabber-3.9.1-9.el6.noarch</code>卸载掉，<code>wget http://mirrors.163.com/centos/6/os/x86_64/Packages/python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>之后，执行<code>rpm -ivh python-urlgrabber-3.9.1-11.el6.noarch.rpm</code>命令安装即可。</p><p>安装完毕，再用<code>rpm -ivh --force yum-*</code>安装后面的内容。如图:<br><img src="/images/yum4.png" alt="akb48"></p><h2><span id="无法解析yum源">无法解析yum源</span></h2><p>如果在<code>yum makecache</code>的时候出现了<code>http://mirrors.163.com/centos/6/os/x86_64/repodata/repomd.xml: [Errno 14] PYCURL ERROR 6 - &quot;Couldn&#39;t resolve host &#39;mirrors.163.com&#39;&quot;</code>的错误，如图：<br><img src="/images/yum3.png" alt="akb48"></p><p>就修改一下<code>/etc/resolv.conf</code>，然后在里面添加一句<code>nameserver 8.8.8.8</code>，保存即可。</p><h2><span id="nokey">NOKEY？？？</span></h2><p>如果出现<code>Header V3 RSA/SHA1 Signature, key ID c105b9de: NOKEY</code>，可以使用如下方法解决：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd /etc/pki/rpm-gpg/ </span><br><span class="line">wget http://mirrors.163.com/centos/RPM-GPG-KEY-CentOS-6 </span><br><span class="line">rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-6</span><br></pre></td></tr></table></figure></p>]]></content>
-    
-    <summary type="html">
-    
-      自从投入了专有云，就要面对各种各样的甲方爸爸，爸爸们用的系统千奇百怪。
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="redhat" scheme="http://yoursite.com/tags/redhat/"/>
-    
-      <category term="yum源" scheme="http://yoursite.com/tags/yum%E6%BA%90/"/>
     
   </entry>
   
