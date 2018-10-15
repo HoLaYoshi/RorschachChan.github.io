@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock.png">
 <meta property="og:image" content="http://yoursite.com/images/shaq.gif">
-<meta property="og:updated_time" content="2018-10-15T05:49:42.188Z">
+<meta property="og:updated_time" content="2018-10-15T09:52:36.756Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql.sock没了怎么办？">
 <meta name="twitter:description" content="不蒜子网站计数网站从dn-lbstatics.qbox.me/改成busuanzi.ibruce.info/">
@@ -458,7 +458,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>今天在调整jumpserver堡垒机资产用户的时候，在点击“更新”的时候，爆出127.0.0.1:3306无法被访问，于是登录到服务器里一看，发现mysql进程挂了。先检查服务器存储空间，发现还很富裕，于是就启动mysql，爆出来如下错误：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@lcshop-jumpserver ~]# mysql</span><br><span class="line">ERROR <span class="number">2002</span> (HY000): Can<span class="string">'t connect to local MySQL server through socket '</span>/<span class="keyword">var</span>/lib/mysql/mysql.sock<span class="string">' (111)</span></span><br></pre></td></tr></table></figure></p>
-<p>然后来到/var/lib/mysql/里，瞅着这个紫了吧唧的<code>mysql.sock</code>，脑子一抽，把它删了…</p>
+<p>然后来到<code>/var/lib/mysql/</code>里，瞅着这个紫了吧唧的<code>mysql.sock</code>，脑子一抽，把它删了…</p>
 <p>删了…</p>
 <p>这尼玛，再次启动mysql，错误码从111变成2：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@lcshop-jumpserver mysql]# mysql</span><br><span class="line">ERROR <span class="number">2002</span> (HY000): Can<span class="string">'t connect to local MySQL server through socket '</span>/<span class="keyword">var</span>/lib/mysql/mysql.sock<span class="string">' (2)</span></span><br></pre></td></tr></table></figure></p>
 <p>这一下就尴尬了，<code>mysql.sock</code>没了怎么生成？有人说“重启服务器可以生成”，事实证明这就是纯粹的扯淡。真实的方法是：<code>mysqld_safe &amp;</code>。<br><img src="/images/mysql-sock.png" alt="akb48"></p>
@@ -584,6 +584,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2018/10/15/使用dockbix监控进程/" rel="prev" title="使用Dockbix监控进程">
+                使用Dockbix监控进程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -687,7 +691,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">171</span>
+                  <span class="site-state-item-count">172</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -887,7 +891,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共177.0k字</span>
+  <span class="post-count">博客全站共177.6k字</span>
 </div>
         
 
