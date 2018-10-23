@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock2.png">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock3.png">
-<meta property="og:updated_time" content="2018-10-23T08:26:17.372Z">
+<meta property="og:updated_time" content="2018-10-23T08:37:17.718Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql主从同步的几个要点总结">
 <meta name="twitter:description" content="虽然100%的时间都是在用云厂商的服务，但是也要了解一下底层">
@@ -461,12 +461,12 @@
 <p>先说一下主从同步的原理，就是主数据库在数据库更新的时候会更新自己的binlog，同时也会向读数据库（一个或多个）传递这个<code>binlog</code>，此时从库开始一个<code>io_thread</code>这个线程用来接收这个<code>binlog</code>，然后把binlog写入到自己的<code>relaylog</code>，当<code>relaylog</code>发现有数据更新了，就开始一个<code>sql_thread</code>来按照主库更新自己的库，这样达到了“主库读库一致”的效果。图示如下：<br><img src="/images/mysql-sock2.png" alt="paradin"></p>
 <p>上述过程：<br>主从延迟：「步骤2」开始，到「步骤7」执行结束。<br>步骤 2：存储引擎处理，时间极短<br>步骤 3：文件更新通知，磁盘读取延迟<br>步骤 4：Bin Log 文件更新的传输延迟，单线程<br>步骤 5：磁盘写入延迟<br>步骤 6：文件更新通知，磁盘读取延迟<br>步骤 7：SQL 执行时长</p>
 <p>要监控主从同步是否出现异常，可以通过<code>show slave status\G</code>里的<code>Seconds_Behind_Master</code>字段来查看，如图：<br><img src="/images/mysql-sock3.png" alt="paradin"></p>
-<p>但是要注意！<code>Seconds_Behind_Master</code>是有前提的，那就是主库跟读库之间的网络情况要良好，因为这个字段是从属服务器SQL线程和从属服务器I/O线程之间的时间差距，（即比较<code>binlog</code>和<code>relaylog</code>执行sql的timestamp时间差），单位是秒。如果主服务器和从属服务器之间的网络连接较快，则从属服务器I/O线程会非常接近主服务器，所以本字段能够十分近似地指示，从属服务器SQL线程比主服务器落后多少。如果网络较慢，则这种指示不准确；从属SQL线程经常会赶上读取速度较慢地从属服务器I/O线程，因此，Seconds_Behind_Master经常显示值为0。即使I/O线程落后于主服务器时，也是如此。换句话说，本列只对速度快的网络有用。</p>
+<p>但是要注意！<code>Seconds_Behind_Master</code>是有前提的，那就是主库跟读库之间的网络情况要良好，因为这个字段是从属服务器SQL线程和从属服务器I/O线程之间的时间差距，（即比较<code>binlog</code>和<code>relaylog</code>执行sql的timestamp时间差），单位是秒。如果主服务器和从属服务器之间的网络连接较快，则从属服务器I/O线程会非常接近主服务器，所以本字段能够十分近似地指示，从属服务器SQL线程比主服务器落后多少。如果网络较慢，则这种指示不准确；从属SQL线程经常会赶上读取速度较慢地从属服务器I/O线程，因此，<code>Seconds_Behind_Master</code>经常显示值为0。即使I/O线程落后于主服务器时，也是如此。换句话说，本列只对速度快的网络有用。</p>
 <h2><span id="要点总结">要点总结</span></h2><ol>
 <li>主库和读库的mysql版本保持一致；</li>
-<li>binlog文件在生产系统中不易过大，建议小于500m，不然容易拖慢数据库性能；</li>
+<li><code>binlog</code>文件在生产系统中不易过大，建议小于500m，不然容易拖慢数据库性能；</li>
 <li>设置slave前先检查一下设置的账号能不能远程登陆；</li>
-<li>在设置多个库同步时，一个binlog-do-db参数对应一个库，不能一行写多个库；</li>
+<li>在设置多个库同步时，一个<code>binlog-do-db</code>参数对应一个库，不能一行写多个库；</li>
 <li>如果出现了<code>Slave_IO_Running: No</code>这个状态，去主库上<code>show master status\G</code>，查看一下是否file跟从库的file是不是对不上；</li>
 <li>代码里避免出现“查询读库后马上到主库操作”的字段，由于主从同步有延迟，这样很有可能会出现前端多次请求，而从库一致无法从主库得到最新的数据消息，所以sql被执行了好几次的错误，这样的情况可以考虑加入“可以用唯一索引限制”或者用<code>insert … select … where not exist</code>这种方式；</li>
 </ol>
