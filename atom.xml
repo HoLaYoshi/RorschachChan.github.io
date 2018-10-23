@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-10-15T16:23:43.254Z</updated>
+  <updated>2018-10-23T08:26:17.372Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Mysql主从同步的几个要点总结</title>
+    <link href="http://yoursite.com/2018/10/23/Mysql%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%9A%84%E5%87%A0%E4%B8%AA%E8%A6%81%E7%82%B9%E6%80%BB%E7%BB%93/"/>
+    <id>http://yoursite.com/2018/10/23/Mysql主从同步的几个要点总结/</id>
+    <published>2018-10-23T07:42:04.000Z</published>
+    <updated>2018-10-23T08:26:17.372Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="同步原理">同步原理</span></h2><p>主从同步是Mysql非常常见的一个应用，也是非常重要的监控之处，这里简单总结在配置Mysql时候的几个要点，防止以后自己踩坑。</p><p>先说一下主从同步的原理，就是主数据库在数据库更新的时候会更新自己的binlog，同时也会向读数据库（一个或多个）传递这个<code>binlog</code>，此时从库开始一个<code>io_thread</code>这个线程用来接收这个<code>binlog</code>，然后把binlog写入到自己的<code>relaylog</code>，当<code>relaylog</code>发现有数据更新了，就开始一个<code>sql_thread</code>来按照主库更新自己的库，这样达到了“主库读库一致”的效果。图示如下：<br><img src="/images/mysql-sock2.png" alt="paradin"></p><p>上述过程：<br>主从延迟：「步骤2」开始，到「步骤7」执行结束。<br>步骤 2：存储引擎处理，时间极短<br>步骤 3：文件更新通知，磁盘读取延迟<br>步骤 4：Bin Log 文件更新的传输延迟，单线程<br>步骤 5：磁盘写入延迟<br>步骤 6：文件更新通知，磁盘读取延迟<br>步骤 7：SQL 执行时长</p><p>要监控主从同步是否出现异常，可以通过<code>show slave status\G</code>里的<code>Seconds_Behind_Master</code>字段来查看，如图：<br><img src="/images/mysql-sock3.png" alt="paradin"></p><p>但是要注意！<code>Seconds_Behind_Master</code>是有前提的，那就是主库跟读库之间的网络情况要良好，因为这个字段是从属服务器SQL线程和从属服务器I/O线程之间的时间差距，（即比较<code>binlog</code>和<code>relaylog</code>执行sql的timestamp时间差），单位是秒。如果主服务器和从属服务器之间的网络连接较快，则从属服务器I/O线程会非常接近主服务器，所以本字段能够十分近似地指示，从属服务器SQL线程比主服务器落后多少。如果网络较慢，则这种指示不准确；从属SQL线程经常会赶上读取速度较慢地从属服务器I/O线程，因此，Seconds_Behind_Master经常显示值为0。即使I/O线程落后于主服务器时，也是如此。换句话说，本列只对速度快的网络有用。</p><h2><span id="要点总结">要点总结</span></h2><ol><li>主库和读库的mysql版本保持一致；</li><li>binlog文件在生产系统中不易过大，建议小于500m，不然容易拖慢数据库性能；</li><li>设置slave前先检查一下设置的账号能不能远程登陆；</li><li>在设置多个库同步时，一个binlog-do-db参数对应一个库，不能一行写多个库；</li><li>如果出现了<code>Slave_IO_Running: No</code>这个状态，去主库上<code>show master status\G</code>，查看一下是否file跟从库的file是不是对不上；</li><li>代码里避免出现“查询读库后马上到主库操作”的字段，由于主从同步有延迟，这样很有可能会出现前端多次请求，而从库一致无法从主库得到最新的数据消息，所以sql被执行了好几次的错误，这样的情况可以考虑加入“可以用唯一索引限制”或者用<code>insert … select … where not exist</code>这种方式；</li></ol><h2><span id="参考资料">参考资料</span></h2><p><a href="https://dba.stackexchange.com/questions/24793/mysql-replication-slave-is-continuously-lagging-behind-master" target="_blank" rel="noopener">https://dba.stackexchange.com/questions/24793/mysql-replication-slave-is-continuously-lagging-behind-master</a><br><a href="http://ningg.top/inside-mysql-master-slave-delay/" target="_blank" rel="noopener">http://ningg.top/inside-mysql-master-slave-delay/</a><br><a href="http://database.51cto.com/art/201108/287653.htm" target="_blank" rel="noopener">http://database.51cto.com/art/201108/287653.htm</a><br><a href="https://zhuanlan.zhihu.com/p/28554242" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28554242</a></p>]]></content>
+    
+    <summary type="html">
+    
+      虽然100%的时间都是在用云厂商的服务，但是也要了解一下底层
+    
+    </summary>
+    
+      <category term="大牛之路" scheme="http://yoursite.com/categories/%E5%A4%A7%E7%89%9B%E4%B9%8B%E8%B7%AF/"/>
+    
+    
+      <category term="Mysql" scheme="http://yoursite.com/tags/Mysql/"/>
+    
+  </entry>
   
   <entry>
     <title>使用Dockbix监控进程</title>
@@ -191,13 +213,13 @@
     <link href="http://yoursite.com/2018/09/17/%E8%B0%83%E7%94%A8%E9%98%BF%E9%87%8C%E4%BA%91api%E5%8E%BB%E4%BF%AE%E6%94%B9%E5%9F%9F%E5%90%8D/"/>
     <id>http://yoursite.com/2018/09/17/调用阿里云api去修改域名/</id>
     <published>2018-09-17T06:13:26.000Z</published>
-    <updated>2018-09-17T09:42:04.761Z</updated>
+    <updated>2018-10-17T01:36:43.985Z</updated>
     
     <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="问题简述">问题简述</span></h2><p>以阿里云厂家为例，假设我们有一个网站，它的服务器、数据库、负载均衡都部署在杭州区可用区B,将IP A绑定到某个域名上，启动了系统之后为客户提供服务。那么如果现在要对这套系统进行灾备，应该怎么做？</p><p>第一个方法：在可用区D复制一模一样的环境，然后以“主备服务器组”的方式配置一下负载均衡：如果端口监听不正常就会切换到备用服务器上，监听正常了再切回来。但是这个方式有一个问题，就是当前模式<strong>阿里云的主备切换是不支持HTTPS/HTTP的</strong>，如图：<br><img src="/images/aliyundns2.png" alt="akb48"></p><p>可见，这种方式是有很大的局限性的。</p><p>那既然同是花钱，干脆就做一个异地容灾，整套系统在其他的地理区域比如上海区也复制一遍，把上海区的B IP也绑定到这个网站域名上，阿里云的域名解析是支持多IP绑定同一个域名的。平时的时候，上海区的IP被域名解析的权重是0，一旦杭州区出现了某些线路方面的硬件问题，那么就将杭州区的权重降成0，同时提高上海区的权重，这样用户就会直接访问到上海区的系统。</p><p>理想是丰满的，但是现实是骨感的，因为阿里云的权重配置区域是1~100，而不是0~100，如下图：<br><img src="/images/aliyundns1.png" alt="akb48"></p><p>也就是说这个云解析的负载均衡是不能当做主备切换使用的，如果想要通过阿里云解析来达到主备切换的目的，方法只能是<code>升级VIP DNS，配置网站监控</code>，具体操作是<a href="https://help.aliyun.com/document_detail/59372.html?spm=5176.215331.1147916.23.65de614dac85Sw" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/59372.html?spm=5176.215331.1147916.23.65de614dac85Sw</a> 。但是这个VIP升级是需要钱的，如果监控的网站越多，花费越大，如果老板不肯掏这份钱，那就只能换条路走。</p><h2><span id="脚本内容">脚本内容</span></h2><p>想来想去，还是老办法—-调用阿里云API修改云解析记录达到切换IP的目的。脚本如下，这里我采取了命令行交互的形式，实际上都是将域名IP写死的：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#此脚本版本是2.7，用来修改阿里云云解析IP地址，使用之前请先安装sdk:pip install aliyun-python-sdk-domain</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.client <span class="keyword">import</span> AcsClient</span><br><span class="line"><span class="keyword">from</span> aliyunsdkcore.request <span class="keyword">import</span> CommonRequest</span><br><span class="line">print <span class="string">"请注意！本脚本只会修改lechange.com域名下的A记录！！！"</span></span><br><span class="line">RRKeyWord = raw_input(<span class="string">"请输入您要修改的域名："</span>)</span><br><span class="line">Value = raw_input(<span class="string">"请输入新的IP："</span>)</span><br><span class="line">client = AcsClient(<span class="string">'这里是AK'</span>, <span class="string">'这里是SK'</span>,<span class="string">'cn-hangzhou'</span>)</span><br><span class="line">request = CommonRequest()</span><br><span class="line">request.set_accept_format(<span class="string">'json'</span>)</span><br><span class="line">request.set_domain(<span class="string">'alidns.aliyuncs.com'</span>)</span><br><span class="line">request.set_method(<span class="string">'POST'</span>)</span><br><span class="line">request.set_version(<span class="string">'2015-01-09'</span>)</span><br><span class="line"></span><br><span class="line">def getRecordId(RRKeyWord):</span><br><span class="line">        global RecordId</span><br><span class="line">        request.set_action_name(<span class="string">'DescribeDomainRecords'</span>)</span><br><span class="line">        request.add_query_param('DomainName', 'lechange.com')#这里写死了lechange.com域名</span><br><span class="line">        request.add_query_param(<span class="string">'RRKeyWord'</span>, RRKeyWord)</span><br><span class="line">        request.add_query_param(<span class="string">'TypeKeyWord'</span>, <span class="string">'A'</span>)</span><br><span class="line">        response = client.do_action_with_exception(request)</span><br><span class="line">        encode_json = json.loads(response)</span><br><span class="line">        RecordId = encode_json['DomainRecords']['Record'][0]['RecordId']#需要获取这个RecordId</span><br><span class="line">                </span><br><span class="line">def UpdateDomainRecord(RRKeyWord,Value):</span><br><span class="line">        request.set_action_name(<span class="string">'UpdateDomainRecord'</span>)</span><br><span class="line">        request.add_query_param(<span class="string">'RecordId'</span>, RecordId)</span><br><span class="line">        request.add_query_param(<span class="string">'RR'</span>, RRKeyWord)</span><br><span class="line">        request.add_query_param(<span class="string">'Type'</span>, <span class="string">'A'</span>)</span><br><span class="line">        request.add_query_param(<span class="string">'Value'</span>, Value)</span><br><span class="line">        response = client.do_action_with_exception(request)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">        getRecordId(RRKeyWord)</span><br><span class="line">        UpdateDomainRecord(RRKeyWord,Value)</span><br></pre></td></tr></table></figure></p><p>这个脚本比较粗糙，可以改进的地方如下：</p><ol><li>判断输入的域名和IP是否符合格式的规范；</li><li>判断输入的域名是否存在；</li><li>如果添加错误，对应的报错；</li><li>搭配爬虫页面脚本使用，如果爬虫页面脚本出现了异常，那么直接启动这个脚本，并且发送微信/邮件通知！</li></ol><h2><span id="效果展示">效果展示</span></h2><p>整个脚本启动后效果如下：<br><img src="/images/aliyundns3.gif" alt="akb48"></p><h2><span id="参考资料">参考资料</span></h2><p><a href="https://help.aliyun.com/document_detail/29776.html?spm=a2c4g.11186623.2.37.d31b31dfNqojPT" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/29776.html?spm=a2c4g.11186623.2.37.d31b31dfNqojPT</a><br><a href="https://help.aliyun.com/document_detail/44657.html?spm=a2c4g.11186623.6.579.4d1d7cd208aSgl" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/44657.html?spm=a2c4g.11186623.6.579.4d1d7cd208aSgl</a></p>]]></content>
     
     <summary type="html">
     
-      “山竹”台风近日肆虐深圳香港地区，为了防止当地机房崩溃，所以就有这篇文章
+      “山竹”台风近日肆虐深圳香港地区，为了防止因当地机房崩溃而影响服务正常访问，所以就有这篇文章
     
     </summary>
     
@@ -454,9 +476,9 @@
     
       <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
-      <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
       <category term="python3.6" scheme="http://yoursite.com/tags/python3-6/"/>
+    
+      <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
     
   </entry>
   
@@ -481,28 +503,6 @@
       <category term="python" scheme="http://yoursite.com/tags/python/"/>
     
       <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>云服务器的内存竟然少了500M...</title>
-    <link href="http://yoursite.com/2018/07/27/%E7%AE%97%E7%AE%97%E5%86%85%E5%AD%98%E7%9A%84%E8%BF%99%E4%B8%80%E7%AC%94%E7%B3%8A%E6%B6%82%E5%B8%90/"/>
-    <id>http://yoursite.com/2018/07/27/算算内存的这一笔糊涂帐/</id>
-    <published>2018-07-27T07:28:35.000Z</published>
-    <updated>2018-08-03T05:54:17.603Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="故障发现">故障发现</span></h2><p>今天发现有一台阿里云线上环境的服务器内存在告急，使用<code>free -m</code>一看，果然剩余的内存不多了，而且<code>buffers</code>和<code>cached</code>也都不高，如图：<br><img src="/images/memcache1.png" alt="paradin"></p><p>用<code>top</code>一看，里面的情况是这样的:<br><img src="/images/memcache2.png" alt="paradin"></p><p>很奇怪，<code>top</code>里的<code>res</code>即物理内存加起来也就2200M多一点，但是<code>free</code>命令里显示已经用掉了几乎3.4个G，那这1.2G的空头内存去哪了？要知道，<code>free</code>命令会把<code>Slab缓存</code>统计到了<code>used memory</code>里，那就看看<code>slab缓存</code>有多少吧。</p><p><code>yum install -y nmon</code>，使用<code>nmon</code>看一下，如图：<br><img src="/images/memcache3.png" alt="paradin"></p><p>发现里面有几乎650MB的slab内存，这样还是少了大约550MB，那么使用<code>slabtop</code>查看细节，如图：<br><img src="/images/memcache5.png" alt="paradin"></p><p>再用<code>cat /proc/meminfo</code>去查看一下内存详细情况，如图：<br><img src="/images/memcache4.png" alt="paradin"></p><p><a href="https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/" target="_blank" rel="noopener">https://blog.famzah.net/2014/09/22/know-your-linux-memory-usage/</a> 这里提到内存的计算公式：<br>     <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + (Slab + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + (Active + Inactive) + (Slab + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + (Buffers + Cached + SwapCached) + AnonPages + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)</span><br><span class="line">MemTotal = MemFree + ((“Active(anon)” + “Active(file)”) + (“Inactive(anon)” + “Inactive(file)”)) + ((SReclaimable + SUnreclaim) + PageTables + KernelStack)</span><br></pre></td></tr></table></figure></p><p>虽然作者说他测试的机器内核是3.2的，但是这几个公式对我这个服务器（内核2.6）都可以用，虽然肯定不能严丝合缝但是相差值并不大，我用前两个公式算了一下我这个机器的情况：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MemTotal（<span class="number">3495620</span>） = MemFree（<span class="number">251396</span>） + Buffers（<span class="number">11456</span>） + Cached（<span class="number">292324</span>） + SwapCached（<span class="number">0</span>） + AnonPages（<span class="number">2302484</span>） + Slab（<span class="number">627068</span>） + PageTables（<span class="number">8972</span>） + KernelStack（<span class="number">1920</span>） </span><br><span class="line">MemTotal（<span class="number">3495592</span>） = MemFree（<span class="number">251396</span>） + Active（<span class="number">2450960</span>） + Inactive（<span class="number">155276</span>） + Slab（<span class="number">627068</span>） + PageTables（<span class="number">8972</span>） + KernelStack（<span class="number">1920</span>）</span><br></pre></td></tr></table></figure></p><h2><span id="猜测一下">猜测一下</span></h2><p>我特么的法克，这个memtotal跟3921112差距很远啊！相差了412MB！为什么会少了这么多？会不会这412MB就是那<code>used memory</code>减去slap内存的那部分神秘内存？他为什么没有统计在<code>/proc/meminfo</code>里？</p><p>于是果断给阿里云提工单，截图发锤，让他们给一个完美的解释。</p><p>等待阿里云回复的时间里，我又找了几个其他的机器，各种型号的都算了一下，发现一个现象：凡是装了这个模块的服务器都出现了<code>MemTotal</code>不相符的问题，大约误差值都是400M~500M，而除了这个模块，<code>MemTotal</code>的误差值基本就是50M以内。</p><p>呃…这好像不能怪阿里云了…不过的确<code>MemTotal</code>是有误差的啊！</p><p>找开发了解了一下，这个服务器里用了大量的tcp长连接，而且是https的，使用<code>netstat -na|grep ESTABLISHED|wc -l</code>一看，有95000个左右。</p><p>而在开发环境的机器里查看，<code>MemTotal</code>的相差率很小，而tcp连接数则不到20个。那用排除法可以确定是TCP长连接的锅，于是我猜测<strong>TCP长连接占用掉了一部分内存，而这部分内存又没有在meminfo（SLAB）里体现出来，进而导致free命令与top命令相差过大</strong>。</p><h2><span id="小心求证">小心求证</span></h2><p><strong>未完待续…</strong></p><h2><span id="参考资料">参考资料</span></h2><p><a href="http://farll.com/2016/10/high-memory-usage-alarm/#comment-9881" target="_blank" rel="noopener">http://farll.com/2016/10/high-memory-usage-alarm/#comment-9881</a><br><a href="http://lday.me/2017/09/02/0012_a_memory_leak_detection_procedure/" target="_blank" rel="noopener">http://lday.me/2017/09/02/0012_a_memory_leak_detection_procedure/</a> （虽然跟本文没啥关系，但是强力推荐）<br><a href="http://blog.yufeng.info/archives/2456" target="_blank" rel="noopener">http://blog.yufeng.info/archives/2456</a><br><a href="http://lovestblog.cn/blog/2015/08/21/rssxmx/" target="_blank" rel="noopener">http://lovestblog.cn/blog/2015/08/21/rssxmx/</a><br><a href="https://www.mawenbao.com/research/linux-ate-my-memory.html" target="_blank" rel="noopener">https://www.mawenbao.com/research/linux-ate-my-memory.html</a></p>]]></content>
-    
-    <summary type="html">
-    
-      拿着计算器算内存，我觉得我成了一个会计...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="内存泄漏" scheme="http://yoursite.com/tags/%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F/"/>
     
   </entry>
   
