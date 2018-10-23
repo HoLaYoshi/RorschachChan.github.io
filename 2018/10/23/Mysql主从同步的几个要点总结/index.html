@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock2.png">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock3.png">
-<meta property="og:updated_time" content="2018-10-23T08:37:17.718Z">
+<meta property="og:updated_time" content="2018-10-23T08:49:10.214Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql主从同步的几个要点总结">
 <meta name="twitter:description" content="虽然100%的时间都是在用云厂商的服务，但是也要了解一下底层">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  825
+                  852
                 </span>
               
 
@@ -463,12 +463,13 @@
 <p>要监控主从同步是否出现异常，可以通过<code>show slave status\G</code>里的<code>Seconds_Behind_Master</code>字段来查看，如图：<br><img src="/images/mysql-sock3.png" alt="paradin"></p>
 <p>但是要注意！<code>Seconds_Behind_Master</code>是有前提的，那就是主库跟读库之间的网络情况要良好，因为这个字段是从属服务器SQL线程和从属服务器I/O线程之间的时间差距，（即比较<code>binlog</code>和<code>relaylog</code>执行sql的timestamp时间差），单位是秒。如果主服务器和从属服务器之间的网络连接较快，则从属服务器I/O线程会非常接近主服务器，所以本字段能够十分近似地指示，从属服务器SQL线程比主服务器落后多少。如果网络较慢，则这种指示不准确；从属SQL线程经常会赶上读取速度较慢地从属服务器I/O线程，因此，<code>Seconds_Behind_Master</code>经常显示值为0。即使I/O线程落后于主服务器时，也是如此。换句话说，本列只对速度快的网络有用。</p>
 <h2><span id="要点总结">要点总结</span></h2><ol>
-<li>主库和读库的mysql版本保持一致；</li>
+<li>主库和读库的mysql版本保持一致，硬件情况也保持一致；</li>
 <li><code>binlog</code>文件在生产系统中不易过大，建议小于500m，不然容易拖慢数据库性能；</li>
 <li>设置slave前先检查一下设置的账号能不能远程登陆；</li>
 <li>在设置多个库同步时，一个<code>binlog-do-db</code>参数对应一个库，不能一行写多个库；</li>
 <li>如果出现了<code>Slave_IO_Running: No</code>这个状态，去主库上<code>show master status\G</code>，查看一下是否file跟从库的file是不是对不上；</li>
 <li>代码里避免出现“查询读库后马上到主库操作”的字段，由于主从同步有延迟，这样很有可能会出现前端多次请求，而从库一致无法从主库得到最新的数据消息，所以sql被执行了好几次的错误，这样的情况可以考虑加入“可以用唯一索引限制”或者用<code>insert … select … where not exist</code>这种方式；</li>
+<li>主库的慢sql太多的话，也会影响主从同步；</li>
 </ol>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://dba.stackexchange.com/questions/24793/mysql-replication-slave-is-continuously-lagging-behind-master" target="_blank" rel="noopener">https://dba.stackexchange.com/questions/24793/mysql-replication-slave-is-continuously-lagging-behind-master</a><br><a href="http://ningg.top/inside-mysql-master-slave-delay/" target="_blank" rel="noopener">http://ningg.top/inside-mysql-master-slave-delay/</a><br><a href="http://database.51cto.com/art/201108/287653.htm" target="_blank" rel="noopener">http://database.51cto.com/art/201108/287653.htm</a><br><a href="https://zhuanlan.zhihu.com/p/28554242" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28554242</a></p>
 
