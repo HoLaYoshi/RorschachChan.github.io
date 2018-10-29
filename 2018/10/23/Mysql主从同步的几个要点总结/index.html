@@ -99,7 +99,7 @@
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock2.png">
 <meta property="og:image" content="http://yoursite.com/images/mysql-sock3.png">
 <meta property="og:image" content="http://yoursite.com/images/roseisback.gif">
-<meta property="og:updated_time" content="2018-10-23T09:04:19.832Z">
+<meta property="og:updated_time" content="2018-10-24T01:31:27.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mysql主从同步的几个要点总结">
 <meta name="twitter:description" content="虽然100%的时间都是在用云厂商的服务，但是也要了解一下底层">
@@ -459,7 +459,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><h2><span id="同步原理">同步原理</span></h2><p>主从同步是Mysql非常常见的一个应用，也是非常重要的监控之处，这里简单总结在配置Mysql时候的几个要点，防止以后自己踩坑。</p>
-<p>先说一下主从同步的原理，就是主数据库在数据库更新的时候会更新自己的binlog，同时也会向读数据库（一个或多个）传递这个<code>binlog</code>，此时从库开始一个<code>io_thread</code>这个线程用来接收这个<code>binlog</code>，然后把binlog写入到自己的<code>relaylog</code>，当<code>relaylog</code>发现有数据更新了，就开始一个<code>sql_thread</code>来按照主库更新自己的库，这样达到了“主库读库一致”的效果。图示如下：<br><img src="/images/mysql-sock2.png" alt="paradin"></p>
+<p>先说一下主从同步的原理，就是主数据库在数据库更新的时候会更新自己的<code>binlog</code>，同时也会向读数据库（一个或多个）传递这个<code>binlog</code>，此时从库开始一个<code>io_thread</code>这个线程用来接收这个<code>binlog</code>，然后把binlog写入到自己的<code>relaylog</code>，当<code>relaylog</code>发现有数据更新了，就开始一个<code>sql_thread</code>来按照主库更新自己的库，这样达到了“主库读库一致”的效果。图示如下：<br><img src="/images/mysql-sock2.png" alt="paradin"></p>
 <p>上述过程：<br>主从延迟：「步骤2」开始，到「步骤7」执行结束。<br>步骤 2：存储引擎处理，时间极短<br>步骤 3：文件更新通知，磁盘读取延迟<br>步骤 4：Bin Log 文件更新的传输延迟，单线程<br>步骤 5：磁盘写入延迟<br>步骤 6：文件更新通知，磁盘读取延迟<br>步骤 7：SQL 执行时长</p>
 <p>要监控主从同步是否出现异常，可以通过<code>show slave status\G</code>里的<code>Seconds_Behind_Master</code>字段来查看，如图：<br><img src="/images/mysql-sock3.png" alt="paradin"></p>
 <p>但是要注意！<code>Seconds_Behind_Master</code>是有前提的，那就是主库跟读库之间的网络情况要良好，因为这个字段是从属服务器SQL线程和从属服务器I/O线程之间的时间差距，（即比较<code>binlog</code>和<code>relaylog</code>执行sql的timestamp时间差），单位是秒。如果主服务器和从属服务器之间的网络连接较快，则从属服务器I/O线程会非常接近主服务器，所以本字段能够十分近似地指示，从属服务器SQL线程比主服务器落后多少。如果网络较慢，则这种指示不准确；从属SQL线程经常会赶上读取速度较慢地从属服务器I/O线程，因此，<code>Seconds_Behind_Master</code>经常显示值为0。即使I/O线程落后于主服务器时，也是如此。换句话说，本列只对速度快的网络有用。</p>
@@ -473,7 +473,7 @@
 <li>主库的慢sql太多的话，也会影响主从同步；</li>
 </ol>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://dba.stackexchange.com/questions/24793/mysql-replication-slave-is-continuously-lagging-behind-master" target="_blank" rel="noopener">https://dba.stackexchange.com/questions/24793/mysql-replication-slave-is-continuously-lagging-behind-master</a><br><a href="http://ningg.top/inside-mysql-master-slave-delay/" target="_blank" rel="noopener">http://ningg.top/inside-mysql-master-slave-delay/</a><br><a href="http://database.51cto.com/art/201108/287653.htm" target="_blank" rel="noopener">http://database.51cto.com/art/201108/287653.htm</a><br><a href="https://zhuanlan.zhihu.com/p/28554242" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/28554242</a></p>
-<p><img src="/images/roseisback.gif" alt="paradin"></p>
+<p><img src="/images/roseisback.gif" alt="paradin" title="罗斯许久不见的大幅度变相接折叠上篮"></p>
 
       
     </div>
@@ -920,7 +920,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共178.4k字</span>
+  <span class="post-count">博客全站共178.5k字</span>
 </div>
         
 

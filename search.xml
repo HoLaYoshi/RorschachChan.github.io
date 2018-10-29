@@ -151,8 +151,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>Jenkins</tag>
         <tag>钉钉</tag>
+        <tag>Jenkins</tag>
         <tag>Docker</tag>
       </tags>
   </entry>
@@ -223,7 +223,7 @@
   <entry>
     <title><![CDATA[爬取当前IP并且修改阿里云安全组的脚本]]></title>
     <url>%2F2018%2F08%2F07%2F%E7%88%AC%E5%8F%96%E5%BD%93%E5%89%8DIP%E5%B9%B6%E4%B8%94%E4%BF%AE%E6%94%B9%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%89%E5%85%A8%E7%BB%84%E7%9A%84%E8%84%9A%E6%9C%AC%2F</url>
-    <content type="text"><![CDATA[动机与脚本我工位所用的网络是公司特批的海外专线，速度OK还能翻墙出去看看，自从有了这条线爽的飞起，但缺陷就是每周IP地址都会变，IP一变很多的阿里云ecs安全组就要重新配置，因为有一些公网端口比如grafana或者跳板机是只能公司运维人员访问的。这样每周都要手动改一次IP地址太烦了，于是乎，写了下面这个脚本，一劳永逸的解决这个问题： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576#coding=utf-8#这个脚本在python3.6下自验通过，用途是去爬当前的IP地址然后给阿里云安全组添加新的IP，并且删除掉老的IPfrom aliyunsdkcore import clientfrom aliyunsdkecs.request.v20140526 import AuthorizeSecurityGroupRequestfrom aliyunsdkecs.request.v20140526 import RevokeSecurityGroupRequestfrom aliyunsdkcore.profile import region_providerimport requests,sys,re,osfrom bs4 import BeautifulSoupclt = client.AcsClient('这里是AK', '这里是SK', 'cn-hangzhou') #鉴权file = "F:\\ip.txt"def checkDIR(): global file if os.path.exists(file) == True: #先判断文件是否存在 with open(file, "r") as f: old_ip = f.read() return (old_ip) #获取旧ip else: print("ip.txt文件不存在，请手动生成！") sys.exit() #文件不存在直接退出def getIP(): global file r = requests.get('http://www.ip111.cn/') #这里输入要爬的网站域名 soup = BeautifulSoup(r.text, "lxml") context = [] for link in soup.find_all('td'): #获取所有td标签内容 context.append(link.get_text()) #添加一个列里 str = context[4] ip = re.split(r'[\n\s]\s*', str)[1] #多符号分割字符串 with open(file, "w") as f: f.write(ip) return ipdef addnewRULE(func): global clt # 设置参数 for port in ['3000/3000', '34872/34872']: #这里是端口 request = AuthorizeSecurityGroupRequest.AuthorizeSecurityGroupRequest() request.set_accept_format('json') request.add_query_param('RegionId', 'cn-hangzhou') request.add_query_param('SecurityGroupId', '目标安全组ID') request.add_query_param('IpProtocol', 'tcp') request.add_query_param('PortRange', port) request.add_query_param('SourceCidrIp',func()) request.add_query_param('NicType', 'intranet') #如果不加这句话就是公网添加 if port == '3000/3000': request.add_query_param('Description', 'Grafana使用端口') else: request.add_query_param('Description', 'Zabbix和堡垒机使用端口') # 发起请求 response = clt.do_action(request) print (response)def deloldRULE(func): global clt # 设置参数 for port in ['3000/3000','34872/34872']: request = RevokeSecurityGroupRequest.RevokeSecurityGroupRequest() request.set_accept_format('json') request.add_query_param('RegionId', 'cn-hangzhou') request.add_query_param('SecurityGroupId', '目标安全组ID') request.add_query_param('IpProtocol', 'tcp') request.add_query_param('PortRange', port) request.add_query_param('SourceCidrIp', func()) request.add_query_param('NicType', 'intranet') #如果不加这句话就是公网删除 # 发起请求 response = clt.do_action(request) print (response)if __name__ == '__main__': checkDIR() deloldRULE(checkDIR) getIP() addnewRULE(getIP) 整个脚本的逻辑就是先在F盘下有ip.txt里面就保存当前IP地址，然后执行脚本的时候就会先在目标安全组里删除掉这个IP相关的3000端口和34872端口，然后去www.ip111.cn里爬取当前的网址，把新IP写入到ip.txt的同时，再去目标安全组里添加这个新IP相关的3000端口和34872端口。 新的知识点 把上一个函数结果当作参数在下一个函数里执行的方法： python的退出有两个：os._exit()和sys.exit()：os._exit()会直接将python程序终止，之后的所有代码都不会执行；sys.exit()会抛出一个异常: SystemExit，如果这个异常没有被捕获，那么python解释器将会退出。如果有捕获该异常的代码，那么这些代码还是会执行。使用sys.exit()来退出程序比较优雅，一般情况下也用这个，os._exit()可以在os.fork()产生的子进程里使用。 在windows里定时执行python脚本的方法：打开控制面板—&gt;系统和安全—&gt;计划任务。如图： 点击右侧的创建基本任务，输入任务名称和可选的描述。点击下一步，设置任务的开始时间，可以选择每日执行、每周执行或每月执行。点击下一步，操作选择启动程序，点击下一步输入参数。如图： 123程序或脚本：python.exe 添加参数：输入要执行的python脚本路径（包括文件名）起始于：输入python.exe的目录（不包括文件名） 最后点击下一步，整个过程搞定。]]></content>
+    <content type="text"><![CDATA[动机与脚本我工位所用的网络是公司特批的海外专线，速度OK还能翻墙出去看看，自从有了这条线爽的飞起，但缺陷就是每周IP地址都会变，IP一变很多的阿里云ecs安全组就要重新配置，因为有一些公网端口比如grafana或者跳板机是只能公司运维人员访问的。这样每周都要手动改一次IP地址太烦了，于是乎，写了下面这个脚本，一劳永逸的解决这个问题： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576#coding=utf-8#这个脚本在python3.6下自验通过，用途是去爬当前的IP地址然后给阿里云安全组添加新的IP，并且删除掉老的IPfrom aliyunsdkcore import clientfrom aliyunsdkecs.request.v20140526 import AuthorizeSecurityGroupRequestfrom aliyunsdkecs.request.v20140526 import RevokeSecurityGroupRequestfrom aliyunsdkcore.profile import region_providerimport requests,sys,re,osfrom bs4 import BeautifulSoupclt = client.AcsClient('这里是AK', '这里是SK', 'cn-hangzhou') #鉴权file = "F:\\ip.txt"def checkDIR(): global file if os.path.exists(file) == True: #先判断文件是否存在 with open(file, "r") as f: old_ip = f.read() return (old_ip) #获取旧ip else: print("ip.txt文件不存在，请手动生成！") sys.exit() #文件不存在直接退出def getIP(): global file r = requests.get('http://www.ip111.cn/') #这里输入要爬的网站域名 soup = BeautifulSoup(r.text, "lxml") context = [] for link in soup.find_all('td'): #获取所有td标签内容 context.append(link.get_text()) #添加一个列里 str = context[4] ip = re.split(r'[\n\s]\s*', str)[1] #多符号分割字符串 with open(file, "w") as f: f.write(ip) return ipdef addnewRULE(func): global clt # 设置参数 for port in ['3000/3000', '34872/34872']: #这里是端口 request = AuthorizeSecurityGroupRequest.AuthorizeSecurityGroupRequest() request.set_accept_format('json') request.add_query_param('RegionId', 'cn-hangzhou') request.add_query_param('SecurityGroupId', '目标安全组ID') request.add_query_param('IpProtocol', 'tcp') request.add_query_param('PortRange', port) request.add_query_param('SourceCidrIp',func()) request.add_query_param('NicType', 'intranet') #如果不加这句话就是公网添加 if port == '3000/3000': request.add_query_param('Description', 'Grafana使用端口') else: request.add_query_param('Description', 'Zabbix和堡垒机使用端口') # 发起请求 response = clt.do_action(request) print (response)def deloldRULE(func): global clt # 设置参数 for port in ['3000/3000','34872/34872']: request = RevokeSecurityGroupRequest.RevokeSecurityGroupRequest() request.set_accept_format('json') request.add_query_param('RegionId', 'cn-hangzhou') request.add_query_param('SecurityGroupId', '目标安全组ID') request.add_query_param('IpProtocol', 'tcp') request.add_query_param('PortRange', port) request.add_query_param('SourceCidrIp', func()) request.add_query_param('NicType', 'intranet') #如果不加这句话就是公网删除 # 发起请求 response = clt.do_action(request) print (response)if __name__ == '__main__': checkDIR() deloldRULE(checkDIR) getIP() addnewRULE(getIP) 整个脚本的逻辑就是先在F盘下有ip.txt里面就保存当前IP地址，然后执行脚本的时候就会先在目标安全组里删除掉这个IP相关的3000端口和34872端口，然后去www.ip111.cn里爬取当前的网址，把新IP写入到ip.txt的同时，再去目标安全组里添加这个新IP相关的3000端口和34872端口。 新的知识点 把上一个函数结果当作参数在下一个函数里执行的方法： python的退出有两个：os._exit()和sys.exit()：os._exit()会直接将python程序终止，之后的所有代码都不会执行；sys.exit()会抛出一个异常: SystemExit，如果这个异常没有被捕获，那么python解释器将会退出。如果有捕获该异常的代码，那么这些代码还是会执行。使用sys.exit()来退出程序比较优雅，一般情况下也用这个，os._exit()可以在os.fork()产生的子进程里使用。 在windows里定时执行python脚本的方法：打开控制面板—&gt;系统和安全—&gt;计划任务。如图： 点击右侧的创建基本任务，输入任务名称和可选的描述。点击下一步，设置任务的开始时间，可以选择每日执行、每周执行或每月执行。点击下一步，操作选择启动程序，点击下一步输入参数。如图： 123程序或脚本：python.exe 添加参数：输入要执行的python脚本路径（包括文件名）起始于：输入python.exe的目录（不包括文件名） 最后点击下一步，整个过程搞定。 目前http://www.ip111.cn/网站已经更改了网页格式，上述的代码有一段已经不好使了，需要将getIP()这个函数改成如下的方法 123456789101112def getIP(): global file r = requests.get('http://2018.ip138.com/ic.asp') #改用这个域名 soup = BeautifulSoup(r.text, "lxml") context = [] for link in soup.find_all('body'): #获取body内容 context.append(link.get_text()) #添加一个列里 str = context[0] ip = re.split(r'[\[\]]',str)[1] #进行分割 with open(file, "w") as f: f.write(ip) return ip]]></content>
       <categories>
         <category>工作与技术</category>
       </categories>
@@ -313,9 +313,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>数据库中间件</tag>
         <tag>读写分离</tag>
         <tag>mycat</tag>
-        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -338,9 +338,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>数据库中间件</tag>
         <tag>读写分离</tag>
         <tag>mycat</tag>
-        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -351,9 +351,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
+        <tag>数据库中间件</tag>
         <tag>读写分离</tag>
         <tag>mycat</tag>
-        <tag>数据库中间件</tag>
       </tags>
   </entry>
   <entry>
@@ -728,18 +728,6 @@
       </tags>
   </entry>
   <entry>
-    <title><![CDATA[用非root启动进程以及启动docker]]></title>
-    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
-    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
-      <categories>
-        <category>工作与技术</category>
-      </categories>
-      <tags>
-        <tag>docker</tag>
-        <tag>安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title><![CDATA[用非root用户启动tomcat进程]]></title>
     <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8%E6%99%AE%E9%80%9A%E7%94%A8%E6%88%B7%E5%90%AF%E5%8A%A8tomcat%2F</url>
     <content type="text"><![CDATA[使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有很多的软件没有这么贴心的服务，这就需要我们手动的更改了。 使用非root用户启动tomcat以tomcat为例，打算用chris账号(属于chen这个group)启动。那么首先先创建账号和组，如下： 12345[root@chen-docker ~]groupadd chen #创建chen这个组[root@chen-docker ~]useradd -s /bin/bash -g chen chris #在这个组里面添加chris这个用户[root@chen-docker ~]passwd chris #给这个用户设定密码[root@chen-docker ~]# id chrisuid=1000(chris) gid=1002(chen) groups=1002(chen) #可见添加成功 su chris切换到chris用户，在/home/chris里使用wget http://apache.fayea.com/tomcat/tomcat-9/v9.0.7/bin/apache-tomcat-9.0.7.tar.gz下载tomcat。然后解压缩在/home/chris里，因为chris用户在这里是有权限的。然后进行如下的操作： 12345cd ~/ 代表用户所在目录mkdir -p ~/shell-scriptcd ~/shell-script/touch start.shtoush stop.sh 这个start.sh的内容很简单，如下： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./start.shfi shutdown.sh的内容同理： 12345678#/bin/bashif [ "root" == "$USER" ] #不让root启动then echo "can't start with user 'root',retry after change user!" exit 1else cd /home/chris/apache-tomcat-9.0.7/bin/ &amp;&amp; ./shutdown.shfi chmod +x *.sh给上面两个脚本可执行权限，但是现在执行startup.sh或者shutdown.sh会出现一个问题： 12Neither the JAVA_HOME nor the JRE_HOME environment variable is definedAt least one of these environment variable is needed to run this program 这是因为chris用户没有权限去启动java这个可执行程序，如果使用java -version回答是bash: java: command not found，这个时候怎么办？ 编辑~/.bash_profile，在末尾处加上如下的内容： 然后source .bash_profile，再使用java -version确认一下应该是OK了。这个时候也是可以使用chris用户去启动刚刚的那个start.sh和shutdown.sh的。 由于我们的tomcat是源码解压缩，所以要使用root用户去创建一下/etc/init.d/tomcat。里面内容如下： 123456789#!/bin/bashcase $1 instart)su - chris -lc "sh /home/chris/shell-script/start.sh";; #如果要root启动，那就是su - root -lc "sh /home/utomcat/shell-script/start.sh";;stop)su - chris -lc "sh /home/chris/shell-script/shutdown.sh";;*)echo "parameter error, usage:(start|stop)";;esac 保存之后，执行一下service tomcat start看看效果。 如果要设置开机自启动，别忘了chkconfig --add tomcat和chkconfig tomcat on，在浏览器打开ip:8080看见汤姆猫~ 当普通用户要使用1024以下的端口众所周知，linux默认是不准许普通用户调用1024以下的端口的，那么遇到这样的需求怎么办呢？最好的方法是使用iptables。 首先让程序运行在非root帐户下，并绑定高于1024的端口，在确保能正常工作的时候，将低端口通过端口转发，将低端口转到高端口，从而实现非root运行的程序绑定低端口。要使用此方法可以使用下面的方式： 1234sysctl -w net.ipv4.ip_forward=1 #要长久保存，需要在/etc/sysctl.conf文件内修改，然后sysctl -p /etc/sysctl.confiptables -F -t natiptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to:8088 #将80端口转发到8088iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080 #这句话也可以 这么操作在速度上没有任何影响。]]></content>
@@ -752,6 +740,18 @@
       </tags>
   </entry>
   <entry>
+    <title><![CDATA[用非root启动进程以及启动docker]]></title>
+    <url>%2F2018%2F04%2F18%2F%E7%94%A8%E9%9D%9Eroot%E5%90%AF%E5%8A%A8%E8%BF%9B%E7%A8%8B%E4%BB%A5%E5%8F%8A%E5%90%AF%E5%8A%A8docker%2F</url>
+    <content type="text"><![CDATA[使用非root用户启动普通进程使用非root用户启动进程是运维安全的一个主要环节，拿tomcat进程来说，如果是使用root用户去启动了tomcat，那么有一个严重的问题，那就是tomcat具有root权限。这意味着你的任何一个jsp脚本都具有root权限，所以那些不怀好意的人可以轻易地用jsp脚本去搞破坏，甚至删除你整个硬盘里的东西！所以为了活着，我们要极力避免这种现象。 很多的软件都自带的用户/用户组，比如nginx、zabbix、elasticsearch，但是也有更多的软件没有这么贴心的服务，这就需要我们手动的更改了。 docker不应该使用root启动1.8版本之前的docker是不支持user namespace的，所以那样的话，如果在docker容器内部使用root运行app，那么不可否认，这个root和宿主机的root是同一个UID。但是，需要特别注意的是，容器内的root与宿主机上的root权限并不一定是相等的。 但是为了绝对的安全，还是推荐把docker升级到1.8以上，然后彻底避免用root去启动容器，在http://www.projectatomic.io/docs/docker-image-author-guidance/里最下面一段也明文说了---生产环境里不要用root用户去启动docker!!! 使用非root用户启动docker的办法如下：创建docker组：sudo groupadd docker将当前用户加入docker组：sudo gpasswd -a ${USER} docker重新启动docker服务：sudo service docker restart或sudo systemctl restart docker当前用户退出系统再重新登陆。 参考资料https://www.zhihu.com/question/25580965]]></content>
+      <categories>
+        <category>工作与技术</category>
+      </categories>
+      <tags>
+        <tag>docker</tag>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[使用docker做一个主从同步的redis集群]]></title>
     <url>%2F2018%2F04%2F18%2F%E4%BD%BF%E7%94%A8docker%E5%81%9A%E4%B8%80%E4%B8%AA%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%9A%84redis%E9%9B%86%E7%BE%A4%2F</url>
     <content type="text"><![CDATA[查看容器内部信息之前用docker run -it --name redis-master redis /bin/bash创建了一个redis的docker，现在登陆发现状态已经是exit，于是就使用docker container start 容器ID号or容器名称来重新启动。如图： 然后书里说到要用docker inspect来查看所挂载volume的情况，使用命令: 1[root@chen-docker ~]# docker inspect --format &quot;&#123;&#123; .Volumes &#125;&#125;&quot; f391531120b0 但是很不幸，系统反馈给我一个错误： 1Template parsing error: template: :1:3: executing &quot;&quot; at &lt;.Volumes&gt;: map has no entry for key &quot;Volumes&quot; 没有这个Volumes，那就干脆查看一下这个容器的所有信息：docker inspect f391531120b0，这个命令里面有Config、Mounts、HostConfig、NetworkSettings等等整个容器的所有信息，比如看一下NetworkSettings相关的内容，如图： 此时使用如下命令： 1234[root@chen-docker ~]# docker inspect --format &quot;&#123;&#123; .NetworkSettings.IPAddress &#125;&#125;&quot; f391531120b0 #注意前面的.192.168.0.2[root@chen-docker ~]# docker inspect --format &quot;&#123;&#123; .NetworkSettings.MacAddress &#125;&#125;&quot; f391531120b002:42:c0:a8:00:02 这样就可以获取到内网IP和mac地址，同理换成docker inspect f391531120b0 | grep Mounts -A 10，看一下挂载信息，如图： 原来容器里的/data其实就是宿主机的/var/lib/docker/volumes/94b3c20a6d269c7498ab59ee45c560e84fed64a636767a4baa54fa7befbcd4ff/_data这个文件夹。为了验证这一点，我先到宿主机去创建一个叫aaa文件，如下： 12root@f391531120b0:/data# cat aaa 123123 再返回到宿主机上看： 12345[root@chen-docker ~]# cd /var/lib/docker/volumes/94b3c20a6d269c7498ab59ee45c560e84fed64a636767a4baa54fa7befbcd4ff/_data[root@chen-docker _data]# lsaaa[root@chen-docker _data]# cat aaa 123123 这就搞定了！ 主从同步排错就是按书里写的开始配置和启动redis-slave，但是却发现同步没有成功，在redis-slave日志里发现这样的话： 12332677:S 08 Feb 16:14:40.952 * Connecting to MASTER 172.168.10.70:637932677:S 08 Feb 16:14:40.952 * MASTER &lt;-&gt; SLAVE sync started32677:S 08 Feb 16:14:40.953 # Error condition on socket for SYNC: Connection refused 这个的原因就是redis主服务器绑定了127.0.0.1，那么跨服务器IP的访问就会失败，从服务器用IP和端口访问主的时候，主服务器发现本机6379端口绑在了127.0.0.1上，也就是只能本机才能访问，外部请求会被过滤。所以需要修改redis-master的redis.conf，注释掉bind 127.0.0.1，如果是线上生产环境建议绑定IP地址。 重新启动redis之后，发现同步依然失败，日志变成了这样： 12345690:S 17 Apr 09:27:35.906 * Non blocking connect for SYNC fired the event.90:S 17 Apr 09:27:35.907 # Error reply to PING from master: &apos;-DENIED Redis is running in protected mode because protected mode is enabled, no bind address was specified, no authentication password is requested to clients. In this mode connections are only accepted from the loopback interface. If you want to connect&apos;90:S 17 Apr 09:27:36.908 * Connecting to MASTER 192.168.0.2:637990:S 17 Apr 09:27:36.909 * MASTER &lt;-&gt; SLAVE sync started90:S 17 Apr 09:27:36.909 * Non blocking connect for SYNC fired the event.90:S 17 Apr 09:27:36.909 # Error condition on socket for SYNC: Connection reset by peer 这个日志的意思是说redis在没有开启bind和密码的情况下，保护模式被开启。然后Redis的只接受来自环回IPv4和IPv6地址的连接。于是还是要修改redis-master的redis.conf关闭保护模式：portected-mode no，然后重启redis-master即可。 容器内安装ping先检查你的容器是使用什么系统的景象，如果是ubantu那就是apt-get，安装ping的命令如下： 12apt-get updateapt-get install inetutils-ping 如何让容器一直启动如果用了一段时间的docker就会发现，我们的容器经常用了一段时间就自动退出了，docker ps已经找不到了，在docker ps -a里面了，如图： 然后我们docker start containerId想重新开启这个容器，可能这次来的更快，没几分钟容器又自己关了，由这个问题又可能引发其它很多的问题。 docker run指定的命令如果不是那些一直挂起的命令（比如运行top，不断echo），就是会自动退出的。-d命令是设置detach为true，根据官方的文档，意思是让这个命令在后台运行，但并不是一直运行，Docker容器后台运行,就必须有一个前台进程。主线程结束，容器会退出。 我们启动容器的时候不要-d命令启动，用-dit就好了，例如： 12docker run -d hello-world(不要这么做)docker run -dit hello-world(推荐)]]></content>
@@ -759,8 +759,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>docker</tag>
         <tag>redis</tag>
+        <tag>docker</tag>
         <tag>主从同步</tag>
       </tags>
   </entry>
@@ -809,8 +809,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>nginx</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -857,8 +857,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>python</tag>
         <tag>redis</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -963,8 +963,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>运维技术</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -1160,9 +1160,9 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>atlas</tag>
-        <tag>mysql</tag>
         <tag>读写分离</tag>
+        <tag>mysql</tag>
+        <tag>atlas</tag>
       </tags>
   </entry>
   <entry>
@@ -1219,8 +1219,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>运维技术</tag>
         <tag>linux</tag>
+        <tag>运维技术</tag>
       </tags>
   </entry>
   <entry>
@@ -1279,8 +1279,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>crontab</tag>
         <tag>linux</tag>
+        <tag>crontab</tag>
       </tags>
   </entry>
   <entry>
@@ -1885,8 +1885,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>zabbix</tag>
         <tag>redis</tag>
+        <tag>zabbix</tag>
       </tags>
   </entry>
   <entry>
@@ -1994,8 +1994,8 @@
         <category>工作与技术</category>
       </categories>
       <tags>
-        <tag>git</tag>
         <tag>nginx</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
