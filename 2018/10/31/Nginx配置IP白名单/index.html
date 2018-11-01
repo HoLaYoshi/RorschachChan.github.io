@@ -101,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/images/nginxV5.png">
 <meta property="og:image" content="http://yoursite.com/images/nginxV6.png">
 <meta property="og:image" content="http://yoursite.com/images/nginxV7.png">
-<meta property="og:updated_time" content="2018-11-01T02:17:22.928Z">
+<meta property="og:updated_time" content="2018-11-01T02:51:14.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx配置IP白名单">
 <meta name="twitter:description" content="浏览器插件很容易修改http header，给用户自己伪造自己的地域提供了便利，这时候就只能用remote address来判断了，remote_address是不可能伪造的">
@@ -419,7 +419,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  817
+                  826
                 </span>
               
 
@@ -470,8 +470,8 @@
 <p>重启一波nginx，发现<code>http_x_forwarded_for</code>正是远程访问的IP地址<code>115.205.2.28</code>，于是将xxdtq.conf判断IP改成如下内容：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location = /test/test.html &#123;</span><br><span class="line">    if ($http_x_forwarded_for = 115.205.2.28) &#123;		#改用http_x_forwarded_for</span><br><span class="line">            return 403;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>重启nginx之后，果然页面是403，如图：<br><img src="/images/nginxV6.png" alt="akb48"></p>
 <p>然后用其他的IP地址，比如用手机连接4G去打开<a href="http://xxdtq.lechange.com/test/test.html" target="_blank" rel="noopener">http://xxdtq.lechange.com/test/test.html</a> ，发现是正常读取的，试验成功！<br><img src="/images/nginxV7.png" alt="akb48"></p>
-<p>如果是要整个/test/目录都不让访问的话，就要改成如下内容：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location ^~ /test/ &#123;</span><br><span class="line">   if ($http_x_forwarded_for = 115.205.2.28) &#123;</span><br><span class="line">           return 403;</span><br><span class="line">           &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<p>如果要配置多个IP地址，就要改成如下内容：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location ~ ^/shopadmin &#123;</span><br><span class="line">    if ($remote_addr ~* &quot;203.19.37.144|60.191.94.118&quot;) &#123;	#这里改成~*</span><br><span class="line">    	return  403;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果是要整个/test/目录都不让访问的话，就要改成如下内容：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location ^~ /test/ &#123;</span><br><span class="line">   if ($http_x_forwarded_for = 115.205.2.28) &#123;	# =是精确匹配</span><br><span class="line">           return 403;</span><br><span class="line">           &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果要配置多个IP地址，就要改成如下内容：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">location ~ ^/shopadmin &#123;</span><br><span class="line">    if ($remote_addr ~* &quot;第一个IP|第二个IP|第三个IP&quot;) &#123;	#这里改成~*</span><br><span class="line">    	return  403;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h2><span id="elk里提取http_x_forwarded_for">elk里提取http_x_forwarded_for</span></h2><p>nginx日志中的<code>http_x_forwarded_for</code>字段会有多个IP。使用自定义的模板<code>，grok</code>常用表达式的IPORHOST匹配<code>http_x_forwarded_for</code>该字段，获取的IP值是最后一个，如何取第一个IP值？</p>
 <p>答案是：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">mutate &#123;</span><br><span class="line">      split =&gt; [&quot;http_x_forwarded_for&quot;,&quot;,&quot;]</span><br><span class="line">      add_field =&gt; [&quot;real_remote_addr&quot;,&quot;%&#123;http_x_forwarded_for[0]&#125;&quot;]</span><br><span class="line">      &#125;</span><br></pre></td></tr></table></figure></p>
 <p>IPORHOST这些变量匹配不到所有IP，只能通过自定义正则来匹配到所有IP；再通过以上方法截取第一个IP值。正则表达式写法是：<code>[\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\,\s]*</code></p>
