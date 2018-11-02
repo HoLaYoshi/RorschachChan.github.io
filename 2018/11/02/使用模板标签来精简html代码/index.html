@@ -91,14 +91,14 @@
 <meta name="description" content="模板文件如果已经指定了样式，那么变量文件代码里就不要重复写样式了，这一点要注意。">
 <meta name="keywords" content="django,前端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用模板标签来精简html代码">
+<meta property="og:title" content="使用模板嵌套来精简html代码">
 <meta property="og:url" content="http://yoursite.com/2018/11/02/使用模板标签来精简html代码/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
 <meta property="og:description" content="模板文件如果已经指定了样式，那么变量文件代码里就不要重复写样式了，这一点要注意。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-11-02T07:28:07.586Z">
+<meta property="og:updated_time" content="2018-11-02T08:10:36.070Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用模板标签来精简html代码">
+<meta name="twitter:title" content="使用模板嵌套来精简html代码">
 <meta name="twitter:description" content="模板文件如果已经指定了样式，那么变量文件代码里就不要重复写样式了，这一点要注意。">
 
 
@@ -135,7 +135,7 @@
 
 
 
-  <title>使用模板标签来精简html代码 | Chris Chan's BLOG</title>
+  <title>使用模板嵌套来精简html代码 | Chris Chan's BLOG</title>
   
 
 
@@ -335,7 +335,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用模板标签来精简html代码</h1>
+          <h1 class="post-title" itemprop="name headline">使用模板嵌套来精简html代码</h1>
         
 
         <div class="post-meta">
@@ -387,7 +387,7 @@
 
           
           
-             <span id="/2018/11/02/使用模板标签来精简html代码/" class="leancloud_visitors" data-flag-title="使用模板标签来精简html代码">
+             <span id="/2018/11/02/使用模板标签来精简html代码/" class="leancloud_visitors" data-flag-title="使用模板嵌套来精简html代码">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -413,7 +413,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  650
+                  955
                 </span>
               
 
@@ -429,7 +429,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  3
+                  4
                 </span>
               
             </div>
@@ -454,11 +454,14 @@
       
 
       
-        <script src="\assets\js\APlayer.min.js"> </script><p>在html文件里经常会遇到很多有大量重复代码的情况出现，为了代码精简好看以及后期维护的方便，就需要把那些重复的代码统一放到一个文件里去，不重复的部分自然保留，文件到时直接调用重复模板就好，不同的部分对应填充。</p>
-<p>举个例子，有一个代码叫<code>aaa.html</code>：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">        &lt;meta charset=&apos;UTF-8&apos;&gt;</span><br><span class="line">        &lt;title&gt;&#123;&#123; blog.title &#125;&#125;&lt;/title&gt;		&lt;!-- blog.title就是文章标题，从数据库中提取，使用vender映射出来 --&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">                &lt;a href=&quot;&#123;% url &apos;home&apos; %&#125;&quot;&gt;</span><br><span class="line">                        &lt;h2&gt;BACK TO HOMEPAGE&lt;/h2&gt;	&lt;!-- 这部分是重复的 --&gt;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;h3&gt;&#123;&#123; blog.title &#125;&#125;&lt;/h3&gt;	&lt;!-- 这一部分也是同样用vender映射，展现每一篇文章对应的作者和内容 --&gt;</span><br><span class="line">        &lt;p&gt;作者：&#123;&#123; blog.author &#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;分类：</span><br><span class="line">                &lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog.blog_type.pk %&#125;&quot;&gt;</span><br><span class="line">                        &#123;&#123; blog.blog_type &#125;&#125;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">        &lt;p&gt; &#123;&#123; blog.blog_type.pk &#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;发表时间：&#123;&#123; blog.created_time|date:&quot;Y-m-d H:i:s&quot;&#125;&#125;&lt;/p&gt;  &lt;!-- 这里规定了时间格式 --&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; blog.content &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
+        <script src="\assets\js\APlayer.min.js"> </script><p>在编写django的时候，前端html文件里经常会遇到很多有大量重复代码的情况出现，为了代码精简好看以及后期维护的方便，就需要把那些重复的代码统一放到一个文件里去，不重复的部分自然保留，文件到时直接调用重复模板就好，不同的部分对应填充。</p>
+<p>举个例子，有一个代码是<code>templates/aaa.html</code>：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">        &lt;meta charset=&apos;UTF-8&apos;&gt;</span><br><span class="line">        &lt;title&gt;&#123;&#123; blog.title &#125;&#125;&lt;/title&gt;		&lt;!-- blog.title就是文章标题，从数据库中提取，使用vender映射出来 --&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">                &lt;a href=&quot;&#123;% url &apos;home&apos; %&#125;&quot;&gt;</span><br><span class="line">                        &lt;h2&gt;BACK TO HOMEPAGE&lt;/h2&gt;	&lt;!-- 这部分是重复的 --&gt;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;h3&gt;&#123;&#123; blog.title &#125;&#125;&lt;/h3&gt;	&lt;!-- 这一部分也是同样用vender映射，展现每一篇文章对应的作者和内容 --&gt;</span><br><span class="line">        &lt;p&gt;作者：&#123;&#123; blog.author &#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;分类：</span><br><span class="line">                &lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog.blog_type.pk %&#125;&quot;&gt;</span><br><span class="line">                        &#123;&#123; blog.blog_type &#125;&#125;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">        &lt;p&gt; &#123;&#123; blog.blog_type.pk &#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;发表时间：&#123;&#123; blog.created_time|date:&quot;Y-m-d H:i:s&quot;&#125;&#125;&lt;/p&gt;  &lt;!-- 这里规定了时间格式 --&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; blog.content &#125;&#125;&lt;/p&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
 <p>假设<code>aaa.html</code>里”BACK TO HOMEPAGE”这个部分是重复的，即每一个页面都有返回主页的点击。既然都有这个功能，那么就单独做一个<code>base.html</code>文件当框架，把重复的部分写进去：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">        &lt;meta charset=&apos;UTF-8&apos;&gt;</span><br><span class="line">        &lt;title&gt;&#123;% block title %&#125;&#123;% endblock %&#125;&lt;/title&gt;	&lt;!--这里加入了一个block(块），块的名字叫title--&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">                &lt;a href=&quot;&#123;% url &apos;home&apos; %&#125;&quot;&gt;</span><br><span class="line">                        &lt;h2&gt;BACK TO HOMEPAGE&lt;/h2&gt;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &#123;% block content%&#125; &#123;% endblock %&#125;		&lt;!--这里又加入了一个block，块的名字叫content--&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure></p>
 <p>现在的<code>base.html</code>就是一个框架，里面有了两个block，这两个块有各自的名称，因为这两个块的内容是变化的。再把<code>aaa.html</code>里需要对应配置的部分定义成对应的变量，并且引入这个<code>base.html</code>即可。重新修理后的<code>aaa.html</code>就长这个样子了：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&#123;% extends &apos;base.html&apos; %&#125;	&lt;!--首先引入同目录下的base.html--&gt;</span><br><span class="line"></span><br><span class="line">&#123;% block title%&#125;</span><br><span class="line">        &#123;&#123; blog.title &#125;&#125;	&lt;!--这部分就是title块的内容--&gt;</span><br><span class="line">&#123;% endblock%&#125;</span><br><span class="line"></span><br><span class="line">&#123;% block content %&#125;  &lt;!--这一段就是content块的内容--&gt;</span><br><span class="line">        &lt;h3&gt;&#123;&#123; blog.title &#125;&#125;&lt;/h3&gt;</span><br><span class="line">        &lt;p&gt;作者：&#123;&#123; blog.author &#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;分类：</span><br><span class="line">                &lt;a href=&quot;&#123;% url &apos;blogs_with_type&apos; blog.blog_type.pk %&#125;&quot;&gt;</span><br><span class="line">                        &#123;&#123; blog.blog_type &#125;&#125;</span><br><span class="line">                &lt;/a&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line">        &lt;p&gt; &#123;&#123; blog.blog_type.pk &#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;发表时间：&#123;&#123; blog.created_time|date:&quot;Y-m-d H:i:s&quot;&#125;&#125;&lt;/p&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &lt;p&gt;&#123;&#123; blog.content &#125;&#125;&lt;/p&gt;</span><br><span class="line">&#123;% endblock %&#125;</span><br></pre></td></tr></table></figure></p>
 <p>将<code>aaa.html</code>保存之后，刷新对应的页面，会发现依旧可以成功读取而且界面没有任何的变化。</p>
+<p>可是在实际操作中也会出现这样的需求：多个不同的django APP可能会要访问同一个模板文件（即base.html），那么就要每一个app都复制一遍base.html吗？其实大可不必。这里可以修改一下<code>setting.py</code>，在里面设置一下公共的模板文件路径。</p>
+<p>首先我们现在project根目录下建立一个base文件夹，把<code>base.html</code>复制进去，然后修改一下<code>setting.py</code>如下的字段：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">TEMPLATES = [</span><br><span class="line">   &#123;</span><br><span class="line">       &apos;BACKEND&apos;: &apos;django.template.backends.django.DjangoTemplates&apos;,</span><br><span class="line">       &apos;DIRS&apos;: [</span><br><span class="line">           	os.path.join(BASE_DIR，&apos;base&apos;),		#BASE_DIR是在文件最开始定义的，即project的根目录</span><br><span class="line">           ],</span><br><span class="line">       &apos;APP_DIRS&apos;: True,		#这句话的意思是templates文件夹里所有的文件都可以访问</span><br><span class="line">       &apos;OPTIONS&apos;: &#123;</span><br><span class="line">           &apos;context_processors&apos;: [</span><br><span class="line">               &apos;django.template.context_processors.debug&apos;,</span><br><span class="line">               &apos;django.template.context_processors.request&apos;,</span><br><span class="line">               &apos;django.contrib.auth.context_processors.auth&apos;,</span><br><span class="line">               &apos;django.contrib.messages.context_processors.messages&apos;,</span><br><span class="line">           ],</span><br><span class="line">       &#125;,</span><br><span class="line">   &#125;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>保存之后，再次刷新界面，发现界面没变化。这里django在寻找页面的时候，就会去project的路径/base下先找对应的文件，如果没有，会再去自己应用下的templates文件夹里找。如果两个都没有，那就会报错<code>base.html is not exist</code>。</p>
 
       
     </div>
@@ -523,7 +526,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/11/02/使用模板标签来精简html代码/" title="使用模板标签来精简html代码">使用模板标签来精简html代码</a>
+					<a href="http://yoursite.com/2018/11/02/使用模板标签来精简html代码/" title="使用模板嵌套来精简html代码">使用模板嵌套来精简html代码</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -882,7 +885,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共180.7k字</span>
+  <span class="post-count">博客全站共181.0k字</span>
 </div>
         
 
