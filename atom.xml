@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-11-02T08:10:36.070Z</updated>
+  <updated>2018-11-05T07:10:43.762Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过调整Css让界面美观一点</title>
+    <link href="http://yoursite.com/2018/11/05/%E9%80%9A%E8%BF%87%E8%B0%83%E6%95%B4Css%E8%AE%A9%E7%95%8C%E9%9D%A2%E7%BE%8E%E8%A7%82%E4%B8%80%E7%82%B9/"/>
+    <id>http://yoursite.com/2018/11/05/通过调整Css让界面美观一点/</id>
+    <published>2018-11-05T06:07:43.000Z</published>
+    <updated>2018-11-05T07:10:43.762Z</updated>
+    
+    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><p>数据可视化肯定需要前端知识，同时也要美化前端，让用户的体验更好，这时候就需要接触到css技术。</p><p>css简单来说就是先给你需要修饰的部分设定变量，然后针对不同的变量做不同的声明，达到修改界面的目的。css规则由两个主要的部分构成：选择器，以及一条或多条声明，格式是：<code>selector {declaration1; declaration2; ... declarationN }</code>。</p><p>在html文本里添加一个style标签，比如：<code>&lt;style type=&quot;test/css&quot;&gt; &lt;/style&gt;</code>。这个标签可以放到<code>&lt;body&gt;</code>最尾处也可以放到<code>&lt;head&gt;</code>最尾处。不过一般来说都是放到<code>&lt;body&gt;</code>里。</p><p>在调整css的时候，可以搭配chrome的F12键直接修改，然后将修改的内容拷贝粘贴到html文件里。</p><h2><span id="举个例子">举个例子</span></h2><p>比如我现在的页面是如下这个样子的：<br><img src="/images/css3.png" alt="akb48"></p><p>这个结构可以看出使用最直白的html语言编写，为了美观大方，我们需要把它改成如下的样子：<br><img src="/images/css4.png" alt="akb48"></p><p>原来的代码如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">                &lt;a href=<span class="string">"&#123;% url 'home' %&#125;"</span>&gt;</span><br><span class="line">                        &lt;h2&gt;Homepage&lt;<span class="regexp">/h2&gt;</span></span><br><span class="line"><span class="regexp">                &lt;/</span>a&gt;</span><br><span class="line">                &lt;a href=<span class="string">"&#123;% url 'blog_list' %&#125;"</span>&gt;List&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">                &lt;a href="http:/</span><span class="regexp">/www.baidu.com"&gt;跳往百度&lt;/</span>a&gt;</span><br><span class="line">                &lt;a href=<span class="string">"http://www.lechange.com"</span>&gt;跳往乐橙&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &#123;% block content %&#125; &#123;% endblock %&#125;</span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure></p><p>更改后的代码如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div  <span class="class"><span class="keyword">class</span></span>=<span class="string">"nav"</span>&gt;</span><br><span class="line">&lt;!-- 给这个div标签添加一个<span class="class"><span class="keyword">class</span>叫<span class="title">nav</span> --&gt;</span></span><br><span class="line"><span class="class">                &lt;<span class="title">a</span> <span class="title">class</span></span>=<span class="string">"logo"</span> href=<span class="string">"&#123;% url 'home' %&#125;"</span>&gt;</span><br><span class="line">&lt;!-- 给这个div下的这个a标签添加一个<span class="class"><span class="keyword">class</span>叫<span class="title">logo</span> --&gt;</span></span><br><span class="line"><span class="class">                        &lt;<span class="title">h2</span>&gt;<span class="title">Homepage</span>&lt;/<span class="title">h2</span>&gt;</span></span><br><span class="line"><span class="class">                &lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="class">                &lt;<span class="title">a</span> <span class="title">href</span></span>=<span class="string">"&#123;% url 'blog_list' %&#125;"</span>&gt;List&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">                &lt;a href="http:/</span><span class="regexp">/www.baidu.com"&gt;跳往百度&lt;/</span>a&gt;</span><br><span class="line">                &lt;a href=<span class="string">"http://www.lechange.com"</span>&gt;跳往乐橙&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &#123;% block content %&#125; &#123;% endblock %&#125;</span><br><span class="line">        &lt;style type=<span class="string">'text/css'</span>&gt;</span><br><span class="line">body&#123;</span><br><span class="line">                       margin: <span class="number">0</span>;</span><br><span class="line">                       padding: <span class="number">0</span>;</span><br><span class="line">&lt;!-- 这是对整个body标签进行声明，外边距和内边距都是<span class="number">0</span> --&gt;</span><br><span class="line">                &#125;</span><br><span class="line">                div.nav&#123;</span><br><span class="line">                       background-color: #eee;</span><br><span class="line">border-bottom: <span class="number">2</span>px solid blue;</span><br><span class="line">padding: <span class="number">5</span>px <span class="number">10</span>px;</span><br><span class="line">&lt;!-- 这是对整个nav的div标签进行声明：颜色灰色 --&gt;</span><br><span class="line">&lt;!-- 增加一条底线取代&lt;hr&gt;，设定宽是<span class="number">2</span>px，实线，颜色是蓝色 --&gt;</span><br><span class="line">&lt;!-- 设定上下边距<span class="number">5</span>px,左右边距<span class="number">10</span>px --&gt;</span><br><span class="line">               &#125;</span><br><span class="line">div.nav a&#123;</span><br><span class="line">text-decoration: none;</span><br><span class="line">color: #000;</span><br><span class="line">&lt;!-- 这是对整个nav的div标签里的所有a标签说明：取消下划线，并且规定为黑色 --&gt;</span><br><span class="line">&#125;</span><br><span class="line">                div.nav a.logo &#123;</span><br><span class="line">display: inline-block;</span><br><span class="line">color: green;</span><br><span class="line">font-size:<span class="number">120</span>%;</span><br><span class="line">&lt;!-- 在这里对nav的div标签里那个叫logo的a标签进行单独的说明：缩进，并且规定为绿色 --&gt;</span><br><span class="line">&lt;!-- 字体大小是原来的<span class="number">120</span>% --&gt;</span><br><span class="line">                &#125;</span><br><span class="line">        &lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p><p>调整css是一个很繁琐很麻烦的事情，需要耐心。</p>]]></content>
+    
+    <summary type="html">
+    
+      从这里，开始往bootstrap发展
+    
+    </summary>
+    
+      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="django" scheme="http://yoursite.com/tags/django/"/>
+    
+      <category term="html" scheme="http://yoursite.com/tags/html/"/>
+    
+      <category term="css" scheme="http://yoursite.com/tags/css/"/>
+    
+  </entry>
   
   <entry>
     <title>使用模板嵌套来精简html代码</title>
@@ -390,9 +416,9 @@
       <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
     
     
-      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
-    
       <category term="钉钉" scheme="http://yoursite.com/tags/%E9%92%89%E9%92%89/"/>
+    
+      <category term="Jenkins" scheme="http://yoursite.com/tags/Jenkins/"/>
     
       <category term="Docker" scheme="http://yoursite.com/tags/Docker/"/>
     
@@ -469,34 +495,6 @@
       <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
     
       <category term="kubernetes" scheme="http://yoursite.com/tags/kubernetes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>使用gitlab搭配阿里云容器镜像服务构建镜像</title>
-    <link href="http://yoursite.com/2018/08/15/%E4%BD%BF%E7%94%A8gitlab%E6%90%AD%E9%85%8D%E9%98%BF%E9%87%8C%E4%BA%91%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F%E6%9C%8D%E5%8A%A1%E6%9E%84%E5%BB%BA%E9%95%9C%E5%83%8F/"/>
-    <id>http://yoursite.com/2018/08/15/使用gitlab搭配阿里云容器镜像服务构建镜像/</id>
-    <published>2018-08-15T02:15:44.000Z</published>
-    <updated>2018-08-23T06:42:54.142Z</updated>
-    
-    <content type="html"><![CDATA[<script src="\assets\js\APlayer.min.js"> </script><h2><span id="工作思路">工作思路</span></h2><p>本次北京AWS技术峰会里看到了很多公司在运维上使用容器部署和扩容的实例，一天下来感受良多。现在比较流行部署办法就是“云镜像”：<strong>即开发把新的代码提交到gitlab上，然后gitlab与云厂家的镜像服务相关联，然后每一次commit提交都会触发一次镜像的构建，然后再根据这个镜像部署到实际的服务器里，同时将此服务器作一个快照，同时再搭配上容器监控，如果服务吃紧，就用此快照购买实例扩容；如果服务闲余，那么也会自动将最老的服务器实例关机，进而释放退款。</strong></p><p>用图像来说就是这个意思：<br><img src="/images/aliyungitlab7.png" alt="paradin" title="也可以gitlab触发jenkins，用jenkins构建镜像并且把镜像推送到阿里云容器仓库去"></p><h2><span id="勾连gitlab与云镜像">勾连gitlab与云镜像</span></h2><p>本文使用的镜像厂家是阿里云，gitlab版本是<code>10.7.3</code>。</p><p>进入阿里云的“容器镜像”页面，如果你是第一次使用这个产品需要先建立一个仓库密码，然后点击左侧的代码源，如图：<br><img src="/images/aliyungitlab1.png" alt="paradin"></p><p>在gitlab地方选择“绑定账号”，就需要填写对应的栏目：<br><img src="/images/aliyungitlab2.png" alt="paradin"></p><p>前两项很好写，最后一个token需要在gitlab里创建：在gitlab的页面，点击个人的头像，然后<code>settings</code>—<code>Access Tokens</code>，填写好名字（生产环境一般都是填运维的账号）然后在<code>api</code>处打勾，生成的那个东东就是token，直接复制填写到阿里云的页面即可。如图：<br><img src="/images/aliyungitlab3.png" alt="paradin"></p><h2><span id="配置镜像仓库">配置镜像仓库</span></h2><p>在阿里云容器镜像界面点击“创建镜像仓库”，填写好名字摘要仓库类型之后，在代码源里选择gitlab，由于刚刚填写了token所以是可以看得到gitlab用户下所有的project名的，如图：<br><img src="/images/aliyungitlab4.png" alt="paradin"></p><p>然后点击新创建的那个仓库，在构建一栏默认已经选择好了“代码变更时自动构建镜像”，点击“添加规则”，如图：<br><img src="/images/aliyungitlab5.png" alt="paradin"></p><p>这里我选择了master分支，然后指明了dockerfile文件名和路径，最后版本号就先写一个version，这个可以通过gitlab在commit时特殊指定。</p><p>右侧栏里的Webhook是用来发送提示的，可以在钉钉里创建一个机器人，在创建机器人时会生成webhook，然后把机器人的webhook添加到这个webhook即可。如果在添加的时候提示“当前请求失败，请重试”，这个情况是因为Webhook的名称里有中文，要全英文才可以。<br><img src="/images/aliyungitlab8.png" alt="paradin"></p><h2><span id="编写dockerfile">编写dockerfile</span></h2><p>如果没有dockerfile是无法构建镜像的，于是就在上面“规则”的目录里创建对应的dockerfile文件，<font color="red">注意!“规则”里的根目录就是代码文件夹的顶目录，而不是整个服务器的根目录</font>。写dockerfile的基础知识和语法这里不多说了，网络上有的是，我就随便写一个nginx dockerfile，内容如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">############################################################</span><br><span class="line"># Dockerfile to build Nginx container images</span><br><span class="line"># Based on Debian</span><br><span class="line">############################################################</span><br><span class="line">FROM    debian:latest</span><br><span class="line">MAINTAINER      ChrisChan <span class="string">"Chris@jjfjj.com"</span></span><br><span class="line">RUN     apt-get update</span><br><span class="line">RUN     apt-get install -y nginx</span><br><span class="line">RUN     apt-get install -y vim</span><br><span class="line">RUN     apt-get install -y procps#安装ps命令</span><br><span class="line">RUN     echo <span class="string">'HI!WARRIOR is the champion!!!'</span> &gt; <span class="regexp">/var/</span>www/html/index.nginx-debian.html</span><br><span class="line">EXPOSE  8080#开放8080端口</span><br><span class="line">COPY    /file/kubernetes.tar.gz /mnt/</span><br><span class="line">#CMD    service nginx start &amp;&amp; nginx -g "daemon off;"</span><br><span class="line">ENTRYPOINT [ <span class="string">"/usr/sbin/nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span> ]</span><br></pre></td></tr></table></figure></p><p><font color="red">注意！使用上面注释的CMD语句作为结尾的话，那么这个镜像docker run的时候就会马上退出，这是因为把command做为容器内部命令，那么nginx程序将后台运行，这个时候nginx并不是pid为1的程序，而是执行的bash，这个bash执行了nginx指令后就挂了，所以容器也就退出了。</font>简而言之，Docker容器后台运行,就必须有一个前台进程。因为Docker容器仅在它的1号进程（PID为1）运行时，会保持运行。如果1号进程退出了，Docker容器也就退出了。</p><p>在gitlab触发之后，阿里云就自动把这个dockerfile build成了镜像保存在阿里云的容器仓库里，如图：<br><img src="/images/aliyungitlab6.png" alt="paradin"></p><p>想用这个镜像就可以直接去阿里云的仓库里下载并启动，这样就节省了本地的硬盘容量。最后就是把这个镜像部署到对应的kubernetes集群里，这样就完成了“gitlab代码提交触发阿里云构建镜像”的过程，而如何使用kubernetes的内容将在以后细说。</p>]]></content>
-    
-    <summary type="html">
-    
-      出去参加交流才发现，我们的运维简直就是手工作坊...
-    
-    </summary>
-    
-      <category term="工作与技术" scheme="http://yoursite.com/categories/%E5%B7%A5%E4%BD%9C%E4%B8%8E%E6%8A%80%E6%9C%AF/"/>
-    
-    
-      <category term="gitlab" scheme="http://yoursite.com/tags/gitlab/"/>
-    
-      <category term="持续集成" scheme="http://yoursite.com/tags/%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90/"/>
-    
-      <category term="阿里云" scheme="http://yoursite.com/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"/>
-    
-      <category term="docker镜像" scheme="http://yoursite.com/tags/docker%E9%95%9C%E5%83%8F/"/>
     
   </entry>
   
