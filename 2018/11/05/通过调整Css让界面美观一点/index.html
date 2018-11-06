@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/css3.png">
 <meta property="og:image" content="http://yoursite.com/images/css4.png">
-<meta property="og:updated_time" content="2018-11-05T07:26:05.576Z">
+<meta property="og:updated_time" content="2018-11-05T08:23:44.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过调整Css让界面美观一点">
 <meta name="twitter:description" content="从这里，开始往bootstrap发展">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  715
+                  711
                 </span>
               
 
@@ -461,7 +461,7 @@
 <p>css简单来说就是先给你需要修饰的部分设定变量，然后针对不同的变量做不同的声明，达到修改界面的目的。css规则由两个主要的部分构成：选择器，以及一条或多条声明，格式是：<code>selector {declaration1; declaration2; ... declarationN }</code>。</p>
 <p>在html文本里添加一个style标签，比如：<code>&lt;style type=&quot;test/css&quot;&gt; &lt;/style&gt;</code>。这个标签可以放到<code>&lt;body&gt;</code>最尾处也可以放到<code>&lt;head&gt;</code>最尾处。不过一般来说都是放到<code>&lt;body&gt;</code>里。</p>
 <p>在调整css的时候，可以搭配chrome的F12键直接修改，然后将修改的内容拷贝粘贴到html文件里。</p>
-<h2><span id="举个例子">举个例子</span></h2><p>比如我现在的页面是如下这个样子的：<br><img src="/images/css3.png" alt="akb48"></p>
+<p>比如我现在的页面是如下这个样子的：<br><img src="/images/css3.png" alt="akb48"></p>
 <p>这个结构可以看出使用最直白的html语言编写，为了美观大方，我们需要把它改成如下的样子：<br><img src="/images/css4.png" alt="akb48"></p>
 <p>原来的代码如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div&gt;</span><br><span class="line">                &lt;a href=<span class="string">"&#123;% url 'home' %&#125;"</span>&gt;</span><br><span class="line">                        &lt;h2&gt;Homepage&lt;<span class="regexp">/h2&gt;</span></span><br><span class="line"><span class="regexp">                &lt;/</span>a&gt;</span><br><span class="line">                &lt;a href=<span class="string">"&#123;% url 'blog_list' %&#125;"</span>&gt;List&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">                &lt;a href="http:/</span><span class="regexp">/www.baidu.com"&gt;跳往百度&lt;/</span>a&gt;</span><br><span class="line">                &lt;a href=<span class="string">"http://www.lechange.com"</span>&gt;跳往乐橙&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &#123;% block content %&#125; &#123;% endblock %&#125;</span><br><span class="line">&lt;<span class="regexp">/body&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>html&gt;</span><br></pre></td></tr></table></figure></p>
 <p>更改后的代码如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&lt;body&gt;</span><br><span class="line">        &lt;div  <span class="class"><span class="keyword">class</span></span>=<span class="string">"nav"</span>&gt;</span><br><span class="line">		&lt;!-- 给这个div标签添加一个<span class="class"><span class="keyword">class</span>叫<span class="title">nav</span> --&gt;</span></span><br><span class="line"><span class="class">                &lt;<span class="title">a</span> <span class="title">class</span></span>=<span class="string">"logo"</span> href=<span class="string">"&#123;% url 'home' %&#125;"</span>&gt;</span><br><span class="line">				&lt;!-- 给这个div下的这个a标签添加一个<span class="class"><span class="keyword">class</span>叫<span class="title">logo</span> --&gt;</span></span><br><span class="line"><span class="class">                        &lt;<span class="title">h2</span>&gt;<span class="title">Homepage</span>&lt;/<span class="title">h2</span>&gt;</span></span><br><span class="line"><span class="class">                &lt;/<span class="title">a</span>&gt;</span></span><br><span class="line"><span class="class">                &lt;<span class="title">a</span> <span class="title">href</span></span>=<span class="string">"&#123;% url 'blog_list' %&#125;"</span>&gt;List&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">                &lt;a href="http:/</span><span class="regexp">/www.baidu.com"&gt;跳往百度&lt;/</span>a&gt;</span><br><span class="line">                &lt;a href=<span class="string">"http://www.lechange.com"</span>&gt;跳往乐橙&lt;<span class="regexp">/a&gt;</span></span><br><span class="line"><span class="regexp">        &lt;/</span>div&gt;</span><br><span class="line">        &lt;hr&gt;</span><br><span class="line">        &#123;% block content %&#125; &#123;% endblock %&#125;</span><br><span class="line">        &lt;style type=<span class="string">'text/css'</span>&gt;</span><br><span class="line">				body&#123;</span><br><span class="line">                       margin: <span class="number">0</span>;</span><br><span class="line">                       padding: <span class="number">0</span>;</span><br><span class="line">					&lt;!-- 这是对整个body标签进行声明，外边距和内边距都是<span class="number">0</span> --&gt;</span><br><span class="line">                &#125;</span><br><span class="line">                div.nav&#123;</span><br><span class="line">                       background-color: #eee;</span><br><span class="line">					border-bottom: <span class="number">2</span>px solid blue;</span><br><span class="line">					padding: <span class="number">5</span>px <span class="number">10</span>px;</span><br><span class="line">					&lt;!-- 这是对整个nav的div标签进行声明：颜色灰色 --&gt;</span><br><span class="line">					&lt;!-- 增加一条底线取代&lt;hr&gt;，设定宽是<span class="number">2</span>px，实线，颜色是蓝色 --&gt;</span><br><span class="line">					&lt;!-- 设定上下边距<span class="number">5</span>px,左右边距<span class="number">10</span>px --&gt;</span><br><span class="line">               	&#125;</span><br><span class="line">				div.nav a&#123;</span><br><span class="line">					text-decoration: none;</span><br><span class="line">					color: #000;</span><br><span class="line">					&lt;!-- 这是对整个nav的div标签里的所有a标签说明：取消下划线，并且规定为黑色 --&gt;</span><br><span class="line">				&#125;</span><br><span class="line">                div.nav a.logo &#123;</span><br><span class="line">					display: inline-block;</span><br><span class="line">					color: green;</span><br><span class="line">					font-size:<span class="number">120</span>%;</span><br><span class="line">					&lt;!-- 在这里对nav的div标签里那个叫logo的a标签进行单独的说明：缩进，并且规定为绿色 --&gt;</span><br><span class="line">					&lt;!-- 字体大小是原来的<span class="number">120</span>% --&gt;</span><br><span class="line">                &#125;</span><br><span class="line">        &lt;<span class="regexp">/style&gt;</span></span><br><span class="line"><span class="regexp">&lt;/</span>body&gt;</span><br><span class="line">&lt;<span class="regexp">/html&gt;</span></span><br></pre></td></tr></table></figure></p>
@@ -669,17 +669,8 @@ var jiathis_config={
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -853,22 +844,6 @@ show_date_time();
       </section>
 
       
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;">&#x4E3E;&#x4E2A;&#x4F8B;&#x5B50;</span></span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
-      
 
       
 
@@ -916,7 +891,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共181.7k字</span>
+  <span class="post-count">博客全站共181.9k字</span>
 </div>
         
 
