@@ -107,7 +107,7 @@
 <meta property="og:image" content="http://yoursite.com/images/jenkins9.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkins10.png">
 <meta property="og:image" content="http://yoursite.com/images/jenkins11.png">
-<meta property="og:updated_time" content="2018-11-06T03:18:58.693Z">
+<meta property="og:updated_time" content="2018-11-06T03:38:44.026Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Jenkins的安装与创建简单任务">
 <meta name="twitter:description" content="为了自动化部署和持续集成">
@@ -425,7 +425,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  994
+                  1,014
                 </span>
               
 
@@ -475,8 +475,8 @@
 <p>插件安装完毕之后，就是自己创建一个管理员账号和密码，输入之后，点击右下角<code>保存并完成</code>。<br><img src="/images/jenkins3.png" alt="paradin"></p>
 <p>然后就可以看到Jenkins初始化的首页。<br><img src="/images/jenkins4.png" alt="paradin"></p>
 <h2><span id="镜像安装">镜像安装</span></h2><p>docker安装jenkins也很简单粗暴，但是官方的jenkins镜像可能拉取比较慢，推荐先去加速，国内docker加速的方法在此：<a href="https://rorschachchan.github.io/2018/04/20/%E5%9B%BD%E5%86%85Docker%E7%9A%84%E5%8A%A0%E9%80%9F%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener">https://rorschachchan.github.io/2018/04/20/%E5%9B%BD%E5%86%85Docker%E7%9A%84%E5%8A%A0%E9%80%9F%E6%96%B9%E6%B3%95/</a> 。</p>
-<p>安装步骤如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker pull jenkins		#目前下载的是V2.60.3</span><br><span class="line">cd /data/</span><br><span class="line">docker run -d --name jenkins -p 8080:8080 -v /data/jenkins:/var/jenkins_home jenkins	#做了一个挂载</span><br><span class="line">chown -R 1000 /data/jenkins		#将权限打开，不然的话jenkins无法正常启动</span><br><span class="line">docker start jenkins</span><br><span class="line">cat /data/jenkins/secrets/initialAdminPassword		#网页需要的验证码</span><br></pre></td></tr></table></figure></p>
-<p>此时登录<code>http://your server ip:8080/</code>就会正常访问了，其余的步骤跟上面的一致。</p>
+<p>安装步骤如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker pull jenkins		</span><br><span class="line">cd /data/</span><br><span class="line">docker run -d --name jenkins -p 8080:8080 -v /data/jenkins:/var/jenkins_home jenkins	#做了一个挂载</span><br><span class="line">chown -R 1000 /data/jenkins		#将权限打开，不然的话jenkins无法正常启动</span><br><span class="line">docker start jenkins</span><br><span class="line">cat /data/jenkins/secrets/initialAdminPassword		#网页需要的验证码</span><br></pre></td></tr></table></figure></p>
+<p>此时登录<code>http://your server ip:8080/</code>就会正常访问了，其余的步骤跟上面的一致。不过镜像安装有点瑕疵，就是tag是V2.60.3，有点老，有些插件已经不支持了。</p>
 <h2><span id="创建任务">创建任务</span></h2><p>假设现在要创建一个Job(任务)，这个任务就是输出当前服务器的外网IP地址，那么就点击首页里的<code>新建任务</code>，然后输入任务名，补充一句，生产环境里的Job名最好不用中文，不做死就不会死，然后选择<code>构建一个自由风格的软件项目</code>，如图：<br><img src="/images/jenkins5.png" alt="paradin"></p>
 <p>在<code>源码管理</code>的地方，我们暂时选择<code>None</code>，待日后把jenkins与github相关联之后，就可以通过github来配置源码了。在<code>构建触发器</code>的地方，我们选择<code>Poll SCM</code>，这里说一下这几个触发器选项的意思：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Build after other projects are built：	</span><br><span class="line">Build periodically ： 周期进行项目构建（它不关心源码是否发生变化），可以配置如下：<span class="number">0</span> <span class="number">2</span> * * *（每天<span class="number">2</span>:<span class="number">00</span> 必须build一次源码）</span><br><span class="line">Build when a change is pushed to GitHub： 只要github上有提交了，jenkins没有自动检测到并构建，这设置之后在github中也需要设置才能生效</span><br><span class="line">Poll SCM：定时检查源码变更（根据SCM软件的版本号），如果有更新就checkout最新code下来，然后执行构建动作。可以配置如下：*<span class="regexp">/10 * * * *  （每5分钟检查一次源码变化）</span></span><br></pre></td></tr></table></figure></p>
 <p><img src="/images/jenkins6.png" alt="paradin"></p>
