@@ -88,22 +88,22 @@
 
 
 
-<meta name="description" content="留下两个例子，日后说不定用得着">
+<meta name="description" content="留下几个例子，日后说不定用得着">
 <meta name="keywords" content="python,金山云">
 <meta property="og:type" content="article">
-<meta property="og:title" content="金山云api调用的两个例子">
+<meta property="og:title" content="金山云api调用的几个例子">
 <meta property="og:url" content="http://yoursite.com/2018/03/29/金山云api调用的两个例子/index.html">
 <meta property="og:site_name" content="Chris Chan&#39;s BLOG">
-<meta property="og:description" content="留下两个例子，日后说不定用得着">
+<meta property="og:description" content="留下几个例子，日后说不定用得着">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/ksapi4.png">
 <meta property="og:image" content="http://yoursite.com/images/ksapi1.png">
 <meta property="og:image" content="http://yoursite.com/images/ksapi3.png">
 <meta property="og:image" content="http://yoursite.com/images/ksapi2.png">
-<meta property="og:updated_time" content="2018-03-29T15:26:45.306Z">
+<meta property="og:updated_time" content="2018-11-12T10:32:01.696Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="金山云api调用的两个例子">
-<meta name="twitter:description" content="留下两个例子，日后说不定用得着">
+<meta name="twitter:title" content="金山云api调用的几个例子">
+<meta name="twitter:description" content="留下几个例子，日后说不定用得着">
 <meta name="twitter:image" content="http://yoursite.com/images/ksapi4.png">
 
 
@@ -140,7 +140,7 @@
 
 
 
-  <title>金山云api调用的两个例子 | Chris Chan's BLOG</title>
+  <title>金山云api调用的几个例子 | Chris Chan's BLOG</title>
   
 
 
@@ -340,7 +340,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">金山云api调用的两个例子</h1>
+          <h1 class="post-title" itemprop="name headline">金山云api调用的几个例子</h1>
         
 
         <div class="post-meta">
@@ -392,7 +392,7 @@
 
           
           
-             <span id="/2018/03/29/金山云api调用的两个例子/" class="leancloud_visitors" data-flag-title="金山云api调用的两个例子">
+             <span id="/2018/03/29/金山云api调用的两个例子/" class="leancloud_visitors" data-flag-title="金山云api调用的几个例子">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -418,7 +418,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  430
+                  661
                 </span>
               
 
@@ -434,7 +434,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  2
+                  3
                 </span>
               
             </div>
@@ -442,7 +442,7 @@
 
           
               <div class="post-description">
-                  留下两个例子，日后说不定用得着
+                  留下几个例子，日后说不定用得着
               </div>
           
 
@@ -460,6 +460,7 @@
 
       
         <script src="\assets\js\APlayer.min.js"> </script><p>今天另外一个运维要看一下金山云API返回的格式，于是就临时写了两个demo，也顺便记录下来，说不定以后开发脚本的时候可能用的着。</p>
+<p>金山云跟阿里云的sdk不一样，阿里云有一个总的sdk，然后不同的服务还需要去分别下载对应具体的sdk；而金山的不是，他绝大多数的服务都是用那个总sdk。</p>
 <h2><span id="查询数据库的脚本">查询数据库的脚本</span></h2><p>需要先获取<code>https://github.com/kscdb/krds_openapi_sdk.git</code>，然后执行<code>python setup.py install</code>安装所用的金山库。</p>
 <p>这个脚本是查询某个数据库的具体情况：<br><img src="/images/ksapi4.png" alt="paradin"></p>
 <p>脚本如下：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"># -*- encoding:utf-8 -*-</span><br><span class="line"><span class="keyword">from</span> kscore.session <span class="keyword">import</span> get_session</span><br><span class="line"><span class="keyword">from</span> krds_client <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">#密钥</span><br><span class="line">ACCESS_KEY_ID = <span class="string">"这里填写ak"</span></span><br><span class="line">SECRET_ACCESS_KEY = <span class="string">"这里填写sk"</span></span><br><span class="line"></span><br><span class="line">#连接</span><br><span class="line">s = get_session()</span><br><span class="line">krds_client = KRDSClient(ACCESS_KEY_ID, SECRET_ACCESS_KEY, <span class="string">'地域名'</span>)</span><br><span class="line">r = krds_client.DescribeDBInstances(DBInstanceIdentifier='5c664b16-fbfe-4373-8a00-67c9476e7386',DBInstanceType='HA')	#DBInstanceIdentifier后面是实例ID</span><br><span class="line">print r</span><br></pre></td></tr></table></figure></p>
@@ -470,6 +471,8 @@
 <p>脚本如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line"># -*- encoding:utf-8 -*-</span><br><span class="line"><span class="keyword">from</span> kscore.session <span class="keyword">import</span> get_session</span><br><span class="line"></span><br><span class="line">#密钥</span><br><span class="line">ACCESS_KEY_ID = <span class="string">"这里填写ak"</span></span><br><span class="line">SECRET_ACCESS_KEY = <span class="string">"这里填写sk"</span></span><br><span class="line"></span><br><span class="line">#连接</span><br><span class="line">s = get_session()</span><br><span class="line">client = s.create_client(<span class="string">"kec"</span>, <span class="string">"地域名"</span>, use_ssl=True,ks_access_key_id=ACCESS_KEY_ID, ks_secret_access_key=SECRET_ACCESS_KEY)</span><br><span class="line">print client.describe_instances(Search=['js-online-hlsproxy-20'])	#Search后面接实例名</span><br></pre></td></tr></table></figure></p>
 <p>执行脚本之后，可以看到返回的结果包括数据库里很多的资料，如图：<br><img src="/images/ksapi2.png" alt="paradin" title="执行效果"></p>
 <p>如果不加参数的话，就是返回账号内所有的服务器情况。</p>
+<h2><span id="弹性ip相关的脚本">弹性IP相关的脚本</span></h2><p>脚本如下：<br>    <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python</span></span><br><span class="line">#coding=utf-8</span><br><span class="line">#这个脚本是用来修改金山云的eip带宽</span><br><span class="line"><span class="keyword">import</span> json,pprint</span><br><span class="line"><span class="keyword">from</span> kscore.session <span class="keyword">import</span> get_session</span><br><span class="line"></span><br><span class="line"># 密钥</span><br><span class="line">ACCESS_KEY_ID = <span class="string">"这里是ak"</span></span><br><span class="line">SECRET_ACCESS_KEY = <span class="string">"这里是sk"</span></span><br><span class="line"></span><br><span class="line">s = get_session()</span><br><span class="line">region=<span class="string">'cn-shanghai-2'</span></span><br><span class="line">eipClient = s.create_client(<span class="string">"eip"</span>,region, use_ssl=False,ks_access_key_id=ACCESS_KEY_ID,ks_secret_access_key=SECRET_ACCESS_KEY)</span><br><span class="line"></span><br><span class="line">#allEips=eipClient.get_lines()	#这是获取LineID</span><br><span class="line">allEips=eipClient.allocate_address(LineId:"a2403858-2550-4612-850c-ea840fa343f9",BandWidth:5,ChargeType:"PostPaidByDay")	#这是创建eip</span><br><span class="line"></span><br><span class="line">print allEips</span><br><span class="line">#allEips=eipClient.describe_addresses(MaxResults=7)	#这是查询eip，一次输出7次</span><br><span class="line">#eipClient.modify_address(**&#123;'AllocationId':'弹性IP','BandWidth':2&#125;) #这里是修改eip带宽</span><br></pre></td></tr></table></figure></p>
+<p>总体来说金山云的sdk文档还是比较挫。</p>
 <h2><span id="参考资料">参考资料</span></h2><p><a href="https://github.com/KscSDK/ksc-sdk-python" target="_blank" rel="noopener">https://github.com/KscSDK/ksc-sdk-python</a><br><a href="https://github.com/kscdb/krds_openapi_sdk" target="_blank" rel="noopener">https://github.com/kscdb/krds_openapi_sdk</a></p>
 
       
@@ -535,7 +538,7 @@
 
 				<li class="post-copyright-link">
 					<strong>本文标题：</strong>
-					<a href="http://yoursite.com/2018/03/29/金山云api调用的两个例子/" title="金山云api调用的两个例子">金山云api调用的两个例子</a>
+					<a href="http://yoursite.com/2018/03/29/金山云api调用的两个例子/" title="金山云api调用的几个例子">金山云api调用的几个例子</a>
 				</li>
 
 				<li class="post-copyright-date">
@@ -869,7 +872,7 @@ show_date_time();
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x6570;&#x636E;&#x5E93;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text"><span id="&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;">&#x67E5;&#x8BE2;&#x670D;&#x52A1;&#x5668;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text"><span id="&#x5F39;&#x6027;ip&#x76F8;&#x5173;&#x7684;&#x811A;&#x672C;">&#x5F39;&#x6027;IP&#x76F8;&#x5173;&#x7684;&#x811A;&#x672C;</span></span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text"><span id="&#x53C2;&#x8003;&#x8D44;&#x6599;">&#x53C2;&#x8003;&#x8D44;&#x6599;</span></span></a></li></ol></div>
             
 
           </div>
@@ -923,7 +926,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共182.1k字</span>
+  <span class="post-count">博客全站共182.4k字</span>
 </div>
         
 
