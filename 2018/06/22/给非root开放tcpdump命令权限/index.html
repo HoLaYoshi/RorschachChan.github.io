@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/tcpdump1.png">
 <meta property="og:image" content="http://yoursite.com/images/tcpdump2.png">
-<meta property="og:updated_time" content="2018-06-22T08:37:43.473Z">
+<meta property="og:updated_time" content="2018-11-06T14:34:16.082Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="给非root开放tcpdump命令权限">
 <meta name="twitter:description" content="甲沟炎真是疼死我了~">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  142
+                  182
                 </span>
               
 
@@ -461,6 +461,7 @@
 <p>注册了账号下发给各位开发之后，开发反馈了一个问题：无法用<code>tcpdump</code>抓包。因为<code>tcpdump</code>默认是只能被root调用的，如果是非root用户使用就会报错：<code>You don&#39;t have permission to capture on that device</code>。</p>
 <p>如果要让普通用户也能顺利用上<code>tcpdump</code>，方法很简单，就是对tcpdump这个文件修改成<code>u+s</code>即可。整个过程如下图：<br><img src="/images/tcpdump1.png" alt="akb48"></p>
 <p>在堡垒机的web界面试一下：<br><img src="/images/tcpdump2.png" alt="akb48"></p>
+<p>但是<code>jstack</code>这个命令不能按照上面的方法配置给非root用户，因为<code>jstack</code>命令只能是当前java进程的用户才能用。</p>
 
       
     </div>
@@ -688,7 +689,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">177</span>
+                  <span class="site-state-item-count">178</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -710,7 +711,7 @@ var jiathis_config={
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">143</span>
+                  <span class="site-state-item-count">144</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -888,7 +889,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共181.9k字</span>
+  <span class="post-count">博客全站共182.1k字</span>
 </div>
         
 
