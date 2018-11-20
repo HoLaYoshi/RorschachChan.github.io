@@ -100,10 +100,11 @@
 <meta property="og:image" content="http://yoursite.com/images/monitorzk2.png">
 <meta property="og:image" content="http://yoursite.com/images/monitorzk3.png">
 <meta property="og:image" content="http://yoursite.com/images/monitorzk4.png">
+<meta property="og:image" content="http://yoursite.com/images/monitorzk8.png">
 <meta property="og:image" content="http://yoursite.com/images/monitorzk5.png">
 <meta property="og:image" content="http://yoursite.com/images/monitorzk6.png">
 <meta property="og:image" content="http://yoursite.com/images/monitorzk7.png">
-<meta property="og:updated_time" content="2018-11-01T03:35:59.209Z">
+<meta property="og:updated_time" content="2018-11-20T09:11:21.229Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="两个Zabbix_get问题记录">
 <meta name="twitter:description" content="金庸大师，一路走好。">
@@ -421,7 +422,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  624
+                  694
                 </span>
               
 
@@ -470,6 +471,7 @@
 <p>我怀疑是脚本的问题，于是我改成一个单纯的<code>echo</code>，如下:<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@zookeeper1 ~]# cat checkZKrole.sh </span><br><span class="line">#!/bin/bash</span><br><span class="line">role=$(sh /usr/zookeeper/bin/zkServer.sh status| cut -d&quot; &quot; -f2)</span><br><span class="line">#echo $role</span><br><span class="line">echo woshinibaba</span><br></pre></td></tr></table></figure></p>
 <p>这一次的返回值是正常的，可见不是脚本的问题：<br><img src="/images/monitorzk4.png" alt="akb48"></p>
 <p>那是他妈的什么问题，真是见了鬼了…后来想干脆写一个crontab，让crontab把角色写到本地，然后再用cut命令切开把结果当做zabbix_get的目标。但是在这里发现了问题所在，当我的crontab是<code>* * * * * cd /usr/zookeeper/bin/; ./zkServer.sh status &gt; /tmp/role.txt &gt; /dev/null 2&gt;&amp;1</code>，发现<code>/tmp/role.txt</code>里根本没有值，应该是crontab在执行有参数的命令的时候出现了问题。</p>
+<p>后来发现了，原来是sudo搞得鬼，如果是由于zookeeper是root用户启动的，所以只有root用户能成功访问，如果是sudo的话，那么就会返回“Error contacting service. It is probably not running.”，所以截取出来的部分就是contacting，如图：<br><img src="/images/monitorzk8.png" alt="akb48"></p>
 <h2><span id="zabbix_get执行脚本超时">zabbix_get执行脚本超时</span></h2><p>在监控mq队列时候，同样也需要到了自定义监控项，我写了几个简单的脚本如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@dahuatech zabbix]# cat monitor_mq.sh </span><br><span class="line">#!/bin/sh</span><br><span class="line">ip=$1</span><br><span class="line">queuename=$2</span><br><span class="line">type=$3</span><br><span class="line"></span><br><span class="line">case $&#123;type&#125; in</span><br><span class="line">	Pending)</span><br><span class="line">	curl -s -u &apos;admin:admin&apos;  &quot;http://$&#123;ip&#125;:8161/admin/queues.jsp&quot;|grep &quot;$&#123;queuename&#125;&lt;/a&gt;&lt;/td&gt;&quot; -A 5|sed -n &apos;2p&apos;|egrep -o &apos;[0-9]+&apos;</span><br><span class="line">	;;</span><br><span class="line">	Enqueued)</span><br><span class="line">	curl -s -u &apos;admin:admin&apos;  &quot;http://$&#123;ip&#125;:8161/admin/queues.jsp&quot;|grep &quot;$&#123;queuename&#125;&lt;/a&gt;&lt;/td&gt;&quot; -A 5|sed -n &apos;4p&apos;|egrep -o &apos;[0-9]+&apos;</span><br><span class="line">	;;</span><br><span class="line">	Dequeued)</span><br><span class="line">	curl -s -u &apos;admin:admin&apos;  &quot;http://$&#123;ip&#125;:8161/admin/queues.jsp&quot;|grep &quot;$&#123;queuename&#125;&lt;/a&gt;&lt;/td&gt;&quot; -A 5|sed -n &apos;5p&apos;|egrep -o &apos;[0-9]+&apos;</span><br><span class="line">	;;</span><br><span class="line">esac</span><br></pre></td></tr></table></figure></p>
 <p>配置了<code>UserParameter=activemq.check[*],sh /etc/zabbix/monitor_mq.sh $1 $2 $3</code>放到<code>zabbix-agentd.conf</code>里，重启了zabbix-agent。在zabbix-server配置了对应的item，如图：<br><img src="/images/monitorzk5.png" alt="akb48"></p>
 <p>然后在本地执行这个脚本，发现回值秒取，但是同样在zabbix-get里使用，就是timeout：<br><img src="/images/monitorzk6.png" alt="akb48"></p>
@@ -926,7 +928,7 @@ show_date_time();
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共182.4k字</span>
+  <span class="post-count">博客全站共182.5k字</span>
 </div>
         
 
