@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/images/django23.png">
 <meta property="og:image" content="http://yoursite.com/images/django24.gif">
-<meta property="og:updated_time" content="2018-11-24T03:53:33.440Z">
+<meta property="og:updated_time" content="2018-11-24T03:54:06.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Django前端输入变量通过内部脚本返回前端展示之三">
 <meta name="twitter:description" content="Django后台执行脚本反馈到前端输出">
@@ -416,7 +416,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,046
+                  1,048
                 </span>
               
 
@@ -467,7 +467,7 @@
 <p>于是<code>views.py</code>里的相关部分就是这样：<br>    <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">def encrypt(request):</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        AESWord = request.POST.get(<span class="string">'AESWord'</span>)</span><br><span class="line">        with open('/yunwei/AES/AESWord.txt','w') as f:		#把前端获取到的值记录到本地的AESWord.txt文件里</span><br><span class="line">            f.write(AESWord+<span class="string">"\n"</span>)</span><br><span class="line">        child = subprocess.Popen(<span class="string">'python /yunwei/AES/Encrypt.py'</span>,stdout=subprocess.PIPE, stderr=subprocess.PIPE,shell=True)	</span><br><span class="line">        stdout, stderr = child.communicate()</span><br><span class="line">        result = str(stdout,encoding='utf-8')	#将脚本反馈的结果输入result</span><br><span class="line">        return HttpResponse(result)			#页面展示result</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> render(request,<span class="string">'encrypt.html'</span>)</span><br></pre></td></tr></table></figure></p>
 <p>而<code>encrypt.py</code>内容改成如下：<br>    <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env python</span><br><span class="line">#coding=utf-8</span><br><span class="line"></span><br><span class="line">import linecache,subprocess</span><br><span class="line">AESWord = linecache.getline(&apos;/yunwei/AES/AESWord.txt&apos;,1).strip(&apos;\n&apos;)	#在这里读取前端的变量</span><br><span class="line">result = list(subprocess.getstatusoutput(&quot;java -jar /yunwei/AES/aesEncrpt.jar &quot;+AESWord))[1].split(&quot;=&quot;)[1]</span><br><span class="line">print (AESWord+ &quot;的加密结果是：&quot;+(result))</span><br></pre></td></tr></table></figure></p>
 <p>执行效果如下：<br><img src="/images/django24.gif" alt="akb48"></p>
-<p>达到了我们的目的！后期就是把<code>result</code>使用<code>render</code>加工映射到某个网页，页面就好看很多了。</p>
+<p>这样的操作达到了目的！后期就是把<code>result</code>使用<code>render</code>加工映射到某个网页，页面就好看很多了。</p>
 <h2><span id="jsajax方法解决">js+ajax方法解决</span></h2><p>上面的方法虽然可以达到我们想要的目的，但是其实是十分不推荐的：一是因为网页调用本地程序的权限正在被取消，二是因为真不如JS写直接，三是只能在自己本地调用。</p>
 <p>所以还是用前端来解决更专业更优雅，那么就要使用js+ajax。</p>
 <p>具体内容下次补充…</p>
@@ -584,8 +584,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/21/初步接触Ajax/" rel="next" title="初步接触Ajax">
-                <i class="fa fa-chevron-left"></i> 初步接触Ajax
+              <a href="/2018/11/12/Git-clone的几个小故障/" rel="next" title="Git clone的几个错误">
+                <i class="fa fa-chevron-left"></i> Git clone的几个错误
               </a>
             
           </div>
@@ -706,7 +706,7 @@ var jiathis_config={
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">180</span>
+                  <span class="site-state-item-count">179</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
